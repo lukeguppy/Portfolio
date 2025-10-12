@@ -3,7 +3,7 @@
         "title": "BlockBlast",
         "slug": "blockblast",
         "description": "A drag-and-drop puzzle game where you clear lines by placing coloured blocks. Features combos, scoring, and smooth animations.",
-        "image": "https://via.placeholder.com/300x200/14b8a6/0f172a?text=BlockBlast+Puzzle",
+        "image": "/images/blockblast.png",
         "tech": ["HTML", "CSS", "JavaScript"],
         "playUrl": "/games/blockblast/"
     }
