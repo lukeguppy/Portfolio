@@ -109,35 +109,35 @@ function getValidMoves(row, col) {
     const piece = board[row][col];
     if (!piece) return [];
 
-    const color = piece[0];
+    const colour = piece[0];
     const type = piece[1];
     let moves = [];
 
     switch (type) {
         case 'P':
-            moves = getPawnMoves(row, col, color);
+            moves = getPawnMoves(row, col, colour);
             break;
         case 'R':
-            moves = getRookMoves(row, col, color);
+            moves = getRookMoves(row, col, colour);
             break;
         case 'N':
-            moves = getKnightMoves(row, col, color);
+            moves = getKnightMoves(row, col, colour);
             break;
         case 'B':
-            moves = getBishopMoves(row, col, color);
+            moves = getBishopMoves(row, col, colour);
             break;
         case 'Q':
-            moves = getQueenMoves(row, col, color);
+            moves = getQueenMoves(row, col, colour);
             break;
         case 'K':
-            moves = getKingMoves(row, col, color);
+            moves = getKingMoves(row, col, colour);
             break;
     }
 
     // Filter moves that don't put own king in check
     return moves.filter(move => {
         const newBoard = simulateMove({row, col}, move);
-        return !isInCheck(color, newBoard);
+        return !isInCheck(colour, newBoard);
     });
 }
 
@@ -150,10 +150,10 @@ function simulateMove(from, to) {
 }
 
 // Pawn moves
-function getPawnMoves(row, col, color) {
+function getPawnMoves(row, col, colour) {
     const moves = [];
-    const direction = color === 'w' ? -1 : 1;
-    const startRow = color === 'w' ? 6 : 1;
+    const direction = colour === 'w' ? -1 : 1;
+    const startRow = colour === 'w' ? 6 : 1;
 
     // Forward
     if (!board[row + direction][col]) {
@@ -168,7 +168,7 @@ function getPawnMoves(row, col, color) {
         const newCol = col + dc;
         if (newCol >= 0 && newCol < 8) {
             const target = board[row + direction][newCol];
-            if (target && target[0] !== color) {
+            if (target && target[0] !== colour) {
                 moves.push({row: row + direction, col: newCol});
             }
         }
@@ -178,22 +178,22 @@ function getPawnMoves(row, col, color) {
 }
 
 // Rook moves
-function getRookMoves(row, col, color) {
-    return getSlidingMoves(row, col, color, [[0,1], [0,-1], [1,0], [-1,0]]);
+function getRookMoves(row, col, colour) {
+    return getSlidingMoves(row, col, colour, [[0,1], [0,-1], [1,0], [-1,0]]);
 }
 
 // Bishop moves
-function getBishopMoves(row, col, color) {
-    return getSlidingMoves(row, col, color, [[1,1], [1,-1], [-1,1], [-1,-1]]);
+function getBishopMoves(row, col, colour) {
+    return getSlidingMoves(row, col, colour, [[1,1], [1,-1], [-1,1], [-1,-1]]);
 }
 
 // Queen moves
-function getQueenMoves(row, col, color) {
-    return getSlidingMoves(row, col, color, [[0,1], [0,-1], [1,0], [-1,0], [1,1], [1,-1], [-1,1], [-1,-1]]);
+function getQueenMoves(row, col, colour) {
+    return getSlidingMoves(row, col, colour, [[0,1], [0,-1], [1,0], [-1,0], [1,1], [1,-1], [-1,1], [-1,-1]]);
 }
 
 // Sliding moves
-function getSlidingMoves(row, col, color, directions) {
+function getSlidingMoves(row, col, colour, directions) {
     const moves = [];
     for (const [dr, dc] of directions) {
         for (let i = 1; i < 8; i++) {
@@ -204,7 +204,7 @@ function getSlidingMoves(row, col, color, directions) {
             if (!target) {
                 moves.push({row: newRow, col: newCol});
             } else {
-                if (target[0] !== color) {
+                if (target[0] !== colour) {
                     moves.push({row: newRow, col: newCol});
                 }
                 break;
@@ -215,7 +215,7 @@ function getSlidingMoves(row, col, color, directions) {
 }
 
 // Knight moves
-function getKnightMoves(row, col, color) {
+function getKnightMoves(row, col, colour) {
     const moves = [];
     const deltas = [[-2,-1], [-2,1], [-1,-2], [-1,2], [1,-2], [1,2], [2,-1], [2,1]];
     for (const [dr, dc] of deltas) {
@@ -223,7 +223,7 @@ function getKnightMoves(row, col, color) {
         const newCol = col + dc;
         if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
             const target = board[newRow][newCol];
-            if (!target || target[0] !== color) {
+            if (!target || target[0] !== colour) {
                 moves.push({row: newRow, col: newCol});
             }
         }
@@ -232,7 +232,7 @@ function getKnightMoves(row, col, color) {
 }
 
 // King moves
-function getKingMoves(row, col, color) {
+function getKingMoves(row, col, colour) {
     const moves = [];
     for (let dr = -1; dr <= 1; dr++) {
         for (let dc = -1; dc <= 1; dc++) {
@@ -241,7 +241,7 @@ function getKingMoves(row, col, color) {
             const newCol = col + dc;
             if (newRow >= 0 && newRow < 8 && newCol >= 0 && newCol < 8) {
                 const target = board[newRow][newCol];
-                if (!target || target[0] !== color) {
+                if (!target || target[0] !== colour) {
                     moves.push({row: newRow, col: newCol});
                 }
             }
@@ -273,12 +273,12 @@ function movePiece(from, to) {
 }
 
 // Is in check
-function isInCheck(color, testBoard = board) {
+function isInCheck(colour, testBoard = board) {
     // Find king
     let kingPos = null;
     for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
-            if (testBoard[r][c] === color + 'K') {
+            if (testBoard[r][c] === colour + 'K') {
                 kingPos = {row: r, col: c};
                 break;
             }
@@ -287,7 +287,7 @@ function isInCheck(color, testBoard = board) {
     }
 
     // Check if any enemy piece can attack king
-    const enemyColor = color === 'w' ? 'b' : 'w';
+    const enemyColor = colour === 'w' ? 'b' : 'w';
     for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
             if (testBoard[r][c] && testBoard[r][c][0] === enemyColor) {
@@ -305,7 +305,7 @@ function isInCheck(color, testBoard = board) {
 function getValidMovesForPiece(row, col, testBoard) {
     const piece = testBoard[row][col];
     if (!piece) return [];
-    const color = piece[0];
+    const colour = piece[0];
     const type = piece[1];
     // Simplified, assume same as getValidMoves but without check filter
     // For simplicity, reuse but it's recursive, so implement separately
@@ -313,19 +313,19 @@ function getValidMovesForPiece(row, col, testBoard) {
     let moves = [];
     switch (type) {
         case 'P':
-            const direction = color === 'w' ? -1 : 1;
+            const direction = colour === 'w' ? -1 : 1;
             if (row + direction >= 0 && row + direction < 8 && !testBoard[row + direction][col]) {
                 moves.push({row: row + direction, col});
             }
             for (let dc = -1; dc <= 1; dc += 2) {
                 const nc = col + dc;
-                if (nc >= 0 && nc < 8 && testBoard[row + direction][nc] && testBoard[row + direction][nc][0] !== color) {
+                if (nc >= 0 && nc < 8 && testBoard[row + direction][nc] && testBoard[row + direction][nc][0] !== colour) {
                     moves.push({row: row + direction, col: nc});
                 }
             }
             break;
         case 'R':
-            moves = getSlidingMovesTest(row, col, color, testBoard, [[0,1], [0,-1], [1,0], [-1,0]]);
+            moves = getSlidingMovesTest(row, col, colour, testBoard, [[0,1], [0,-1], [1,0], [-1,0]]);
             break;
         case 'N':
             const deltas = [[-2,-1], [-2,1], [-1,-2], [-1,2], [1,-2], [1,2], [2,-1], [2,1]];
@@ -334,17 +334,17 @@ function getValidMovesForPiece(row, col, testBoard) {
                 const nc = col + dc;
                 if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
                     const target = testBoard[nr][nc];
-                    if (!target || target[0] !== color) {
+                    if (!target || target[0] !== colour) {
                         moves.push({row: nr, col: nc});
                     }
                 }
             }
             break;
         case 'B':
-            moves = getSlidingMovesTest(row, col, color, testBoard, [[1,1], [1,-1], [-1,1], [-1,-1]]);
+            moves = getSlidingMovesTest(row, col, colour, testBoard, [[1,1], [1,-1], [-1,1], [-1,-1]]);
             break;
         case 'Q':
-            moves = getSlidingMovesTest(row, col, color, testBoard, [[0,1], [0,-1], [1,0], [-1,0], [1,1], [1,-1], [-1,1], [-1,-1]]);
+            moves = getSlidingMovesTest(row, col, colour, testBoard, [[0,1], [0,-1], [1,0], [-1,0], [1,1], [1,-1], [-1,1], [-1,-1]]);
             break;
         case 'K':
             for (let dr = -1; dr <= 1; dr++) {
@@ -354,7 +354,7 @@ function getValidMovesForPiece(row, col, testBoard) {
                     const nc = col + dc;
                     if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8) {
                         const target = testBoard[nr][nc];
-                        if (!target || target[0] !== color) {
+                        if (!target || target[0] !== colour) {
                             moves.push({row: nr, col: nc});
                         }
                     }
@@ -365,7 +365,7 @@ function getValidMovesForPiece(row, col, testBoard) {
     return moves;
 }
 
-function getSlidingMovesTest(row, col, color, testBoard, directions) {
+function getSlidingMovesTest(row, col, colour, testBoard, directions) {
     const moves = [];
     for (const [dr, dc] of directions) {
         for (let i = 1; i < 8; i++) {
@@ -376,7 +376,7 @@ function getSlidingMovesTest(row, col, color, testBoard, directions) {
             if (!target) {
                 moves.push({row: nr, col: nc});
             } else {
-                if (target[0] !== color) {
+                if (target[0] !== colour) {
                     moves.push({row: nr, col: nc});
                 }
                 break;
@@ -387,12 +387,12 @@ function getSlidingMovesTest(row, col, color, testBoard, directions) {
 }
 
 // Is checkmate
-function isCheckmate(color) {
+function isCheckmate(colour) {
     // If in check and no valid moves
-    if (!isInCheck(color)) return false;
+    if (!isInCheck(colour)) return false;
     for (let r = 0; r < 8; r++) {
         for (let c = 0; c < 8; c++) {
-            if (board[r][c] && board[r][c][0] === color) {
+            if (board[r][c] && board[r][c][0] === colour) {
                 if (getValidMoves(r, c).length > 0) return false;
             }
         }
