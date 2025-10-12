@@ -2,7 +2,7 @@
 
 A personal portfolio website showcasing my skills, projects, and games. Built with Eleventy.
 
-## Live Demo
+## Live Site
 [View Portfolio](https://lukeguppy.github.io/Portfolio/)
 
 ## Features
