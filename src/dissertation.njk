@@ -34,6 +34,7 @@ pageTitle: Dissertation
     </div>
     <div class="dissertation-pdf">
         <h3>Dissertation PDF</h3>
-        <p><a href="https://raw.githubusercontent.com/lukeguppy/dissertation/main/dissertation.pdf" target="_blank" class="btn-primary">View Full Dissertation PDF</a></p>
+        <p><a href="{{ "/dissertation.pdf" | url }}" target="_blank" class="btn-primary" download>Download PDF</a></p>
+        <iframe src="{{ "/dissertation.pdf" | url }}" width="100%" height="1000px" type="application/pdf" style="border: none; border-radius: 8px;"></iframe>
     </div>
 </section>
