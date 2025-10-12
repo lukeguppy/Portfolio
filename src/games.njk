@@ -14,7 +14,7 @@ pageTitle: Games
 <section class="games">
     <div class="games-grid">
         {% for game in site.games %}
-        <a class="game-card" href="{{ game.playUrl }}">
+        <a class="game-card" href="{{ game.playUrl | url }}">
             <img src="{{ game.image }}" alt="{{ game.title }} Thumbnail">
             <h3>{{ game.title }}</h3>
             <p>{{ game.description }}</p>
