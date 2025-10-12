@@ -15,6 +15,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addGlobalData("games", require("./_data/games.json"));
 
     return {
+        pathPrefix: "/Portfolio/",
         dir: {
             input: "src",
             output: "docs"
