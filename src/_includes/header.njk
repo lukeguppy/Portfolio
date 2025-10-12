@@ -2,7 +2,7 @@
     <nav>
         <div class="nav-container">
             <h1>{{ pageTitle or site.title }}</h1>
-            <ul>
+            <ul{% if title != "Home" %} class="single"{% endif %}>
                 {% if title == "Home" %}
                 <li><a href="{{ "/about-me/" | url }}">About Me</a></li>
                 <li><a href="{{ "/games/" | url }}">Games</a></li>
@@ -12,6 +12,10 @@
                 <li><a href="{{ "/" | url }}">Home</a></li>
                 {% endif %}
             </ul>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank"><img src="{{ "/images/linkedin.png" | url }}" alt="LinkedIn"></a>
+                <a href="https://github.com/lukeguppy" target="_blank"><img src="{{ "/images/github.png" | url }}" alt="GitHub"></a>
+            </div>
         </div>
     </nav>
 </header>
