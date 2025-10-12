@@ -17,3 +17,6 @@ Thumbs.db
 # Markdown files except README
 *.md
 !README.md
+
+# Personal documents
+Luke_Guppy_CV_25.pdf
