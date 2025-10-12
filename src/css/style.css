@@ -38,7 +38,6 @@ body {
     flex-direction: column;
     overflow-x: hidden;
     overflow-y: auto;
-    min-height: 100vh;
 }
 
 a {
