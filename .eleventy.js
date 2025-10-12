@@ -4,6 +4,7 @@ module.exports = function(eleventyConfig) {
     eleventyConfig.addPassthroughCopy("src/js");
     eleventyConfig.addPassthroughCopy("src/games");
     eleventyConfig.addPassthroughCopy("src/images");
+    eleventyConfig.addPassthroughCopy("Luke_Guppy_CV_25.pdf");
 
     // Add Prism.js for code highlighting
     eleventyConfig.addPassthroughCopy({
