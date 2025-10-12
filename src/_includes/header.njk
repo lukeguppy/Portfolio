@@ -1,0 +1,17 @@
+<header>
+    <nav>
+        <div class="nav-container">
+            <h1>{{ pageTitle or site.title }}</h1>
+            <ul>
+                {% if title == "Home" %}
+                <li><a href="/about-me/">About Me</a></li>
+                <li><a href="/games/">Games</a></li>
+                <li><a href="/dissertation/">Dissertation</a></li>
+                <li><a href="/contact/">Contact</a></li>
+                {% else %}
+                <li><a href="/">Home</a></li>
+                {% endif %}
+            </ul>
+        </div>
+    </nav>
+</header>

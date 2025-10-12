@@ -1,0 +1,21 @@
+{
+  "title": "Portfolio",
+  "author": "Luke Guppy",
+  "description": "Portfolio of Luke Guppy",
+  "games": [
+    {
+      "title": "BlockBlast",
+      "description": "A fun puzzle game where you place blocks to clear lines.",
+      "image": "/images/blockblast.png",
+      "playUrl": "/games/blockblast/",
+      "tech": ["JavaScript", "HTML", "CSS"]
+    },
+    {
+      "title": "Chess",
+      "description": "Coming soon...",
+      "image": "/images/chess.png",
+      "playUrl": "#",
+      "tech": []
+    }
+  ]
+}

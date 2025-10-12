@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build output
+docs/
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment variables
+.env
+
+# Markdown files except README
+*.md
+!README.md

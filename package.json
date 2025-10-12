@@ -1,0 +1,16 @@
+{
+  "name": "puzzle-games-portfolio",
+  "version": "1.0.0",
+  "description": "Portfolio site for puzzle games using Eleventy",
+  "scripts": {
+    "build": "eleventy",
+    "serve": "eleventy --serve",
+    "start": "npm run serve"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.1",
+    "prismjs": "^1.29.0"
+  },
+  "author": "Your Name",
+  "license": "MIT"
+}
