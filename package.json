@@ -1,7 +1,7 @@
 {
-  "name": "puzzle-games-portfolio",
+  "name": "games-portfolio",
   "version": "1.0.0",
-  "description": "Portfolio site for puzzle games using Eleventy",
+  "description": "Portfolio site using Eleventy",
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",

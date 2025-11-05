@@ -6,7 +6,7 @@ A personal portfolio website showcasing my skills, projects, and games. Built wi
 [View Portfolio](https://lukeguppy.github.io/Portfolio/)
 
 ## Features
-- Interactive games (e.g., BlockBlast puzzle game)
+- Interactive games (e.g., BlockBlast, chess)
 - Skills and experience overview
 - Dissertation details
 - Contact information
