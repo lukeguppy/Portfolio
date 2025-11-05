@@ -34,44 +34,46 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    width: min(90vw, 500px);
-    height: calc(100vh - 120px);
-    max-height: 800px;
-    padding: 20px;
-    margin: 10px;
+    justify-content: flex-start;
+    width: 90vw;
+    height: calc(100vh - 100px);
+    max-height: 90vh;
+    padding: 2vh;
+    margin: 0;
     box-sizing: border-box;
 }
 
 /* Combo placeholder styling */
 #combo-placeholder {
     width: 100%;
-    height: 30px; /* Adjust this height as needed to accommodate the combo message */
-    margin-bottom: 5px; /* Add some spacing below the placeholder */
+    height: 5vh; /* Relative height */
+    min-height: 25px;
+    margin-bottom: 1vh;
 }
 
 /* Combo display styling */
 #combo-display {
     font-family: 'Luckiest Guy', cursive;
-    font-size: 1.5em;
+    font-size: clamp(1rem, 2.5vw, 1.5rem);
     color: yellow;
     text-align: center;
     text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
     position: absolute;
-    top: 0; /* Position at the top of the placeholder */
+    top: 0;
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
     box-sizing: border-box;
-    line-height: 30px; /* Match the placeholder height for vertical centering */
+    line-height: 5vh;
 }
 
 /* Score display styling */
 #score-display {
     font-family: 'Luckiest Guy', cursive;
-    font-size: 2.5em;
+    font-size: clamp(1.5rem, 4vw, 2.5rem);
     color: white;
     text-align: center;
-    margin-bottom: 15px;
+    margin-bottom: 2vh;
     text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
@@ -80,8 +82,10 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: center;
     width: 100%;
-    flex-grow: 1;
+    flex: 1;
+    min-height: 0;
 }
 
 /* Game board layout and styling */
@@ -91,8 +95,10 @@ body {
     grid-template-rows: repeat(8, 1fr);
     border: 2px solid #555588;
     background-color: #222244;
-    width: min(80%, 400px);
-    aspect-ratio: 1 / 1;
+    width: min(60vw, 50vh);
+    height: min(60vw, 50vh);
+    max-width: 400px;
+    max-height: 400px;
     position: relative;
     flex-shrink: 0;
 }
@@ -148,22 +154,23 @@ body {
 /* Layout for block options */
 #block-options {
     display: flex;
-    gap: 20px;
+    gap: 2vw;
     justify-content: center;
     width: 100%;
     height: auto;
     align-items: center;
-    margin-top: 20px;
-    margin-bottom: 20px;
+    margin-top: 2vh;
+    margin-bottom: 2vh;
     flex-wrap: wrap;
+    flex-shrink: 0;
 }
 
 /* Styling for individual block options */
 .block-option {
     background-color: #333366;
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: grab;
-    padding: 10px;
+    padding: clamp(5px, 1vw, 10px);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -172,8 +179,8 @@ body {
 
 /* Preview cell layout */
 .block-preview .preview-cell {
-    width: 20px;
-    height: 20px;
+    width: clamp(8px, 1.5vw, 15px);
+    height: clamp(8px, 1.5vw, 15px);
     margin: 1px;
 }
 
@@ -247,41 +254,17 @@ body {
     transform: scale(1);
 }
 
-/* Responsive */
-@media (max-width: 768px) {
+/* Responsive - everything is now fluid, minimal adjustments needed */
+@media (max-width: 480px) {
     .container {
-        width: 95vw;
-        height: calc(100vh - 100px);
-        max-width: none;
-        max-height: none;
-        margin: 5px;
-        padding: 15px;
+        width: 98vw;
+        height: calc(100vh - 80px);
+        padding: 1vh;
     }
-
+    
     #board {
-        width: min(90%, 300px);
-    }
-
-    .block-preview .preview-cell {
-        width: 15px;
-        height: 15px;
-        margin: 1px;
-    }
-
-    #block-options {
-        gap: 10px;
-    }
-
-    .block-option {
-        padding: 5px;
-    }
-
-    #score-display {
-        font-size: 1.8em;
-    }
-
-    #combo-display {
-        font-size: 1.2em;
+        width: min(70vw, 60vh);
+        height: min(70vw, 60vh);
     }
 }
 
