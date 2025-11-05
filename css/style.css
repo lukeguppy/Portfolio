@@ -396,7 +396,7 @@ main {
 
 /* About Section Styling */
 .about-container {
-    max-width: 900px;
+    max-width: 800px;
     margin: 0 auto;
     text-align: center;
 }
@@ -410,41 +410,41 @@ main {
 
 .about-content {
     background-color: var(--secondary-bg);
-    padding: 3rem;
+    padding: 2.5rem;
     border-radius: 12px;
     box-shadow: var(--shadow);
     text-align: left;
 }
 
-.about-intro {
-    margin-bottom: 2.5rem;
-    padding-bottom: 2rem;
-    border-bottom: 1px solid var(--border-color);
-}
-
-.about-intro p {
-    font-size: 1.2rem;
+.about-content p {
+    font-size: 1.1rem;
     line-height: 1.7;
     color: var(--text-color);
-    margin: 0;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
 }
 
-.about-details {
-    display: grid;
-    gap: 2rem;
+.about-content p:last-child {
+    margin-bottom: 0;
 }
 
-.about-section h3 {
-    color: var(--accent-color);
-    margin-bottom: 1rem;
-    font-size: 1.3rem;
-    font-weight: 600;
+.fade-in-1 {
+    transition-delay: 0.1s;
 }
 
-.about-section p {
-    line-height: 1.6;
-    color: var(--text-color);
-    margin: 0;
+.fade-in-2 {
+    transition-delay: 0.3s;
+}
+
+.fade-in-3 {
+    transition-delay: 0.5s;
+}
+
+.about-content p.visible {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 /* About Me Page Spacing */
