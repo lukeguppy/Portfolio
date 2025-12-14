@@ -1,0 +1,36 @@
+/* CSS Variables - Theme Colors & Design Tokens */
+
+:root {
+    --bg-primary: #0a0a0a;
+    --bg-secondary: #1a1a1a;
+    --bg-tertiary: #2a2a2a;
+    --bg-glass: rgba(255, 255, 255, 0.05);
+    --text-primary: #ffffff;
+    --text-secondary: #b0b0b0;
+    --text-muted: #808080;
+    --accent-primary: #4ECDC4;
+    --accent-secondary: #FF6B6B;
+    --accent-warning: #FFD93D;
+    --accent-success: #6BCF7F;
+    --border-color: rgba(255, 255, 255, 0.1);
+    --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --sidebar-opacity: 1;
+}
+
+body.light-mode {
+    --bg-primary: #EEF2F6;
+    --bg-secondary: #FFFFFF;
+    --bg-tertiary: #F8FAFC;
+    --bg-glass: rgba(255, 255, 255, 0.95);
+    --text-primary: #020617;
+    --text-secondary: #334155;
+    --text-muted: #64748B;
+    --accent-primary: #38B2AC;
+    --accent-secondary: #F56565;
+    --accent-warning: #ECC94B;
+    --accent-success: #48BB78;
+    --border-color: rgba(30, 41, 59, 0.20);
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15), 0 2px 4px -1px rgba(0, 0, 0, 0.1);
+    --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.12), 0 1px 2px 0 rgba(0, 0, 0, 0.08);
+}

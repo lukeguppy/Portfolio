@@ -1,11 +1,17 @@
 /* CSS Variables for Theme */
 :root {
-    --bg-color: #0f172a; /* slate-900 */
-    --text-color: #f1f5f9; /* slate-100 */
-    --accent-color: #14b8a6; /* teal-500 */
-    --secondary-bg: #1e293b; /* slate-800 */
-    --border-color: #334155; /* slate-700 */
-    --hover-color: #0f766e; /* teal-700 */
+    --bg-color: #0f172a;
+    /* slate-900 */
+    --text-color: #f1f5f9;
+    /* slate-100 */
+    --accent-color: #14b8a6;
+    /* teal-500 */
+    --secondary-bg: #1e293b;
+    /* slate-800 */
+    --border-color: #334155;
+    /* slate-700 */
+    --hover-color: #0f766e;
+    /* teal-700 */
     --link-color: #14b8a6;
     --btn-bg: #14b8a6;
     --btn-text: #0f172a;
@@ -166,7 +172,8 @@ main {
     margin-right: auto;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
     display: inline-block;
     padding: 0.75rem 1.5rem;
     background-color: var(--btn-bg);
@@ -176,7 +183,8 @@ main {
     text-align: center;
 }
 
-.btn-primary:hover, .btn-secondary:hover {
+.btn-primary:hover,
+.btn-secondary:hover {
     background-color: var(--hover-color);
     transform: translateY(-2px);
 }
@@ -187,15 +195,15 @@ main {
     color: var(--accent-color);
 }
 
-/* Games Section */
-.games-grid {
+/* Playground Section */
+.playground-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(var(--card-min-width), 1fr));
     gap: 2rem;
     margin-top: 2rem;
 }
 
-.game-card {
+.playground-card {
     background-color: var(--secondary-bg);
     padding: 1.5rem;
     border-radius: 8px;
@@ -206,21 +214,21 @@ main {
     display: block;
 }
 
-.game-card:hover {
+.playground-card:hover {
     transform: translateY(-5px);
     box-shadow: var(--shadow-hover);
     background-color: var(--secondary-bg);
 }
 
-.game-card h3 {
+.playground-card h3 {
     margin-bottom: 0.5rem;
 }
 
-.game-card p {
+.playground-card p {
     margin-bottom: 1.5rem;
 }
 
-.game-card .btn-secondary {
+.playground-card .btn-secondary {
     margin-top: 1rem;
 }
 
@@ -293,7 +301,7 @@ main {
     margin-bottom: 1rem;
 }
 
-.game-card img {
+.playground-card img {
     width: 100%;
     height: auto;
     max-height: 300px;
@@ -390,7 +398,11 @@ main {
 }
 
 /* Other Sections */
-.about, .skills, .projects, .experience, .contact {
+.about,
+.skills,
+.projects,
+.experience,
+.contact {
     margin: 4rem 0;
 }
 
@@ -475,7 +487,7 @@ main {
     margin-bottom: 1rem;
 }
 
-.dissertation-content > div {
+.dissertation-content>div {
     margin-bottom: 3rem;
 }
 
@@ -561,7 +573,8 @@ form label {
     font-weight: 600;
 }
 
-form input, form textarea {
+form input,
+form textarea {
     padding: 0.75rem;
     border: 1px solid var(--border-color);
     border-radius: 4px;
@@ -624,21 +637,22 @@ footer {
         font-size: 1rem;
     }
 
-    .btn-primary, .btn-secondary {
+    .btn-primary,
+    .btn-secondary {
         padding: 0.5rem 1rem;
         font-size: 0.9rem;
     }
 
-    .games-grid {
+    .playground-grid {
         grid-template-columns: 1fr;
         gap: 1rem;
     }
 
-    .game-card {
+    .playground-card {
         padding: 1rem;
     }
 
-    .game-card img {
+    .playground-card img {
         height: 150px;
     }
 

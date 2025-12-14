@@ -1,0 +1,181 @@
+/* Color Picker */
+
+.picker-overlay {
+position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(8px);
+    z-index: 5000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.picker-overlay.active {
+opacity: 1;
+    visibility: visible;
+}
+
+.picker-modal {
+background: var(--bg-secondary, #1e1e1e);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    width: 340px;
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+    transform: scale(0.9);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.picker-overlay.active .picker-modal {
+transform: scale(1);
+}
+
+.picker-header {
+display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.picker-header h3 {
+margin: 0;
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--text-primary);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.picker-close {
+background: none;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 24px;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0;
+    transition: color 0.2s;
+}
+
+.picker-close:hover {
+color: var(--text-primary);
+}
+
+.picker-grid {
+display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+    margin-bottom: 24px;
+}
+
+.picker-swatch {
+width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid transparent;
+    
+    position: relative;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.picker-swatch::after {
+content: '';
+    position: absolute;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    transition: border-color 0.2s;
+}
+
+.picker-swatch:hover {
+transform: scale(1.1);
+}
+
+.picker-swatch.active::after {
+border-color: var(--text-primary);
+}
+
+.picker-divider {
+text-align: center;
+    font-size: 12px;
+    color: var(--text-muted);
+    margin: 10px 0 15px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+}
+
+.picker-divider::before,
+.picker-divider::after {
+content: '';
+    position: absolute;
+    top: 50%;
+    width: 40%;
+    height: 1px;
+    background: var(--border-color);
+}
+
+.picker-divider::before {
+left: 0;
+}
+
+.picker-divider::after {
+right: 0;
+}
+
+.picker-wheel-container {
+display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.picker-custom-row {
+display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.picker-preview {
+width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+}
+
+.picker-hex-input {
+flex: 1;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    color: var(--text-primary);
+    padding: 10px 12px;
+    border-radius: 8px;
+    font-family: monospace;
+    font-size: 14px;
+    text-transform: uppercase;
+}
+
+.picker-save-btn {
+background: var(--text-primary);
+    color: var(--bg-primary);
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.picker-save-btn:hover {
+opacity: 0.9;
+}

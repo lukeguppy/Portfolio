@@ -4,18 +4,38 @@
   "description": "Portfolio of Luke Guppy",
   "games": [
     {
-      "title": "BlockBlast",
-      "description": "A fun puzzle game where you place blocks to clear lines.",
-      "image": "/images/blockblast.png",
-      "playUrl": "/games/blockblast/",
-      "tech": ["JavaScript", "HTML", "CSS"]
+      "title": "MapPlotter",
+      "description": "An interactive business mapping tool using Leaflet for location visualisation.",
+      "image": "/images/mapplotter.png",
+      "playUrl": "/playground/mapplotter/",
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS",
+        "Leaflet"
+      ]
     },
     {
       "title": "Chess",
       "description": "A full chess game with rules, check, checkmate, castling, en passant, and pawn promotion.",
       "image": "/images/chess.png",
-      "playUrl": "/games/chess/",
-      "tech": ["JavaScript", "HTML", "CSS"]
+      "playUrl": "/playground/chess/",
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
+      "title": "BlockBlast",
+      "description": "A fun puzzle game where you place blocks to clear lines.",
+      "image": "/images/blockblast.png",
+      "playUrl": "/playground/blockblast/",
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
     }
   ]
 }

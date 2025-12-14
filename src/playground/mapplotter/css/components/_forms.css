@@ -1,0 +1,361 @@
+/* Form Elements */
+
+.input-group {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 12px;
+    align-items: center;
+}
+
+.input-group.compact {
+    margin-bottom: 6px;
+    align-items: stretch;
+    gap: 0.5rem;
+}
+
+.category-select {
+    background-color: var(--bg-input, #fff);
+    color: var(--text-primary, #333);
+    border: 1px solid var(--border-color, #ccc);
+    border-radius: 6px;
+    padding: 8px 12px;
+    font-size: 14px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.category-select option {
+    background-color: var(--bg-secondary, #fff);
+    color: var(--text-primary, #333);
+    padding: 8px;
+}
+
+.input-group label {
+    display: flex;
+    align-items: center;
+    min-width: 40px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--text-secondary);
+}
+
+.input-group input,
+.input-group textarea {
+    flex: 1;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    height: 2.5rem;
+    box-sizing: border-box;
+}
+
+.input-group input:focus,
+.input-group textarea:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+}
+
+.input-group textarea {
+    resize: vertical;
+    min-height: 80px;
+}
+
+.custom-pin-controls {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 8px;
+}
+
+.color-section {
+    flex-shrink: 0;
+}
+
+.name-section {
+    flex: 2;
+    min-width: 6rem;
+}
+
+.quantity-section {
+    flex-shrink: 0;
+    width: 5rem;
+}
+
+#custom-pin-name-input {
+    width: 100%;
+    font-size: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    height: 2.5rem;
+    box-sizing: border-box;
+}
+
+#custom-pin-quantity {
+    width: 100%;
+    font-size: 14px;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    color: var(--text-primary);
+    outline: none;
+    transition: all 0.3s ease;
+    height: 2.5rem;
+    box-sizing: border-box;
+}
+
+#custom-pin-name-input:focus,
+#custom-pin-quantity:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+}
+
+#add-custom-pin-btn {
+    flex-shrink: 0;
+    min-width: 60px;
+}
+
+.category-select {
+    width: 100%;
+    background: var(--bg-tertiary);
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    padding: 10px 12px;
+    padding-right: 30px;
+    color: var(--text-primary);
+    font-size: 14px;
+    outline: none;
+    transition: all 0.3s ease;
+    margin-bottom: 6px;
+    height: 2.5rem;
+    box-sizing: border-box;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23808080' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.category-select:focus {
+    box-shadow: none;
+}
+
+.category-select:has(option:checked) {
+    border-color: transparent;
+}
+
+.category-select option {
+    background: var(--bg-tertiary);
+    color: var(--text-primary);
+}
+
+.results-section h4 {
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.full-width {
+    width: 100%;
+    justify-content: center;
+    margin-top: 6px;
+}
+
+.custom-pin-hidden {
+    opacity: 0.3;
+}
+
+#radius-value {
+    min-width: 40px;
+    text-align: center;
+
+    font-weight: 500;
+    color: var(--text-primary);
+    font-size: 13px;
+    margin-left: 8px;
+    white-space: nowrap;
+}
+
+.dark-preview {
+    background-color: #1a1a1a;
+    background-image: url('https://a.basemaps.cartocdn.com/dark_all/12/2048/1362.png');
+}
+
+.light-preview {
+    background-color: #f0f0f0;
+    background-image: url('https://a.basemaps.cartocdn.com/light_all/12/2048/1362.png');
+}
+
+.voyager-preview {
+    background-color: #f4f7f6;
+    background-image: url('https://a.basemaps.cartocdn.com/rastertiles/voyager/12/2048/1362.png');
+}
+
+.minimal-light-preview {
+    background-color: #ffffff;
+    background-image: url('https://a.basemaps.cartocdn.com/light_nolabels/12/2048/1362.png');
+}
+
+.minimal-dark-preview {
+    background-color: #2c2c2c;
+    background-image: url('https://a.basemaps.cartocdn.com/dark_nolabels/12/2048/1362.png');
+}
+
+.osm-preview {
+    background-color: #f2efe9;
+    background-image: url('https://a.tile.openstreetmap.org/12/2048/1362.png');
+}
+
+.satellite-preview {
+    background-color: #1a2c1a;
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/12/1362/2048');
+}
+
+.terrain-preview {
+    background-color: #f4f1de;
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/12/1362/2048');
+}
+
+#marker-opacity {
+    flex: 1;
+    height: 6px;
+    background: var(--bg-tertiary);
+    border-radius: 3px;
+    outline: none;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#marker-opacity::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+#marker-opacity::-webkit-slider-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+}
+
+#marker-opacity::-moz-range-thumb {
+    width: 20px;
+    height: 20px;
+    background: var(--accent-primary);
+    border-radius: 50%;
+    cursor: pointer;
+    border: 3px solid var(--bg-primary);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
+    transition: all 0.2s ease;
+}
+
+#marker-opacity::-moz-range-thumb:hover {
+    transform: scale(1.1);
+    box-shadow: 0 4px 12px rgba(78, 205, 196, 0.4);
+}
+
+.light-mode-control {
+    display: flex;
+    align-items: center;
+}
+
+#opacity-value {
+    min-width: 45px;
+    text-align: center;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-primary);
+    background: var(--bg-tertiary);
+    padding: 6px 8px;
+    border-radius: 6px;
+    border: 1px solid var(--border-color);
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+input[type="number"]::-moz-number-spin-box {
+    -moz-appearance: textfield;
+}
+
+input[type="number"]:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(78, 205, 196, 0.1);
+}
+
+.separator-container {
+    display: flex;
+    align-items: center;
+    text-align: center;
+    margin: 16px 0;
+    position: relative;
+}
+
+.separator-container::before,
+.separator-container::after {
+    content: '';
+    flex: 1;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.separator-text {
+    padding: 0 10px;
+    color: var(--text-muted);
+    font-size: 11px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.rightmove-section {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+#rightmove-url {
+    width: 100%;
+}
+
+#lightbox-img {
+    max-width: 90vw;
+    max-height: 85vh;
+    display: block;
+    object-fit: contain;
+    transition: opacity 0.15s ease;
+}
+
+#picker-wheel-canvas {
+    border-radius: 50%;
+    cursor: crosshair;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    width: 200px;
+    height: 200px;
+}
+
+.close-modal-btn:hover {
+    color: var(--text-primary);
+}

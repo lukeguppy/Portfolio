@@ -1,7 +1,7 @@
 {
-  "name": "games-portfolio",
+  "name": "portfolio",
   "version": "1.0.0",
-  "description": "Portfolio site using Eleventy",
+  "description": "Luke Guppy's Portfolio site using Eleventy",
   "scripts": {
     "build": "eleventy",
     "serve": "eleventy --serve",
@@ -11,6 +11,6 @@
     "@11ty/eleventy": "^2.0.1",
     "prismjs": "^1.29.0"
   },
-  "author": "Your Name",
+  "author": "Luke Guppy",
   "license": "MIT"
 }

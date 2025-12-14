@@ -1,8 +1,8 @@
-module.exports = function(eleventyConfig) {
+module.exports = function (eleventyConfig) {
     // Passthrough copy for static assets
     eleventyConfig.addPassthroughCopy("src/css");
     eleventyConfig.addPassthroughCopy("src/js");
-    eleventyConfig.addPassthroughCopy("src/games");
+    eleventyConfig.addPassthroughCopy("src/playground");
     eleventyConfig.addPassthroughCopy("src/images");
     eleventyConfig.addPassthroughCopy("dissertation.pdf");
 
@@ -11,9 +11,6 @@ module.exports = function(eleventyConfig) {
         "node_modules/prismjs/themes/prism-tomorrow.css": "css/prism.css",
         "node_modules/prismjs/prism.js": "js/prism.js"
     });
-
-    // Add global data
-    eleventyConfig.addGlobalData("games", require("./_data/games.json"));
 
     return {
         pathPrefix: "/Portfolio/",

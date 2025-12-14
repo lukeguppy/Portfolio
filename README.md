@@ -1,12 +1,12 @@
 # Portfolio
 
-A personal portfolio website showcasing my skills, projects, and games. Built with Eleventy.
+Luke Guppy's personal portfolio website showcasing skills, projects, and a playground of interactive experiments. Built with Eleventy.
 
 ## Live Site
 [View Portfolio](https://lukeguppy.github.io/Portfolio/)
 
 ## Features
-- Interactive games (e.g., BlockBlast, chess)
+- Interactive playground (MapPlotter, Chess, BlockBlast)
 - Skills and experience overview
 - Dissertation details
 - Contact information

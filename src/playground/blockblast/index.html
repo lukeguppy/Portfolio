@@ -1,35 +1,49 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Game</title>
+    <title>BlockBlast</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <style>
+        #home-btn:hover {
+            background-color: #0f766e;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </head>
+
 <body>
     <header>
         <nav>
             <div class="nav-container">
-                <h1>Chess</h1>
+                <h1>BlockBlast</h1>
                 <ul>
+                    <li><a href="../">Playground</a></li>
                     <li><a href="../../">Home</a></li>
-                    <li><a href="../index.html">Games</a></li>
                 </ul>
             </div>
         </nav>
     </header>
     <div class="container">
-        <div id="chess-board"></div>
-        <div id="game-info">
-            <div id="turn-indicator">White's turn</div>
-            <button id="reset-btn">Reset Game</button>
+        <div id="combo-placeholder"></div>
+        <div id="combo-display"></div>
+        <div id="score-display">0</div>
+        <div id="game-area">
+            <div id="board"></div>
+            <div id="block-options">
+            </div>
         </div>
+
     </div>
 
     <script src="script.js"></script>
 </body>
+
 </html>

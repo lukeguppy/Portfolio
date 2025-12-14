@@ -1,0 +1,24 @@
+---
+layout: base.njk
+title: Playground
+pageTitle: Playground
+---
+
+<section class="hero">
+    <div class="hero-content">
+        <h1>Playground</h1>
+        <p>A few small projects and experiments I've put together. Click to explore!</p>
+    </div>
+</section>
+
+<section class="playground">
+    <div class="playground-grid">
+        {% for item in site.games %}
+        <a class="playground-card" href="{{ item.playUrl | url }}">
+            <img src="{{ item.image | url }}" alt="{{ item.title }} Thumbnail">
+            <h3>{{ item.title }}</h3>
+            <p>{{ item.description }}</p>
+        </a>
+        {% endfor %}
+    </div>
+</section>
