@@ -1,0 +1,391 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Explore - Interactive Business Mapping</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <link rel="stylesheet" href="css/styles.css?v=fresh">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                    <circle cx="12" cy="10" r="3"></circle>
+                </svg>
+                <span>Explore</span>
+            </div>
+
+            <div class="search-container">
+                <input type="text" id="location-search" placeholder="Search location...">
+                <button id="search-btn">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="m21 21-4.35-4.35"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="header-actions">
+                <!-- Portfolio Navigation -->
+                <a href="../" class="btn btn-secondary" style="text-decoration: none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="3" width="7" height="7"></rect>
+                        <rect x="14" y="14" width="7" height="7"></rect>
+                        <rect x="3" y="14" width="7" height="7"></rect>
+                    </svg>
+                    Playground
+                </a>
+                <a href="../../" class="btn btn-secondary" style="text-decoration: none;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                        <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                    </svg>
+                    Home
+                </a>
+                <!-- Undo/Redo Buttons -->
+                <button id="undo-btn" class="btn-icon-circle" title="Undo (Ctrl+Z)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M3 7v6h6"></path>
+                        <path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13"></path>
+                    </svg>
+                </button>
+                <button id="redo-btn" class="btn-icon-circle" title="Redo (Ctrl+Y)">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 7v6h-6"></path>
+                        <path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3l3 2.7"></path>
+                    </svg>
+                </button>
+
+                <button id="save-btn" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                        <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                        <polyline points="7 3 7 8 15 8"></polyline>
+                    </svg>
+                </button>
+                <button id="load-btn" class="btn btn-secondary">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                        <polyline points="7 10 12 15 17 10"></polyline>
+                        <line x1="12" y1="15" x2="12" y2="3"></line>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Sidebar Toggle Button -->
+        <button id="sidebar-toggle" class="sidebar-toggle-btn">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="15 18 9 12 15 6"></polyline>
+            </svg>
+        </button>
+
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <!-- Main Tabs: Add / Pins -->
+            <div class="main-tabs">
+                <button class="main-tab" data-main-tab="add">Add</button>
+                <button class="main-tab" data-main-tab="pins">Pins <span id="pin-count-badge"
+                        class="tab-badge">0</span></button>
+            </div>
+
+            <!-- Instant Tab Restoration (No Flicker) -->
+            <script>
+                (function () {
+                    const saved = localStorage.getItem('mapplotter-active-tab') || 'add';
+                    const tab = document.querySelector(`.main-tab[data-main-tab="${saved}"]`);
+                    const content = document.getElementById(`${saved}-tab-content`);
+                    if (tab) tab.classList.add('active');
+                    if (content) content.classList.add('active');
+                })();
+            </script>
+
+            <div class="sidebar-content">
+                <!-- ADD TAB CONTENT -->
+                <div class="main-tab-content" id="add-tab-content">
+                    <div class="sidebar-section">
+                        <!-- Search Radius -->
+
+
+                        <!-- Search Type Selection -->
+                        <div class="search-type-container">
+                            <div class="search-type-tabs">
+                                <button class="search-tab active" data-type="category">Category</button>
+                                <button class="search-tab" data-type="name">Specific Name</button>
+                                <button class="search-tab" data-type="custom">Custom Pin</button>
+                            </div>
+
+                            <div class="search-content">
+                                <div class="search-panel active" id="category-panel">
+                                    <select id="category-select" class="category-select">
+                                        <option value="">Select category...</option>
+                                    </select>
+                                    <div class="input-group compact">
+                                        <button id="search-category-btn"
+                                            class="btn btn-primary full-width">Search</button>
+                                    </div>
+                                </div>
+
+                                <div class="search-panel" id="name-panel">
+                                    <div class="input-group compact">
+                                        <input type="text" id="business-search" placeholder="e.g., Tesco, Nando's">
+                                    </div>
+                                    <div class="input-group compact">
+                                        <button id="search-businesses-btn"
+                                            class="btn btn-primary full-width">Search</button>
+                                    </div>
+                                </div>
+
+                                <div class="search-panel" id="custom-panel">
+                                    <div class="custom-pin-controls">
+                                        <div class="color-section">
+                                            <div id="custom-pin-color-dot" class="category-color clickable"
+                                                style="background: #4ECDC4" onclick="app.changeCustomPinColor()"
+                                                title="Click to change color"></div>
+                                        </div>
+                                        <div class="name-section">
+                                            <input type="text" id="custom-pin-name-input" placeholder="Pin name..."
+                                                maxlength="50">
+                                        </div>
+                                        <div class="quantity-section">
+                                            <input type="text" id="custom-pin-quantity" placeholder="Qty"
+                                                maxlength="10">
+                                        </div>
+                                    </div>
+                                    <div class="input-group compact">
+                                        <button id="add-custom-pin-btn" class="btn btn-primary full-width" disabled>Add
+                                            Pin</button>
+                                    </div>
+
+                                    <div class="separator-container">
+                                        <span class="separator-text">OR</span>
+                                    </div>
+
+                                    <div class="rightmove-section">
+                                        <div class="input-group compact">
+                                            <input type="text" id="rightmove-url"
+                                                placeholder="www.rightmove.co.uk/properties/...">
+                                        </div>
+                                        <div class="input-group compact">
+                                            <button id="add-rightmove-btn" class="btn btn-secondary full-width">Add from
+                                                Rightmove</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Search Radius (Moved Here) -->
+                        <div class="radius-control-container" id="radius-control-section">
+                            <div class="radius-header">
+                                <label>Search Radius</label>
+                                <div class="radius-input-wrapper">
+                                    <input type="number" id="radius-value" class="radius-value-input" value="5" min="1"
+                                        max="50">
+                                    <span class="radius-unit">km</span>
+                                    <button id="radius-visibility-btn" class="btn-inset-circle"
+                                        title="Show search radius on map">
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                            stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                            stroke-linejoin="round">
+                                            <path
+                                                d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24">
+                                            </path>
+                                            <line x1="1" y1="1" x2="23" y2="23"></line>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="radius-slider-wrapper">
+                                <input type="range" id="search-radius" min="1" max="50" value="5" class="radius-slider">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- PINS TAB CONTENT -->
+                <div class="main-tab-content" id="pins-tab-content">
+                    <div id="categories-list" class="categories-list"></div>
+                </div>
+            </div>
+
+            <!-- Sidebar Actions (fixed at bottom) -->
+            <div class="sidebar-actions">
+                <div class="sidebar-actions-row">
+                    <!-- Settings Button -->
+                    <button id="settings-btn" class="btn btn-secondary">
+                        <span class="action-icon">⚙️</span>
+                        <span class="action-label">Settings</span>
+                    </button>
+
+                    <!-- Map Theme Button -->
+                    <button id="theme-btn" class="btn btn-secondary">
+                        <span class="action-icon">🗺️</span>
+                        <span class="action-label">Theme</span>
+                    </button>
+
+                    <!-- Export as Image Button -->
+                    <button id="export-image-btn" class="btn btn-secondary" title="Export map as PNG">
+                        <span class="action-icon">📷</span>
+                        <span class="action-label">Export</span>
+                    </button>
+                </div>
+            </div>
+        </aside>
+
+
+
+        <!-- Bottom Button Row is now empty -->
+        <div class="bottom-button-row">
+        </div>
+
+
+        </aside>
+
+        <!-- Map Container -->
+        <div class="map-container">
+            <div id="map"></div>
+        </div>
+    </main>
+
+    <!-- Custom Pin Modal -->
+    <div id="custom-pin-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add Custom Pin</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="input-group">
+                    <label>Description</label>
+                    <textarea id="custom-pin-description" placeholder="Enter description (optional)"></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id="cancel-custom-pin" class="btn btn-secondary">Cancel</button>
+                <button id="save-custom-pin" class="btn btn-primary">Save Pin</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Theme Modal -->
+    <div id="theme-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Map Theme</h3>
+                <button class="modal-close">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                        stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="theme-grid">
+                    <div class="theme-option" data-theme="satellite">
+                        <div class="theme-preview satellite-preview"></div>
+                        <span>Satellite</span>
+                    </div>
+                    <div class="theme-option active" data-theme="dark_all">
+                        <div class="theme-preview dark-preview"></div>
+                        <span>Dark</span>
+                    </div>
+                    <div class="theme-option" data-theme="osm">
+                        <div class="theme-preview osm-preview"></div>
+                        <span>Standard</span>
+                    </div>
+                    <div class="theme-option" data-theme="light_all">
+                        <div class="theme-preview light-preview"></div>
+                        <span>Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="voyager">
+                        <div class="theme-preview voyager-preview"></div>
+                        <span>Voyager</span>
+                    </div>
+                    <div class="theme-option" data-theme="light_nolabels">
+                        <div class="theme-preview minimal-light-preview"></div>
+                        <span>Minimal Light</span>
+                    </div>
+                    <div class="theme-option" data-theme="dark_nolabels">
+                        <div class="theme-preview minimal-dark-preview"></div>
+                        <span>Minimal Dark</span>
+                    </div>
+                    <div class="theme-option" data-theme="terrain">
+                        <div class="theme-preview terrain-preview"></div>
+                        <span>Terrain</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Selection Bar -->
+    <div id="selection-bar" class="selection-bar">
+        <div class="selection-info">
+            <span class="selection-count">0 items selected</span>
+            <button id="clear-selection-btn" class="btn-icon" title="Clear Selection">✕</button>
+        </div>
+        <div class="selection-actions">
+            <button id="group-selected-btn" class="btn btn-sm btn-primary">Group</button>
+            <button id="hide-selected-btn" class="btn btn-sm btn-secondary">Hide</button>
+            <button id="show-selected-btn" class="btn btn-sm btn-secondary">Show</button>
+            <button id="delete-selected-btn" class="btn btn-sm btn-danger">Delete</button>
+        </div>
+    </div>
+
+
+
+    <!-- Hidden file input -->
+    <input type="file" id="file-input" accept=".json" style="display: none;">
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <!-- Config & Utils -->
+    <script src="js/config/constants.js"></script>
+    <script src="js/utils/helpers.js"></script>
+    <script src="js/utils/ModalHelper.js"></script>
+    <script src="js/utils/PopupBuilder.js"></script>
+
+    <script src="js/services/ApiService.js"></script>
+    <script src="js/services/StorageService.js"></script>
+    <script src="js/services/StateManager.js"></script>
+    <script src="js/services/RightmoveService.js"></script>
+    <script src="js/services/UndoManager.js"></script>
+
+    <!-- Components -->
+    <script src="js/components/Icons.js"></script>
+    <script src="js/components/Lightbox.js"></script>
+    <script src="js/components/MapManager.js"></script>
+    <script src="js/components/DragDropManager.js"></script>
+    <script src="js/components/SearchController.js"></script>
+    <script src="js/components/UIManager.js"></script>
+    <script src="js/components/ColorPicker.js"></script>
+    <script src="js/components/ExportController.js"></script>
+    <script src="js/components/SelectionManager.js"></script>
+    <script src="js/components/CustomPinManager.js"></script>
+    <script src="js/components/CategoryManager.js"></script>
+    <script src="js/components/ConfigurationManager.js"></script>
+    <script src="js/components/EventController.js"></script>
+    <script src="js/components/SidebarController.js"></script>
+
+    <!-- Main App -->
+    <script src="js/app.js"></script>
+</body>
+
+</html>

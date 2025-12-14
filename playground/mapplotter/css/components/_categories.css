@@ -1,0 +1,201 @@
+/* Categories & Pin Items */
+
+.categories-list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    background: var(--bg-tertiary);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    transition: transform 0.2s cubic-bezier(0.2, 0, 0.2, 1), box-shadow 0.2s, background-color 0.2s;
+    cursor: grab;
+    position: relative;
+    user-select: none;
+}
+
+.category-item.animating {
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0.2, 1);
+}
+
+.drag-ghost {
+    transition: none !important;
+    will-change: transform;
+}
+
+.category-item.dragging {
+    opacity: 0 !important;
+    visibility: hidden;
+    pointer-events: none;
+    transform: none;
+    box-shadow: none;
+    background: transparent;
+    border: 1px dashed var(--border-color);
+}
+
+.drag-handle {
+    color: var(--text-muted);
+    font-size: 16px;
+    margin-right: 6px;
+    cursor: grab;
+    padding: 4px;
+    flex-shrink: 0;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 20px;
+    width: 20px;
+}
+
+.category-actions {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-shrink: 0;
+    margin-left: 6px;
+}
+
+.category-actions button {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 6px;
+    transition: all 0.2s ease;
+    font-size: 14px;
+}
+
+.category-actions button:hover {
+    color: var(--text-primary);
+    background: var(--bg-primary);
+}
+
+.category-actions button:last-child:hover {
+    color: var(--accent-danger);
+}
+
+.category-actions .btn-inset-circle.active {
+    background: rgba(78, 205, 196, 0.2);
+    color: var(--accent-primary);
+    border-color: rgba(78, 205, 196, 0.3);
+    box-shadow: 0 0 8px rgba(78, 205, 196, 0.2);
+}
+
+.drag-handle:active {
+    cursor: grabbing;
+}
+
+.category-item:hover {
+    border-color: var(--accent-primary);
+    transform: translateY(-1px);
+}
+
+body.dragging-global,
+body.dragging-global * {
+    cursor: none !important;
+}
+
+.category-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 0;
+    margin-left: 6px;
+}
+
+.category-color {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    border: 2px solid var(--bg-primary);
+    flex-shrink: 0;
+}
+
+.category-color.clickable {
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.category-color.clickable:hover {
+    transform: scale(1.2);
+    border-color: var(--accent-primary);
+}
+
+.category-name {
+    font-size: 14px;
+    font-weight: 500;
+}
+
+.category-count {
+    font-size: 12px;
+    color: var(--text-muted);
+}
+
+.category-item {
+    position: relative;
+    transition: all 0.2s;
+}
+
+.category-item.selected {
+    background: var(--bg-tertiary);
+    border-color: var(--accent-primary);
+}
+
+.pin-checkbox {
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    margin-right: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    background: var(--bg-tertiary);
+    flex-shrink: 0;
+}
+
+.pin-checkbox:hover {
+    border-color: var(--accent-primary);
+    background: var(--bg-secondary);
+}
+
+.pin-checkbox:checked {
+    background: var(--accent-primary);
+    border-color: var(--accent-primary);
+}
+
+.pin-checkbox:checked::after {
+    content: '';
+    position: absolute;
+    left: 6px;
+    top: 2px;
+    width: 4px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.category-item:hover .pin-checkbox {
+    border-color: var(--text-muted);
+}
+
+.clickable-text {
+    cursor: pointer;
+    transition: color 0.2s;
+}
+
+.clickable-text:hover {
+    color: var(--accent-primary);
+    text-decoration: underline;
+}
