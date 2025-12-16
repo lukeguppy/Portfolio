@@ -10,160 +10,253 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Portfolio/css/style.css">
     <link rel="stylesheet" href="/Portfolio/css/prism.css">
+    
+    <link rel="stylesheet" href="/Portfolio/css/about.css">
+    
 </head>
 <body>
     <header>
     <nav>
         <div class="nav-container">
             <h1>About Me</h1>
-            <ul class="single">
+            <ul>
                 
-                <li><a href="/Portfolio/">Home</a></li>
+                
+                    
+                        <li><a href="/Portfolio/">Home</a></li>
+                    
+                
+                    
+                
+                    
+                        <li><a href="/Portfolio/dissertation/">Dissertation</a></li>
+                    
+                
+                    
+                        <li><a href="/Portfolio/playground/">Playground</a></li>
+                    
+                
+                    
+                        <li><a href="/Portfolio/contact/">Contact</a></li>
+                    
                 
             </ul>
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank"><img src="/Portfolio/images/linkedin.png" alt="LinkedIn"></a>
-                <a href="https://github.com/lukeguppy" target="_blank"><img src="/Portfolio/images/github.png" alt="GitHub"></a>
+                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" class="nav-social-link" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
+                        <defs>
+                            <linearGradient id="metal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f3f4f6" />
+                                <stop offset="50%" style="stop-color:#d1d5db" />
+                                <stop offset="100%" style="stop-color:#9ca3af" />
+                            </linearGradient>
+                            <filter id="glow-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
+                            </filter>
+                        </defs>
+                        <path fill="url(#metal-gradient)" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/lukeguppy" target="_blank" class="nav-social-link" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
+                        <path fill="url(#metal-gradient)" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </nav>
 </header>
     <main>
         
-<section class="hero">
-    <div class="hero-content">
-        <h1>About Me</h1>
-        <p>More about my skills and work experience.</p>
+<section class="page-header">
+    <h1>About Me</h1>
+    <p>My skills, experience, and projects</p>
+</section>
+
+<!-- EXPERIENCE - Timeline with growing line and dots (KEEP AS-IS) -->
+<section class="about-experience">
+    <div class="experience-container">
+        <div class="experience-title">
+            <span class="word">My</span>
+            <span class="word">Experience</span>
+        </div>
+        <div class="experience-timeline">
+            <!-- Fixed dots on timeline - always visible after title -->
+            <div class="timeline-dots">
+                <span class="timeline-dot" data-card="0"></span>
+                <span class="timeline-dot" data-card="1"></span>
+                <span class="timeline-dot" data-card="2"></span>
+            </div>
+            <!-- Centered scanner/progress bar -->
+            <div class="timeline-scanner"></div>
+            <!-- Cards scroll through, appear when their dot passes scanner -->
+            <div class="timeline-cards">
+                <article class="exp-card">
+                    <h3>Software Engineer I — AI Team</h3>
+                    <p class="meta">AlphaSights · Feb 2026 – Present</p>
+                    <p>Starting soon — details to follow.</p>
+                </article>
+                <article class="exp-card">
+                    <h3>Graduate Software Engineer</h3>
+                    <p class="meta">Leonardo Helicopters · Aug 2024 – Jan 2026</p>
+                    <ul>
+                        <li><strong>Autonomy, Technology and Innovation</strong> — Implemented optimisation solvers, built Python ROS2/Docker drone simulations, designed behaviour tree architectures.</li>
+                        <li><strong>Tactical Processing</strong> — Developed C++/Docker mission management system, built gRPC services for multi-system communication.</li>
+                    </ul>
+                </article>
+                <article class="exp-card">
+                    <h3>Work Experience Placement</h3>
+                    <p class="meta">Metaswitch Networks · 2019</p>
+                    <p>Implemented and tested error checking for translation software during a two-week placement in a professional development environment.</p>
+                </article>
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="about-content">
-    <h2>Work Experience</h2>
-    <div class="timeline">
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <h3>Graduate Software Engineer</h3>
-                <p>Leonardo Helicopters (Aug 2024 – Present)</p>
-                <ul>
-                    <li><strong>Autonomy, Technology and Innovation (May 2025 – Present)</strong>
-                        <ul>
-                            <li>Implemented optimisation solvers for task assignment, delivering a proof-of-concept capability that supports the development of scalable autonomous systems.</li>
-                            <li>Built a python ROS2/Docker drone simulation environment, enabling prototyping of reinforcement learning and multi-agent autonomy for future mission systems.</li>
-                            <li>Designed and tested behaviour tree architectures for mission control, improving scalability and decision-making reliability in simulated operations.</li>
-                        </ul>
-                    </li>
-                    <li><strong>Tactical Processing (Aug 2024 – May 2025)</strong>
-                        <ul>
-                            <li>Developed key components of the C++/Docker mission management system for a prototype autonomous helicopter, including decision-tree and objective management infrastructure that was later demonstrated to stakeholders.</li>
-                            <li>Built and validated gRPC services to ensure robust multi-system communication, supporting successful prototype integration and customer-facing demonstrations.</li>
-                        </ul>
-                    </li>
-                </ul>
+<!-- PINBOARD SECTION - Projects + Tech pin onto cork board -->
+<section class="pinboard-section">
+    <!-- Cork board background -->
+    <div class="pinboard-bg"></div>
+    
+    <!-- Projects -->
+    <div class="pinboard-content">
+        <h2 class="pinboard-title" data-phase="title">Projects</h2>
+        
+        <div class="polaroid-grid projects-grid">
+            <article class="polaroid-card" data-index="0">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">🎓</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>Final Year Dissertation</h3>
+                    <span class="polaroid-tech">C#, Unity, PPO</span>
+                    <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation.</p>
+                    <a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub →</a>
+                </div>
+            </article>
+            
+            <article class="polaroid-card" data-index="1">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">🤖</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>LLM Token Predictor</h3>
+                    <span class="polaroid-tech">Python</span>
+                    <p>A scaled-down transformer system implementing next word prediction capabilities.</p>
+                </div>
+            </article>
+            
+            <article class="polaroid-card" data-index="2">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">📊</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>AI Scheduling</h3>
+                    <span class="polaroid-tech">Python</span>
+                    <p>Optimisation algorithms for dynamic pricing using discount criteria.</p>
+                </div>
+            </article>
+            
+            <article class="polaroid-card" data-index="3">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">📡</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>Delay-Tolerant Networking</h3>
+                    <span class="polaroid-tech">C++, NS3</span>
+                    <p>Routing protocols for mobile nodes in intermittent connectivity.</p>
+                </div>
+            </article>
+            
+            <article class="polaroid-card" data-index="4">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">🌊</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>Wave Diffraction Simulator</h3>
+                    <span class="polaroid-tech">C#, WPF</span>
+                    <p>Interactive wave diffraction pattern simulation with visualisation.</p>
+                </div>
+            </article>
+            
+            <article class="polaroid-card" data-index="5">
+                <div class="polaroid-tape"></div>
+                <div class="polaroid-image">
+                    <span class="polaroid-icon">🎮</span>
+                </div>
+                <div class="polaroid-caption">
+                    <h3>3D Browser Game</h3>
+                    <span class="polaroid-tech">JavaScript, THREE.js</span>
+                    <p>Browser-based 3D game using THREE.js for interactive environments.</p>
+                </div>
+            </article>
+        </div>
+        
+        <!-- Technologies -->
+        <h2 class="pinboard-title tech-title" data-phase="tech-title">Technologies</h2>
+        
+        <!-- Languages Row -->
+        <div class="polaroid-grid tech-grid" data-row="languages">
+            <div class="tech-polaroid" data-index="0">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🐍</span>
+                <span class="tech-name">Python</span>
+            </div>
+            <div class="tech-polaroid" data-index="1">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">⚡</span>
+                <span class="tech-name">C++</span>
+            </div>
+            <div class="tech-polaroid" data-index="2">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🎯</span>
+                <span class="tech-name">C#</span>
+            </div>
+            <div class="tech-polaroid" data-index="3">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">☕</span>
+                <span class="tech-name">Java</span>
+            </div>
+            <div class="tech-polaroid" data-index="4">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🌐</span>
+                <span class="tech-name">JavaScript</span>
             </div>
         </div>
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <h3>Work Experience Placement</h3>
-                <p>Metaswitch Networks (2019)</p>
-                <ul>
-                    <li>Implemented and tested error checking for translation software during a two-week placement.</li>
-                    <li>Gained experience in a professional software development environment, participating in agile standups and team meetings.</li>
-                </ul>
+        
+        <!-- Tools & Systems Row -->
+        <div class="polaroid-grid tech-grid" data-row="tools">
+            <div class="tech-polaroid" data-index="5">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🤖</span>
+                <span class="tech-name">ML/AI</span>
             </div>
-        </div>
-        <div class="timeline-item">
-            <div class="timeline-content">
-                <h3>Dog Walker</h3>
-                <p>Dogs Lead (2015 – 2019)</p>
-                <ul>
-                    <li>Provided professional dog walking services, visiting client homes to ensure pet care and exercise.</li>
-                    <li>Demonstrated responsibility for client properties and the well-being of their dogs during scheduled visits.</li>
-                </ul>
+            <div class="tech-polaroid" data-index="6">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🔧</span>
+                <span class="tech-name">ROS2</span>
             </div>
-        </div>
-    </div>
-
-    <h2>Skills</h2>
-    <h3>Hard Skills</h3>
-    <ul class="skills-list">
-        <li>C++</li>
-        <li>Python</li>
-        <li>C#</li>
-        <li>Machine Learning</li>
-        <li>ROS2</li>
-        <li>Docker</li>
-        <li>Java</li>
-        <li>JavaScript</li>
-        <li>C</li>
-        <li>Haskell</li>
-        <li>SQL</li>
-        <li>Git & GitHub</li>
-        <li>Linux</li>
-        <li>Data Structures</li>
-        <li>Algorithms</li>
-        <li>HTML & CSS</li>
-    </ul>
-    <h3>Soft Skills</h3>
-    <ul class="skills-list">
-        <li>Agile</li>
-        <li>Communication</li>
-        <li>Adaptability</li>
-        <li>Problem Solving</li>
-    </ul>
-
-    <h2>Other Projects</h2>
-    <div class="projects-grid">
-        <div class="project-card">
-            <h3>Final Year Dissertation (C#, Unity, PPO)</h3>
-            <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation of traffic lights and other vehicles. Designed with an extendable reward system for additional behaviours. Demonstrated the design and implementation of intelligent systems to solve complex problems.</p>
-            <p><a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub</a></p>
-        </div>
-        <div class="project-card">
-            <h3>Small-scale LLM-style token predictor (Python)</h3>
-            <p>A scaled down version of the common AI transformer systems behind ChatGPT and other LLMs. From scratch, this implements the same learning and predicting capability scaled down to a simple next word predictor.</p>
-        </div>
-        <div class="project-card">
-            <h3>AI Scheduling (Python)</h3>
-            <p>Designed optimisation algorithms for dynamic pricing using discount criteria, balancing revenue and demand.</p>
-        </div>
-        <div class="project-card">
-            <h3>Delay-Tolerant Networking (C++, NS3)</h3>
-            <p>Built and evaluated routing protocols for mobile nodes in intermittent connectivity, improving resilience and throughput.</p>
-        </div>
-        <div class="project-card">
-            <h3>C#</h3>
-            <ul>
-                <li>WPF application simulating wave diffraction patterns</li>
-                <li>Team project: web app for tracking progress and status of software development teams and their projects</li>
-            </ul>
-        </div>
-        <div class="project-card">
-            <h3>Java</h3>
-            <ul>
-                <li>Normalised PostgreSQL database system for data integrity and querying</li>
-                <li>Maze-solving algorithm using graph traversal techniques</li>
-                <li>Restaurant recommendation system using custom data structures for reviews and search</li>
-            </ul>
-        </div>
-        <div class="project-card">
-            <h3>C</h3>
-            <ul>
-                <li>Packet sniffer for detecting network attacks and anomalies</li>
-                <li>In-terminal text processor for file manipulation and analysis</li>
-            </ul>
-        </div>
-        <div class="project-card">
-            <h3>JavaScript</h3>
-            <ul>
-                <li>Browser-based 3D game using THREE.js for interactive 3D environments</li>
-            </ul>
-        </div>
-        <div class="project-card">
-            <h3>Haskell</h3>
-            <ul>
-                <li>Wordle solver using probabilistic reasoning to guess words efficiently</li>
-                <li>Snake game with functional graphics and game logic</li>
-            </ul>
+            <div class="tech-polaroid" data-index="7">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🐳</span>
+                <span class="tech-name">Docker</span>
+            </div>
+            <div class="tech-polaroid" data-index="8">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">📦</span>
+                <span class="tech-name">Git</span>
+            </div>
+            <div class="tech-polaroid" data-index="9">
+                <div class="polaroid-tape small"></div>
+                <span class="tech-icon">🐧</span>
+                <span class="tech-name">Linux</span>
+            </div>
         </div>
     </div>
 </section>
@@ -171,13 +264,21 @@
     <footer>
     <div class="footer-container">
         <p>&copy; 2025 Luke Guppy</p>
-        <ul>
-            <li><a href="https://linkedin.com/in/lukeguppy">LinkedIn</a></li>
-            <li><a href="https://github.com/lukeguppy">GitHub</a></li>
-        </ul>
+        <div class="footer-links">
+            <a href="https://linkedin.com/in/lukeguppy">LinkedIn</a>
+            <a href="https://github.com/lukeguppy">GitHub</a>
+        </div>
     </div>
 </footer>
     <script src="/Portfolio/js/script.js"></script>
     <script src="/Portfolio/js/prism.js"></script>
+    
+    
+    
+    <script src="/Portfolio/js/about.js"></script>
+    
+    <script src="/Portfolio/js/about-pinboard.js"></script>
+    
+    
 </body>
 </html>

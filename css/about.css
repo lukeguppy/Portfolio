@@ -1,0 +1,700 @@
+/* ================================================
+   ABOUT PAGE - Separate Styles
+   Dramatic, section-based animations
+   ================================================ */
+
+/* ================================================
+   PINNED EXPERIENCE SECTION
+   Timeline with growing line and dots
+   ================================================ */
+.about-experience {
+    min-height: 250vh;
+    /* Reduced for earlier next section transition */
+    position: relative;
+    z-index: 1;
+    /* Below header (1000) */
+}
+
+.experience-container {
+    position: sticky;
+    top: 6rem;
+    /* Header + small extra */
+    height: calc(100vh - 0rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 2rem;
+    overflow: visible;
+}
+
+/* Section title - words appear one by one */
+.experience-title {
+    display: flex;
+    gap: 0.5em;
+    justify-content: center;
+    margin-bottom: 3rem;
+}
+
+.experience-title .word {
+    font-size: clamp(2.5rem, 6vw, 4rem);
+    font-weight: 700;
+    opacity: 0;
+    transform: translateY(40px) scale(0.8);
+    transition: none;
+}
+
+.experience-title .word.visible {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.experience-title .word:nth-child(2) {
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+/* Timeline with line and dots */
+.experience-timeline {
+    position: relative;
+    padding-left: 3rem;
+    max-width: 800px;
+    margin: 0 auto;
+    width: 100%;
+    --line-progress: 0;
+    --timeline-visible: 0;
+    /* 0 = hidden, 1 = visible */
+}
+
+/* Base timeline line - appears after title, with dots */
+.experience-timeline::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--border-glass);
+    opacity: var(--timeline-visible);
+    transition: opacity 0.5s ease;
+}
+
+/* Filled line - grows from top based on progress */
+.experience-timeline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 2px;
+    height: calc(var(--line-progress) * 100%);
+    background: var(--accent);
+    box-shadow: 0 0 15px var(--accent-glow);
+    z-index: 1;
+    opacity: var(--timeline-visible);
+}
+
+/* Container for separate dot elements */
+.timeline-dots {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    z-index: 2;
+}
+
+/* Individual dots - positioned at card locations */
+.timeline-dot {
+    position: absolute;
+    left: 50%;
+    width: 14px;
+    height: 14px;
+    background: var(--border-glass);
+    border: 2px solid var(--border-glass);
+    border-radius: 50%;
+    transform: translateX(-50%);
+    opacity: var(--timeline-visible, 0);
+    transition: background 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease, opacity 0.5s ease;
+}
+
+/* Position dots to match card positions */
+.timeline-dot:nth-child(1) {
+    top: 60px;
+}
+
+.timeline-dot:nth-child(2) {
+    top: 240px;
+}
+
+.timeline-dot:nth-child(3) {
+    top: 470px;
+}
+
+/* Dot lights up when line reaches it */
+.timeline-dot.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    box-shadow: 0 0 25px var(--accent-glow);
+}
+
+/* Container for card content */
+.timeline-cards {
+    padding-left: 3rem;
+}
+
+/* Timeline cards - fade in only, no movement */
+.exp-card {
+    position: relative;
+    background: var(--bg-glass);
+    border: 1px solid var(--border-glass);
+    border-radius: 24px;
+    padding: 2rem;
+    margin-bottom: 1.5rem;
+    --item-progress: 0;
+    opacity: var(--item-progress);
+    transform: translateX(calc(40px * (1 - var(--item-progress))));
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.exp-card:last-child {
+    margin-bottom: 0;
+}
+
+/* Card glow when transition completes */
+.exp-card.complete {
+    border-color: var(--accent);
+    box-shadow: 0 0 30px rgba(0, 255, 200, 0.15);
+}
+
+.exp-card:hover {
+    border-color: var(--border-glow);
+    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+}
+
+.exp-card h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.exp-card .meta {
+    font-size: 0.9375rem;
+    color: var(--accent);
+    font-weight: 500;
+    margin-bottom: 1rem;
+}
+
+.exp-card p,
+.exp-card ul {
+    color: var(--text-soft);
+    font-size: 0.9375rem;
+    line-height: 1.7;
+}
+
+.exp-card ul {
+    padding-left: 1.25rem;
+}
+
+/* ================================================
+   SKILLS CLOUD SECTION
+   Like Technologies solar system
+   ================================================ */
+.about-skills {
+    min-height: 200vh;
+    position: relative;
+    padding: 0 2rem;
+}
+
+.skills-container {
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+}
+
+/* Title animates from large */
+.skills-title {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(2);
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 700;
+    opacity: 0;
+    z-index: 10;
+    pointer-events: none;
+    transition: none;
+}
+
+/* Skill cloud container */
+.skill-cloud {
+    position: relative;
+    width: 100%;
+    max-width: 700px;
+    height: 400px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Central core (like sun) */
+.skill-core {
+    position: absolute;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--accent), #0d9488);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    color: #000;
+    opacity: 0;
+    transform: scale(0);
+    box-shadow: 0 0 60px var(--accent-glow);
+}
+
+.skill-core.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Orbiting skill pills */
+.skill-orbit {
+    position: absolute;
+    border: 1px dashed var(--border-glass);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+}
+
+.skill-orbit.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.skill-orbit:nth-child(1) {
+    width: 250px;
+    height: 250px;
+}
+
+.skill-orbit:nth-child(2) {
+    width: 380px;
+    height: 380px;
+}
+
+.skill-orbit:nth-child(3) {
+    width: 500px;
+    height: 500px;
+}
+
+/* Skill pills float around */
+.skill-pill {
+    position: absolute;
+    padding: 0.625rem 1.25rem;
+    background: var(--bg-glass-strong);
+    backdrop-filter: blur(20px);
+    border: 1px solid var(--border-glass);
+    border-radius: 100px;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-soft);
+    white-space: nowrap;
+    opacity: 0;
+    transform: scale(0.3);
+    transition: border-color 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.skill-pill.visible {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.skill-pill:hover {
+    border-color: var(--accent);
+    color: var(--accent);
+    box-shadow: 0 0 30px rgba(20, 184, 166, 0.3);
+}
+
+/* ================================================
+   PINBOARD SECTION
+   Cork board with polaroid cards that pin on scroll
+   ================================================ */
+.pinboard-section {
+    min-height: 450vh;
+    position: relative;
+    z-index: 5;
+}
+
+/* Cork board background - fades in */
+.pinboard-bg {
+    position: fixed;
+    inset: 0;
+    /* Multi-layer cork texture */
+    background:
+        radial-gradient(ellipse 80px 60px at 15% 25%, rgba(180, 140, 100, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse 100px 80px at 75% 65%, rgba(160, 120, 80, 0.06) 0%, transparent 50%),
+        radial-gradient(ellipse 60px 50px at 45% 80%, rgba(170, 130, 90, 0.07) 0%, transparent 50%),
+        linear-gradient(160deg, hsl(25, 40%, 18%) 0%, hsl(20, 35%, 14%) 40%, hsl(15, 30%, 10%) 100%);
+    opacity: 0;
+    transition: opacity 1s ease;
+    z-index: -1;
+}
+
+/* Cork grain texture overlay */
+.pinboard-bg::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle 2px at 20% 30%, rgba(139, 90, 43, 0.15) 0%, transparent 100%),
+        radial-gradient(circle 1.5px at 60% 70%, rgba(120, 80, 40, 0.12) 0%, transparent 100%),
+        radial-gradient(circle 3px at 40% 60%, rgba(150, 100, 50, 0.08) 0%, transparent 100%);
+    background-size: 40px 40px, 35px 35px, 50px 50px;
+    pointer-events: none;
+    opacity: 0.8;
+}
+
+/* Fine grain noise */
+.pinboard-bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+        radial-gradient(circle at center, rgba(255, 220, 180, 0.03) 1px, transparent 1px),
+        radial-gradient(circle at center, rgba(139, 90, 43, 0.02) 1px, transparent 1px);
+    background-size: 4px 4px, 7px 7px;
+    background-position: 0 0, 2px 2px;
+    pointer-events: none;
+}
+
+.pinboard-bg.visible {
+    opacity: 1;
+}
+
+/* Content container - sticky */
+.pinboard-content {
+    position: sticky;
+    top: 0;
+    min-height: 100vh;
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    will-change: transform;
+}
+
+/* Section titles with tape effect */
+.pinboard-title {
+    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-weight: 800;
+    color: #fff;
+    text-align: center;
+    margin: 0 0 3rem 0;
+    position: relative;
+    opacity: 0;
+    transform: translateY(-80px) rotate(-2deg);
+    transition: none;
+}
+
+/* Tech title sticks to top when it reaches it */
+.pinboard-title.tech-title {
+    position: sticky;
+    top: 6rem;
+    z-index: 10;
+}
+
+.pinboard-title.pinned {
+    opacity: 1;
+    transform: translateY(0) rotate(-1deg);
+}
+
+.pinboard-title::before {
+    content: '';
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) rotate(2deg);
+    width: 80px;
+    height: 25px;
+    background: linear-gradient(135deg, rgba(255, 255, 220, 0.7) 0%, rgba(255, 255, 200, 0.5) 100%);
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    opacity: 0;
+    transition: opacity 0.3s ease 0.2s;
+}
+
+.pinboard-title.pinned::before {
+    opacity: 1;
+}
+
+/* Polaroid grid */
+.polaroid-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    width: 100%;
+    margin-bottom: 4rem;
+}
+
+/* Individual polaroid card */
+.polaroid-card {
+    position: relative;
+    background: linear-gradient(145deg, #fafafa 0%, #f0f0f0 100%);
+    padding: 1rem 1rem 1.5rem 1rem;
+    border-radius: 4px;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 8px 40px rgba(0, 0, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    transform: translateY(100px) rotate(var(--rotation, 0deg));
+    opacity: 0;
+    transition: none;
+    --rotation: 0deg;
+}
+
+.polaroid-card.pinned {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+}
+
+/* Randomize rotations */
+.polaroid-card[data-index="0"] {
+    --rotation: -3deg;
+}
+
+.polaroid-card[data-index="1"] {
+    --rotation: 2deg;
+}
+
+.polaroid-card[data-index="2"] {
+    --rotation: -1deg;
+}
+
+.polaroid-card[data-index="3"] {
+    --rotation: 4deg;
+}
+
+.polaroid-card[data-index="4"] {
+    --rotation: -2deg;
+}
+
+.polaroid-card[data-index="5"] {
+    --rotation: 1deg;
+}
+
+/* Hover lift effect */
+.polaroid-card.pinned:hover {
+    transform: translateY(-10px) rotate(0deg) scale(1.02);
+    box-shadow:
+        0 20px 40px rgba(0, 0, 0, 0.4),
+        0 15px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 10;
+}
+
+/* Tape decoration */
+.polaroid-tape {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-3deg);
+    width: 60px;
+    height: 20px;
+    background: linear-gradient(135deg, rgba(255, 255, 220, 0.8) 0%, rgba(255, 255, 200, 0.6) 100%);
+    border-radius: 2px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.15);
+}
+
+.polaroid-tape.small {
+    width: 40px;
+    height: 14px;
+    top: -8px;
+}
+
+/* Polaroid image area */
+.polaroid-image {
+    width: 100%;
+    aspect-ratio: 4/3;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+}
+
+.polaroid-icon {
+    font-size: 3rem;
+    filter: grayscale(0.3);
+}
+
+/* Caption area */
+.polaroid-caption {
+    color: #333;
+    text-align: left;
+}
+
+.polaroid-caption h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin: 0 0 0.5rem 0;
+    color: #1a1a1a;
+}
+
+.polaroid-tech {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #14b8a6;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 0.5rem;
+    background: rgba(20, 184, 166, 0.1);
+    padding: 0.2rem 0.5rem;
+    border-radius: 3px;
+}
+
+.polaroid-caption p {
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: #555;
+    margin: 0 0 0.75rem 0;
+}
+
+.polaroid-caption a {
+    font-size: 0.85rem;
+    color: #14b8a6;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.polaroid-caption a:hover {
+    text-decoration: underline;
+}
+
+/* Tech polaroids - smaller */
+.tech-grid {
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 1.5rem;
+    max-width: 800px;
+}
+
+.tech-polaroid {
+    position: relative;
+    background: linear-gradient(145deg, #fafafa 0%, #f0f0f0 100%);
+    padding: 1.5rem 1rem;
+    border-radius: 4px;
+    box-shadow:
+        0 3px 15px rgba(0, 0, 0, 0.25),
+        inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    text-align: center;
+    transform: translateY(60px) rotate(var(--rotation, 0deg));
+    opacity: 0;
+    transition: none;
+}
+
+.tech-polaroid.pinned {
+    opacity: 1;
+    transform: translateY(0) rotate(var(--rotation, 0deg));
+}
+
+/* Random rotations for tech */
+.tech-polaroid[data-index="0"] {
+    --rotation: 2deg;
+}
+
+.tech-polaroid[data-index="1"] {
+    --rotation: -1deg;
+}
+
+.tech-polaroid[data-index="2"] {
+    --rotation: 3deg;
+}
+
+.tech-polaroid[data-index="3"] {
+    --rotation: -2deg;
+}
+
+.tech-polaroid[data-index="4"] {
+    --rotation: 1deg;
+}
+
+.tech-polaroid[data-index="5"] {
+    --rotation: -3deg;
+}
+
+.tech-polaroid[data-index="6"] {
+    --rotation: 2deg;
+}
+
+.tech-polaroid[data-index="7"] {
+    --rotation: -1deg;
+}
+
+.tech-polaroid[data-index="8"] {
+    --rotation: 0deg;
+}
+
+.tech-polaroid[data-index="9"] {
+    --rotation: -2deg;
+}
+
+.tech-polaroid.pinned:hover {
+    transform: translateY(-5px) rotate(0deg) scale(1.05);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    z-index: 10;
+}
+
+.tech-icon {
+    display: block;
+    font-size: 1.5rem;
+    margin-bottom: 0.3rem;
+    filter: grayscale(0.2);
+}
+
+.tech-name {
+    font-size: 1rem;
+    font-weight: 700;
+    color: #1a1a1a;
+}
+
+/* Tech title */
+.tech-title {
+    margin-top: 4rem;
+}
+
+/* Space between tech rows */
+.tech-grid[data-row="languages"] {
+    margin-bottom: 1.5rem;
+}
+
+.tech-grid[data-row="tools"] {
+    margin-bottom: 2rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .polaroid-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .tech-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .pinboard-content {
+        padding: 4rem 1rem;
+    }
+
+    .experience-title {
+        flex-wrap: wrap;
+    }
+}

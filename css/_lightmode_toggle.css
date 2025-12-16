@@ -1,0 +1,179 @@
+/* User Provided Day/Night Toggle CSS - Fixed Pixel Port */
+/* Converted from em scaling to fixed px to avoid min-font-size issues */
+/* Target Size: ~56px Width */
+
+.theme-toggle-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 32px;
+}
+
+.theme-switch {
+    display: inline-block;
+    position: relative;
+    width: 56px;
+    height: 28px;
+    margin: 0;
+}
+
+.theme-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+}
+
+/* === THE TRACK (.tdnn) === */
+.tdnn {
+    cursor: pointer;
+    margin: 0 auto;
+    position: relative;
+    width: 56px;
+    height: 28px;
+    border-radius: 28px;
+    transition: all 500ms ease-in-out;
+    background: #423966;
+    /* Night BG */
+    overflow: hidden;
+    box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+/* === THE ORB (.moon) === */
+.moon {
+    position: absolute;
+    display: block;
+    border-radius: 50%;
+    transition: all 400ms ease-in-out;
+
+    /* MOON STATE */
+    top: 5px;
+    left: 5px;
+    transform: rotate(-75deg);
+    width: 18px;
+    height: 18px;
+    background: #423966;
+    /* Night BG */
+
+    /* Moon Shadow (The Crescent ONLY) */
+    /* Starfield moved to .stars container to avoid rotation issues */
+    box-shadow:
+        5px 4px 0 0 #d9fbff inset,
+        /* Crescent */
+        rgba(255, 255, 255, 0) 0px 0px 0 0;
+    /* Clear previous */
+}
+
+/* === STARS (New Container) === */
+.stars {
+    opacity: 1;
+    transition: opacity 0.5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+/* Draw Stars using box-shadow on a 1px pixel */
+.stars:before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 2px;
+    height: 2px;
+    background: transparent;
+    border-radius: 50%;
+
+    box-shadow:
+        /* x (plus is right) | y (minus is up) | blur | size */
+        4px -8px 0.3px 0px rgba(255, 255, 255, 0.9),
+        16px 2px 0.3px 0px rgba(255, 255, 255, 0.8),
+        4px 4px 0.3px 1px rgba(255, 255, 255, 0.8),
+        -5px -5px 0.3px 0px rgba(255, 255, 255, 0.9),
+        18px -5px 0.3px 1px rgba(255, 255, 255, 0.7);
+}
+
+/* Hide Stars in Day Mode */
+input:checked+.tdnn .stars {
+    opacity: 0;
+}
+
+/* === CHECKED STATE (Day Mode) === */
+
+/* Track becomes Day */
+input:checked+.tdnn {
+    background: #9ee3fb;
+    /* Sky Blue */
+}
+
+/* Orb becomes Sun */
+input:checked+.tdnn .moon {
+    top: 6px;
+    left: 32px;
+    /* Move right */
+    transform: rotate(0deg);
+
+    width: 16px;
+    height: 16px;
+
+    background: #FFD93D;
+    /* Yellow Sun */
+
+    /* Sun Rays - Scaled down */
+    box-shadow:
+        0 -9px 0 -5px #FFD93D,
+        6px -6px 0 -5px #FFD93D,
+        9px 0 0 -5px #FFD93D,
+        6px 6px 0 -5px #FFD93D,
+        0 9px 0 -5px #FFD93D,
+        -6px 6px 0 -5px #FFD93D,
+        -9px 0 0 -5px #FFD93D,
+        -6px -6px 0 -5px #FFD93D;
+}
+
+
+/* === CLOUDS === */
+.clouds {
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+
+.clouds:before,
+.clouds:after {
+    content: "";
+    position: absolute;
+    background: #fff;
+    border-radius: 20px;
+}
+
+.clouds:before {
+    width: 12px;
+    height: 6px;
+    top: 8px;
+    left: 8px;
+    opacity: 0.8;
+}
+
+.clouds:after {
+    width: 16px;
+    height: 8px;
+    top: 15px;
+    left: 14px;
+    opacity: 0.6;
+}
+
+/* Show clouds in Day Mode */
+input:checked+.tdnn .clouds {
+    opacity: 1;
+    transform: translateX(-4px);
+    transition: all 0.5s ease;
+}

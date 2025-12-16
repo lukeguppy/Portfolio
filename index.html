@@ -10,23 +10,56 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Portfolio/css/style.css">
     <link rel="stylesheet" href="/Portfolio/css/prism.css">
+    
 </head>
 <body>
     <header>
     <nav>
         <div class="nav-container">
-            <h1>Portfolio</h1>
+            <h1>Home</h1>
             <ul>
                 
-                <li><a href="/Portfolio/about-me/">About Me</a></li>
-                <li><a href="/Portfolio/playground/">Playground</a></li>
-                <li><a href="/Portfolio/dissertation/">Dissertation</a></li>
-                <li><a href="/Portfolio/contact/">Contact</a></li>
+                
+                    
+                
+                    
+                        <li><a href="/Portfolio/about-me/">About Me</a></li>
+                    
+                
+                    
+                        <li><a href="/Portfolio/dissertation/">Dissertation</a></li>
+                    
+                
+                    
+                        <li><a href="/Portfolio/playground/">Playground</a></li>
+                    
+                
+                    
+                        <li><a href="/Portfolio/contact/">Contact</a></li>
+                    
                 
             </ul>
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank"><img src="/Portfolio/images/linkedin.png" alt="LinkedIn"></a>
-                <a href="https://github.com/lukeguppy" target="_blank"><img src="/Portfolio/images/github.png" alt="GitHub"></a>
+                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" class="nav-social-link" aria-label="LinkedIn">
+                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
+                        <defs>
+                            <linearGradient id="metal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#f3f4f6" />
+                                <stop offset="50%" style="stop-color:#d1d5db" />
+                                <stop offset="100%" style="stop-color:#9ca3af" />
+                            </linearGradient>
+                            <filter id="glow-shadow" x="-50%" y="-50%" width="200%" height="200%">
+                                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
+                            </filter>
+                        </defs>
+                        <path fill="url(#metal-gradient)" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
+                    </svg>
+                </a>
+                <a href="https://github.com/lukeguppy" target="_blank" class="nav-social-link" aria-label="GitHub">
+                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
+                        <path fill="url(#metal-gradient)" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                    </svg>
+                </a>
             </div>
         </div>
     </nav>
@@ -34,42 +67,134 @@
     <main>
         
 <section class="hero">
+    <div class="hero-glow"></div>
     <div class="hero-content">
-        <h1>Welcome to My Portfolio</h1>
-        <p>Personal portfolio showcasing software engineering projects, academic research, professional experience and a playground with a few fun projects.</p>
-    </div>
-</section>
-
-<section id="about" class="about">
-    <div class="about-container">
-        <h2>About Me</h2>
-        
-        <div class="about-content">
-            <p class="fade-in-1">I'm Luke, a <strong>Graduate Software Engineer</strong> at Leonardo Helicopters, working on prototypes of <strong>autonomous control systems</strong> using <strong>Python</strong> and <strong>C++</strong>. I have experience with machine learning, system design, and software engineering, and enjoy building systems and delivering meaningful, tangible results.</p>
-            
-            <p class="fade-in-2">I hold a <strong>1st-Class Honours degree in Computer Science</strong> from the University of Warwick. My 1st-Class dissertation involved using a curriculum learning approach to train a PPO neural network agent for autonomous driving in a custom Unity simulation—giving me deep, hands-on experience in neural networks and system design.</p>
-            
-            <p class="fade-in-3">Through professional and personal projects, I have experience with <strong>Python, C++, C#, Java, C, and more languages</strong>. I thrive on taking on new challenges, expanding my skillset, contributing to projects that create a meaningful impact, and I am always looking for the next opportunity to grow.</p>
+        <span class="hero-tag">Hi, I'm</span>
+        <h1 class="hero-title">
+            <span class="title-line">Luke</span>
+            <span class="title-line accent">Guppy</span>
+        </h1>
+        <p class="hero-sub">Joining <strong>AlphaSights</strong> AI team Feb 2026. Currently at <strong>Leonardo Helicopters</strong> building autonomous systems.</p>
+        <div class="hero-cta">
+            <a href="/Portfolio/about-me/" class="cta-primary">
+                <span>View Experience</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="/Portfolio/playground/" class="cta-ghost">Explore Projects</a>
         </div>
     </div>
 </section>
 
-<section id="navigation" class="navigation">
-    <div class="nav-cards">
-        <div class="nav-card">
-            <h3>Skills & Experience</h3>
-            <p>View my technical skills and professional work experience.</p>
-            <a href="/Portfolio/about-me/" class="btn-secondary">View Skills & Experience</a>
+<!-- PINNED SECTION: What I Build -->
+<section class="pinned-section" id="skills">
+    <div class="pin-container">
+        <div class="pin-content">
+            <div class="stagger-words">
+                <span class="word" data-order="1">What</span>
+                <span class="word" data-order="2">I</span>
+                <span class="word" data-order="3">Build</span>
+            </div>
+            <div class="cards-from-sides">
+                <article class="side-card from-left" data-order="4">
+                    <div class="card-icon-wrap">
+                        <!-- Robot Face (Matches Solar System) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="10" rx="2" />
+                            <circle cx="12" cy="5" r="2" />
+                            <path d="M12 7v4" />
+                            <line x1="8" y1="16" x2="8" y2="16" />
+                            <line x1="16" y1="16" x2="16" y2="16" />
+                        </svg>
+                    </div>
+                    <h3>Autonomous Systems</h3>
+                    <p>Reinforcement learning and multi-agent coordination for robotics.</p>
+                </article>
+                <article class="side-card from-right" data-order="5">
+                    <div class="card-icon-wrap">
+                        <!-- Neural Core / Network (For ML) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <circle cx="6" cy="6" r="2" />
+                            <circle cx="18" cy="6" r="2" />
+                            <circle cx="6" cy="18" r="2" />
+                            <circle cx="18" cy="18" r="2" />
+                            <path d="M12 9V6" />
+                            <path d="M12 15v3" />
+                            <path d="M9 12H6" />
+                            <path d="M15 12h3" />
+                            <path d="M10 10l-2.5-2.5" />
+                            <path d="M14 10l2.5-2.5" />
+                            <path d="M10 14l-2.5 2.5" />
+                            <path d="M14 14l2.5 2.5" />
+                        </svg>
+                    </div>
+                    <h3>Machine Learning</h3>
+                    <p>Neural networks and PPO agents for real-world applications.</p>
+                </article>
+                <article class="side-card from-left" data-order="6">
+                    <div class="card-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3>Software Engineering</h3>
+                    <p>Python, C++, Docker, ROS2 — robust systems that deliver.</p>
+                </article>
+            </div>
         </div>
-        <div class="nav-card">
-            <h3>Dissertation</h3>
-            <p>Explore my Final Year Dissertation on autonomous vehicle systems.</p>
-            <a href="/Portfolio/dissertation/" class="btn-secondary">View Dissertation</a>
+    </div>
+</section>
+
+<!-- EXPLORE SECTION -->
+<section class="explore-section" id="explore">
+    <div class="explore-inner">
+        <h2 class="section-title reveal-up">Explore</h2>
+        <div class="explore-grid">
+            <a href="/Portfolio/about-me/" class="explore-tile reveal-up" data-color="teal" style="--delay: 0.1s">
+                <div class="tile-content">
+                    <span class="tile-label">Experience</span>
+                    <h3>Skills & Career</h3>
+                    <p>Work history and technical expertise</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            <a href="/Portfolio/dissertation/" class="explore-tile reveal-up" data-color="purple" style="--delay: 0.2s">
+                <div class="tile-content">
+                    <span class="tile-label">Research</span>
+                    <h3>Dissertation</h3>
+                    <p>Autonomous driving with PPO</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            <a href="/Portfolio/playground/" class="explore-tile tile-wide reveal-up" data-color="blue" style="--delay: 0.3s">
+                <div class="tile-content">
+                    <span class="tile-label">Projects</span>
+                    <h3>Playground</h3>
+                    <p>Interactive demos and experiments</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
         </div>
-        <div class="nav-card">
-            <h3>Playground</h3>
-            <p>Try a few interactive projects implemented by me.</p>
-            <a href="/Portfolio/playground/" class="btn-secondary">Explore Playground</a>
+    </div>
+</section>
+
+<!-- TECH SOLAR SYSTEM -->
+<section class="tech-section" id="skills">
+    <div class="tech-inner">
+        <h2 class="section-title reveal-up">Technologies</h2>
+        <div class="solar-system">
+            <div class="sun"></div>
+            <div class="orbit orbit-1">
+                <span class="planet" style="--start: 15deg">Python</span>
+                <span class="planet" style="--start: 105deg">C++</span>
+                <span class="planet" style="--start: 200deg">C#</span>
+                <span class="planet" style="--start: 290deg">Java</span>
+            </div>
+            <div class="orbit orbit-2">
+                <span class="planet" style="--start: 45deg">ML</span>
+                <span class="planet" style="--start: 117deg">ROS2</span>
+                <span class="planet" style="--start: 189deg">Docker</span>
+                <span class="planet" style="--start: 261deg">Git</span>
+                <span class="planet" style="--start: 333deg">Linux</span>
+            </div>
         </div>
     </div>
 </section>
@@ -78,13 +203,15 @@
     <footer>
     <div class="footer-container">
         <p>&copy; 2025 Luke Guppy</p>
-        <ul>
-            <li><a href="https://linkedin.com/in/lukeguppy">LinkedIn</a></li>
-            <li><a href="https://github.com/lukeguppy">GitHub</a></li>
-        </ul>
+        <div class="footer-links">
+            <a href="https://linkedin.com/in/lukeguppy">LinkedIn</a>
+            <a href="https://github.com/lukeguppy">GitHub</a>
+        </div>
     </div>
 </footer>
     <script src="/Portfolio/js/script.js"></script>
     <script src="/Portfolio/js/prism.js"></script>
+    
+    
 </body>
 </html>
