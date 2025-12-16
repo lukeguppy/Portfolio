@@ -20,6 +20,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const timelineCardsContainer = document.querySelector('.timeline-cards');
 
     if (experienceSection && expTimeline && timelineCardsContainer) {
+        // ================================================
+        // CONFIGURABLE: Scroll duration per phase (in vh per card)
+        // These are ABSOLUTE - adding more cards increases section height automatically
+        // ================================================
+        const lineGrowthVh = 60;   // vh of scroll for line to grow to each dot (ADJUSTABLE)
+        const cardAnimateVh = 30;  // vh of scroll for card animation
+        const dwellVh = 60;       // vh of scroll for reading/dwelling
+
+        const numCards = expCards.length;
+        const vhPerCard = lineGrowthVh + cardAnimateVh + dwellVh;
+
+        // Calculate and set section height dynamically
+        // Timeline takes 85% of section (15% for title), plus 100vh buffer
+        const timelineVh = numCards * vhPerCard;
+        const sectionHeight = Math.ceil(timelineVh / 0.85) + 100;
+        experienceSection.style.minHeight = `${sectionHeight}vh`;
+
+        // Calculate percentages from absolute values
+        const linePct = lineGrowthVh / vhPerCard;
+        const cardPct = cardAnimateVh / vhPerCard;
+        const dwellPct = dwellVh / vhPerCard;
+
         const updateExperience = () => {
             const rect = experienceSection.getBoundingClientRect();
             const sectionTop = rect.top;
@@ -27,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const windowHeight = window.innerHeight;
 
             // Calculate progress through the pinned section
+            // To slow down: increase section height in CSS (more scroll room)
             const scrollDistance = sectionHeight - windowHeight;
             const scrolled = -sectionTop;
             const progress = Math.max(0, Math.min(1, scrolled / scrollDistance));
@@ -71,8 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
-            // Divide progress into segments per card
-            const numCards = expCards.length;
+            // Each card gets equal segment of timeline progress
             const segmentSize = 1 / numCards;
 
             let lineHeight = 0;
@@ -80,9 +102,9 @@ document.addEventListener('DOMContentLoaded', () => {
             expCards.forEach((card, i) => {
                 const dot = timelineDots[i];
                 const segmentStart = i * segmentSize;
-                // 15% line growth, 25% card animate, 60% dwell (more time to read)
-                const segmentLineEnd = segmentStart + segmentSize * 0.15;
-                const segmentCardEnd = segmentStart + segmentSize * 0.40;
+                // Phase boundaries within segment
+                const segmentLineEnd = segmentStart + segmentSize * linePct;
+                const segmentCardEnd = segmentStart + segmentSize * (linePct + cardPct);
                 const segmentEnd = segmentStart + segmentSize;
 
                 const dotPosition = dotPositions[i];
@@ -90,34 +112,40 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 if (timelineProgress >= segmentStart) {
                     if (timelineProgress < segmentLineEnd) {
-                        // Line growing toward dot
+                        // Line growing toward dot - card not visible yet
                         const growthProgress = (timelineProgress - segmentStart) / (segmentLineEnd - segmentStart);
                         lineHeight = prevDotPosition + (dotPosition - prevDotPosition) * growthProgress;
 
                         card.style.setProperty('--item-progress', 0);
-                        card.classList.remove('visible', 'complete');
+                        card.style.setProperty('--card-scale', 0.95);
+                        card.classList.remove('visible', 'complete', 'focused');
                         if (dot) dot.classList.remove('active');
                     } else if (timelineProgress < segmentCardEnd) {
-                        // Card animating in
+                        // Card animating in - FOCUSED, scaling up
                         lineHeight = dotPosition;
                         const cardProgress = (timelineProgress - segmentLineEnd) / (segmentCardEnd - segmentLineEnd);
 
                         card.style.setProperty('--item-progress', cardProgress);
+                        card.style.setProperty('--card-scale', 0.95 + 0.1 * cardProgress);  // Scale 0.95 -> 1.05
+                        card.classList.add('focused');
                         if (dot) dot.classList.add('active');
                         if (cardProgress > 0) card.classList.add('visible');
                         if (cardProgress >= 1) card.classList.add('complete');
                         else card.classList.remove('complete');
                     } else if (timelineProgress < segmentEnd) {
-                        // Dwell phase - leeway to view card
+                        // Dwell phase - FOCUSED, full scale
                         lineHeight = dotPosition;
                         card.style.setProperty('--item-progress', 1);
-                        card.classList.add('visible', 'complete');
+                        card.style.setProperty('--card-scale', 1.05);
+                        card.classList.add('visible', 'complete', 'focused');
                         if (dot) dot.classList.add('active');
                     } else {
-                        // Past segment
+                        // Past segment - shrink back, no longer focused
                         lineHeight = dotPosition;
                         card.style.setProperty('--item-progress', 1);
+                        card.style.setProperty('--card-scale', 0.95);
                         card.classList.add('visible', 'complete');
+                        card.classList.remove('focused');
                         if (dot) dot.classList.add('active');
                     }
                 } else {

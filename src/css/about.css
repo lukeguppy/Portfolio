@@ -8,11 +8,11 @@
    Timeline with growing line and dots
    ================================================ */
 .about-experience {
-    min-height: 250vh;
-    /* Reduced for earlier next section transition */
+    /* Height set dynamically by about.js based on numCards × vhPerCard */
+    min-height: 600vh;
+    /* Fallback if JS fails */
     position: relative;
     z-index: 1;
-    /* Below header (1000) */
 }
 
 .experience-container {
@@ -143,33 +143,30 @@
     padding-left: 3rem;
 }
 
-/* Timeline cards - fade in only, no movement */
+/* Experience entries - no card styling, blend with background */
 .exp-card {
     position: relative;
-    background: var(--bg-glass);
-    border: 1px solid var(--border-glass);
-    border-radius: 24px;
-    padding: 2rem;
-    margin-bottom: 1.5rem;
+    /* No background, no border - flows with page */
+    padding: 1.5rem 0;
+    margin-bottom: 1rem;
     --item-progress: 0;
+    --card-scale: 0.9;
+    /* Controlled by JS: 1.05 when focused, 0.95 when not */
     opacity: var(--item-progress);
-    transform: translateX(calc(40px * (1 - var(--item-progress))));
-    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    transform: translateX(calc(30px * (1 - var(--item-progress)))) scale(var(--card-scale));
+    transform-origin: left center;
+    transition: transform 0.4s ease-out;
 }
 
 .exp-card:last-child {
     margin-bottom: 0;
 }
 
-/* Card glow when transition completes */
-.exp-card.complete {
-    border-color: var(--accent);
-    box-shadow: 0 0 30px rgba(0, 255, 200, 0.15);
-}
+/* Focused state - just scaling, no color change */
 
-.exp-card:hover {
-    border-color: var(--border-glow);
-    box-shadow: 0 25px 50px rgba(0, 0, 0, 0.3);
+/* Previous cards - slightly smaller, more muted */
+.exp-card.complete:not(.focused) {
+    opacity: 0.7;
 }
 
 .exp-card h3 {
