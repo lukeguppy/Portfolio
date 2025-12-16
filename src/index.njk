@@ -1,46 +1,138 @@
 ---
 layout: base.njk
 title: Home
-pageTitle: Portfolio
+pageTitle: Home
 ---
 
 <section class="hero">
+    <div class="hero-glow"></div>
     <div class="hero-content">
-        <h1>Welcome to My Portfolio</h1>
-        <p>Personal portfolio showcasing software engineering projects, academic research, professional experience and a playground with a few fun projects.</p>
-    </div>
-</section>
-
-<section id="about" class="about">
-    <div class="about-container">
-        <h2>About Me</h2>
-        
-        <div class="about-content">
-            <p class="fade-in-1">I'm Luke, a <strong>Graduate Software Engineer</strong> at Leonardo Helicopters, working on prototypes of <strong>autonomous control systems</strong> using <strong>Python</strong> and <strong>C++</strong>. I have experience with machine learning, system design, and software engineering, and enjoy building systems and delivering meaningful, tangible results.</p>
-            
-            <p class="fade-in-2">I hold a <strong>1st-Class Honours degree in Computer Science</strong> from the University of Warwick. My 1st-Class dissertation involved using a curriculum learning approach to train a PPO neural network agent for autonomous driving in a custom Unity simulation—giving me deep, hands-on experience in neural networks and system design.</p>
-            
-            <p class="fade-in-3">Through professional and personal projects, I have experience with <strong>Python, C++, C#, Java, C, and more languages</strong>. I thrive on taking on new challenges, expanding my skillset, contributing to projects that create a meaningful impact, and I am always looking for the next opportunity to grow.</p>
+        <span class="hero-tag">Hi, I'm</span>
+        <h1 class="hero-title">
+            <span class="title-line">Luke</span>
+            <span class="title-line accent">Guppy</span>
+        </h1>
+        <p class="hero-sub">Joining <strong>AlphaSights</strong> AI team Feb 2026. Currently at <strong>Leonardo Helicopters</strong> building autonomous systems.</p>
+        <div class="hero-cta">
+            <a href="{{ "/about-me/" | url }}" class="cta-primary">
+                <span>View Experience</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </a>
+            <a href="{{ "/playground/" | url }}" class="cta-ghost">Explore Projects</a>
         </div>
     </div>
 </section>
 
-<section id="navigation" class="navigation">
-    <div class="nav-cards">
-        <div class="nav-card">
-            <h3>Skills & Experience</h3>
-            <p>View my technical skills and professional work experience.</p>
-            <a href="{{ "/about-me/" | url }}" class="btn-secondary">View Skills & Experience</a>
+<!-- PINNED SECTION: What I Build -->
+<section class="pinned-section" id="skills">
+    <div class="pin-container">
+        <div class="pin-content">
+            <div class="stagger-words">
+                <span class="word" data-order="1">What</span>
+                <span class="word" data-order="2">I</span>
+                <span class="word" data-order="3">Build</span>
+            </div>
+            <div class="cards-from-sides">
+                <article class="side-card from-left" data-order="4">
+                    <div class="card-icon-wrap">
+                        <!-- Robot Face (Matches Solar System) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <rect x="3" y="11" width="18" height="10" rx="2" />
+                            <circle cx="12" cy="5" r="2" />
+                            <path d="M12 7v4" />
+                            <line x1="8" y1="16" x2="8" y2="16" />
+                            <line x1="16" y1="16" x2="16" y2="16" />
+                        </svg>
+                    </div>
+                    <h3>Autonomous Systems</h3>
+                    <p>Reinforcement learning and multi-agent coordination for robotics.</p>
+                </article>
+                <article class="side-card from-right" data-order="5">
+                    <div class="card-icon-wrap">
+                        <!-- Neural Core / Network (For ML) -->
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="12" cy="12" r="3" />
+                            <circle cx="6" cy="6" r="2" />
+                            <circle cx="18" cy="6" r="2" />
+                            <circle cx="6" cy="18" r="2" />
+                            <circle cx="18" cy="18" r="2" />
+                            <path d="M12 9V6" />
+                            <path d="M12 15v3" />
+                            <path d="M9 12H6" />
+                            <path d="M15 12h3" />
+                            <path d="M10 10l-2.5-2.5" />
+                            <path d="M14 10l2.5-2.5" />
+                            <path d="M10 14l-2.5 2.5" />
+                            <path d="M14 14l2.5 2.5" />
+                        </svg>
+                    </div>
+                    <h3>Machine Learning</h3>
+                    <p>Neural networks and PPO agents for real-world applications.</p>
+                </article>
+                <article class="side-card from-left" data-order="6">
+                    <div class="card-icon-wrap">
+                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+                    </div>
+                    <h3>Software Engineering</h3>
+                    <p>Python, C++, Docker, ROS2 — robust systems that deliver.</p>
+                </article>
+            </div>
         </div>
-        <div class="nav-card">
-            <h3>Dissertation</h3>
-            <p>Explore my Final Year Dissertation on autonomous vehicle systems.</p>
-            <a href="{{ "/dissertation/" | url }}" class="btn-secondary">View Dissertation</a>
+    </div>
+</section>
+
+<!-- EXPLORE SECTION -->
+<section class="explore-section" id="explore">
+    <div class="explore-inner">
+        <h2 class="section-title reveal-up">Explore</h2>
+        <div class="explore-grid">
+            <a href="{{ "/about-me/" | url }}" class="explore-tile reveal-up" data-color="teal" style="--delay: 0.1s">
+                <div class="tile-content">
+                    <span class="tile-label">Experience</span>
+                    <h3>Skills & Career</h3>
+                    <p>Work history and technical expertise</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            <a href="{{ "/dissertation/" | url }}" class="explore-tile reveal-up" data-color="purple" style="--delay: 0.2s">
+                <div class="tile-content">
+                    <span class="tile-label">Research</span>
+                    <h3>Dissertation</h3>
+                    <p>Autonomous driving with PPO</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
+            <a href="{{ "/playground/" | url }}" class="explore-tile tile-wide reveal-up" data-color="blue" style="--delay: 0.3s">
+                <div class="tile-content">
+                    <span class="tile-label">Projects</span>
+                    <h3>Playground</h3>
+                    <p>Interactive demos and experiments</p>
+                </div>
+                <div class="tile-arrow">→</div>
+            </a>
         </div>
-        <div class="nav-card">
-            <h3>Playground</h3>
-            <p>Try a few interactive projects implemented by me.</p>
-            <a href="{{ "/playground/" | url }}" class="btn-secondary">Explore Playground</a>
+    </div>
+</section>
+
+<!-- TECH SOLAR SYSTEM -->
+<section class="tech-section" id="skills">
+    <div class="tech-inner">
+        <h2 class="section-title reveal-up">Technologies</h2>
+        <div class="solar-system">
+            <div class="sun"></div>
+            <div class="orbit orbit-1">
+                <span class="planet" style="--start: 15deg">Python</span>
+                <span class="planet" style="--start: 105deg">C++</span>
+                <span class="planet" style="--start: 200deg">C#</span>
+                <span class="planet" style="--start: 290deg">Java</span>
+            </div>
+            <div class="orbit orbit-2">
+                <span class="planet" style="--start: 45deg">ML</span>
+                <span class="planet" style="--start: 117deg">ROS2</span>
+                <span class="planet" style="--start: 189deg">Docker</span>
+                <span class="planet" style="--start: 261deg">Git</span>
+                <span class="planet" style="--start: 333deg">Linux</span>
+            </div>
         </div>
     </div>
 </section>

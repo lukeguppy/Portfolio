@@ -4,18 +4,37 @@
   "description": "Portfolio of Luke Guppy",
   "games": [
     {
+      "title": "MapPlotter",
+      "description": "An interactive map plotter that allows you to plot and search locations on a map, has rightmove api integration",
+      "image": "/images/mapplotter.png",
+      "playUrl": "/games/mapplotter/",
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
       "title": "BlockBlast",
       "description": "A fun puzzle game where you place blocks to clear lines.",
       "image": "/images/blockblast.png",
       "playUrl": "/games/blockblast/",
-      "tech": ["JavaScript", "HTML", "CSS"]
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
     },
     {
       "title": "Chess",
       "description": "A full chess game with rules, check, checkmate, castling, en passant, and pawn promotion.",
       "image": "/images/chess.png",
       "playUrl": "/games/chess/",
-      "tech": ["JavaScript", "HTML", "CSS"]
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
     }
   ]
 }

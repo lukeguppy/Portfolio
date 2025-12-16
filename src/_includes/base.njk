@@ -10,6 +10,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ "/css/style.css" | url }}">
     <link rel="stylesheet" href="{{ "/css/prism.css" | url }}">
+    {% if pageStyle %}
+    <link rel="stylesheet" href="{{ pageStyle | url }}">
+    {% endif %}
 </head>
 <body>
     {% include "header.njk" %}
@@ -19,5 +22,13 @@
     {% include "footer.njk" %}
     <script src="{{ "/js/script.js" | url }}"></script>
     <script src="{{ "/js/prism.js" | url }}"></script>
+    {% if pageScript %}
+    <script src="{{ pageScript | url }}"></script>
+    {% endif %}
+    {% if pageScripts %}
+    {% for script in pageScripts %}
+    <script src="{{ script | url }}"></script>
+    {% endfor %}
+    {% endif %}
 </body>
 </html>
