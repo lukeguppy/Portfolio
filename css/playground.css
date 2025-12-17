@@ -630,19 +630,35 @@ body {
 }
 
 /* Cardinal tick marks (N, S, E, W) */
-.compass-ring::after {
-    content: '';
+/* Place all at top center, then rotate around the ring center.
+   Ring is 550x550. Center is 275, 275. 
+   Border is 3px thick (inset). Center of border is at 1.5px.
+   Tick height 24px. To center tick on border center (1.5px), 
+   Tick top should be 1.5px - 12px = -10.5px.
+   Pivot distance from top: 275px - (-10.5px) = 285.5px.
+*/
+.compass-tick {
     position: absolute;
-    top: -12px;
-    left: 50%;
-    transform: translateX(-50%);
     width: 4px;
     height: 24px;
     background: rgba(255, 200, 100, 0.6);
-    box-shadow:
-        0 450px 0 rgba(255, 200, 100, 0.6),
-        -225px 225px 0 rgba(255, 200, 100, 0.4),
-        225px 225px 0 rgba(255, 200, 100, 0.4);
+    left: 50%;
+    top: -10.5px;
+    transform-origin: 50% 285.5px;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px rgba(255, 200, 100, 0.4);
+}
+
+.compass-tick.E {
+    transform: translateX(-50%) rotate(90deg);
+}
+
+.compass-tick.S {
+    transform: translateX(-50%) rotate(180deg);
+}
+
+.compass-tick.W {
+    transform: translateX(-50%) rotate(270deg);
 }
 
 .compass-needle {
