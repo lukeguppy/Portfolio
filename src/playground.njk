@@ -1,24 +1,153 @@
 ---
 layout: base.njk
 title: Playground
-pageTitle: Playground
+description: Interactive projects and experiments
+pageStyle: /css/playground.css
+pageScripts:
+  - /js/playground.js
+hideFooter: true
 ---
 
-<section class="page-header">
-    <h1>Playground</h1>
-    <p>Interactive projects and experiments I've built</p>
-</section>
+<div class="playground-container">
 
-<section class="section">
-    <div class="container">
-        <div class="playground-grid">
-            {% for item in site.games %}
-            <a class="playground-card" href="{{ item.playUrl | url }}">
-                <img src="{{ item.image | url }}" alt="{{ item.title }}">
-                <h3>{{ item.title }}</h3>
-                <p>{{ item.description }}</p>
-            </a>
-            {% endfor %}
-        </div>
+    <!-- 1. CHESS PORTAL -->
+    <section class="game-portal chess-portal" id="chess-realm">
+        <a href="{{ '/playground/chess/' | url }}" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- 3D Chessboard Scene -->
+                <div class="chess-scene">
+                    <div class="chessboard">
+                        <!-- WHITE PIECES -->
+                        <img src="{{ '/images/chess-pieces/wK.svg' | url }}" class="chess-piece sq-g1" alt="">
+                        <img src="{{ '/images/chess-pieces/wQ.svg' | url }}" class="chess-piece sq-h5" alt="">
+                        <img src="{{ '/images/chess-pieces/wR.svg' | url }}" class="chess-piece sq-a1" alt="">
+                        <img src="{{ '/images/chess-pieces/wR.svg' | url }}" class="chess-piece sq-f1" alt="">
+                        <img src="{{ '/images/chess-pieces/wB.svg' | url }}" class="chess-piece sq-c4" alt="">
+                        <img src="{{ '/images/chess-pieces/wB.svg' | url }}" class="chess-piece sq-g2" alt="">
+                        <img src="{{ '/images/chess-pieces/wN.svg' | url }}" class="chess-piece sq-e5" alt="">
+                        <img src="{{ '/images/chess-pieces/wN.svg' | url }}" class="chess-piece sq-b5" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-a2" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-b2" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-c3" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-d4" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-e4" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-f2" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-g3" alt="">
+                        <img src="{{ '/images/chess-pieces/wP.svg' | url }}" class="chess-piece pawn sq-h2" alt="">
+                        <!-- BLACK PIECES -->
+                        <img src="{{ '/images/chess-pieces/bK.svg' | url }}" class="chess-piece sq-g8" alt="">
+                        <img src="{{ '/images/chess-pieces/bQ.svg' | url }}" class="chess-piece sq-d8" alt="">
+                        <img src="{{ '/images/chess-pieces/bR.svg' | url }}" class="chess-piece sq-a8" alt="">
+                        <img src="{{ '/images/chess-pieces/bR.svg' | url }}" class="chess-piece sq-f8" alt="">
+                        <img src="{{ '/images/chess-pieces/bB.svg' | url }}" class="chess-piece sq-c8" alt="">
+                        <img src="{{ '/images/chess-pieces/bB.svg' | url }}" class="chess-piece sq-e7" alt="">
+                        <img src="{{ '/images/chess-pieces/bN.svg' | url }}" class="chess-piece sq-c6" alt="">
+                        <img src="{{ '/images/chess-pieces/bN.svg' | url }}" class="chess-piece sq-f6" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-a7" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-b7" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-c7" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-d5" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-e6" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-f7" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-g6" alt="">
+                        <img src="{{ '/images/chess-pieces/bP.svg' | url }}" class="chess-piece pawn sq-h7" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Chess</h2>
+                <p class="portal-hint">Click to play →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- 2. BLOCK BLAST PORTAL -->
+    <section class="game-portal block-portal" id="block-realm">
+        <a href="{{ '/playground/blockblast/' | url }}" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- Floating 3D Cubes -->
+                <div class="floating-cubes">
+                    <div class="cube cube-1">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-2">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-3">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-4">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-5">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Block Blast</h2>
+                <p class="portal-hint">Click to play →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- 3. MAP PLOTTER PORTAL -->
+    <section class="game-portal map-portal" id="map-realm">
+        <a href="{{ '/playground/mapplotter/' | url }}" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- Compass Rose -->
+                <div class="compass-rose">
+                    <div class="compass-ring"></div>
+                    <div class="compass-needle"></div>
+                    <div class="compass-center"></div>
+                </div>
+                <!-- Animated Flight Paths -->
+                <div class="flight-path path-1"></div>
+                <div class="flight-path path-2"></div>
+                <div class="flight-path path-3"></div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Map Plotter</h2>
+                <p class="portal-hint">Click to explore →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-arrow"></div>
     </div>
-</section>
+
+</div>

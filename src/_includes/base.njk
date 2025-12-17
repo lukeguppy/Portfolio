@@ -19,7 +19,9 @@
     <main>
         {{ content | safe }}
     </main>
+    {% if not hideFooter %}
     {% include "footer.njk" %}
+    {% endif %}
     <script src="{{ "/js/script.js" | url }}"></script>
     <script src="{{ "/js/prism.js" | url }}"></script>
     {% if pageScript %}
