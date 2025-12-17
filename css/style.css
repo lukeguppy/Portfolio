@@ -272,6 +272,7 @@ nav ul li a::after {
     z-index: 1;
     text-align: center;
     max-width: 900px;
+    overflow: visible;
 }
 
 .hero-tag {
@@ -298,7 +299,7 @@ nav ul li a::after {
 .hero-title {
     font-size: clamp(4rem, 12vw, 9rem);
     font-weight: 700;
-    line-height: 0.9;
+    line-height: 0.95;
     letter-spacing: -0.04em;
     margin-bottom: 2rem;
 }
@@ -319,6 +320,8 @@ nav ul li a::after {
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    padding-bottom: 0.15em;
+    /* Space for descenders (p, y) without affecting line gap */
 }
 
 .hero-sub {
