@@ -318,9 +318,26 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Elastic easing for "pin bounce" effect
                         const eased = p < 1 ? 1 - Math.pow(1 - p, 3) : 1;  // Cubic ease-out
 
+                        // DECOUPLED TRANSFORMS:
+                        // We use individual properties for the structural positioning (Sticky/Animation)
+                        // This allows the CSS 'transform' property to work ON TOP for hover effects
                         c.style.opacity = String(eased);
-                        c.style.transform = `translateX(${xOffset}px) translateY(${compensation + yOffset}px) rotate(${rotOffset}deg) scale(${0.8 + 0.2 * eased})`;
-                        c.classList.toggle('pinned', p >= 1);
+
+                        // 1. Position/Stickiness (JS Controlled)
+                        c.style.translate = `${xOffset}px ${compensation + yOffset}px`;
+                        c.style.rotate = `${rotOffset}deg`;
+                        c.style.scale = `${0.8 + 0.2 * eased}`;
+
+                        // 2. Clear conflict (Disable CSS base transform so our individual props win)
+                        // But leave it valid for :hover to apply 'scale(1.02)' on top!
+                        c.style.transform = 'none';
+
+                        // 3. Toggle class for visual styles (shadows etc)
+                        if (p >= 1) {
+                            c.classList.add('pinned');
+                        } else {
+                            c.classList.remove('pinned');
+                        }
                     });
                 } else {
                     // Not yet at sticky position - restore transform
