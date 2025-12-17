@@ -2,7 +2,12 @@
 layout: base.njk
 title: Home
 pageTitle: Home
+pageScripts:
+  - /js/neural-bg.js
+  - /js/pinned-bg.js
+  - /js/section-bg.js
 ---
+
 
 <section class="hero">
     <div class="hero-glow"></div>
@@ -13,13 +18,7 @@ pageTitle: Home
             <span class="title-line accent">Guppy</span>
         </h1>
         <p class="hero-sub">Joining <strong>AlphaSights</strong> AI team Feb 2026. Currently at <strong>Leonardo Helicopters</strong> building autonomous systems.</p>
-        <div class="hero-cta">
-            <a href="{{ "/about-me/" | url }}" class="cta-primary">
-                <span>View Experience</span>
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-            </a>
-            <a href="{{ "/playground/" | url }}" class="cta-ghost">Explore Projects</a>
-        </div>
+
     </div>
 </section>
 
