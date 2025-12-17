@@ -20,8 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
         projectsLeaveScroll: 0.5,   // Dead scroll after last row before tech appears
 
         // Tech section
-        techCardScrollDistance: 80,  // Pixels of scroll PER CARD (staggered)
-        cardsPerRow: 3
+        techCardScrollVh: 0.35,  // 35% of viewport height per card
+        cardsPerRow: 3,
+
+        // Helper to get pixel value
+        getTechCardDistance: () => window.innerHeight * 0.35
     };
 
     // ========================================
@@ -91,7 +94,8 @@ document.addEventListener('DOMContentLoaded', () => {
         // 3. Cards staggered animation: numCards × scrollPerCard
         const titleFadeScroll = 200;
         const titleTravelScroll = vh - stickyPosition;
-        const cardsScroll = techCards.length * CONFIG.techCardScrollDistance;
+        // Add +1 buffer to ensure the last card fully completes its animation
+        const cardsScroll = (techCards.length) * CONFIG.getTechCardDistance();
 
         const totalTechScroll = titleFadeScroll + titleTravelScroll + cardsScroll;
         const height = projectTimeline.projectsEndScroll + totalTechScroll + vh; // +vh for end buffer
@@ -306,9 +310,10 @@ document.addEventListener('DOMContentLoaded', () => {
                         const cardRot = getComputedStyle(c).getPropertyValue('--rotation') || '0deg';
 
                         // Calculate individual card progress based on stagger
-                        const cardStartScroll = i * CONFIG.techCardScrollDistance;
+                        const dist = CONFIG.getTechCardDistance();
+                        const cardStartScroll = i * dist;
                         const cardScrollProgress = scrollSinceStick - cardStartScroll;
-                        const p = Math.max(0, Math.min(1, cardScrollProgress / CONFIG.techCardScrollDistance));
+                        const p = Math.max(0, Math.min(1, cardScrollProgress / dist));
 
                         // Animate from unique direction
                         const xOffset = dir.x * (1 - p);
@@ -318,9 +323,27 @@ document.addEventListener('DOMContentLoaded', () => {
                         // Elastic easing for "pin bounce" effect
                         const eased = p < 1 ? 1 - Math.pow(1 - p, 3) : 1;  // Cubic ease-out
 
+                        // DECOUPLED TRANSFORMS:
+                        // We use individual properties for the structural positioning (Sticky/Animation)
+                        // This allows the CSS 'transform' property to work ON TOP for hover effects
                         c.style.opacity = String(eased);
-                        c.style.transform = `translateX(${xOffset}px) translateY(${compensation + yOffset}px) rotate(${rotOffset}deg) scale(${0.8 + 0.2 * eased})`;
-                        c.classList.toggle('pinned', p >= 1);
+
+                        // 1. Position/Stickiness (JS Controlled)
+                        c.style.translate = `${xOffset}px ${compensation + yOffset}px`;
+                        c.style.rotate = `${rotOffset}deg`;
+                        // Shrink effect: Start at 2.5x, end at 1x
+                        c.style.scale = `${2.5 - 1.5 * eased}`;
+
+                        // 2. Clear conflict (Disable CSS base transform so our individual props win)
+                        // But leave it valid for :hover to apply 'scale(1.02)' on top!
+                        c.style.transform = 'none';
+
+                        // 3. Toggle class for visual styles (shadows etc)
+                        if (p >= 1) {
+                            c.classList.add('pinned');
+                        } else {
+                            c.classList.remove('pinned');
+                        }
                     });
                 } else {
                     // Not yet at sticky position - restore transform

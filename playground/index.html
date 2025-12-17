@@ -4,19 +4,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Playground</title>
-    <meta name="description" content="Portfolio of Luke Guppy">
+    <meta name="description" content="Interactive projects and experiments">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="/Portfolio/css/style.css">
     <link rel="stylesheet" href="/Portfolio/css/prism.css">
     
+    <link rel="stylesheet" href="/Portfolio/css/playground.css">
+    
 </head>
 <body>
     <header>
     <nav>
         <div class="nav-container">
-            <h1>Playground</h1>
+            <h1>Portfolio</h1>
             <ul>
                 
                 
@@ -66,48 +68,157 @@
 </header>
     <main>
         
-<section class="page-header">
-    <h1>Playground</h1>
-    <p>Interactive projects and experiments I've built</p>
-</section>
+<div class="playground-container">
 
-<section class="section">
-    <div class="container">
-        <div class="playground-grid">
-            
-            <a class="playground-card" href="/Portfolio/playground/mapplotter/">
-                <img src="/Portfolio/images/mapplotter.png" alt="MapPlotter">
-                <h3>MapPlotter</h3>
-                <p>An interactive business mapping tool using Leaflet for location visualisation.</p>
-            </a>
-            
-            <a class="playground-card" href="/Portfolio/playground/chess/">
-                <img src="/Portfolio/images/chess.png" alt="Chess">
-                <h3>Chess</h3>
-                <p>A full chess game with rules, check, checkmate, castling, en passant, and pawn promotion.</p>
-            </a>
-            
-            <a class="playground-card" href="/Portfolio/playground/blockblast/">
-                <img src="/Portfolio/images/blockblast.png" alt="BlockBlast">
-                <h3>BlockBlast</h3>
-                <p>A fun puzzle game where you place blocks to clear lines.</p>
-            </a>
-            
-        </div>
+    <!-- 1. CHESS PORTAL -->
+    <section class="game-portal chess-portal" id="chess-realm">
+        <a href="/Portfolio/playground/chess/" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- 3D Chessboard Scene -->
+                <div class="chess-scene">
+                    <div class="chessboard">
+                        <!-- WHITE PIECES -->
+                        <img src="/Portfolio/images/chess-pieces/wK.svg" class="chess-piece sq-g1" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wQ.svg" class="chess-piece sq-h5" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wR.svg" class="chess-piece sq-a1" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wR.svg" class="chess-piece sq-f1" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wB.svg" class="chess-piece sq-c4" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wB.svg" class="chess-piece sq-g2" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wN.svg" class="chess-piece sq-e5" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wN.svg" class="chess-piece sq-b5" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-a2" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-b2" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-c3" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-d4" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-e4" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-f2" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-g3" alt="">
+                        <img src="/Portfolio/images/chess-pieces/wP.svg" class="chess-piece pawn sq-h2" alt="">
+                        <!-- BLACK PIECES -->
+                        <img src="/Portfolio/images/chess-pieces/bK.svg" class="chess-piece sq-g8" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bQ.svg" class="chess-piece sq-d8" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bR.svg" class="chess-piece sq-a8" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bR.svg" class="chess-piece sq-f8" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bB.svg" class="chess-piece sq-c8" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bB.svg" class="chess-piece sq-e7" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bN.svg" class="chess-piece sq-c6" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bN.svg" class="chess-piece sq-f6" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-a7" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-b7" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-c7" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-d5" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-e6" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-f7" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-g6" alt="">
+                        <img src="/Portfolio/images/chess-pieces/bP.svg" class="chess-piece pawn sq-h7" alt="">
+                    </div>
+                </div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Chess</h2>
+                <p class="portal-hint">Click to play →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- 2. BLOCK BLAST PORTAL -->
+    <section class="game-portal block-portal" id="block-realm">
+        <a href="/Portfolio/playground/blockblast/" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- Floating 3D Cubes -->
+                <div class="floating-cubes">
+                    <div class="cube cube-1">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-2">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-3">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-4">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                    <div class="cube cube-5">
+                        <div class="face front"></div>
+                        <div class="face back"></div>
+                        <div class="face left"></div>
+                        <div class="face right"></div>
+                        <div class="face top"></div>
+                        <div class="face bottom"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Block Blast</h2>
+                <p class="portal-hint">Click to play →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- 3. MAP PLOTTER PORTAL -->
+    <section class="game-portal map-portal" id="map-realm">
+        <a href="/Portfolio/playground/mapplotter/" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- Compass Rose -->
+                <div class="compass-rose">
+                    <div class="compass-ring"></div>
+                    <div class="compass-needle"></div>
+                    <div class="compass-center"></div>
+                </div>
+                <!-- Animated Flight Paths -->
+                <div class="flight-path path-1"></div>
+                <div class="flight-path path-2"></div>
+                <div class="flight-path path-3"></div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Map Plotter</h2>
+                <p class="portal-hint">Click to explore →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- Scroll Indicator -->
+    <div class="scroll-indicator">
+        <span>Scroll</span>
+        <div class="scroll-arrow"></div>
     </div>
-</section>
+
+</div>
     </main>
-    <footer>
-    <div class="footer-container">
-        <p>&copy; 2025 Luke Guppy</p>
-        <div class="footer-links">
-            <a href="https://linkedin.com/in/lukeguppy">LinkedIn</a>
-            <a href="https://github.com/lukeguppy">GitHub</a>
-        </div>
-    </div>
-</footer>
+    
     <script src="/Portfolio/js/script.js"></script>
     <script src="/Portfolio/js/prism.js"></script>
+    
+    
+    
+    <script src="/Portfolio/js/playground.js"></script>
     
     
 </body>

@@ -1,0 +1,981 @@
+/* =========================================
+   PLAYGROUND - IMMERSIVE PORTAL DESIGN
+   ========================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+
+:root {
+    --chess-bg: #0d0d0d;
+    --chess-accent: #c5a059;
+    --block-bg: #0a0a1a;
+    --block-accent: #00f0ff;
+    --map-bg: #0f1a14;
+    --map-accent: #4ade80;
+}
+
+/* =========================================
+   GLOBAL LAYOUT
+   ========================================= */
+html,
+body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    color: #fff;
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+}
+
+/* Hide scrollbar but allow scroll */
+body::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.playground-container {
+    height: 100vh;
+    overflow-y: scroll;
+    scroll-snap-type: y mandatory;
+    scroll-behavior: smooth;
+}
+
+/* =========================================
+   PORTAL SECTIONS
+   ========================================= */
+.game-portal {
+    height: 100vh;
+    width: 100vw;
+    position: relative;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    /* Force stop on each section */
+    overflow: hidden;
+}
+
+.portal-link {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    text-decoration: none;
+    color: inherit;
+    position: relative;
+    z-index: 2;
+}
+
+/* =========================================
+   PORTAL BACKGROUNDS (Layered)
+   ========================================= */
+.portal-bg {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    overflow: hidden;
+}
+
+.bg-layer {
+    position: absolute;
+    inset: 0;
+    transition: transform 0.8s ease-out, opacity 0.5s ease;
+}
+
+/* --- CHESS: 3D Board Scene --- */
+.chess-portal {
+    background: linear-gradient(160deg, #0a0805 0%, #1a1510 50%, #0d0a08 100%);
+}
+
+.chess-portal .layer-1 {
+    /* Subtle checkered ambient pattern */
+    background-image:
+        conic-gradient(rgba(40, 30, 20, 0.3) 90deg,
+            rgba(20, 15, 10, 0.3) 90deg 180deg,
+            rgba(40, 30, 20, 0.3) 180deg 270deg,
+            rgba(20, 15, 10, 0.3) 270deg);
+    background-size: 60px 60px;
+    opacity: 0.5;
+}
+
+.chess-portal .layer-2 {
+    background:
+        radial-gradient(ellipse at 50% 60%, rgba(197, 160, 89, 0.25) 0%, transparent 50%),
+        radial-gradient(circle at 30% 30%, rgba(197, 160, 89, 0.12) 0%, transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(255, 220, 150, 0.08) 0%, transparent 25%),
+        radial-gradient(circle at 15% 75%, rgba(139, 90, 43, 0.1) 0%, transparent 20%);
+}
+
+/* Chess title - dark woody stroke with 3D effect */
+.chess-portal .portal-title {
+    -webkit-text-stroke: 5px #3d2817;
+    paint-order: stroke fill;
+    text-shadow:
+        /* 3D extrusion in wood tones */
+        2px 2px 0 #5c3d1e,
+        3px 3px 0 #4a3118,
+        4px 4px 0 #3d2817,
+        5px 5px 0 #2f1e10,
+        6px 6px 0 #241708,
+        /* Soft shadow */
+        8px 10px 15px rgba(0, 0, 0, 0.9);
+}
+
+/* === 3D CHESS SCENE === */
+.chess-scene {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) perspective(1200px) rotateX(50deg) rotateZ(-5deg);
+    width: 650px;
+    height: 650px;
+    transform-style: preserve-3d;
+}
+
+.chessboard {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    border: 6px solid rgba(139, 90, 43, 0.9);
+    box-shadow:
+        0 30px 80px rgba(0, 0, 0, 0.9),
+        0 0 40px rgba(197, 160, 89, 0.3),
+        inset 0 0 20px rgba(0, 0, 0, 0.3);
+    background: conic-gradient(#d4a574 90deg, #8b5a2b 90deg 180deg,
+            #d4a574 180deg 270deg, #8b5a2b 270deg);
+    background-size: 25% 25%;
+}
+
+/* Chess Pieces */
+.chess-piece {
+    position: absolute;
+    width: 55px;
+    height: 55px;
+    filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+    pointer-events: none;
+    transition: filter 0.3s ease;
+}
+
+/* Pawns are smaller */
+.chess-piece.pawn {
+    width: 42px;
+    height: 42px;
+}
+
+/* Square position classes - columns a-h, rows 1-8 */
+/* Column positions: a=6.25%, b=18.75%, c=31.25%, d=43.75%, e=56.25%, f=68.75%, g=81.25%, h=93.75% */
+/* Row positions (from top): 8=6.25%, 7=18.75%, 6=31.25%, 5=43.75%, 4=56.25%, 3=68.75%, 2=81.25%, 1=93.75% */
+
+/* Column classes */
+.sq-a1,
+.sq-a2,
+.sq-a3,
+.sq-a4,
+.sq-a5,
+.sq-a6,
+.sq-a7,
+.sq-a8 {
+    left: 6.25%;
+}
+
+.sq-b1,
+.sq-b2,
+.sq-b3,
+.sq-b4,
+.sq-b5,
+.sq-b6,
+.sq-b7,
+.sq-b8 {
+    left: 18.75%;
+}
+
+.sq-c1,
+.sq-c2,
+.sq-c3,
+.sq-c4,
+.sq-c5,
+.sq-c6,
+.sq-c7,
+.sq-c8 {
+    left: 31.25%;
+}
+
+.sq-d1,
+.sq-d2,
+.sq-d3,
+.sq-d4,
+.sq-d5,
+.sq-d6,
+.sq-d7,
+.sq-d8 {
+    left: 43.75%;
+}
+
+.sq-e1,
+.sq-e2,
+.sq-e3,
+.sq-e4,
+.sq-e5,
+.sq-e6,
+.sq-e7,
+.sq-e8 {
+    left: 56.25%;
+}
+
+.sq-f1,
+.sq-f2,
+.sq-f3,
+.sq-f4,
+.sq-f5,
+.sq-f6,
+.sq-f7,
+.sq-f8 {
+    left: 68.75%;
+}
+
+.sq-g1,
+.sq-g2,
+.sq-g3,
+.sq-g4,
+.sq-g5,
+.sq-g6,
+.sq-g7,
+.sq-g8 {
+    left: 81.25%;
+}
+
+.sq-h1,
+.sq-h2,
+.sq-h3,
+.sq-h4,
+.sq-h5,
+.sq-h6,
+.sq-h7,
+.sq-h8 {
+    left: 93.75%;
+}
+
+/* Row classes */
+.sq-a8,
+.sq-b8,
+.sq-c8,
+.sq-d8,
+.sq-e8,
+.sq-f8,
+.sq-g8,
+.sq-h8 {
+    top: 6.25%;
+}
+
+.sq-a7,
+.sq-b7,
+.sq-c7,
+.sq-d7,
+.sq-e7,
+.sq-f7,
+.sq-g7,
+.sq-h7 {
+    top: 18.75%;
+}
+
+.sq-a6,
+.sq-b6,
+.sq-c6,
+.sq-d6,
+.sq-e6,
+.sq-f6,
+.sq-g6,
+.sq-h6 {
+    top: 31.25%;
+}
+
+.sq-a5,
+.sq-b5,
+.sq-c5,
+.sq-d5,
+.sq-e5,
+.sq-f5,
+.sq-g5,
+.sq-h5 {
+    top: 43.75%;
+}
+
+.sq-a4,
+.sq-b4,
+.sq-c4,
+.sq-d4,
+.sq-e4,
+.sq-f4,
+.sq-g4,
+.sq-h4 {
+    top: 56.25%;
+}
+
+.sq-a3,
+.sq-b3,
+.sq-c3,
+.sq-d3,
+.sq-e3,
+.sq-f3,
+.sq-g3,
+.sq-h3 {
+    top: 68.75%;
+}
+
+.sq-a2,
+.sq-b2,
+.sq-c2,
+.sq-d2,
+.sq-e2,
+.sq-f2,
+.sq-g2,
+.sq-h2 {
+    top: 81.25%;
+}
+
+.sq-a1,
+.sq-b1,
+.sq-c1,
+.sq-d1,
+.sq-e1,
+.sq-f1,
+.sq-g1,
+.sq-h1 {
+    top: 93.75%;
+}
+
+/* Center pieces in squares */
+.chess-piece[class*="sq-"] {
+    transform: translate(-50%, -50%);
+}
+
+@keyframes pieceGlow {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+    }
+
+    50% {
+        filter: drop-shadow(0 6px 20px rgba(197, 160, 89, 0.8)) drop-shadow(0 0 15px rgba(255, 200, 100, 0.4));
+    }
+}
+
+@keyframes pieceSlide {
+
+    0%,
+    45%,
+    100% {
+        transform: translate(0, 0);
+    }
+
+    50%,
+    95% {
+        transform: translate(60px, -60px);
+    }
+}
+
+@keyframes pieceFloat {
+
+    0%,
+    100% {
+        transform: translateZ(10px);
+    }
+
+    50% {
+        transform: translateZ(20px);
+    }
+}
+
+/* --- BLOCK BLAST: Synthwave Neon Grid --- */
+.block-portal {
+    background: var(--block-bg);
+}
+
+.block-portal .layer-1 {
+    /* Neon Grid */
+    background:
+        linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+    background-size: 60px 60px;
+    animation: gridScroll 20s linear infinite;
+}
+
+.block-portal .layer-2 {
+    /* Gradient Glow */
+    background:
+        radial-gradient(ellipse at 50% 120%, rgba(138, 43, 226, 0.4) 0%, transparent 60%),
+        radial-gradient(ellipse at 50% -20%, rgba(0, 240, 255, 0.3) 0%, transparent 50%);
+}
+
+.block-portal:hover .layer-1 {
+    animation-play-state: paused;
+    opacity: 0.8;
+    transform: scale(1.03);
+}
+
+/* === FLOATING 3D CUBES === */
+.floating-cubes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    perspective: 1000px;
+}
+
+.cube {
+    position: absolute;
+    width: 60px;
+    height: 60px;
+    --half-size: 30px;
+    transform-style: preserve-3d;
+    animation: cubeFloat 10s ease-in-out infinite;
+}
+
+/* All 6 faces */
+.cube .face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(135deg, rgba(0, 240, 255, 0.3), rgba(138, 43, 226, 0.3));
+    border: 2px solid rgba(0, 240, 255, 0.8);
+    box-shadow:
+        0 0 15px rgba(0, 240, 255, 0.6),
+        inset 0 0 10px rgba(0, 240, 255, 0.2);
+}
+
+.cube .front {
+    transform: translateZ(var(--half-size));
+}
+
+.cube .back {
+    transform: rotateY(180deg) translateZ(var(--half-size));
+}
+
+.cube .left {
+    transform: rotateY(-90deg) translateZ(var(--half-size));
+}
+
+.cube .right {
+    transform: rotateY(90deg) translateZ(var(--half-size));
+}
+
+.cube .top {
+    transform: rotateX(90deg) translateZ(var(--half-size));
+}
+
+.cube .bottom {
+    transform: rotateX(-90deg) translateZ(var(--half-size));
+}
+
+.cube-1 {
+    top: 15%;
+    left: 12%;
+    width: 70px;
+    height: 70px;
+    --half-size: 35px;
+    animation-delay: 0s;
+}
+
+.cube-2 {
+    top: 25%;
+    right: 25%;
+    width: 55px;
+    height: 55px;
+    --half-size: 27px;
+    animation-delay: -3s;
+}
+
+.cube-2 .face {
+    border-color: rgba(138, 43, 226, 0.8);
+    box-shadow: 0 0 15px rgba(138, 43, 226, 0.6);
+}
+
+.cube-3 {
+    bottom: 20%;
+    left: 18%;
+    width: 50px;
+    height: 50px;
+    --half-size: 25px;
+    animation-delay: -6s;
+}
+
+.cube-3 .face {
+    border-color: rgba(255, 100, 200, 0.7);
+    box-shadow: 0 0 15px rgba(255, 100, 200, 0.5);
+}
+
+.cube-4 {
+    bottom: 20%;
+    right: 8%;
+    width: 60px;
+    height: 60px;
+    animation-delay: -4s;
+}
+
+.cube-4 .face {
+    border-color: rgba(50, 255, 150, 0.7);
+    box-shadow: 0 0 15px rgba(50, 255, 150, 0.5);
+}
+
+.cube-5 {
+    top: 80%;
+    right: 40%;
+    width: 45px;
+    height: 45px;
+    --half-size: 22px;
+    animation-delay: -7s;
+}
+
+@keyframes cubeFloat {
+
+    0%,
+    100% {
+        transform: translateY(0) rotateX(0deg) rotateY(0deg);
+    }
+
+    25% {
+        transform: translateY(-20px) rotateX(10deg) rotateY(15deg);
+    }
+
+    50% {
+        transform: translateY(-10px) rotateX(-5deg) rotateY(-10deg);
+    }
+
+    75% {
+        transform: translateY(-25px) rotateX(8deg) rotateY(-15deg);
+    }
+}
+
+@keyframes cubeSpin {
+    from {
+        transform: rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+    }
+
+    to {
+        transform: rotateX(360deg) rotateY(360deg) rotateZ(180deg);
+    }
+}
+
+/* --- MAP PLOTTER: Dark Neon Map Theme --- */
+.map-portal {
+    background: linear-gradient(160deg, #050a0a 0%, #0a1515 50%, #051010 100%);
+}
+
+.map-portal .layer-1 {
+    /* Neon Grid */
+    background-image:
+        /* Main grid */
+        linear-gradient(rgba(20, 184, 166, 0.15) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 184, 166, 0.15) 1px, transparent 1px),
+        /* Finer grid */
+        linear-gradient(rgba(20, 184, 166, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(20, 184, 166, 0.05) 1px, transparent 1px),
+        /* Center glow */
+        radial-gradient(circle at 50% 50%, rgba(20, 184, 166, 0.2) 0%, transparent 40%);
+    background-size: 100px 100px, 100px 100px, 25px 25px, 25px 25px, 100% 100%;
+}
+
+.map-portal .layer-2 {
+    /* Neon vignette */
+    background:
+        radial-gradient(ellipse at 30% 20%, rgba(20, 184, 166, 0.1) 0%, transparent 50%),
+        radial-gradient(ellipse at 70% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, transparent 30%, rgba(0, 0, 0, 0.7) 100%);
+}
+
+.map-portal:hover .layer-1 {
+    transform: scale(1.05);
+    filter: brightness(1.3);
+}
+
+/* === COMPASS ROSE === */
+.compass-rose {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 550px;
+    height: 550px;
+    pointer-events: none;
+}
+
+/* Outer decorative ring */
+.compass-rose::before {
+    content: '';
+    position: absolute;
+    inset: -20px;
+    border: 3px solid rgba(20, 184, 166, 0.2);
+    border-radius: 50%;
+    animation: compassSpin 120s linear infinite reverse;
+}
+
+.compass-ring {
+    position: absolute;
+    inset: 0;
+    border: 3px solid rgba(255, 200, 100, 0.4);
+    border-radius: 50%;
+    animation: compassSpin 60s linear infinite;
+}
+
+/* Inner ring */
+.compass-ring::before {
+    content: '';
+    position: absolute;
+    inset: 40px;
+    border: 2px solid rgba(255, 200, 100, 0.25);
+    border-radius: 50%;
+}
+
+/* Cardinal tick marks (N, S, E, W) */
+.compass-ring::after {
+    content: '';
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 4px;
+    height: 24px;
+    background: rgba(255, 200, 100, 0.6);
+    box-shadow:
+        0 450px 0 rgba(255, 200, 100, 0.6),
+        -225px 225px 0 rgba(255, 200, 100, 0.4),
+        225px 225px 0 rgba(255, 200, 100, 0.4);
+}
+
+.compass-needle {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 8px;
+    height: 180px;
+    transform-origin: center bottom;
+    transform: translateX(-50%) translateY(-100%);
+    background: linear-gradient(to top, transparent 0%, #ff6b6b 20%, #ff4757 100%);
+    clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+    animation: needleWobble 4s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px rgba(255, 75, 75, 0.8));
+}
+
+.compass-needle::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 8px;
+    height: 140px;
+    transform: translateX(-50%);
+    background: linear-gradient(to bottom, transparent 0%, #4a9fff 20%, #2d7dd2 100%);
+    clip-path: polygon(50% 100%, 0% 0%, 100% 0%);
+    filter: drop-shadow(0 0 15px rgba(45, 125, 210, 0.8));
+}
+
+.compass-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 30px;
+    height: 30px;
+    background: radial-gradient(circle, #fff 0%, #ffd700 40%, #ff8c00 100%);
+    border-radius: 50%;
+    box-shadow:
+        0 0 20px rgba(255, 200, 0, 1),
+        0 0 40px rgba(255, 200, 0, 0.8),
+        0 0 80px rgba(255, 150, 0, 0.5);
+    animation: centerPulse 2s ease-in-out infinite;
+}
+
+/* Center inner dot */
+.compass-center::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 10px;
+    height: 10px;
+    background: #fff;
+    border-radius: 50%;
+}
+
+/* Map Plotter: Title with gradient transparency to show compass */
+.map-portal .portal-title {
+    background: linear-gradient(90deg,
+            rgba(255, 255, 255, 1) 0%,
+            rgba(255, 255, 255, 0.4) 50%,
+            rgba(255, 255, 255, 1) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-shadow: none;
+}
+
+/* === FLIGHT PATHS === */
+.flight-path {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    border: 2px dashed transparent;
+    border-radius: 50%;
+    opacity: 0;
+    animation: flightArc 8s ease-in-out infinite;
+}
+
+.path-1 {
+    top: -50%;
+    left: -50%;
+    border-top-color: rgba(0, 255, 200, 0.4);
+    animation-delay: 0s;
+}
+
+.path-2 {
+    top: -30%;
+    left: -70%;
+    border-right-color: rgba(255, 150, 50, 0.3);
+    animation-delay: 2.5s;
+}
+
+.path-3 {
+    top: -60%;
+    left: -30%;
+    border-bottom-color: rgba(150, 100, 255, 0.3);
+    animation-delay: 5s;
+}
+
+@keyframes compassSpin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+@keyframes needleWobble {
+
+    0%,
+    100% {
+        transform: translateX(-50%) translateY(-100%) rotate(-5deg);
+    }
+
+    50% {
+        transform: translateX(-50%) translateY(-100%) rotate(5deg);
+    }
+}
+
+@keyframes centerPulse {
+
+    0%,
+    100% {
+        transform: translate(-50%, -50%) scale(1);
+        box-shadow: 0 0 30px rgba(255, 200, 0, 0.8);
+    }
+
+    50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        box-shadow: 0 0 50px rgba(255, 200, 0, 1), 0 0 80px rgba(255, 150, 0, 0.6);
+    }
+}
+
+@keyframes flightArc {
+    0% {
+        opacity: 0;
+        transform: rotate(-30deg) scale(0.5);
+    }
+
+    20% {
+        opacity: 0.6;
+    }
+
+    80% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 0;
+        transform: rotate(30deg) scale(1.2);
+    }
+}
+
+/* =========================================
+   ANIMATIONS
+   ========================================= */
+@keyframes pulseGlow {
+    from {
+        opacity: 0.5;
+        transform: scale(1);
+    }
+
+    to {
+        opacity: 1;
+        transform: scale(1.05);
+    }
+}
+
+@keyframes gridScroll {
+    from {
+        background-position: 0 0;
+    }
+
+    to {
+        background-position: 0 60px;
+    }
+}
+
+/* =========================================
+   PORTAL CONTENT (Title, Tag, Hint)
+   ========================================= */
+.portal-content {
+    position: relative;
+    z-index: 3;
+    text-align: center;
+    padding: 2rem;
+}
+
+.portal-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 4px;
+    padding: 0.5rem 1.5rem;
+    border: 1px solid currentColor;
+    border-radius: 50px;
+    opacity: 0.6;
+    margin-bottom: 1.5rem;
+    transition: opacity 0.3s, transform 0.3s;
+}
+
+.portal-title {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: clamp(5rem, 18vw, 14rem);
+    font-weight: 400;
+    margin: 0;
+    line-height: 0.9;
+    letter-spacing: 0.05em;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.5s ease;
+}
+
+/* Accent Colors for Titles */
+.chess-portal .portal-title {
+    color: #fff;
+    text-shadow: 0 0 60px rgba(197, 160, 89, 0.3);
+}
+
+.block-portal .portal-title {
+    color: #fff;
+    text-shadow: 0 0 80px rgba(0, 240, 255, 0.4), 0 0 120px rgba(138, 43, 226, 0.3);
+}
+
+.map-portal .portal-title {
+    color: #fff;
+    text-shadow: 0 0 60px rgba(74, 222, 128, 0.3);
+}
+
+.portal-hint {
+    font-size: 1rem;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: opacity 0.4s ease 0.1s, transform 0.4s ease 0.1s;
+    margin-top: 2rem;
+    letter-spacing: 2px;
+}
+
+.chess-portal .portal-hint {
+    text-shadow:
+        0 0 5px #3d2817,
+        0 0 10px #3d2817,
+        0 0 15px #3d2817,
+        0 2px 6px #3d2817,
+        0 4px 12px #3d2817,
+        2px 2px 8px #3d2817,
+        -2px 2px 8px #3d2817;
+}
+
+/* =========================================
+   HOVER STATES - Only on title hover
+   ========================================= */
+.portal-content:hover .portal-tag {
+    opacity: 1;
+    transform: translateY(-5px);
+}
+
+.portal-title:hover {
+    transform: scale(1.03);
+    cursor: pointer;
+}
+
+.portal-content:hover .portal-hint {
+    opacity: 0.7;
+    transform: translateY(0);
+}
+
+/* =========================================
+   SCROLL INDICATOR
+   ========================================= */
+.scroll-indicator {
+    position: fixed;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.5rem;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 100;
+    transition: opacity 0.3s ease;
+}
+
+.scroll-indicator.hidden {
+    opacity: 0;
+}
+
+.scroll-indicator span {
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+}
+
+.scroll-arrow {
+    width: 20px;
+    height: 20px;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(45deg);
+    animation: scrollDown 1.2s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+    0% {
+        transform: rotate(45deg) translateY(-4px) translateX(-4px);
+        opacity: 0;
+    }
+
+    50% {
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(45deg) translateY(8px) translateX(8px);
+        opacity: 0;
+    }
+}
+
+/* =========================================
+   RESPONSIVE
+   ========================================= */
+@media (max-width: 768px) {
+    .portal-title {
+        font-size: clamp(3rem, 20vw, 6rem);
+    }
+
+    .portal-tag {
+        font-size: 0.65rem;
+        padding: 0.4rem 1rem;
+    }
+}
