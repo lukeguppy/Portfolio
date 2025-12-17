@@ -1,19 +1,19 @@
 /* =============================================
-   CHESS - PREMIUM MARBLE & EMERALD DESIGN
+   CHESS - WARM WOODEN CLUB DESIGN
    ============================================= */
 
 :root {
     --board-size: min(70vh, 75vw, 560px);
     --square-size: calc(var(--board-size) / 8);
-    --light-square: #eeeed2;
-    --dark-square: #769656;
-    --selected-square: #baca44;
-    --move-indicator: rgba(186, 202, 68, 0.7);
+    --light-square: #d4a574;
+    --dark-square: #8b5a2b;
+    --selected-square: #e6c496;
+    --move-indicator: rgba(197, 160, 89, 0.7);
     --capture-indicator: rgba(180, 70, 70, 0.8);
-    --gold: #d4af37;
-    --gold-light: #f4cf67;
-    --emerald: #1a4d3e;
-    --emerald-dark: #0d2920;
+    --gold: #c5a059;
+    --gold-light: #d4a574;
+    --wood-dark: #2a1810;
+    --wood-medium: #3d2817;
 }
 
 * {
@@ -30,33 +30,42 @@ body {
 
 body {
     font-family: 'Cinzel', 'Georgia', serif;
-    background: linear-gradient(135deg, #0a1f1a 0%, #143d32 50%, #0a1f1a 100%);
+    background: #1a1512;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
 }
 
-/* === ANIMATED BACKGROUND SHIMMER === */
+/* === SUBTLE CHECKERED PATTERN (matches playground) === */
 body::before {
     content: '';
     position: fixed;
     inset: 0;
     background:
-        radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
-        radial-gradient(ellipse at 0% 50%, rgba(26, 77, 62, 0.4) 0%, transparent 40%),
-        radial-gradient(ellipse at 100% 50%, rgba(26, 77, 62, 0.4) 0%, transparent 40%);
-    animation: shimmer 8s ease-in-out infinite alternate;
+        /* Warm golden glows */
+        radial-gradient(ellipse at 50% 60%, rgba(197, 160, 89, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 30% 30%, rgba(197, 160, 89, 0.08) 0%, transparent 30%),
+        radial-gradient(circle at 80% 20%, rgba(255, 220, 150, 0.05) 0%, transparent 25%),
+        /* Subtle checkered pattern */
+        conic-gradient(from 0deg at 50% 50%,
+            rgba(40, 30, 20, 0.25) 90deg,
+            rgba(20, 15, 10, 0.2) 90deg 180deg,
+            rgba(40, 30, 20, 0.25) 180deg 270deg,
+            rgba(20, 15, 10, 0.2) 270deg);
+    background-size: 100% 100%, 100% 100%, 100% 100%, 60px 60px;
+    animation: subtleGlow 10s ease-in-out infinite alternate;
     pointer-events: none;
+    opacity: 0.7;
 }
 
-@keyframes shimmer {
+@keyframes subtleGlow {
     0% {
-        opacity: 0.6;
+        filter: brightness(0.9);
     }
 
     100% {
-        opacity: 1;
+        filter: brightness(1.1);
     }
 }
 
@@ -65,7 +74,7 @@ body::after {
     content: '';
     position: fixed;
     inset: 0;
-    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.35) 100%);
+    background: radial-gradient(circle at 50% 50%, transparent 35%, rgba(0, 0, 0, 0.5) 100%);
     pointer-events: none;
 }
 
@@ -133,10 +142,10 @@ body::after {
     border-radius: 4px;
     overflow: hidden;
     box-shadow:
-        0 0 0 4px var(--emerald),
+        0 0 0 4px var(--wood-medium),
         0 0 0 8px var(--gold),
-        0 0 0 12px var(--emerald-dark),
-        0 0 40px rgba(212, 175, 55, 0.15),
+        0 0 0 12px var(--wood-dark),
+        0 0 40px rgba(197, 160, 89, 0.15),
         0 30px 80px rgba(0, 0, 0, 0.6),
         0 10px 30px rgba(0, 0, 0, 0.4);
     position: relative;
@@ -260,7 +269,7 @@ body::after {
     background: linear-gradient(135deg, var(--gold) 0%, #b8962e 100%);
     border: none;
     border-radius: 8px;
-    color: var(--emerald-dark);
+    color: var(--wood-dark);
     font-family: inherit;
     font-size: 0.85rem;
     font-weight: 600;
