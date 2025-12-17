@@ -49,13 +49,13 @@ function initialiseBoard() {
 
 function renderBoard() {
     boardElement.innerHTML = '';
-    
+
     // Find king positions to highlight if in check
     const whiteKingPos = findKing('white');
     const blackKingPos = findKing('black');
     const whiteInCheck = isKingInCheck('white');
     const blackInCheck = isKingInCheck('black');
-    
+
     for (let row = 0; row < 8; row++) {
         for (let col = 0; col < 8; col++) {
             const square = document.createElement('div');
@@ -100,7 +100,7 @@ function renderBoard() {
 
 function handleSquareClick(row, col) {
     if (gameOver) return;
-    
+
     if (selectedSquare) {
         if (selectedSquare.row === row && selectedSquare.col === col) {
             // Deselect
@@ -133,7 +133,7 @@ function selectPiece(row, col) {
 
 function isPieceColour(piece, colour) {
     return (colour === 'white' && piece === piece.toUpperCase()) ||
-           (colour === 'black' && piece === piece.toLowerCase());
+        (colour === 'black' && piece === piece.toLowerCase());
 }
 
 function findKing(colour) {
@@ -152,7 +152,7 @@ function findKing(colour) {
 function getPseudoLegalMoves(row, col) {
     const piece = board[row][col];
     if (!piece) return [];
-    
+
     const moves = [];
     const isWhite = piece === piece.toUpperCase();
     const pieceColour = isWhite ? 'white' : 'black';
@@ -161,17 +161,17 @@ function getPseudoLegalMoves(row, col) {
         // Pawn moves
         const direction = isWhite ? -1 : 1;
         const startRow = isWhite ? 6 : 1;
-        
+
         // Move forward one square
         if (row + direction >= 0 && row + direction < 8 && board[row + direction][col] === '') {
             moves.push({ row: row + direction, col });
-            
+
             // Move forward two squares from starting position
             if (row === startRow && board[row + 2 * direction][col] === '') {
                 moves.push({ row: row + 2 * direction, col });
             }
         }
-        
+
         // Capture diagonally
         for (let dc of [-1, 1]) {
             const newRow = row + direction;
@@ -222,26 +222,26 @@ function getPseudoLegalMoves(row, col) {
                 }
             }
         }
-        
+
         // Castling
         const rights = castlingRights[pieceColour];
         const baseRow = isWhite ? 7 : 0;
         const rookPiece = isWhite ? 'R' : 'r';
-        
+
         if (row === baseRow && col === 4) {
             // Kingside castling
-            if (rights.kingSide && 
-                board[baseRow][5] === '' && 
-                board[baseRow][6] === '' && 
+            if (rights.kingSide &&
+                board[baseRow][5] === '' &&
+                board[baseRow][6] === '' &&
                 board[baseRow][7] === rookPiece) {
                 moves.push({ row: baseRow, col: 6, isCastling: true, rookFrom: 7, rookTo: 5 });
             }
-            
+
             // Queenside castling
-            if (rights.queenSide && 
-                board[baseRow][3] === '' && 
-                board[baseRow][2] === '' && 
-                board[baseRow][1] === '' && 
+            if (rights.queenSide &&
+                board[baseRow][3] === '' &&
+                board[baseRow][2] === '' &&
+                board[baseRow][1] === '' &&
                 board[baseRow][0] === rookPiece) {
                 moves.push({ row: baseRow, col: 2, isCastling: true, rookFrom: 0, rookTo: 3 });
             }
@@ -257,9 +257,9 @@ function getSlidingMoves(row, col, directions, pieceColour) {
         for (let i = 1; i < 8; i++) {
             const newRow = row + dr * i;
             const newCol = col + dc * i;
-            
+
             if (newRow < 0 || newRow >= 8 || newCol < 0 || newCol >= 8) break;
-            
+
             const target = board[newRow][newCol];
             if (target === '') {
                 moves.push({ row: newRow, col: newCol });
@@ -296,7 +296,7 @@ function isSquareUnderAttack(row, col, byColour) {
 function isKingInCheck(colour) {
     const kingPos = findKing(colour);
     if (!kingPos) return false;
-    
+
     const enemyColour = colour === 'white' ? 'black' : 'white';
     return isSquareUnderAttack(kingPos.row, kingPos.col, enemyColour);
 }
@@ -305,11 +305,11 @@ function isKingInCheck(colour) {
 function getLegalMoves(row, col) {
     const piece = board[row][col];
     if (!piece) return [];
-    
+
     const pieceColour = isPieceColour(piece, 'white') ? 'white' : 'black';
     const pseudoLegalMoves = getPseudoLegalMoves(row, col);
     const legalMoves = [];
-    
+
     for (const move of pseudoLegalMoves) {
         // Special handling for castling
         if (move.isCastling) {
@@ -317,13 +317,13 @@ function getLegalMoves(row, col) {
             if (isKingInCheck(pieceColour)) {
                 continue;
             }
-            
+
             // Check all squares the king moves through
             const kingCol = col;
             const targetCol = move.col;
             const direction = targetCol > kingCol ? 1 : -1;
             let canCastle = true;
-            
+
             // Check each square from king's position to target (inclusive)
             for (let c = kingCol; c !== targetCol + direction; c += direction) {
                 if (isSquareUnderAttack(row, c, pieceColour === 'white' ? 'black' : 'white')) {
@@ -331,7 +331,7 @@ function getLegalMoves(row, col) {
                     break;
                 }
             }
-            
+
             if (canCastle) {
                 legalMoves.push(move);
             }
@@ -342,71 +342,71 @@ function getLegalMoves(row, col) {
             }
         }
     }
-    
+
     return legalMoves;
 }
 
 function doesMoveLeaveSelfInCheck(fromRow, fromCol, move) {
     const piece = board[fromRow][fromCol];
     const pieceColour = isPieceColour(piece, 'white') ? 'white' : 'black';
-    
+
     // Make the move temporarily
     const capturedPiece = board[move.row][move.col];
     const enPassantCaptured = move.isEnPassant ? board[fromRow][move.col] : null;
-    
+
     board[move.row][move.col] = piece;
     board[fromRow][fromCol] = '';
-    
+
     if (move.isEnPassant) {
         board[fromRow][move.col] = '';
     }
-    
+
     // Check if king is in check after the move
     const inCheck = isKingInCheck(pieceColour);
-    
+
     // Undo the move
     board[fromRow][fromCol] = piece;
     board[move.row][move.col] = capturedPiece;
-    
+
     if (move.isEnPassant) {
         board[fromRow][move.col] = enPassantCaptured;
     }
-    
+
     return inCheck;
 }
 
 function makeMove(from, moveData) {
     const piece = board[from.row][from.col];
     const to = { row: moveData.row, col: moveData.col };
-    
+
     // Reset en passant target
     enPassantTarget = null;
-    
+
     // Set en passant target if pawn moves two squares
     if (piece.toLowerCase() === 'p' && Math.abs(to.row - from.row) === 2) {
         enPassantTarget = { row: (from.row + to.row) / 2, col: from.col };
     }
-    
+
     // Handle en passant capture
     if (moveData.isEnPassant) {
         board[from.row][to.col] = '';
     }
-    
+
     // Handle castling
     if (moveData.isCastling) {
         board[to.row][moveData.rookTo] = board[to.row][moveData.rookFrom];
         board[to.row][moveData.rookFrom] = '';
     }
-    
+
     // Move the piece
     board[to.row][to.col] = piece;
     board[from.row][from.col] = '';
-    
+
     // Handle pawn promotion
     if (piece.toLowerCase() === 'p' && (to.row === 0 || to.row === 7)) {
         board[to.row][to.col] = piece === 'P' ? 'Q' : 'q';
     }
-    
+
     // Update castling rights
     if (piece.toLowerCase() === 'k') {
         castlingRights[currentTurn].kingSide = false;
@@ -419,18 +419,18 @@ function makeMove(from, moveData) {
             if (from.col === 7) castlingRights[currentTurn].kingSide = false;
         }
     }
-    
+
     moveHistory.push({ from, to, piece });
     selectedSquare = null;
     possibleMoves = [];
-    
+
     // Switch turns
     currentTurn = currentTurn === 'white' ? 'black' : 'white';
-    
+
     // Check game state
     const inCheck = isKingInCheck(currentTurn);
     const hasLegalMoves = hasAnyLegalMoves(currentTurn);
-    
+
     if (!hasLegalMoves) {
         gameOver = true;
         if (inCheck) {
@@ -449,13 +449,14 @@ function makeMove(from, moveData) {
 }
 
 function updateTurnIndicator(inCheck = false) {
-    const turnText = `${currentTurn.charAt(0).toUpperCase() + currentTurn.slice(1)}'s Turn`;
+    const turnText = currentTurn === 'white' ? 'White to move' : 'Black to move';
+    turnIndicator.dataset.turn = currentTurn;
     if (inCheck) {
-        turnIndicator.textContent = `${turnText} - CHECK!`;
-        turnIndicator.style.color = '#ef4444';
+        turnIndicator.textContent = `${turnText} · Check`;
+        turnIndicator.style.color = '#c53030';
     } else {
         turnIndicator.textContent = turnText;
-        turnIndicator.style.color = '#14b8a6';
+        turnIndicator.style.color = '';
     }
 }
 

@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chess Game</title>
+    <title>Chess</title>
     <link rel="stylesheet" href="../../css/style.css">
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -19,18 +19,40 @@
                 <h1>Chess</h1>
                 <ul>
                     <li><a href="../../">Home</a></li>
-                    <li><a href="../index.html">Playground</a></li>
+                    <li><a href="../">Playground</a></li>
                 </ul>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <div id="chess-board"></div>
-        <div id="game-info">
-            <div id="turn-indicator">White's turn</div>
-            <button id="reset-btn">Reset Game</button>
+
+    <!-- The board wrapper with labels -->
+    <div class="chess-wrapper">
+        <!-- File labels (a-h) -->
+        <div class="file-labels">
+            <span>a</span><span>b</span><span>c</span><span>d</span><span>e</span><span>f</span><span>g</span><span>h</span>
+        </div>
+
+        <!-- Board with rank labels -->
+        <div class="board-row">
+            <div class="rank-labels">
+                <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+            </div>
+
+            <div id="chess-board"></div>
+
+            <div class="rank-labels right">
+                <span>8</span><span>7</span><span>6</span><span>5</span><span>4</span><span>3</span><span>2</span><span>1</span>
+            </div>
         </div>
     </div>
+
+    <!-- Turn indicator as ambient element -->
+    <div id="game-info">
+        <div id="turn-indicator" data-turn="white">White to move</div>
+    </div>
+
+    <!-- Reset button -->
+    <button id="reset-btn">New Game</button>
 
     <script src="script.js"></script>
 </body>

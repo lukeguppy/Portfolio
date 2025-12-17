@@ -1,66 +1,165 @@
-/* CSS Variables for Theme */
+/* =============================================
+   CHESS - PREMIUM MARBLE & EMERALD DESIGN
+   ============================================= */
+
 :root {
-    --bg-color: #0f172a;
-    --text-color: #f1f5f9;
-    --accent-color: #14b8a6;
-    --secondary-bg: #1e293b;
-    --border-color: #334155;
-    --hover-color: #0f766e;
-    --btn-bg: #14b8a6;
-    --btn-text: #0f172a;
-    --transition: all 0.3s ease;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --shadow-hover: 0 8px 12px rgba(0, 0, 0, 0.15);
-    --light-square: #f0d9b5;
-    --dark-square: #b58863;
+    --board-size: min(70vh, 75vw, 560px);
+    --square-size: calc(var(--board-size) / 8);
+    --light-square: #eeeed2;
+    --dark-square: #769656;
     --selected-square: #baca44;
-    --move-indicator: rgba(20, 184, 166, 0.5);
-    --capture-indicator: rgba(239, 68, 68, 0.6);
+    --move-indicator: rgba(186, 202, 68, 0.7);
+    --capture-indicator: rgba(180, 70, 70, 0.8);
+    --gold: #d4af37;
+    --gold-light: #f4cf67;
+    --emerald: #1a4d3e;
+    --emerald-dark: #0d2920;
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+html,
+body {
+    height: 100%;
+    overflow: hidden;
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-    background-color: var(--bg-color);
-    margin: 0;
-    padding-top: 80px;
+    font-family: 'Cinzel', 'Georgia', serif;
+    background: linear-gradient(135deg, #0a1f1a 0%, #143d32 50%, #0a1f1a 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+/* === ANIMATED BACKGROUND SHIMMER === */
+body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+        radial-gradient(ellipse at 50% 0%, rgba(212, 175, 55, 0.08) 0%, transparent 50%),
+        radial-gradient(ellipse at 0% 50%, rgba(26, 77, 62, 0.4) 0%, transparent 40%),
+        radial-gradient(ellipse at 100% 50%, rgba(26, 77, 62, 0.4) 0%, transparent 40%);
+    animation: shimmer 8s ease-in-out infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes shimmer {
+    0% {
+        opacity: 0.6;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}
+
+/* Soft vignette */
+body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: radial-gradient(circle at 50% 50%, transparent 40%, rgba(0, 0, 0, 0.35) 100%);
+    pointer-events: none;
+}
+
+
+
+/* === CHESS WRAPPER === */
+.chess-wrapper {
     display: flex;
     flex-direction: column;
     align-items: center;
-    min-height: 100vh;
+    gap: 8px;
+    position: relative;
+    z-index: 1;
 }
 
-.container {
-    background-color: var(--secondary-bg);
-    border-radius: 16px;
-    box-shadow: var(--shadow);
+.board-row {
     display: flex;
-    flex-direction: column;
     align-items: center;
-    padding: 32px;
-    margin: 20px;
-    max-width: 600px;
+    gap: 12px;
 }
 
-#chess-board {
+/* === FILE & RANK LABELS === */
+.file-labels,
+.rank-labels {
+    display: flex;
+    color: rgba(255, 255, 255, 0.35);
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    user-select: none;
+}
+
+.file-labels {
     display: grid;
-    grid-template-columns: repeat(8, 70px);
-    grid-template-rows: repeat(8, 70px);
-    border: 3px solid var(--border-color);
-    border-radius: 8px;
-    overflow: hidden;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
+    grid-template-columns: repeat(8, var(--square-size));
+    width: var(--board-size);
 }
 
+.file-labels span {
+    text-align: center;
+}
+
+.rank-labels {
+    flex-direction: column;
+    height: var(--board-size);
+    justify-content: space-around;
+}
+
+.rank-labels span {
+    height: var(--square-size);
+    display: flex;
+    align-items: center;
+}
+
+.rank-labels.right {
+    opacity: 0;
+}
+
+/* === THE BOARD === */
+#chess-board {
+    width: var(--board-size);
+    height: var(--board-size);
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    grid-template-rows: repeat(8, 1fr);
+    border-radius: 4px;
+    overflow: hidden;
+    box-shadow:
+        0 0 0 4px var(--emerald),
+        0 0 0 8px var(--gold),
+        0 0 0 12px var(--emerald-dark),
+        0 0 40px rgba(212, 175, 55, 0.15),
+        0 30px 80px rgba(0, 0, 0, 0.6),
+        0 10px 30px rgba(0, 0, 0, 0.4);
+    position: relative;
+}
+
+/* Subtle vignette on board */
+#chess-board::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.15);
+    pointer-events: none;
+    border-radius: 2px;
+}
+
+/* === SQUARES === */
 .square {
-    width: 70px;
-    height: 70px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     position: relative;
-    transition: var(--transition);
-    box-sizing: border-box;
+    transition: filter 0.15s ease;
 }
 
 .square.light {
@@ -71,154 +170,163 @@ body {
     background-color: var(--dark-square);
 }
 
+.square:hover {
+    filter: brightness(1.1);
+}
+
 .square.selected {
-    background-color: var(--selected-square);
-    box-shadow: inset 0 0 0 3px rgba(186, 202, 68, 0.7);
+    background-color: var(--selected-square) !important;
 }
 
 .square.check {
-    background-color: #ef4444 !important;
-    box-shadow: inset 0 0 0 3px rgba(239, 68, 68, 0.9), 0 0 20px rgba(239, 68, 68, 0.5);
-    animation: checkPulse 1s ease-in-out infinite;
+    background: linear-gradient(135deg, #c53030 0%, #9b2c2c 100%) !important;
+    animation: checkGlow 1.2s ease-in-out infinite alternate;
 }
 
-@keyframes checkPulse {
-    0%, 100% {
-        box-shadow: inset 0 0 0 3px rgba(239, 68, 68, 0.9), 0 0 20px rgba(239, 68, 68, 0.5);
+@keyframes checkGlow {
+    from {
+        box-shadow: inset 0 0 20px rgba(197, 48, 48, 0.5);
     }
-    50% {
-        box-shadow: inset 0 0 0 3px rgba(239, 68, 68, 0.9), 0 0 30px rgba(239, 68, 68, 0.7);
+
+    to {
+        box-shadow: inset 0 0 30px rgba(197, 48, 48, 0.8), 0 0 20px rgba(197, 48, 48, 0.4);
     }
 }
 
-.square:hover {
-    filter: brightness(0.9);
-}
-
+/* === PIECES === */
 .piece {
-    width: 85%;
-    height: 85%;
+    width: 80%;
+    height: 80%;
+    object-fit: contain;
     user-select: none;
     pointer-events: none;
+    filter: drop-shadow(1px 3px 3px rgba(0, 0, 0, 0.4));
     transition: transform 0.1s ease;
 }
 
 .square:active .piece {
-    transform: scale(0.95);
+    transform: scale(0.9);
 }
 
+/* === MOVE INDICATORS === */
 .move-indicator {
-    width: 22px;
-    height: 22px;
-    background-color: var(--move-indicator);
+    width: 28%;
+    height: 28%;
+    background: var(--move-indicator);
     border-radius: 50%;
     position: absolute;
     pointer-events: none;
 }
 
 .capture-indicator {
-    width: 100%;
-    height: 100%;
+    position: absolute;
+    inset: 6%;
     border: 4px solid var(--capture-indicator);
     border-radius: 50%;
-    position: absolute;
-    box-sizing: border-box;
     pointer-events: none;
 }
 
+/* === TURN INDICATOR - Subtle bottom text === */
 #game-info {
-    margin-top: 24px;
-    text-align: center;
-    color: var(--text-color);
-    width: 100%;
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 100;
 }
 
 #turn-indicator {
-    font-size: 1.5em;
-    font-weight: 600;
-    margin-bottom: 16px;
-    color: var(--accent-color);
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 0.7rem;
+    letter-spacing: 4px;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    transition: color 0.4s ease;
 }
 
+#turn-indicator[data-turn="white"] {
+    color: rgba(255, 255, 255, 0.5);
+}
+
+#turn-indicator[data-turn="black"] {
+    color: rgba(100, 100, 100, 0.6);
+}
+
+/* === RESET BUTTON - Prominent === */
 #reset-btn {
-    background-color: var(--btn-bg);
-    color: var(--btn-text);
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    padding: 12px 24px;
+    background: linear-gradient(135deg, var(--gold) 0%, #b8962e 100%);
     border: none;
-    padding: 12px 32px;
     border-radius: 8px;
-    cursor: pointer;
-    font-size: 1em;
+    color: var(--emerald-dark);
+    font-family: inherit;
+    font-size: 0.85rem;
     font-weight: 600;
-    transition: var(--transition);
-    box-shadow: var(--shadow);
+    letter-spacing: 1px;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+    z-index: 100;
 }
 
 #reset-btn:hover {
-    background-color: var(--hover-color);
-    box-shadow: var(--shadow-hover);
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 100%);
+    box-shadow: 0 6px 28px rgba(212, 175, 55, 0.5);
     transform: translateY(-2px);
 }
 
 #reset-btn:active {
     transform: translateY(0);
-    box-shadow: var(--shadow);
+    box-shadow: 0 2px 12px rgba(212, 175, 55, 0.3);
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    body {
-        padding-top: 60px;
+/* === RESPONSIVE === */
+@media (max-width: 600px) {
+    :root {
+        --board-size: min(90vw, 90vh);
     }
 
-    .container {
-        padding: 20px;
-        margin: 10px;
-        width: 95%;
-        max-width: none;
+    .floating-nav {
+        top: 12px;
+        gap: 20px;
     }
 
-    #chess-board {
-        grid-template-columns: repeat(8, 45px);
-        grid-template-rows: repeat(8, 45px);
+    .nav-link {
+        font-size: 0.7rem;
     }
 
-    .square {
-        width: 45px;
-        height: 45px;
+    .rank-labels,
+    .file-labels.bottom {
+        display: none;
     }
 
-    .move-indicator {
-        width: 14px;
-        height: 14px;
+    .file-labels {
+        font-size: 0.6rem;
     }
 
     #turn-indicator {
-        font-size: 1.2em;
+        font-size: 0.6rem;
     }
 
     #reset-btn {
-        padding: 10px 24px;
-        font-size: 0.9em;
+        width: 38px;
+        height: 38px;
+        font-size: 1.1rem;
+        bottom: 16px;
+        right: 16px;
     }
 }
 
-@media (max-width: 400px) {
-    #chess-board {
-        grid-template-columns: repeat(8, 38px);
-        grid-template-rows: repeat(8, 38px);
+@media (max-height: 500px) {
+    .floating-nav {
+        display: none;
     }
 
-    .square {
-        width: 38px;
-        height: 38px;
-    }
-
-    .move-indicator {
-        width: 12px;
-        height: 12px;
+    .file-labels,
+    .rank-labels {
+        display: none;
     }
 }
