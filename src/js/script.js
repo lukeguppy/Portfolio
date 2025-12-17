@@ -220,7 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
                         // ENTRY PHASE: Rising from below center, scaling down, fading in
                         opacity = entryProgress;
                         scale = 1.8 - (entryProgress * 0.3); // 1.8 → 1.5
-                        topPercent = 70 - (entryProgress * 20); // 70% → 50%
+                        topPercent = 100 - (entryProgress * 50); // 70% → 50%
                     } else if (stickyProgress < 0.95) {
                         // STICKY PHASE: Shrink and move up to final position
                         const shrinkPhase = Math.min(1, stickyProgress / 0.2); // Complete by 20%
