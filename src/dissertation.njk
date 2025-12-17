@@ -1,40 +1,176 @@
 ---
 layout: base.njk
 title: Dissertation
-pageTitle: Dissertation
+pageTitle: Autonomous Navigation
+pageStyle: /css/dissertation.css
+pageScripts:
+  - /js/dissertation.js
 ---
 
-<section class="hero">
+<!-- HEADER: Tech/Blueprint Theme -->
+<section class="dissertation-hero">
+    <div class="hero-bg-grid"></div>
     <div class="hero-content">
-        <h1>Dissertation</h1>
-        <p>Details of my Final Year Dissertation project.</p>
+        <div class="hero-label">Final Year Project · 1st Class Honours</div>
+        <h1 class="hero-title">
+            <span class="glitch-text" data-text="Autonomous">A#X0$M9K@1</span>
+            <span class="highlight">Navigation</span>
+        </h1>
+        <p class="hero-subtitle">Deep Reinforcement Learning in Complex Traffic Environments</p>
+        <div class="hero-stats">
+            <div class="stat-item">
+                <span class="stat-value">PPO</span>
+                <span class="stat-label">Algorithm</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">Unity</span>
+                <span class="stat-label">Simulation</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-value">C#</span>
+                <span class="stat-label">Implementation</span>
+            </div>
+        </div>
+    </div>
+    <div class="hero-scroll-indicator">
+        <span class="scroll-text">INITIALISE SEQUENCE</span>
+        <div class="scroll-line"></div>
     </div>
 </section>
 
-<section class="dissertation-content">
-    <div class="dissertation-overview">
-        <h2>Final Year Dissertation (1st-Class)</h2>
-        <p>My dissertation focused on developing an intelligent autonomous vehicle system using advanced machine learning techniques to navigate complex traffic environments safely and efficiently.</p>
-        <h3>Key Features:</h3>
-        <ul>
-            <li><strong>PPO Reinforcement Learning Agent:</strong> Implemented a Proximal Policy Optimization algorithm to train an AI agent for real-time decision-making in dynamic traffic scenarios.</li>
-            <li><strong>Custom Unity Simulation:</strong> Created a realistic 3D environment simulating traffic lights, intersections, and multiple vehicles for thorough testing and training.</li>
-            <li><strong>Extendable Reward System:</strong> Designed a modular framework allowing easy addition of new behaviours and objectives for the agent, enabling adaptable learning.</li>
-            <li><strong>Technologies Used:</strong> C#, Unity Game Engine, PPO Deep Reinforcement Learning.</li>
-        </ul>
-        <p><a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub</a></p>
+<!-- MAIN PIPELINE: Scrolling narrative -->
+<section class="system-pipeline">
+    <div class="pipeline-track">
+        <div class="track-line"></div>
+        <div class="track-head"></div>
     </div>
-    <div class="dissertation-image">
-        <img src="{{ "/images/dissertation.png" | url }}" alt="Dissertation Project Screenshot" style="width: 100%; max-width: 600px; height: auto; border-radius: 8px; box-shadow: var(--shadow);">
+
+    <div class="pipeline-container">
+        
+        <!-- PHASE 1: OVERVIEW -->
+        <article class="pipeline-module" data-phase="overview">
+            <div class="module-marker">01</div>
+            <div class="module-content">
+                <h2 class="module-title">System Overview</h2>
+                <p class="module-desc">
+                    An intelligent autonomous vehicle system designed to navigate complex, dynamic traffic environments. 
+                    Unlike traditional rule-based systems, this project utilises <strong>Deep Reinforcement Learning</strong> to enable the agent to learn optimal driving policies through trial and error.
+                </p>
+                <div class="module-visual">
+                    <img src="{{ '/images/dissertation.png' | url }}" alt="Simulation Environment" class="blueprint-img">
+                </div>
+            </div>
+        </article>
+
+        <!-- PHASE 2: THE ENVIRONMENT -->
+        <article class="pipeline-module align-right" data-phase="environment">
+            <div class="module-marker">02</div>
+            <div class="module-content">
+                <h2 class="module-title">The Environment</h2>
+                <h3 class="module-subtitle">Unity Simulation Engine</h3>
+                <p class="module-desc">
+                    A custom-built, realistic 3D environment in Unity. It simulates:
+                </p>
+                <ul class="tech-list">
+                    <li>Dynamic Traffic Lights</li>
+                    <li>Complex Intersections</li>
+                    <li>Multi-Vehicle Interaction</li>
+                    <li>Sensor Ray-casting</li>
+                </ul>
+            </div>
+        </article>
+
+        <!-- PHASE 3: THE BRAIN -->
+        <article class="pipeline-module" data-phase="brain">
+            <div class="module-marker">03</div>
+            <div class="module-content">
+                <h2 class="module-title">The Brain</h2>
+                <h3 class="module-subtitle">Proximal Policy Optimisation (PPO)</h3>
+                <p class="module-desc">
+                    The agent utilises PPO, a state-of-the-art policy gradient method, to master continuous control.
+                    It processes discrete inputs (sensors, speed, traffic state) to output continuous steering and acceleration actions.
+                </p>
+                <div class="neural-net-container">
+                    <canvas id="brain-canvas"></canvas>
+                </div>
+            </div>
+        </article>
+
+        <!-- PHASE 4: REWARD SYSTEM -->
+        <article class="pipeline-module align-right" data-phase="logic">
+            <div class="module-marker">04</div>
+            <div class="module-content">
+                <h2 class="module-title">Reward Logic</h2>
+                <p class="module-desc">
+                    A modular reward architecture guides the learning process. The agent balances multiple objectives:
+                </p>
+                <div class="logic-grid">
+                    <div class="logic-card positive">
+                        <span class="icon">+</span>
+                        <span>Velocity Maintenance</span>
+                    </div>
+                    <div class="logic-card positive">
+                        <span class="icon">+</span>
+                        <span>Lane Adherence</span>
+                    </div>
+                    <div class="logic-card negative">
+                        <span class="icon">!</span>
+                        <span>Collision (Terminal)</span>
+                    </div>
+                    <div class="logic-card negative">
+                        <span class="icon">!</span>
+                        <span>Red Light Violation</span>
+                    </div>
+                    <div class="logic-card neutral">
+                        <span class="icon">...</span>
+                        <span>Additional rewards and penalties</span>
+                    </div>
+                </div>
+            </div>
+        </article>
+
     </div>
-    <div class="dissertation-demo">
-        <h3>Example Implementation</h3>
-        <p>Experience the autonomous vehicle simulation in action with this interactive demo.</p>
-        <a href="https://lukeguppy.github.io/dissertation/" target="_blank" class="btn-primary">View Live Demo</a>
+</section>
+
+<!-- DEPLOYMENT SECTION -->
+<section class="deployment-section">
+    <div class="deployment-header">
+        <h2>Deployment & Data</h2>
     </div>
-    <div class="dissertation-pdf">
-        <h3>Dissertation PDF</h3>
-        <p><a href="{{ "/dissertation.pdf" | url }}" target="_blank" class="btn-primary" download>Download PDF</a></p>
-        <iframe src="{{ "/dissertation.pdf" | url }}" width="100%" height="1000px" type="application/pdf" style="border: none; border-radius: 8px;"></iframe>
+    
+    <div class="deployment-grid">
+        <div class="deploy-card">
+            <h3>Interactive Demo</h3>
+            <p>Experience the simulation logic in browser.</p>
+            <a href="https://lukeguppy.github.io/dissertation/" target="_blank" class="btn-tech">
+                <span class="btn-text">LAUNCH SIMULATION</span>
+                <span class="btn-deco"></span>
+            </a>
+        </div>
+
+        <div class="deploy-card">
+            <h3>Github</h3>
+            <p>Explore the C# scripts and ML configurations.</p>
+            <a href="https://github.com/lukeguppy/dissertation" target="_blank" class="btn-tech">
+                <span class="btn-text">ACCESS REPOSITORY</span>
+                <span class="btn-deco"></span>
+            </a>
+        </div>
+
+        <div class="deploy-card pdf-card">
+            <h3>Download</h3>
+            <p>Read the complete dissertation paper.</p>
+             <a href="{{ '/dissertation.pdf' | url }}" target="_blank" class="btn-tech" download>
+                <span class="btn-text">DOWNLOAD PDF</span>
+                <span class="btn-deco"></span>
+            </a>
+        </div>
+    </div>
+
+    <div class="pdf-viewer-container">
+        <div class="pdf-window-header">
+            <span class="window-title">DISSERTATION_FINAL_V2.PDF</span>
+        </div>
+        <iframe src="{{ '/dissertation.pdf' | url }}" class="pdf-frame"></iframe>
     </div>
 </section>

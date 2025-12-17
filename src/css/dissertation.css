@@ -1,0 +1,799 @@
+/* ================================================
+   DISSERTATION PAGE - Tech/Blueprint Theme
+   Cyberpunk/Sci-fi inspired aesthetic
+   ================================================ */
+
+:root {
+    --tech-bg: #0b0c15;
+    --tech-card-bg: #13141f;
+    --tech-accent: #00f3ff;
+    /* Cyan */
+    --tech-secondary: #7000ff;
+    /* Purple */
+    --tech-text: #e0e6ed;
+    --tech-text-dim: #94a3b8;
+    --tech-grid: rgba(0, 243, 255, 0.05);
+    --tech-border: rgba(0, 243, 255, 0.2);
+    --tech-font-mono: 'JetBrains Mono', 'Fira Code', 'Roboto Mono', monospace;
+}
+
+body {
+    background-color: var(--tech-bg);
+    color: var(--tech-text);
+    overflow-x: hidden;
+}
+
+/* ================================================
+   HERO SECTION
+   ================================================ */
+.dissertation-hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    padding: 2rem;
+    overflow: hidden;
+}
+
+/* Animated Grid Background */
+.hero-bg-grid {
+    position: absolute;
+    inset: 0;
+    background-image:
+        linear-gradient(var(--tech-grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--tech-grid) 1px, transparent 1px);
+    background-size: 50px 50px;
+    background-position: center center;
+    transform: perspective(1000px) rotateX(60deg) scale(2);
+    transform-origin: center top;
+    opacity: 0.6;
+    animation: gridMove 20s linear infinite;
+    z-index: -1;
+}
+
+.hero-bg-grid::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at center, transparent 0%, var(--tech-bg) 70%);
+}
+
+@keyframes gridMove {
+    0% {
+        transform: perspective(1000px) rotateX(60deg) scale(2) translateY(0);
+    }
+
+    100% {
+        transform: perspective(1000px) rotateX(60deg) scale(2) translateY(50px);
+    }
+}
+
+.hero-content {
+    text-align: center;
+    z-index: 2;
+    max-width: 900px;
+}
+
+.hero-label {
+    font-family: var(--tech-font-mono);
+    color: var(--tech-accent);
+    letter-spacing: 2px;
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 0.2s forwards;
+}
+
+.hero-title {
+    font-size: clamp(3rem, 8vw, 6rem);
+    line-height: 1;
+    font-weight: 800;
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+    letter-spacing: -2px;
+}
+
+/* Glitch Effect Text */
+.glitch-text {
+    position: relative;
+    display: block;
+    color: #fff;
+}
+
+.highlight {
+    display: inline-block;
+    /* Allows centering via parent text-align */
+    vertical-align: bottom;
+    /* align with baseline */
+    color: var(--tech-accent);
+    /* Fill color */
+    position: relative;
+    opacity: 0;
+    /* Hidden initially, controlled by glitch-complete */
+    width: 0%;
+    /* Start width 0 */
+    overflow: hidden;
+    white-space: nowrap;
+    border-right: 4px solid var(--tech-accent);
+    /* Cursor */
+    /* No stroke initially */
+}
+
+.dissertation-hero.glitch-complete .highlight {
+    opacity: 1;
+    /* Step 1: Type out width (Centered L->R) */
+    animation: typeWidth 1s steps(10) forwards, blinkCursor 0.75s step-end infinite;
+}
+
+/* Cursor blink */
+@keyframes blinkCursor {
+
+    from,
+    to {
+        border-right-color: transparent;
+    }
+
+    50% {
+        border-right-color: var(--tech-accent);
+    }
+}
+
+@keyframes typeWidth {
+    to {
+        width: 100%;
+    }
+}
+
+/* Remove ::before (old fill) */
+.highlight::before {
+    content: none;
+    display: none;
+}
+
+.highlight::after {
+    content: 'Navigation';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    color: transparent;
+    -webkit-text-stroke: 2px var(--tech-accent);
+    opacity: 0;
+    /* Removed background causing occlusion */
+    /* Mask check? No, transparent text */
+    /* To draw outline, we can use clip-path wipe or just opacity fade?
+       User liked the 'draw' effect. */
+    clip-path: inset(0 100% 0 0);
+}
+
+.dissertation-hero.glitch-complete .highlight::after {
+    /* Step 2: Draw outline L->R after typing */
+    animation: drawOutline 0.8s cubic-bezier(0.22, 1, 0.36, 1) 1s forwards;
+    opacity: 1;
+    /* Make visible for clip animation */
+}
+
+@keyframes drawOutline {
+    0% {
+        clip-path: inset(0 100% 0 0);
+    }
+
+    100% {
+        clip-path: inset(0 0 0 0);
+    }
+}
+
+@keyframes typeReveal {
+    to {
+        width: 100%;
+        border-right-color: transparent;
+    }
+}
+
+.hero-subtitle {
+    font-size: 1.25rem;
+    color: var(--tech-text-dim);
+    margin-bottom: 4rem;
+    opacity: 0;
+    /* Wait for entire title sequence (~2s) */
+    animation: fadeUp 0.8s ease 2s forwards;
+}
+
+/* Tech Stats Row */
+.hero-stats {
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    opacity: 0;
+    animation: fadeUp 0.8s ease 1s forwards;
+}
+
+.stat-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+}
+
+.stat-item::after {
+    content: '';
+    position: absolute;
+    right: -1.5rem;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: var(--tech-border);
+}
+
+.stat-item:last-child::after {
+    display: none;
+}
+
+.stat-value {
+    font-family: var(--tech-font-mono);
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #fff;
+    margin-bottom: 0.25rem;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--tech-accent);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+/* Scroll Indicator */
+.hero-scroll-indicator {
+    position: absolute;
+    bottom: 2rem;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    opacity: 0.7;
+}
+
+.scroll-text {
+    font-family: var(--tech-font-mono);
+    font-size: 0.7rem;
+    letter-spacing: 2px;
+    color: var(--tech-accent);
+}
+
+.scroll-line {
+    width: 2px;
+    height: 60px;
+    background: linear-gradient(to bottom, var(--tech-accent), transparent);
+    animation: scrollPulse 2s infinite;
+}
+
+@keyframes scrollPulse {
+    0% {
+        transform: scaleY(0);
+        transform-origin: top;
+    }
+
+    50% {
+        transform: scaleY(1);
+        transform-origin: top;
+    }
+
+    51% {
+        transform: scaleY(1);
+        transform-origin: bottom;
+    }
+
+    100% {
+        transform: scaleY(0);
+        transform-origin: bottom;
+    }
+}
+
+@keyframes fadeUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ================================================
+   SYSTEM PIPELINE (Timeline)
+   ================================================ */
+.system-pipeline {
+    position: relative;
+    padding: 8rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* The central track line */
+.pipeline-track {
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--tech-border);
+    transform: translateX(-50%);
+    z-index: 0;
+}
+
+.track-line {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 100%;
+    transform: scaleY(0);
+    transform-origin: top;
+    background: var(--tech-accent);
+    box-shadow: 0 0 15px var(--tech-accent);
+    width: 100%;
+    will-change: transform;
+}
+
+.track-head {
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 12px;
+    height: 12px;
+    background: #fff;
+    border: 2px solid var(--tech-accent);
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 20px var(--tech-accent);
+    z-index: 2;
+    will-change: transform;
+}
+
+.pipeline-container {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 15vh;
+    /* Space between modules */
+}
+
+/* Pipeline Modules (Cards) */
+.pipeline-module {
+    display: flex;
+    width: 50%;
+    position: relative;
+    opacity: 0.2;
+    transform: scale(0.9);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+
+.pipeline-module.active {
+    opacity: 1;
+    transform: scale(1);
+}
+
+/* Left/Right alternation */
+/* Left/Right alternation */
+.pipeline-module {
+    align-self: flex-start;
+    padding-right: 4rem;
+    text-align: right;
+    transform-origin: right center;
+    /* Scale from the timeline */
+}
+
+.pipeline-module.align-right {
+    align-self: flex-end;
+    padding-right: 0;
+    padding-left: 4rem;
+    flex-direction: row-reverse;
+    text-align: left;
+    transform-origin: left center;
+    /* Scale from the timeline */
+}
+
+/* Marker / Connector */
+.module-marker {
+    position: absolute;
+    top: 0;
+    right: -25px;
+    /* Half width of track (2px) + padding */
+    width: 50px;
+    height: 50px;
+    background: var(--tech-bg);
+    border: 2px solid var(--tech-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--tech-font-mono);
+    color: var(--tech-border);
+    font-weight: 700;
+    z-index: 5;
+    transition: all 0.3s ease;
+}
+
+.pipeline-module.align-right .module-marker {
+    right: auto;
+    left: -25px;
+}
+
+.pipeline-module.active .module-marker {
+    border-color: var(--tech-accent);
+    color: var(--tech-accent);
+    box-shadow: 0 0 20px rgba(0, 243, 255, 0.3);
+    background: #000;
+}
+
+/* Content Box */
+.module-content {
+    background: rgba(19, 20, 31, 0.8);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--tech-border);
+    padding: 2rem;
+    border-radius: 4px;
+    position: relative;
+    overflow: hidden;
+    width: 100%;
+}
+
+.module-content::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 2px;
+    height: 100%;
+    background: var(--tech-accent);
+    opacity: 0;
+    transition: opacity 0.3s;
+}
+
+.pipeline-module.active .module-content::before {
+    opacity: 1;
+}
+
+.module-title {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.module-subtitle {
+    font-family: var(--tech-font-mono);
+    color: var(--tech-accent);
+    font-size: 0.9rem;
+    margin-bottom: 1.5rem;
+}
+
+.module-desc {
+    color: var(--tech-text-dim);
+    line-height: 1.6;
+    margin-bottom: 1.5rem;
+}
+
+.module-desc strong {
+    color: #fff;
+}
+
+/* Visuals inside modules */
+.module-visual {
+    position: relative;
+    border: 1px solid var(--tech-border);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-top: 1rem;
+}
+
+.blueprint-img {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* filter removed to restore original colors */
+}
+
+
+
+/* Tech List Styles */
+.tech-list {
+    list-style: none;
+    padding: 0;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.tech-list li {
+    background: rgba(0, 243, 255, 0.05);
+    padding: 0.5rem 1rem;
+    border-left: 2px solid var(--tech-border);
+    font-family: var(--tech-font-mono);
+    font-size: 0.85rem;
+    color: var(--tech-text);
+}
+
+
+/* Neural Network Viz */
+.neural-net-container {
+    background: #000;
+    border: 1px solid var(--tech-border);
+    border-radius: 4px;
+    position: relative;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+}
+
+#brain-canvas {
+    width: 100%;
+    height: 250px;
+    background: radial-gradient(circle at center, rgba(0, 243, 255, 0.05), transparent 70%);
+}
+
+.net-labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0 1rem;
+    margin-top: 0.5rem;
+    font-family: var(--tech-font-mono);
+    font-size: 0.7rem;
+    color: var(--tech-text-dim);
+    border-top: 1px solid var(--tech-border);
+    padding-top: 0.5rem;
+}
+
+/* Logic Grid */
+.logic-grid {
+    display: grid;
+    gap: 1rem;
+}
+
+.logic-card {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    background: rgba(255, 255, 255, 0.03);
+    padding: 1rem;
+    border-radius: 4px;
+    border: 1px solid transparent;
+}
+
+.logic-card.positive {
+    border-color: rgba(0, 255, 100, 0.3);
+}
+
+.logic-card.negative {
+    border-color: rgba(255, 50, 50, 0.3);
+}
+
+.logic-card .icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    font-weight: bold;
+}
+
+.positive .icon {
+    background: rgba(0, 255, 100, 0.2);
+    color: #0f8;
+}
+
+.negative .icon {
+    background: rgba(255, 50, 50, 0.2);
+    color: #f55;
+}
+
+.logic-card.neutral {
+    border-color: rgba(0, 243, 255, 0.3);
+    border-style: dashed;
+    opacity: 0.7;
+}
+
+.neutral .icon {
+    background: rgba(0, 243, 255, 0.1);
+    color: var(--tech-accent);
+}
+
+/* ================================================
+   DEPLOYMENT SECTION
+   ================================================ */
+.deployment-section {
+    padding: 6rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    position: relative;
+}
+
+.deployment-header {
+    text-align: center;
+    margin-bottom: 4rem;
+}
+
+.deployment-header h2 {
+    font-size: 3rem;
+    color: #fff;
+    text-transform: uppercase;
+}
+
+.deployment-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    margin-bottom: 4rem;
+}
+
+.deploy-card {
+    background: var(--tech-card-bg);
+    border: 1px solid var(--tech-border);
+    padding: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.deploy-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0, 243, 255, 0.1);
+    border-color: var(--tech-accent);
+}
+
+.deploy-card h3 {
+    margin-bottom: 1rem;
+    color: #fff;
+}
+
+.deploy-card p {
+    color: var(--tech-text-dim);
+    margin-bottom: 2rem;
+    flex-grow: 1;
+}
+
+/* Tech Button */
+.btn-tech {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 1rem;
+    background: transparent;
+    border: 1px solid var(--tech-accent);
+    color: var(--tech-accent);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-family: var(--tech-font-mono);
+    font-size: 0.8rem;
+    font-weight: bold;
+    overflow: hidden;
+    transition: all 0.3s ease;
+}
+
+.btn-tech::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 0%;
+    height: 100%;
+    background: var(--tech-accent);
+    z-index: 0;
+    transition: width 0.3s ease;
+}
+
+.btn-tech:hover::before {
+    width: 100%;
+}
+
+.btn-tech:hover {
+    color: #000;
+}
+
+.btn-text {
+    z-index: 1;
+}
+
+.btn-deco {
+    z-index: 1;
+    margin-left: auto;
+}
+
+.btn-deco::after {
+    content: '→';
+    font-size: 1.2em;
+}
+
+/* PDF Viewer */
+/* PDF Viewer */
+/* PDF Viewer */
+.pdf-viewer-container {
+    width: 100%;
+    height: 850px;
+    background: #000;
+    border: 4px solid var(--tech-border);
+    /* Thicker border */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+}
+
+.pdf-window-header {
+    height: 40px;
+    background: var(--tech-card-bg);
+    border-bottom: 2px solid var(--tech-border);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Center the title */
+    padding: 0 1rem;
+    font-family: var(--tech-font-mono);
+}
+
+.window-title {
+    color: var(--tech-text);
+    font-size: 0.9rem;
+    /* Slightly larger */
+    letter-spacing: 2px;
+    font-weight: 700;
+    opacity: 0.9;
+}
+
+.pdf-frame {
+    width: 100%;
+    height: 100%;
+    flex-grow: 1;
+    border: none;
+    background: #1a1a1a;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .pipeline-track {
+        left: 20px;
+        transform: none;
+    }
+
+    .pipeline-module,
+    .pipeline-module.align-right {
+        width: 100%;
+        padding: 0 0 0 50px;
+        text-align: left;
+        flex-direction: column;
+    }
+
+    .module-marker,
+    .pipeline-module.align-right .module-marker {
+        left: -5px;
+        /* Adjust based on track position */
+        right: auto;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+    }
+
+    .hero-stats {
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .stat-item::after {
+        display: none;
+    }
+}
