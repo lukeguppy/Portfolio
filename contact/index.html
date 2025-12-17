@@ -11,6 +11,8 @@
     <link rel="stylesheet" href="/Portfolio/css/style.css">
     <link rel="stylesheet" href="/Portfolio/css/prism.css">
     
+    <link rel="stylesheet" href="/Portfolio/css/contact.css">
+    
 </head>
 <body>
     <header>
@@ -66,47 +68,61 @@
 </header>
     <main>
         
-<section class="hero">
-    <div class="hero-content">
-        <h1>Contact Me</h1>
-        <p>Get in touch!</p>
+<section class="contact-page">
+    
+    <!-- Canvas for animated connections -->
+    <canvas class="network-canvas"></canvas>
+    
+    <!-- The three contact nodes -->
+    <div class="contact-network">
+        
+        <a href="mailto:lukewguppy@gmail.com" class="contact-node" data-channel="email">
+            <div class="node-core">
+                <div class="node-glow"></div>
+                <div class="node-ring"></div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <rect x="2" y="4" width="20" height="16" rx="2"/>
+                    <path d="M22 6L12 13L2 6"/>
+                </svg>
+            </div>
+            <span class="node-name">Email</span>
+        </a>
+        
+        <a href="https://www.linkedin.com/in/lukeguppy" class="contact-node" data-channel="linkedin" target="_blank" rel="noopener">
+            <div class="node-core">
+                <div class="node-glow"></div>
+                <div class="node-ring"></div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                    <rect x="2" y="9" width="4" height="12"/>
+                    <circle cx="4" cy="4" r="2"/>
+                </svg>
+            </div>
+            <span class="node-name">LinkedIn</span>
+        </a>
+        
+        <a href="https://github.com/lukeguppy" class="contact-node" data-channel="github" target="_blank" rel="noopener">
+            <div class="node-core">
+                <div class="node-glow"></div>
+                <div class="node-ring"></div>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                </svg>
+            </div>
+            <span class="node-name">GitHub</span>
+        </a>
+        
     </div>
-</section>
-
-<section class="contact-content">
-    <div class="contact-card">
-        <h2>Let's Connect</h2>
-        <p>I'm always open to discussing new opportunities or any other questions.</p>
-        <div class="contact-details">
-            <div class="contact-item">
-                <h3>Email</h3>
-                <p>lukewguppy@gmail.com</p>
-            </div>
-            <div class="contact-item">
-                <h3>LinkedIn</h3>
-                <p><a href="https://www.linkedin.com/in/lukeguppy" target="_blank">linkedin.com/in/lukeguppy</a></p>
-            </div>
-            <div class="contact-item">
-                <h3>GitHub</h3>
-                <p><a href="https://github.com/lukeguppy" target="_blank">github.com/lukeguppy</a></p>
-            </div>
-        </div>
-    </div>
+    
 </section>
     </main>
     
-    <footer>
-    <div class="footer-container">
-        <p>&copy; 2025 Luke Guppy</p>
-        <div class="footer-links">
-            <a href="https://linkedin.com/in/lukeguppy">LinkedIn</a>
-            <a href="https://github.com/lukeguppy">GitHub</a>
-        </div>
-    </div>
-</footer>
-    
     <script src="/Portfolio/js/script.js"></script>
     <script src="/Portfolio/js/prism.js"></script>
+    
+    
+    
+    <script src="/Portfolio/js/contact.js"></script>
     
     
 </body>

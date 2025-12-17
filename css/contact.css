@@ -1,0 +1,269 @@
+/* ================================================
+   CONTACT PAGE - ORBITAL NETWORK
+   Three nodes orbiting in space with connecting beams
+   ================================================ */
+
+/* ================================================
+   SECTION 1: FULL-PAGE CANVAS LAYOUT
+   ================================================ */
+.contact-page {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+}
+
+.network-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+}
+
+/* ================================================
+   SECTION 2: NODE CONTAINER - TRIANGULAR LAYOUT
+   ================================================ */
+.contact-network {
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    max-width: 700px;
+    height: 500px;
+    margin: 0 auto;
+}
+
+/* ================================================
+   SECTION 3: INDIVIDUAL NODES
+   ================================================ */
+.contact-node {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.5s var(--ease);
+}
+
+/* Triangle formation */
+.contact-node[data-channel="email"] {
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.contact-node[data-channel="linkedin"] {
+    bottom: 10%;
+    left: 10%;
+}
+
+.contact-node[data-channel="github"] {
+    bottom: 10%;
+    right: 10%;
+}
+
+/* Hover lift */
+.contact-node:hover {
+    transform: translateX(-50%) translateY(-10px);
+}
+
+.contact-node[data-channel="linkedin"]:hover,
+.contact-node[data-channel="github"]:hover {
+    transform: translateY(-10px);
+}
+
+/* ================================================
+   SECTION 4: NODE VISUALS
+   ================================================ */
+
+/* Core circle - this is the positioning reference */
+.node-core {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.4s var(--ease);
+}
+
+/* Outer glow - positioned relative to node-core */
+.node-glow {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle,
+            var(--node-color-alpha, rgba(20, 184, 166, 0.15)) 0%,
+            transparent 70%);
+    filter: blur(30px);
+    opacity: 0.5;
+    transition: opacity 0.5s ease, transform 0.5s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.contact-node:hover .node-glow {
+    opacity: 1;
+    transform: translate(-50%, -50%) scale(1.3);
+}
+
+/* Spinning ring - positioned relative to node-core */
+.node-ring {
+    position: absolute;
+    width: 120px;
+    height: 120px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    border: 1px solid var(--node-color-dim, rgba(20, 184, 166, 0.3));
+    animation: ring-spin 20s linear infinite;
+    pointer-events: none;
+}
+
+.node-ring::before {
+    content: '';
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: var(--node-color, #14b8a6);
+    border-radius: 50%;
+    top: -4px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0 0 10px var(--node-color, #14b8a6);
+}
+
+@keyframes ring-spin {
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
+}
+
+.node-core svg {
+    width: 36px;
+    height: 36px;
+    color: var(--text-soft);
+    transition: all 0.4s var(--ease);
+}
+
+.contact-node:hover .node-core {
+    border-color: var(--node-color, #14b8a6);
+    background: rgba(255, 255, 255, 0.06);
+    box-shadow:
+        0 0 40px var(--node-color-alpha, rgba(20, 184, 166, 0.3)),
+        inset 0 0 30px var(--node-color-alpha, rgba(20, 184, 166, 0.1));
+}
+
+.contact-node:hover .node-core svg {
+    color: var(--node-color, #14b8a6);
+    filter: drop-shadow(0 0 10px var(--node-color, #14b8a6));
+}
+
+/* Label */
+.node-name {
+    font-size: 0.9rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    transition: color 0.3s ease;
+}
+
+.contact-node:hover .node-name {
+    color: var(--node-color, #14b8a6);
+}
+
+/* ================================================
+   SECTION 5: NODE COLOR THEMES
+   ================================================ */
+.contact-node[data-channel="email"] {
+    --node-color: #14b8a6;
+    --node-color-dim: rgba(20, 184, 166, 0.3);
+    --node-color-alpha: rgba(20, 184, 166, 0.2);
+}
+
+.contact-node[data-channel="linkedin"] {
+    --node-color: #0077b5;
+    --node-color-dim: rgba(0, 119, 181, 0.3);
+    --node-color-alpha: rgba(0, 119, 181, 0.2);
+}
+
+.contact-node[data-channel="github"] {
+    --node-color: #a855f7;
+    --node-color-dim: rgba(168, 85, 247, 0.3);
+    --node-color-alpha: rgba(168, 85, 247, 0.2);
+}
+
+/* Stagger ring animation */
+.contact-node[data-channel="linkedin"] .node-ring {
+    animation-duration: 25s;
+    animation-direction: reverse;
+}
+
+.contact-node[data-channel="github"] .node-ring {
+    animation-duration: 18s;
+}
+
+/* ================================================
+   SECTION 6: RESPONSIVE
+   ================================================ */
+@media (max-width: 700px) {
+    .contact-network {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 4rem;
+        padding: 8rem 2rem;
+    }
+
+    .contact-node {
+        position: relative;
+        top: auto !important;
+        left: auto !important;
+        right: auto !important;
+        bottom: auto !important;
+        transform: none !important;
+    }
+
+    .contact-node:hover {
+        transform: scale(1.05) !important;
+    }
+
+    .node-glow {
+        width: 150px;
+        height: 150px;
+    }
+
+    .node-ring {
+        width: 100px;
+        height: 100px;
+    }
+
+    .node-core {
+        width: 70px;
+        height: 70px;
+    }
+
+    .node-core svg {
+        width: 28px;
+        height: 28px;
+    }
+}
