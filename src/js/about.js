@@ -206,27 +206,30 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     // PAGE HEADER - Parallax fade
     // ================================================
-    const pageHeader = document.querySelector('.page-header');
-    if (pageHeader) {
-        const headerH1 = pageHeader.querySelector('h1');
-        const headerP = pageHeader.querySelector('p');
+    // ================================================
+    // HERO - Parallax fade
+    // ================================================
+    const heroSection = document.querySelector('.about-hero');
+    if (heroSection) {
+        const heroTitle = heroSection.querySelector('.hero-title');
+        const heroSub = heroSection.querySelector('.hero-sub');
 
-        const updateHeader = () => {
+        const updateHero = () => {
             const scrollY = window.pageYOffset;
-            const fadeEnd = 400;
-            const progress = Math.min(1, scrollY / fadeEnd);
+            const fadeEnd = window.innerHeight * 0.6; // Fade out by 60% of viewport
+            const progress = Math.max(0, Math.min(1, scrollY / fadeEnd));
 
-            if (headerH1) {
-                headerH1.style.opacity = 1 - progress;
-                headerH1.style.transform = `translateY(${scrollY * 0.4}px) scale(${1 - progress * 0.15})`;
+            if (heroTitle) {
+                heroTitle.style.opacity = 1 - progress;
+                heroTitle.style.transform = `translateY(${scrollY * 0.4}px) scale(${1 - progress * 0.15})`;
             }
-            if (headerP) {
-                headerP.style.opacity = 1 - progress;
-                headerP.style.transform = `translateY(${scrollY * 0.25}px)`;
+            if (heroSub) {
+                heroSub.style.opacity = 1 - progress;
+                heroSub.style.transform = `translateY(${scrollY * 0.25}px)`;
             }
         };
 
-        window.addEventListener('scroll', updateHeader, { passive: true });
-        updateHeader();
+        window.addEventListener('scroll', updateHero, { passive: true });
+        updateHero();
     }
 });
