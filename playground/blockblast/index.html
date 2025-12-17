@@ -9,18 +9,138 @@
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&display=swap" rel="stylesheet">
-    <style>
-        #home-btn:hover {
-            background-color: #0f766e;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
-    <header>
+    <!-- Organic irregular mesh - mixed 3, 4, and 5 sided cells -->
+    <svg class="geo-bg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice">
+        <!-- Mixed polygon mesh - triangles, quads, pentagons connected -->
+
+        <!-- Top-left region -->
+        <polygon points="0,0 120,40 80,140 0,100" fill="none" stroke="#00f0ff" stroke-opacity="0.1" /> <!-- quad -->
+        <polygon points="120,40 250,20 200,130 80,140" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="250,20 380,60 300,160 200,130" fill="none" stroke="#8a2be2" stroke-opacity="0.1" />
+        <!-- quad -->
+        <polygon points="80,140 200,130 150,250" fill="none" stroke="#00f0ff" stroke-opacity="0.08" /> <!-- triangle -->
+        <polygon points="200,130 300,160 280,280 150,250" fill="none" stroke="#00f0ff" stroke-opacity="0.1" />
+        <!-- quad -->
+        <polygon points="0,100 80,140 150,250 100,350 0,300" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- pentagon -->
+
+        <!-- Top-center region -->
+        <polygon points="380,60 520,30 480,150 300,160" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="520,30 680,70 620,180 480,150" fill="none" stroke="#ff00ff" stroke-opacity="0.06" />
+        <!-- quad -->
+        <polygon points="680,70 850,40 800,160 620,180" fill="none" stroke="#00f0ff" stroke-opacity="0.1" />
+        <!-- quad -->
+        <polygon points="480,150 620,180 550,300" fill="none" stroke="#00f0ff" stroke-opacity="0.06" />
+        <!-- triangle -->
+        <polygon points="620,180 800,160 750,290 650,320 550,300" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- pentagon -->
+        <polygon points="300,160 480,150 550,300 400,350 280,280" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- pentagon -->
+
+        <!-- Top-right region -->
+        <polygon points="850,40 1020,80 960,200 800,160" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1020,80 1200,50 1150,180 960,200" fill="none" stroke="#8a2be2" stroke-opacity="0.1" />
+        <!-- quad -->
+        <polygon points="1200,50 1400,90 1320,220 1150,180" fill="none" stroke="#00f0ff" stroke-opacity="0.06" />
+        <!-- quad -->
+        <polygon points="960,200 1150,180 1080,320" fill="none" stroke="#ff00ff" stroke-opacity="0.06" />
+        <!-- triangle -->
+        <polygon points="800,160 960,200 1080,320 900,380 750,290" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- pentagon -->
+
+        <!-- Far right region -->
+        <polygon points="1400,90 1580,60 1520,190 1320,220" fill="none" stroke="#00f0ff" stroke-opacity="0.1" />
+        <!-- quad -->
+        <polygon points="1580,60 1760,100 1680,240 1520,190" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1760,100 1920,70 1920,220 1680,240" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1320,220 1520,190 1450,350" fill="none" stroke="#00f0ff" stroke-opacity="0.06" />
+        <!-- triangle -->
+        <polygon points="1520,190 1680,240 1600,380 1450,350" fill="none" stroke="#ff00ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1150,180 1320,220 1450,350 1300,420 1080,320" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.06" /> <!-- pentagon -->
+
+        <!-- Middle-left region -->
+        <polygon points="0,300 100,350 150,480 50,520 0,450" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- pentagon -->
+        <polygon points="100,350 280,280 400,350 320,480 150,480" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- pentagon -->
+        <polygon points="150,480 320,480 250,620" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- triangle -->
+        <polygon points="0,450 50,520 150,480 250,620 180,720 0,680" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.06" /> <!-- 6-sided approximated as lines -->
+
+        <!-- Middle-center region -->
+        <polygon points="400,350 550,300 650,320 580,460 450,500 320,480" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 6-sided -->
+        <polygon points="650,320 750,290 900,380 820,520 700,540 580,460" fill="none" stroke="#8a2be2"
+            stroke-opacity="0.06" /> <!-- 6-sided -->
+        <polygon points="580,460 700,540 620,680" fill="none" stroke="#ff00ff" stroke-opacity="0.06" />
+        <!-- triangle -->
+        <polygon points="320,480 450,500 580,460 620,680 500,720 350,650 250,620" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 7-sided -->
+
+        <!-- Middle-right region -->
+        <polygon points="900,380 1080,320 1300,420 1200,560 1020,600 820,520" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 6-sided -->
+        <polygon points="1300,420 1450,350 1600,380 1500,540 1350,580 1200,560" fill="none" stroke="#8a2be2"
+            stroke-opacity="0.06" /> <!-- 6-sided -->
+        <polygon points="1600,380 1680,240 1920,220 1920,420 1750,480 1500,540" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.06" /> <!-- 6-sided -->
+        <polygon points="820,520 1020,600 950,750" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- triangle -->
+        <polygon points="1020,600 1200,560 1150,720 950,750" fill="none" stroke="#ff00ff" stroke-opacity="0.06" />
+        <!-- quad -->
+
+        <!-- Lower-left region -->
+        <polygon points="0,680 180,720 250,850 100,920 0,850" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- pentagon -->
+        <polygon points="180,720 350,650 500,720 420,870 250,850" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- pentagon -->
+        <polygon points="500,720 620,680 700,540 820,520 950,750 850,900 700,920 580,880 420,870" fill="none"
+            stroke="#00f0ff" stroke-opacity="0.06" /> <!-- large polygon -->
+
+        <!-- Lower-center region -->
+        <polygon points="950,750 1150,720 1100,900 850,900" fill="none" stroke="#8a2be2" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1150,720 1200,560 1350,580 1400,720 1280,880 1100,900" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.06" /> <!-- 6-sided -->
+        <polygon points="1350,580 1500,540 1600,650 1520,820 1400,720" fill="none" stroke="#ff00ff"
+            stroke-opacity="0.06" /> <!-- pentagon -->
+
+        <!-- Lower-right region -->
+        <polygon points="1500,540 1750,480 1920,420 1920,620 1800,700 1600,650" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 6-sided -->
+        <polygon points="1600,650 1800,700 1750,860 1520,820" fill="none" stroke="#8a2be2" stroke-opacity="0.06" />
+        <!-- quad -->
+        <polygon points="1800,700 1920,620 1920,850 1750,860" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+
+        <!-- Bottom region -->
+        <polygon points="0,850 100,920 250,850 420,870 350,1000 150,1050 0,1000" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 7-sided -->
+        <polygon points="420,870 580,880 700,920 620,1050 450,1080 350,1000" fill="none" stroke="#8a2be2"
+            stroke-opacity="0.06" /> <!-- 6-sided -->
+        <polygon points="700,920 850,900 1100,900 1000,1050 800,1080 620,1050" fill="none" stroke="#00f0ff"
+            stroke-opacity="0.08" /> <!-- 6-sided -->
+        <polygon points="1100,900 1280,880 1400,720 1520,820 1450,980 1250,1050 1000,1050" fill="none" stroke="#ff00ff"
+            stroke-opacity="0.05" /> <!-- 7-sided -->
+        <polygon points="1520,820 1750,860 1700,1000 1450,980" fill="none" stroke="#00f0ff" stroke-opacity="0.08" />
+        <!-- quad -->
+        <polygon points="1750,860 1920,850 1920,1080 1850,1080 1700,1000" fill="none" stroke="#8a2be2"
+            stroke-opacity="0.06" /> <!-- pentagon -->
+    </svg>
+
+    <header style="margin-bottom: 0;">
         <nav>
             <div class="nav-container">
                 <h1>BlockBlast</h1>
@@ -31,17 +151,16 @@
             </div>
         </nav>
     </header>
-    <div class="container">
-        <div id="combo-placeholder"></div>
+
+    <!-- Game wrapper - no container box -->
+    <main class="game-wrapper">
         <div id="combo-display"></div>
         <div id="score-display">0</div>
         <div id="game-area">
             <div id="board"></div>
-            <div id="block-options">
-            </div>
+            <div id="block-options"></div>
         </div>
-
-    </div>
+    </main>
 
     <script src="script.js"></script>
 </body>
