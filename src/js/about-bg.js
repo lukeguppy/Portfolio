@@ -155,7 +155,20 @@
             this.heroOpacity = Math.max(0, 1 - (scroll / (vh * 0.6)));
 
             // Experience fades in 30% -> 80% scroll
-            this.expOpacity = Math.min(1, Math.max(0, (scroll - (vh * 0.3)) / (vh * 0.5)));
+            // AND fades out after 550% -> 650% scroll (leaving the pinboard/tech area clean)
+            const fadeIn = Math.min(1, Math.max(0, (scroll - (vh * 0.3)) / (vh * 0.5)));
+            const fadeOut = Math.min(1, Math.max(0, (scroll - (vh * 5.5)) / (vh * 1.0)));
+
+            this.expOpacity = fadeIn * (1 - fadeOut);
+
+            // Dynamic Body Background for Elastic Overscroll
+            // Top: Dark (#050508), Bottom: Sand (#e5e0d8)
+            // Switch when we are deep into the scroll (e.g. past Pinboard start)
+            if (scroll > vh * 5) {
+                document.body.style.backgroundColor = '#e5e0d8';
+            } else {
+                document.body.style.backgroundColor = '#050508';
+            }
         }
 
         update() {

@@ -63,7 +63,36 @@ hideFooter: true
         </a>
     </section>
 
-    <!-- 2. BLOCK BLAST PORTAL -->
+    <!-- 2. MAP PLOTTER PORTAL -->
+    <section class="game-portal map-portal" id="map-realm">
+        <a href="{{ '/playground/mapplotter/' | url }}" class="portal-link">
+            <div class="portal-bg">
+                <div class="bg-layer layer-1"></div>
+                <div class="bg-layer layer-2"></div>
+                <!-- Compass Rose -->
+                <div class="compass-rose">
+                    <div class="compass-ring">
+                    <div class="compass-tick N"></div>
+                    <div class="compass-tick E"></div>
+                    <div class="compass-tick S"></div>
+                    <div class="compass-tick W"></div>
+                </div>
+                    <div class="compass-needle"></div>
+                    <div class="compass-center"></div>
+                </div>
+                <!-- Animated Flight Paths -->
+                <div class="flight-path path-1"></div>
+                <div class="flight-path path-2"></div>
+                <div class="flight-path path-3"></div>
+            </div>
+            <div class="portal-content">
+                <h2 class="portal-title">Map Plotter</h2>
+                <p class="portal-hint">Click to explore →</p>
+            </div>
+        </a>
+    </section>
+
+    <!-- 3. BLOCK BLAST PORTAL -->
     <section class="game-portal block-portal" id="block-realm">
         <a href="{{ '/playground/blockblast/' | url }}" class="portal-link">
             <div class="portal-bg">
@@ -116,35 +145,6 @@ hideFooter: true
             <div class="portal-content">
                 <h2 class="portal-title">Block Blast</h2>
                 <p class="portal-hint">Click to play →</p>
-            </div>
-        </a>
-    </section>
-
-    <!-- 3. MAP PLOTTER PORTAL -->
-    <section class="game-portal map-portal" id="map-realm">
-        <a href="{{ '/playground/mapplotter/' | url }}" class="portal-link">
-            <div class="portal-bg">
-                <div class="bg-layer layer-1"></div>
-                <div class="bg-layer layer-2"></div>
-                <!-- Compass Rose -->
-                <div class="compass-rose">
-                    <div class="compass-ring">
-                    <div class="compass-tick N"></div>
-                    <div class="compass-tick E"></div>
-                    <div class="compass-tick S"></div>
-                    <div class="compass-tick W"></div>
-                </div>
-                    <div class="compass-needle"></div>
-                    <div class="compass-center"></div>
-                </div>
-                <!-- Animated Flight Paths -->
-                <div class="flight-path path-1"></div>
-                <div class="flight-path path-2"></div>
-                <div class="flight-path path-3"></div>
-            </div>
-            <div class="portal-content">
-                <h2 class="portal-title">Map Plotter</h2>
-                <p class="portal-hint">Click to explore →</p>
             </div>
         </a>
     </section>

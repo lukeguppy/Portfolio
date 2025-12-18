@@ -1,0 +1,113 @@
+---
+layout: false
+---
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Tree Test - SVG Version</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { background: #f0f0f0; }
+        #tree-svg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1000;
+        }
+    </style>
+</head>
+<body>
+    <h1 style="position:relative; z-index:2000; background:white; padding:10px;">TREE TEST - SVG Version</h1>
+    
+    <svg id="tree-svg" xmlns="http://www.w3.org/2000/svg">
+        <!-- Tree will be generated here -->
+    </svg>
+    
+    <script>
+        console.log("SVG Tree Script Running");
+        
+        const svg = document.getElementById('tree-svg');
+        const NS = "http://www.w3.org/2000/svg";
+        
+        // Get dimensions
+        const w = window.innerWidth;
+        const h = window.innerHeight;
+        svg.setAttribute('viewBox', `0 0 ${w} ${h}`);
+        
+        // Seeded random
+        let seed = 123456;
+        function mulberry32() {
+            var t = seed += 0x6D2B79F5;
+            t = Math.imul(t ^ t >>> 15, t | 1);
+            t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+            return ((t ^ t >>> 14) >>> 0) / 4294967296;
+        }
+        
+        const CONFIG = {
+            trunkColor: '#3e2723',
+            leafColor: 'rgba(56, 114, 46, 0.8)',
+            startLength: 160,
+            branchWidth: 40,
+            maxDepth: 12,
+        };
+        
+        function drawBranch(x, y, len, angle, bWidth, depth) {
+            const endX = x + len * Math.cos(angle);
+            const endY = y + len * Math.sin(angle);
+            
+            // Create SVG path for branch
+            const path = document.createElementNS(NS, 'line');
+            path.setAttribute('x1', x);
+            path.setAttribute('y1', y);
+            path.setAttribute('x2', endX);
+            path.setAttribute('y2', endY);
+            path.setAttribute('stroke', CONFIG.trunkColor);
+            path.setAttribute('stroke-width', bWidth);
+            path.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(path);
+            
+            if (depth > 8 || len < 10) {
+                drawFoliage(endX, endY);
+                if (depth > CONFIG.maxDepth) return;
+            }
+            
+            if (depth < CONFIG.maxDepth) {
+                const nextLen = len * 0.75;
+                const nextWidth = bWidth * 0.7;
+                
+                if (depth === 0) {
+                    drawBranch(endX, endY, nextLen, angle - 0.1, nextWidth, depth + 1);
+                    drawBranch(endX, endY, nextLen * 0.8, angle - 1.2, nextWidth * 0.8, depth + 1);
+                } else if (depth === 1) {
+                    drawBranch(endX, endY, nextLen, angle + 0.1, nextWidth, depth + 1);
+                    drawBranch(endX, endY, nextLen * 0.7, angle + 0.8, nextWidth * 0.7, depth + 1);
+                } else {
+                    drawBranch(endX, endY, nextLen, angle - 0.4 + (mulberry32() * 0.2), nextWidth, depth + 1);
+                    drawBranch(endX, endY, nextLen, angle + 0.4 + (mulberry32() * 0.2), nextWidth, depth + 1);
+                }
+            }
+        }
+        
+        function drawFoliage(x, y) {
+            const size = 30;
+            for (let i = 0; i < 5; i++) {
+                const circle = document.createElementNS(NS, 'circle');
+                circle.setAttribute('cx', x + (mulberry32() - 0.5) * size * 2);
+                circle.setAttribute('cy', y + (mulberry32() - 0.5) * size * 1.5);
+                circle.setAttribute('r', size * (0.5 + mulberry32() * 0.5));
+                circle.setAttribute('fill', CONFIG.leafColor);
+                svg.appendChild(circle);
+            }
+        }
+        
+        // Draw tree from center-bottom
+        const startX = w * 0.5;
+        const startY = h * 0.95;
+        drawBranch(startX, startY, CONFIG.startLength, -Math.PI/2, CONFIG.branchWidth, 0);
+        
+        console.log("SVG Tree Complete");
+    </script>
+</body>
+</html>
