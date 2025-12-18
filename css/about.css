@@ -7,12 +7,70 @@
    PINNED EXPERIENCE SECTION
    Timeline with growing line and dots
    ================================================ */
-.about-experience {
-    /* Height set dynamically by about.js based on numCards × vhPerCard */
-    min-height: 600vh;
-    /* Fallback if JS fails */
+/* ================================================
+   ABOUT HERO
+   Full screen section for the "Orbital" background
+   ================================================ */
+#about-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100vh;
+    z-index: -1;
+    pointer-events: none;
+    background-color: #050508;
+    /* Ensure hero stays dark even if body changes */
+}
+
+.about-hero {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
+    padding: 0 2rem;
+    /* Ensure it's above the fixed background but below standard nav */
     z-index: 1;
+}
+
+.hero-content {
+    text-align: center;
+    max-width: 800px;
+}
+
+.about-hero .hero-title {
+    font-size: clamp(3.5rem, 8vw, 6rem);
+    font-weight: 800;
+    margin-bottom: 1rem;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.about-hero .hero-sub {
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    color: var(--text-soft);
+    font-weight: 500;
+}
+
+/* ================================================
+   PINNED EXPERIENCE SECTION
+   Timeline with growing line and dots
+   ================================================ */
+.about-experience {
+    /* Starts after the hero */
+    position: relative;
+    z-index: 5;
+    /* Above the hero bg so we can have our own bg if needed, or blend */
+    margin-top: -10vh;
+    /* Slight overlap for seamless feel */
+    padding-top: 10vh;
+    min-height: 400vh;
+    /* ample scroll space */
 }
 
 .experience-container {
@@ -325,29 +383,40 @@
 .pinboard-section {
     min-height: 450vh;
     position: relative;
-    z-index: 5;
+    z-index: 10;
+    /* High to establish stacking context above hero, etc */
 }
 
-/* Cork board background - fades in */
+/* Cork board background - now contains content */
 .pinboard-bg {
     position: fixed;
     inset: 0;
-    /* Dark Wood Texture (Lighter Version) */
+    /* Dark Wood Texture */
     background-color: #5d4037;
-    /* Lighter warm brown base */
     background-image:
-        /* Strong grain lines */
-        repeating-linear-gradient(2deg, transparent 5px, rgba(0, 0, 0, 0.2) 7px, transparent 9px, transparent 15px),
-        repeating-linear-gradient(-2deg, transparent 5px, rgba(0, 0, 0, 0.1) 6px, transparent 8px, transparent 12px),
-        /* Subtle Wood knots */
+        repeating-linear-gradient(30deg, transparent 3px, rgba(0, 0, 0, 0.15) 4px, transparent 5px, transparent 10px),
+        repeating-linear-gradient(-60deg, transparent 3px, rgba(0, 0, 0, 0.08) 4px, transparent 5px, transparent 10px),
         radial-gradient(ellipse at 50% 50%, rgba(93, 59, 39, 0.2) 0%, transparent 60%),
-        /* Warm underglow - lighter gradient */
         linear-gradient(to bottom, #6d4c41 0%, #4e342e 100%);
     background-size: 100% 100%, 100% 100%, 800px 800px, 100% 100%;
 
     opacity: 0;
+    /* Only transition opacity - transform is JS-driven (transitions would fight it) */
     transition: opacity 1s ease;
-    z-index: -1;
+    will-change: transform, opacity;
+    z-index: 6;
+
+    /* CRITICAL: Clip content inside and flexbox for centering */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    /* Force GPU layer for smooth animation */
+    transform: translateZ(0);
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    contain: layout style paint;
 }
 
 /* Wood polish/sheen & noise */
@@ -355,12 +424,12 @@
     content: '';
     position: absolute;
     inset: 0;
-    /* Noise for richness + vertical streakiness */
     background-image:
         linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
         radial-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 0);
     background-size: 4px 100%, 3px 3px;
     opacity: 0.3;
+    pointer-events: none;
 }
 
 /* Softened vignette shadow */
@@ -368,7 +437,6 @@
     content: '';
     position: absolute;
     inset: 0;
-    /* Much lighter vignetting - only 40% opacity at edges */
     background: radial-gradient(circle at center, transparent 40%, rgba(0, 0, 0, 0.4) 120%);
     pointer-events: none;
 }
@@ -377,16 +445,50 @@
     opacity: 1;
 }
 
-/* Content container - sticky */
+/* Performance overlay - solid color that fades in during animation */
+/* Opacity is controlled via JS based on scroll progress */
+.pinboard-overlay {
+    position: absolute;
+    inset: 0;
+    background-color: #5d4037;
+    opacity: 0;
+    /* Controlled by JS */
+    pointer-events: none;
+    z-index: 0;
+    /* Below content but above pseudo-elements */
+}
+
+/* Content container - now inside pinboard-bg */
 .pinboard-content {
-    position: sticky;
-    top: 0;
-    min-height: 100vh;
-    padding: 6rem 2rem;
+    position: relative;
+    width: 100%;
+    height: 100%;
+    padding: 15rem 2rem 2rem 2rem;
+    /* Push cards below navbar + title */
     display: flex;
     flex-direction: column;
     align-items: center;
-    will-change: transform;
+    justify-content: flex-start;
+    /* Align to top, not center */
+    overflow: visible;
+    /* Don't clip cards - let them show */
+    z-index: 1;
+
+    /* GPU acceleration only - NO transitions (would fight JS animation) */
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+}
+
+/* Title container - lives outside pinboard-bg so it doesn't shrink */
+.pinboard-title-container {
+    position: sticky;
+    top: 0;
+    z-index: 8;
+    /* Above pinboard-bg */
+    display: flex;
+    justify-content: center;
+    padding-top: 6rem;
+    pointer-events: none;
 }
 
 /* Section titles with tape effect */
@@ -638,56 +740,257 @@
     --rotation: -1deg;
 }
 
-.tech-polaroid[data-index="8"] {
-    --rotation: 0deg;
+/* =========================================
+/* ZEN GARDEN SECTION
+   ========================================= */
+/* (Base styles moved to bottom of file to avoid duplication) */
+
+/* Global Zen Background (Sand) */
+#zen-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    /* Above Hero/Matrix (z -1), Below Pinboard (z 5) */
+    opacity: 0;
+    /* Hidden initially, shown by JS during projects section */
+    transition: opacity 0.5s ease;
+    pointer-events: none;
+
+    /* Warm sand color base */
+    background-color: #d4c4a8;
+
+    /* Layered sand texture */
+    background-image:
+        /* Fine grain noise */
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise1'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise1)' opacity='0.12'/%3E%3C/svg%3E"),
+        /* Medium grain texture */
+        url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise2'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.4' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise2)' opacity='0.08'/%3E%3C/svg%3E"),
+        /* Subtle gradient for depth */
+        radial-gradient(ellipse at 50% 30%, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
 }
 
-.tech-polaroid[data-index="9"] {
-    --rotation: -2deg;
+#zen-bg-container.visible {
+    opacity: 1;
 }
 
-.tech-polaroid.pinned:hover {
-    transform: translateY(-5px) rotate(0deg) scale(1.05);
-    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
+/* Zen Tree Container - Fixed position so it doesn't scroll */
+.zen-tree-container {
+    position: fixed;
+    /* Fixed so it stays in place, not scrolling */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2;
+    /* Above zen-bg-container (z-index 1), below pinboard */
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.zen-tree-container.visible {
+    opacity: 1;
+}
+
+/* SVG fills container */
+#zen-tree-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Main Zen Section Container */
+.zen-garden-section {
+    position: relative;
+    z-index: 5;
+    /* Above other sections but below pinboard when pinboard is shrunk */
+    min-height: 100vh;
+    padding: 6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    color: #333;
+    background: transparent;
+    /* Background relies on global #zen-bg-container */
+}
+
+/* REMOVED OLD BLUR - Now relying on the shrink transition */
+.zen-garden-section::before {
+    display: none;
+}
+
+.zen-content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    max-width: 1200px;
+    text-align: center;
+}
+
+.zen-title {
+    font-size: 3rem;
+    margin-bottom: 4rem;
+    font-family: 'Outfit', sans-serif;
+    color: #4a453e;
+    /* Dark earth tone */
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: zenFadeIn 1s ease-out forwards;
+}
+
+/* STONE GRID */
+.stone-grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4rem;
+}
+
+.stone-group {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+    align-items: center;
+}
+
+.stone-category {
+    font-size: 1.2rem;
+    color: #7d7568;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 1rem;
+}
+
+.stones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+}
+
+/* TECH STONE STYLING */
+.tech-stone {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, #f0f0f0 0%, #dcdcdc 100%);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    /* Organic pebble shape */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow:
+        8px 8px 16px rgba(0, 0, 0, 0.1),
+        /* Soft shadow */
+        -4px -4px 12px rgba(255, 255, 255, 0.8);
+    /* Highlight */
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    user-select: none;
+}
+
+/* Variation in stone shapes for organic feel */
+.tech-stone:nth-child(2n) {
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+}
+
+.tech-stone:nth-child(3n) {
+    border-radius: 30% 70% 70% 30% / 30% 30% 70% 70%;
+}
+
+.tech-stone:nth-child(5n) {
+    border-radius: 50% 50% 20% 80% / 25% 80% 20% 75%;
+}
+
+/* Stone internal content */
+.stone-icon {
+    font-size: 2.5rem;
+    margin-bottom: 0.5rem;
+    filter: drop-shadow(0 2px 2px rgba(0, 0, 0, 0.1));
+    transition: transform 0.3s ease;
+}
+
+.stone-label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #666;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    position: absolute;
+    bottom: -30px;
+    width: 100%;
+    text-align: center;
+    pointer-events: none;
+}
+
+/* HOVER EFFECTS */
+.tech-stone:hover {
+    transform: translateY(-15px) scale(1.05);
+    /* Float up */
+    box-shadow:
+        20px 20px 30px rgba(0, 0, 0, 0.15),
+        -4px -4px 12px rgba(255, 255, 255, 0.9);
     z-index: 10;
 }
 
-.tech-icon {
-    display: block;
-    font-size: 1.5rem;
-    margin-bottom: 0.3rem;
-    filter: grayscale(0.2);
+.tech-stone:hover .stone-icon {
+    transform: scale(1.1);
 }
 
-.tech-name {
-    font-size: 1rem;
-    font-weight: 700;
-    color: #1a1a1a;
+.tech-stone:hover .stone-label {
+    opacity: 1;
+    transform: translateY(0);
 }
 
-/* Tech title */
-.tech-title {
-    margin-top: 4rem;
+/* Active/Clicked State (optional) */
+.tech-stone:active {
+    transform: translateY(-5px) scale(0.98);
 }
 
-/* Space between tech rows */
-.tech-grid[data-row="languages"] {
-    margin-bottom: 1.5rem;
+@keyframes zenFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
-.tech-grid[data-row="tools"] {
-    margin-bottom: 2rem;
+/* RESPONSIVE */
+@media (max-width: 768px) {
+    .zen-garden-section {
+        padding: 4rem 1rem;
+    }
+
+    .tech-stone {
+        width: 80px;
+        height: 80px;
+    }
+
+    .stone-icon {
+        font-size: 2rem;
+    }
+
+    .stone-label {
+        font-size: 0.8rem;
+        bottom: -25px;
+    }
 }
 
 /* Responsive */
 @media (max-width: 768px) {
     .polaroid-grid {
         grid-template-columns: 1fr;
-    }
-
-    .tech-grid {
-        grid-template-columns: repeat(3, 1fr);
     }
 
     .pinboard-content {

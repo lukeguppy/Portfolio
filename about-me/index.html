@@ -68,9 +68,14 @@
 </header>
     <main>
         
-<section class="page-header">
-    <h1>About Me</h1>
-    <p>My skills, experience, and projects</p>
+<div id="about-bg-container"></div>
+<div id="zen-bg-container"></div> <!-- Moved here for global layering -->
+
+<section class="about-hero">
+    <div class="hero-content">
+        <h1 class="hero-title">About Me</h1>
+        <p class="hero-sub">My skills, experience, and projects</p>
+    </div>
 </section>
 
 <!-- EXPERIENCE - Timeline with growing line and dots (KEEP AS-IS) -->
@@ -116,146 +121,160 @@
 
 <!-- PINBOARD SECTION - Projects + Tech pin onto cork board -->
 <section class="pinboard-section">
-    <!-- Cork board background -->
-    <div class="pinboard-bg"></div>
-    
-    <!-- Projects -->
-    <div class="pinboard-content">
+    <!-- Projects title - OUTSIDE pinboard-bg so it doesn't shrink -->
+    <div class="pinboard-title-container">
         <h2 class="pinboard-title" data-phase="title">Projects</h2>
-        
-        <div class="polaroid-grid projects-grid">
-            <article class="polaroid-card" data-index="0">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">🎓</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>Final Year Dissertation</h3>
-                    <span class="polaroid-tech">C#, Unity, PPO</span>
-                    <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation.</p>
-                    <a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub →</a>
-                </div>
-            </article>
-            
-            <article class="polaroid-card" data-index="1">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">🤖</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>LLM Token Predictor</h3>
-                    <span class="polaroid-tech">Python</span>
-                    <p>A scaled-down transformer system implementing next word prediction capabilities.</p>
-                </div>
-            </article>
-            
-            <article class="polaroid-card" data-index="2">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">📊</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>AI Scheduling</h3>
-                    <span class="polaroid-tech">Python</span>
-                    <p>Optimisation algorithms for dynamic pricing using discount criteria.</p>
-                </div>
-            </article>
-            
-            <article class="polaroid-card" data-index="3">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">📡</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>Delay-Tolerant Networking</h3>
-                    <span class="polaroid-tech">C++, NS3</span>
-                    <p>Routing protocols for mobile nodes in intermittent connectivity.</p>
-                </div>
-            </article>
-            
-            <article class="polaroid-card" data-index="4">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">🌊</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>Wave Diffraction Simulator</h3>
-                    <span class="polaroid-tech">C#, WPF</span>
-                    <p>Interactive wave diffraction pattern simulation with visualisation.</p>
-                </div>
-            </article>
-            
-            <article class="polaroid-card" data-index="5">
-                <div class="polaroid-tape"></div>
-                <div class="polaroid-image">
-                    <span class="polaroid-icon">🎮</span>
-                </div>
-                <div class="polaroid-caption">
-                    <h3>3D Browser Game</h3>
-                    <span class="polaroid-tech">JavaScript, THREE.js</span>
-                    <p>Browser-based 3D game using THREE.js for interactive environments.</p>
-                </div>
-            </article>
-        </div>
-        
-        <!-- Technologies -->
-        <h2 class="pinboard-title tech-title" data-phase="tech-title">Technologies</h2>
-        
-        <!-- Languages Row -->
-        <div class="polaroid-grid tech-grid" data-row="languages">
-            <div class="tech-polaroid" data-index="0">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🐍</span>
-                <span class="tech-name">Python</span>
-            </div>
-            <div class="tech-polaroid" data-index="1">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">⚡</span>
-                <span class="tech-name">C++</span>
-            </div>
-            <div class="tech-polaroid" data-index="2">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🎯</span>
-                <span class="tech-name">C#</span>
-            </div>
-            <div class="tech-polaroid" data-index="3">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">☕</span>
-                <span class="tech-name">Java</span>
-            </div>
-            <div class="tech-polaroid" data-index="4">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🌐</span>
-                <span class="tech-name">JavaScript</span>
+    </div>
+    
+    <!-- Cork board background - CONTAINS the content that shrinks -->
+    <div class="pinboard-bg">
+        <!-- Solid color overlay - fades in during shrink for performance -->
+        <div class="pinboard-overlay"></div>
+        <!-- Projects cards only (no title) -->
+        <div class="pinboard-content">
+            <div class="polaroid-grid projects-grid">
+                <article class="polaroid-card" data-index="0">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">🎓</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>Final Year Dissertation</h3>
+                        <span class="polaroid-tech">C#, Unity, PPO</span>
+                        <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation.</p>
+                        <a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub →</a>
+                    </div>
+                </article>
+                
+                <article class="polaroid-card" data-index="1">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">🤖</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>LLM Token Predictor</h3>
+                        <span class="polaroid-tech">Python</span>
+                        <p>A scaled-down transformer system implementing next word prediction capabilities.</p>
+                    </div>
+                </article>
+                
+                <article class="polaroid-card" data-index="2">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">📊</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>AI Scheduling</h3>
+                        <span class="polaroid-tech">Python</span>
+                        <p>Optimisation algorithms for dynamic pricing using discount criteria.</p>
+                    </div>
+                </article>
+                
+                <article class="polaroid-card" data-index="3">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">📡</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>Delay-Tolerant Networking</h3>
+                        <span class="polaroid-tech">C++, NS3</span>
+                        <p>Routing protocols for mobile nodes in intermittent connectivity.</p>
+                    </div>
+                </article>
+                
+                <article class="polaroid-card" data-index="4">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">🌊</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>Wave Diffraction Simulator</h3>
+                        <span class="polaroid-tech">C#, WPF</span>
+                        <p>Interactive wave diffraction pattern simulation with visualisation.</p>
+                    </div>
+                </article>
+                
+                <article class="polaroid-card" data-index="5">
+                    <div class="polaroid-tape"></div>
+                    <div class="polaroid-image">
+                        <span class="polaroid-icon">🎮</span>
+                    </div>
+                    <div class="polaroid-caption">
+                        <h3>3D Browser Game</h3>
+                        <span class="polaroid-tech">JavaScript, THREE.js</span>
+                        <p>Browser-based 3D game using THREE.js for interactive environments.</p>
+                    </div>
+                </article>
             </div>
         </div>
+    </div>
+</section>
+
+<!-- TECH - ZEN GARDEN (Stones on Sand) -->
+<section class="zen-garden-section">
+    
+    <!-- The Tree (SVG) - Procedurally generated -->
+    <div class="zen-tree-container">
+        <!-- SVG will be created by zen-tree.js -->
+    </div>
+
+    
+    <div class="zen-content">
+        <h2 class="zen-title">Technologies</h2>
         
-        <!-- Tools & Systems Row -->
-        <div class="polaroid-grid tech-grid" data-row="tools">
-            <div class="tech-polaroid" data-index="5">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🤖</span>
-                <span class="tech-name">ML/AI</span>
+        <div class="stone-grid">
+            <!-- Languages -->
+            <div class="stone-group">
+                <h3 class="stone-category">Languages</h3>
+                <div class="stones">
+                    <div class="tech-stone" data-tech="python">
+                        <span class="stone-icon">🐍</span>
+                        <span class="stone-label">Python</span>
+                    </div>
+                    <div class="tech-stone" data-tech="cpp">
+                        <span class="stone-icon">⚡</span>
+                        <span class="stone-label">C++</span>
+                    </div>
+                    <div class="tech-stone" data-tech="csharp">
+                        <span class="stone-icon">🎯</span>
+                        <span class="stone-label">C#</span>
+                    </div>
+                    <div class="tech-stone" data-tech="java">
+                        <span class="stone-icon">☕</span>
+                        <span class="stone-label">Java</span>
+                    </div>
+                    <div class="tech-stone" data-tech="js">
+                        <span class="stone-icon">🌐</span>
+                        <span class="stone-label">JavaScript</span>
+                    </div>
+                </div>
             </div>
-            <div class="tech-polaroid" data-index="6">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🔧</span>
-                <span class="tech-name">ROS2</span>
-            </div>
-            <div class="tech-polaroid" data-index="7">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🐳</span>
-                <span class="tech-name">Docker</span>
-            </div>
-            <div class="tech-polaroid" data-index="8">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">📦</span>
-                <span class="tech-name">Git</span>
-            </div>
-            <div class="tech-polaroid" data-index="9">
-                <div class="polaroid-tape small"></div>
-                <span class="tech-icon">🐧</span>
-                <span class="tech-name">Linux</span>
+
+            <!-- Tools & Systems -->
+            <div class="stone-group">
+                <h3 class="stone-category">Tools & Systems</h3>
+                <div class="stones">
+                    <div class="tech-stone" data-tech="ml">
+                        <span class="stone-icon">🤖</span>
+                        <span class="stone-label">ML/AI</span>
+                    </div>
+                    <div class="tech-stone" data-tech="ros">
+                        <span class="stone-icon">🔧</span>
+                        <span class="stone-label">ROS2</span>
+                    </div>
+                    <div class="tech-stone" data-tech="docker">
+                        <span class="stone-icon">🐳</span>
+                        <span class="stone-label">Docker</span>
+                    </div>
+                    <div class="tech-stone" data-tech="git">
+                        <span class="stone-icon">📦</span>
+                        <span class="stone-label">Git</span>
+                    </div>
+                    <div class="tech-stone" data-tech="linux">
+                        <span class="stone-icon">🐧</span>
+                        <span class="stone-label">Linux</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -269,7 +288,13 @@
     
     <script src="/Portfolio/js/about.js"></script>
     
+    <script src="/Portfolio/js/about-bg.js"></script>
+    
     <script src="/Portfolio/js/about-pinboard.js"></script>
+    
+    <script src="/Portfolio/js/about-zen.js"></script>
+    
+    <script src="/Portfolio/js/zen-tree.js"></script>
     
     
 </body>
