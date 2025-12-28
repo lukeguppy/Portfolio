@@ -1,3 +1,4 @@
+
 class GlobeAutomation {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);

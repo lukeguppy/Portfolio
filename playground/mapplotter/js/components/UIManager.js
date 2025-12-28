@@ -155,13 +155,13 @@ class UIManager {
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         `;
 
-        const colors = {
+        const colours = {
             success: '#6BCF7F',
             error: '#FF6B6B',
             warning: '#FFD93D',
             info: '#4ECDC4'
         };
-        notification.style.background = colors[type] || colors.info;
+        notification.style.background = colours[type] || colours.info;
         notification.textContent = message;
 
         document.body.appendChild(notification);

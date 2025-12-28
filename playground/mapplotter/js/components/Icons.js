@@ -1,7 +1,7 @@
 
 /**
  * Application Icons
- * Centralized store for SVG icon strings to avoid duplication
+ * Centralised store for SVG icon strings to avoid duplication
  */
 const Icons = {
     // Visibility

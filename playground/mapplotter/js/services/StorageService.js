@@ -1,3 +1,7 @@
+/**
+ * StorageService - Handles persistence via LocalStorage and file I/O
+ * Manages loading/saving app state and export/import functionality
+ */
 class StorageService {
     saveToLocalStorage(key, data) {
         try {

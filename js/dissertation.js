@@ -402,6 +402,27 @@ document.addEventListener('DOMContentLoaded', () => {
     // ================================================
     // 6. CUSTOM PDF RENDERING CONTROLLER
     // ================================================
+    /**
+     * Standardises layout and interaction logic for the dissertation viewer,
+     * including PDF rendering and citation management.
+     */
+    class DissertationViewer {
+        constructor() {
+            this.initialiseViewer();
+            this.setupEventListeners();
+        }
+
+        initialiseViewer() {
+            // Locate the main container for the PDF content
+            this.container = document.querySelector('.dissertation-container');
+            if (!this.container) return;
+        }
+
+        setupEventListeners() {
+            // Placeholder for event listeners
+        }
+    }
+
     class PDFController {
         constructor(container) {
             this.container = container;

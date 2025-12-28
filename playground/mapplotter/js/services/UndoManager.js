@@ -123,10 +123,9 @@ class UndoManager {
             }
         });
 
-        // Update UI
-        this.app.ui.updateUI();
+        // Update UI & State
         this.app.mapManager.updateMarkerZIndices();
-        this.app.state.save();
+        this.app.state._onChange();
 
         this.isRestoring = false;
     }

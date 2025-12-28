@@ -22,13 +22,13 @@ class CategoryManager {
     }
 
     /**
-     * Change the color of a category
+     * Change the colour of a category
      */
     changeColor(categoryId) {
         if (this.app.colorPicker) {
             this.app.colorPicker.open(categoryId, 'category');
         } else {
-            console.error('ColorPicker not initialized');
+            console.error('ColorPicker not initialised');
         }
     }
 
@@ -43,9 +43,6 @@ class CategoryManager {
         category.pins.forEach(pin => {
             this.app.mapManager.setItemVisibility(pin, category.visible, category.color);
         });
-
-        this.app.ui.updateUI();
-        this.app.saveToLocalStorage();
     }
 
     /**
@@ -66,7 +63,6 @@ class CategoryManager {
 
                     this.app.state.deleteCategory(id);
                     this.app.selectedItems.delete(id);
-                    this.app.ui.updateUI();
                 }
             }
         );
@@ -108,9 +104,10 @@ class CategoryManager {
     rename(categoryId, newName) {
         const category = this.getById(categoryId);
         if (category && newName && newName.trim()) {
+            this.app.undoManager.saveState('Rename category');
             category.name = newName.trim();
-            this.app.ui.updateUI();
-            this.app.saveToLocalStorage();
+            // Trigger state change manually since we modified a property directly
+            this.app.state._onChange();
             return true;
         }
         return false;

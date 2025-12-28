@@ -10,7 +10,7 @@ class SidebarController {
     }
 
     /**
-     * Initialize sidebar icons from centrally defined Icons
+     * Initialise sidebar icons from centrally defined Icons
      */
     _initIcons() {
         if (typeof Icons === 'undefined') return;

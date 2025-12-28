@@ -1,6 +1,10 @@
+/**
+ * ApiService - Handles external API interactions (Nominatim, Overpass)
+ * Provides methods for searching locations, businesses, and categories
+ */
 class ApiService {
     async searchWithNominatim(query, center, radiusKm) {
-        // Use a bounded query to prioritize local results
+        // Use a bounded query to prioritise local results
         const boundedQuery = `${query} near ${center.lat.toFixed(4)},${center.lng.toFixed(4)}`;
 
         try {
@@ -15,7 +19,7 @@ class ApiService {
             }
 
             const data = await response.json();
-            console.log(`Nominatim returned ${data.length} results`);
+
 
             // Filter by distance
             const results = data.filter(item => {
@@ -29,7 +33,8 @@ class ApiService {
                 return distance <= radiusKm;
             });
 
-            console.log(`Nominatim filtered to ${results.length} results within ${radiusKm}km`);
+
+
 
             return results.map(item => ({
                 lat: parseFloat(item.lat),
@@ -60,11 +65,9 @@ class ApiService {
             try {
                 const results = await this.searchOverpassTag(nameQuery, center, radiusKm);
                 if (results.length > 0) {
-                    console.log(`Name search "${nameQuery}" found ${results.length} results`);
                     return results;
                 }
             } catch (error) {
-                console.log(`Query "${nameQuery}" failed: ${error.message}`);
                 continue;
             }
         }
@@ -86,7 +89,6 @@ class ApiService {
 );
 out center;`; // Use 'out center' to get single coordinate for Ways/Relations
 
-        console.log(`Overpass query: ${overpassQuery}`);
 
         try {
             // AbortController for fetch timeout (20s)
@@ -120,7 +122,6 @@ out center;`; // Use 'out center' to get single coordinate for Ways/Relations
             const results = [];
 
             if (data.elements) {
-                console.log(`Processing ${data.elements.length} elements from Overpass response`);
                 data.elements.forEach(element => {
                     let lat, lon;
 

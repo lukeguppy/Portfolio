@@ -5,8 +5,26 @@ class StateManager {
         this.customPins = [];
         // Autosave trigger
         this.autoSaveEnabled = true;
+        this.listeners = [];
     }
 
+    subscribe(callback) {
+        this.listeners.push(callback);
+    }
+
+    notifyListeners() {
+        this.listeners.forEach(callback => callback());
+    }
+
+    // ... (rest of class)
+
+    // --- Persistence ---
+    _onChange() {
+        if (this.autoSaveEnabled) {
+            this.save();
+        }
+        this.notifyListeners();
+    }
     // --- Accessors ---
     getCategories() { return this.categories; }
     getCustomPins() { return this.customPins; }
@@ -125,9 +143,7 @@ class StateManager {
         if (this.autoSaveEnabled) {
             this.save();
         }
-        // Notify UI to update if needed, or let app handle it via events
-        // For now, we manually call app.ui.updateUI() in the app, 
-        // but eventually we can dispatch events here.
+        this.notifyListeners();
     }
 
     save() {

@@ -14,7 +14,7 @@ class ColorPicker {
         overlay.innerHTML = `
             <div class="picker-modal">
                 <div class="picker-header">
-                    <h3>Choose Color</h3>
+                    <h3>Choose Colour</h3>
                     <button class="picker-close">&times;</button>
                 </div>
                 
@@ -57,7 +57,7 @@ class ColorPicker {
         };
 
         this.hexInput.oninput = (e) => this.handleHexInput(e.target.value);
-        this.saveBtn.onclick = () => this.applyCustomColor();
+        this.saveBtn.onclick = () => this.applyCustomColour();
 
         // Canvas Drag Interaction
         let isDragging = false;
@@ -65,7 +65,7 @@ class ColorPicker {
             const rect = this.canvas.getBoundingClientRect();
             const x = e.clientX - rect.left;
             const y = e.clientY - rect.top;
-            this.pickColorFromCanvas(x, y);
+            this.pickColourFromCanvas(x, y);
         };
 
         this.canvas.onmousedown = (e) => { isDragging = true; pick(e); };
@@ -82,7 +82,7 @@ class ColorPicker {
         const cy = height / 2;
         const radius = width / 2;
 
-        // Draw multiple gradients to create full color spectrum
+        // Draw multiple gradients to create full colour spectrum
         const gradient = this.ctx.createConicGradient(0, cx, cy);
         gradient.addColorStop(0, "red");
         gradient.addColorStop(0.17, "yellow");
@@ -107,7 +107,7 @@ class ColorPicker {
         this.ctx.fill();
     }
 
-    pickColorFromCanvas(x, y) {
+    pickColourFromCanvas(x, y) {
         // Bounds check
         if (x < 0 || x > this.canvas.width || y < 0 || y > this.canvas.height) return;
 
@@ -161,7 +161,7 @@ class ColorPicker {
 
     populateGrid() {
         this.grid.innerHTML = '';
-        CATEGORY_COLORS.forEach(color => {
+        CATEGORY_COLOURS.forEach(color => {
             const swatch = document.createElement('div');
             swatch.className = 'picker-swatch';
             swatch.style.background = color;
@@ -172,7 +172,7 @@ class ColorPicker {
             }
 
             swatch.onclick = () => {
-                this.saveColor(color);
+                this.saveColour(color);
             };
 
             this.grid.appendChild(swatch);
@@ -192,18 +192,18 @@ class ColorPicker {
         this.preview.style.background = color;
     }
 
-    applyCustomColor() {
+    applyCustomColour() {
         let hex = this.hexInput.value;
         if (!hex.startsWith('#')) hex = '#' + hex;
 
         if (/^#[0-9A-F]{6}$/i.test(hex)) {
-            this.saveColor(hex);
+            this.saveColour(hex);
         } else {
-            this.app.ui.showNotification('Invalid Hex Color', 'error');
+            this.app.ui.showNotification('Invalid Hex Colour', 'error');
         }
     }
 
-    saveColor(color) {
+    saveColour(color) {
         if (!this.activeItem) return;
 
         this.activeItem.color = color;
@@ -218,8 +218,8 @@ class ColorPicker {
             this.updateMarker(this.activeItem.id, color);
         }
 
-        this.app.ui.updateUI(); // Updates sidebar dots
-        this.app.saveToLocalStorage();
+        // StateManager handles this via _onChange if property was modified directly
+        if (this.activeItem) this.app.state._onChange();
         this.close();
     }
 

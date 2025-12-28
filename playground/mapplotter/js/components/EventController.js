@@ -8,7 +8,7 @@ class EventController {
     }
 
     /**
-     * Initialize all keyboard shortcuts
+     * Initialise all keyboard shortcuts
      */
     initKeyboardShortcuts() {
         document.addEventListener('keydown', (e) => {
@@ -60,7 +60,7 @@ class EventController {
     }
 
     /**
-     * Initialize all DOM event listeners
+     * Initialise all DOM event listeners
      */
     initDOMListeners() {
         this._initRadiusSlider();
@@ -132,7 +132,7 @@ class EventController {
     }
 
     /**
-     * Initialize radius slider sync
+     * Initialise radius slider sync
      */
     _initRadiusSlider() {
         const radiusSlider = document.getElementById('search-radius');
@@ -176,7 +176,7 @@ class EventController {
     }
 
     /**
-     * Initialize undo/redo buttons
+     * Initialise undo/redo buttons
      */
     _initUndoRedoButtons() {
         const undoBtn = document.getElementById('undo-btn');
@@ -187,7 +187,7 @@ class EventController {
     }
 
     /**
-     * Initialize custom pin input listeners
+     * Initialise custom pin input listeners
      */
     _initCustomPinInputs() {
         const customNameInput = document.getElementById('custom-pin-name-input');
@@ -208,7 +208,7 @@ class EventController {
     }
 
     /**
-     * Initialize save/load buttons
+     * Initialise save/load buttons
      */
     _initSaveLoadButtons() {
         const saveBtn = document.getElementById('save-btn');
@@ -221,7 +221,7 @@ class EventController {
     }
 
     /**
-     * Initialize theme and settings buttons
+     * Initialise theme and settings buttons
      */
     _initThemeSettings() {
         const themeBtn = document.getElementById('theme-btn');
@@ -239,7 +239,7 @@ class EventController {
     }
 
     /**
-     * Initialize export button
+     * Initialise export button
      */
     _initExportButton() {
         const exportBtn = document.getElementById('export-image-btn');
@@ -247,7 +247,7 @@ class EventController {
     }
 
     /**
-     * Initialize sidebar toggle
+     * Initialise sidebar toggle
      */
     _initSidebarToggle() {
         const sidebarToggle = document.getElementById('sidebar-toggle');
@@ -255,7 +255,7 @@ class EventController {
     }
 
     /**
-     * Initialize main tab switching
+     * Initialise main tab switching
      */
     _initMainTabs() {
         document.querySelectorAll('.main-tab').forEach(tab => {

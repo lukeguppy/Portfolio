@@ -103,8 +103,6 @@ class CustomPinManager {
         this.validateInput();
 
         this.cancelMode();
-        this.app.ui.updateUI();
-        this.app.saveToLocalStorage();
         this.app.ui.showNotification('Custom pin added', 'success');
 
         return pin;
@@ -128,13 +126,13 @@ class CustomPinManager {
     }
 
     /**
-     * Change the color of a custom pin
+     * Change the colour of a custom pin
      */
     changeColor(pinId) {
         if (this.app.colorPicker) {
             this.app.colorPicker.open(pinId, 'pin');
         } else {
-            // Fallback color picker
+            // Fallback colour picker
             const pin = this.app.customPins.find(p => p.id === pinId);
             if (!pin) return;
 
@@ -148,13 +146,12 @@ class CustomPinManager {
                     const pinEl = marker.getElement().querySelector('.marker-pin');
                     if (pinEl) pinEl.style.background = pin.color;
                 }
-                this.app.ui.updateUI();
-                this.app.saveToLocalStorage();
+                // Trigger state change
+                this.app.state._onChange();
             };
             input.click();
         }
     }
-
     /**
      * Toggle visibility of a custom pin
      */
@@ -164,8 +161,8 @@ class CustomPinManager {
 
         pin.hidden = !pin.hidden;
         this.app.mapManager.setItemVisibility(pin, !pin.hidden, pin.color);
-        this.app.ui.updateUI();
-        this.app.saveToLocalStorage();
+        // Trigger state change
+        this.app.state._onChange();
     }
 
     /**
@@ -185,8 +182,6 @@ class CustomPinManager {
                     this.app.selectedItems.delete(pinId);
                 }
 
-                this.app.ui.updateUI();
-                this.app.saveToLocalStorage();
                 this.app.ui.showNotification('Pin deleted', 'success');
             }
         );
