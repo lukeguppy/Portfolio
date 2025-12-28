@@ -1,3 +1,7 @@
+/**
+ * DragDropManager - Handles drag and drop reordering of categories and pins
+ * Manages the visual drag ghost and syncs the new order to the state
+ */
 class DragDropManager {
     constructor(app) {
         this.app = app;
@@ -102,7 +106,7 @@ class DragDropManager {
 
     setupDragContainer() {
         const container = document.getElementById('categories-list');
-        if (!container || container.dataset.dragInitialized) return;
+        if (!container || container.dataset.dragInitialised) return;
 
         container.addEventListener('dragover', (e) => {
             e.preventDefault();
@@ -151,7 +155,7 @@ class DragDropManager {
             });
         });
 
-        container.dataset.dragInitialized = 'true';
+        container.dataset.dragInitialised = 'true';
     }
 
     getDragAfterElement(container, y) {

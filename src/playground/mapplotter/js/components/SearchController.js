@@ -15,7 +15,7 @@ class SearchController {
             locInput.addEventListener('keypress', (e) => {
                 if (e.key === 'Enter') this.searchLocation();
             });
-            // Initialize Autosuggest
+            // Initialise Autosuggest
             this.initAutosuggest();
         }
 
@@ -194,17 +194,17 @@ class SearchController {
 
             const categoryName = query.charAt(0).toUpperCase() + query.slice(1);
 
-            // Smart Color Selection
-            const usedColors = new Set(this.app.state.getCategories().map(c => c.color));
-            const availableColors = CATEGORY_COLORS.filter(c => !usedColors.has(c));
-            const colorPool = availableColors.length > 0 ? availableColors : CATEGORY_COLORS;
-            const randomColor = colorPool[Math.floor(Math.random() * colorPool.length)];
+            // Smart Colour Selection
+            const usedColours = new Set(this.app.state.getCategories().map(c => c.color));
+            const availableColours = CATEGORY_COLOURS.filter(c => !usedColours.has(c));
+            const colourPool = availableColours.length > 0 ? availableColours : CATEGORY_COLOURS;
+            const randomColour = colourPool[Math.floor(Math.random() * colourPool.length)];
 
             // Use StateManager
             const category = {
                 id: generateId('cat'),
                 name: categoryName,
-                color: randomColor,
+                color: randomColour,
                 searchTerm: query.toLowerCase(),
                 visible: true,
                 pins: results.map(result => ({
@@ -218,6 +218,9 @@ class SearchController {
 
             category.pins.forEach(p => p.category = category.id);
 
+            // Save state for undo
+            this.app.undoManager.saveState(`Add ${categoryName} category`);
+
             // Update State
             this.app.state.addCategory(category);
 
@@ -227,7 +230,9 @@ class SearchController {
             });
 
             document.getElementById('business-search').value = '';
-            this.app.ui.updateUI();
+            document.getElementById('business-search').value = '';
+
+            this.app.ui.showNotification(`Added ${category.pins.length} ${categoryName} locations`, 'success');
 
             this.app.ui.showNotification(`Added ${category.pins.length} ${categoryName} locations`, 'success');
 
@@ -268,12 +273,12 @@ class SearchController {
                 return;
             }
 
-            const randomColor = CATEGORY_COLORS[Math.floor(Math.random() * CATEGORY_COLORS.length)];
+            const randomColour = CATEGORY_COLOURS[Math.floor(Math.random() * CATEGORY_COLOURS.length)];
 
             const category = {
                 id: generateId('cat'),
                 name: categoryName,
-                color: randomColor,
+                color: randomColour,
                 searchTerm: categoryKey,
                 visible: true,
                 pins: results.map(result => ({
@@ -287,6 +292,9 @@ class SearchController {
 
             category.pins.forEach(p => p.category = category.id);
 
+            // Save state for undo
+            this.app.undoManager.saveState(`Add ${categoryName} category`);
+
             // Update State
             this.app.state.addCategory(category);
 
@@ -295,7 +303,10 @@ class SearchController {
                 this.app.mapManager.addMarker(pin, category.color, category.id);
             });
 
-            this.app.ui.updateUI();
+            category.pins.forEach(pin => {
+                this.app.mapManager.addMarker(pin, category.color, category.id);
+            });
+
             this.app.ui.showNotification(`Added ${category.pins.length} ${categoryName} locations`, 'success');
 
         } catch (error) {
@@ -340,13 +351,16 @@ class SearchController {
                 };
 
                 // Add to Custom Pins state
+                this.app.undoManager.saveState('Add Rightmove property');
                 this.app.state.addCustomPin(pin);
 
                 // Add to Map
                 this.app.mapManager.addMarker(pin, pin.color, null, true);
 
+                // Add to Map
+                this.app.mapManager.addMarker(pin, pin.color, null, true);
+
                 urlInput.value = '';
-                this.app.ui.updateUI();
                 this.app.ui.showNotification('Property added successfully', 'success');
             }
         } catch (error) {

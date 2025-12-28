@@ -8,8 +8,8 @@
 // CONFIG
 // ================================================
 const Config = {
-    lineColor: 'rgba(255, 255, 255, 0.08)',
-    particleColors: {
+    lineColour: 'rgba(255, 255, 255, 0.08)',
+    particleColours: {
         email: { r: 20, g: 184, b: 166 },
         linkedin: { r: 0, g: 119, b: 181 },
         github: { r: 168, g: 85, b: 247 }
@@ -50,14 +50,14 @@ class Particle {
     }
 
     draw() {
-        const { x1, y1, x2, y2, color } = this.conn;
+        const { x1, y1, x2, y2, colour } = this.conn;
         const x = x1 + (x2 - x1) * this.t;
         const y = y1 + (y2 - y1) * this.t;
 
         // Glow
         const grad = ctx.createRadialGradient(x, y, 0, x, y, Config.particleGlow);
-        grad.addColorStop(0, `rgba(${color.r}, ${color.g}, ${color.b}, 0.8)`);
-        grad.addColorStop(0.5, `rgba(${color.r}, ${color.g}, ${color.b}, 0.2)`);
+        grad.addColorStop(0, `rgba(${colour.r}, ${colour.g}, ${colour.b}, 0.8)`);
+        grad.addColorStop(0.5, `rgba(${colour.r}, ${colour.g}, ${colour.b}, 0.2)`);
         grad.addColorStop(1, 'transparent');
 
         ctx.beginPath();
@@ -68,7 +68,7 @@ class Particle {
         // Core
         ctx.beginPath();
         ctx.arc(x, y, Config.particleSize, 0, Math.PI * 2);
-        ctx.fillStyle = `rgb(${color.r}, ${color.g}, ${color.b})`;
+        ctx.fillStyle = `rgb(${colour.r}, ${colour.g}, ${colour.b})`;
         ctx.fill();
     }
 }
@@ -76,7 +76,7 @@ class Particle {
 // ================================================
 // CONNECTIONS
 // ================================================
-function getNodeCenter(node) {
+function getNodeCentre(node) {
     const core = node.querySelector('.node-core');
     if (!core) return null;
     const rect = core.getBoundingClientRect();
@@ -92,7 +92,7 @@ function buildConnections() {
     if (nodes.length < 3) return;
 
     const centers = Array.from(nodes).map(n => ({
-        pos: getNodeCenter(n),
+        pos: getNodeCentre(n),
         channel: n.dataset.channel
     })).filter(c => c.pos);
 
@@ -107,7 +107,7 @@ function buildConnections() {
                 y1: centers[i].pos.y,
                 x2: centers[j].pos.x,
                 y2: centers[j].pos.y,
-                color: Config.particleColors[centers[i].channel]
+                colour: Config.particleColours[centers[i].channel]
             };
             connections.push(conn);
 
@@ -126,7 +126,7 @@ function render() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Draw lines
-    ctx.strokeStyle = Config.lineColor;
+    ctx.strokeStyle = Config.lineColour;
     ctx.lineWidth = 1;
     connections.forEach(c => {
         ctx.beginPath();

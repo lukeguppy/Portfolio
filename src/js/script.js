@@ -93,7 +93,6 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
 
-        // === EXPLORE SECTION ===
         // === EXPLORE SECTION - SCROLL BASED ===
         if (exploreSection) {
             const rect = exploreSection.getBoundingClientRect();
@@ -297,13 +296,32 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     };
 
-    window.addEventListener('scroll', updateTransitions, { passive: true });
+    // Use requestAnimationFrame for smooth performance
+    let isTicking = false;
+
+    window.addEventListener('scroll', () => {
+        if (!isTicking) {
+            window.requestAnimationFrame(() => {
+                updateTransitions();
+                isTicking = false;
+            });
+            isTicking = true;
+        }
+    }, { passive: true });
 
     // === HEADER ===
     const header = document.querySelector('header');
+    let headerTicking = false;
+
     window.addEventListener('scroll', () => {
-        header.style.background = window.pageYOffset > 100 ? 'rgba(5, 5, 8, 0.95)' : 'rgba(255, 255, 255, 0.02)';
-        header.style.boxShadow = window.pageYOffset > 100 ? '0 10px 40px rgba(0, 0, 0, 0.4)' : 'none';
+        if (!headerTicking) {
+            window.requestAnimationFrame(() => {
+                header.style.background = window.pageYOffset > 100 ? 'rgba(5, 5, 8, 0.95)' : 'rgba(255, 255, 255, 0.02)';
+                header.style.boxShadow = window.pageYOffset > 100 ? '0 10px 40px rgba(0, 0, 0, 0.4)' : 'none';
+                headerTicking = false;
+            });
+            headerTicking = true;
+        }
     }, { passive: true });
 
     // === ANCHOR SCROLL ===
@@ -350,7 +368,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        window.addEventListener('scroll', updatePageHeader, { passive: true });
+        let pageHeaderTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!pageHeaderTicking) {
+                window.requestAnimationFrame(() => {
+                    updatePageHeader();
+                    pageHeaderTicking = false;
+                });
+                pageHeaderTicking = true;
+            }
+        }, { passive: true });
         updatePageHeader();
     }
 
@@ -368,7 +395,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        window.addEventListener('scroll', updateSectionHeadings, { passive: true });
+        let headingsTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!headingsTicking) {
+                window.requestAnimationFrame(() => {
+                    updateSectionHeadings();
+                    headingsTicking = false;
+                });
+                headingsTicking = true;
+            }
+        }, { passive: true });
         updateSectionHeadings();
     }
 
@@ -438,7 +474,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        window.addEventListener('scroll', updateSkillsAnimation, { passive: true });
+        let skillsTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!skillsTicking) {
+                window.requestAnimationFrame(() => {
+                    updateSkillsAnimation();
+                    skillsTicking = false;
+                });
+                skillsTicking = true;
+            }
+        }, { passive: true });
         updateSkillsAnimation();
     }
 
@@ -471,7 +516,16 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         };
 
-        window.addEventListener('scroll', updateProjectsAnimation, { passive: true });
+        let projectsTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!projectsTicking) {
+                window.requestAnimationFrame(() => {
+                    updateProjectsAnimation();
+                    projectsTicking = false;
+                });
+                projectsTicking = true;
+            }
+        }, { passive: true });
         updateProjectsAnimation();
     }
 

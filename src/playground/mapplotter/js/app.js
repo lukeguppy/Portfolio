@@ -5,13 +5,17 @@ class MapPlotter {
         this.api = new ApiService();
         this.storage = new StorageService();
 
-        // Initialize Theme
+        // Initialise Theme
         if (localStorage.getItem('theme-mode') === 'light') {
             document.body.classList.add('light-mode');
         }
 
         this.rightmove = new RightmoveService();
         this.state = new StateManager(this);
+
+        // Wire up Observer: Update UI whenever state changes
+        this.state.subscribe(() => this.ui.updateUI());
+
         this.mapManager = new MapManager(this);
         this.dragDropManager = new DragDropManager(this);
         this.searchController = new SearchController(this);
@@ -130,5 +134,5 @@ class MapPlotter {
     }
 }
 
-// Initialize
+// Initialise
 window.app = new MapPlotter();

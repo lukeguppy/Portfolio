@@ -56,7 +56,7 @@ class MapManager {
             inertiaMaxSpeed: 1500
         });
 
-        // Initialize with saved theme or default
+        // Initialise with saved theme or default
         const savedTheme = localStorage.getItem('map-theme') || 'satellite';
 
         // Track preferences for each mode (Context-Aware Persistence)
@@ -64,7 +64,7 @@ class MapManager {
         this.themeForDarkMode = localStorage.getItem('map-theme-dark-mode') || 'dark';
         this.themeForLightMode = localStorage.getItem('map-theme-light-mode') || 'osm';
 
-        this.initializeTheme(savedTheme);
+        this.initialiseTheme(savedTheme);
 
         // Track map movement state (to disable tooltips during pan/zoom)
         this.isMoving = false;
@@ -108,12 +108,12 @@ class MapManager {
     /**
      * Show or hide a specific item (pin) on the map
      */
-    setItemVisibility(item, isVisible, color) {
+    setItemVisibility(item, isVisible, colour) {
         if (isVisible) {
             // Check if already exists to avoid duplicates
             if (this.markers.some(m => m.pinId === item.id)) return;
 
-            const marker = this.createMarker(item, color);
+            const marker = this.createMarker(item, colour);
             this.markers.push(marker);
         } else {
             const markerIndex = this.markers.findIndex(m => m.pinId === item.id);
@@ -154,7 +154,7 @@ class MapManager {
         });
     }
 
-    initializeTheme(theme) {
+    initialiseTheme(theme) {
         this.changeMapTheme(theme);
     }
 
@@ -516,8 +516,8 @@ class MapManager {
         }
     }
 
-    addMarker(pin, color, categoryId) {
-        const marker = this.createMarker(pin, color);
+    addMarker(pin, colour, categoryId) {
+        const marker = this.createMarker(pin, colour);
         this.markers.push(marker);
         return marker;
     }
@@ -530,11 +530,11 @@ class MapManager {
         }
     }
 
-    createMarker(pin, color) {
+    createMarker(pin, colour) {
         // Create icon using PopupBuilder
         const icon = L.divIcon({
             className: 'custom-marker',
-            html: PopupBuilder.buildMarkerIcon(color),
+            html: PopupBuilder.buildMarkerIcon(colour),
             iconSize: [24, 24],
             iconAnchor: [12, 12]
         });

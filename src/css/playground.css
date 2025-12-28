@@ -54,7 +54,7 @@ body {
     scroll-snap-stop: always;
     /* Force stop on each section */
     overflow: hidden;
-    /* Center content layout */
+    /* Centre content layout */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -199,9 +199,27 @@ body {
     height: 650px;
     transform-style: preserve-3d;
     animation: boardFloat 8s ease-in-out infinite;
+    /* Transition for hover grow effect */
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
-/* 3D Slab Thickness (Front Face) - Adjusted for border */
+.chessboard {
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    pointer-events: none;
+    /* Critical: Ensure board doesn't trigger hover */
+}
+
+.chess-portal:hover .chessboard {
+    transform: scale(1.1);
+}
+
+/* Hover Interaction: Title Hide handled in specific block below */
+
+.portal-content {
+    transition: opacity 0.4s ease, transform 0.6s ease;
+}
+
+/* 3D Slab Thickness (Rear/Bottom Effects) */
 .chessboard::before {
     content: '';
     position: absolute;
@@ -221,31 +239,12 @@ body {
     border-top: none;
 }
 
-/* 3D Slab Side (Right Face) */
-.chessboard::after {
-    content: '';
-    position: absolute;
-    top: -15px;
-    /* Start from top of border */
-    left: 100%;
-    /* Right edge (inside border box includes border?) No, usually content+padding+border */
-    /* Wait, box-sizing: border-box means 100% is full width. */
-    /* So left: 100% is correct edge. */
-    /* But if border is included, we need to cover the border depth too? */
-    /* Let's keep it simple, checking visual. */
-    left: calc(100% + 15px);
-    height: calc(100% + 30px);
-    /* Full height + thickness? No side face logic is tricky. */
-    /* Removing side face for now to avoid misalignment, front face is most important for "Slab" look */
-    display: none;
-}
+/* Note: Side faces are omitted to prevent alignment issues during rotation */
 
-/* Make pieces stand UP (Billboard) */
+/* Make pieces stand upright (Billboard Effect) */
 .chess-piece {
     /* ... existing props ... */
-    /* Anchor bottom-center to the square center.
-       translate(-50%, -60%) attempts to place the feet exactly on the center.
-    */
+    /* Anchor bottom-centre to the square centre.o the centre of the square */
     transform: translate(-50%, -60%) rotateX(-35deg) scale(1.15);
     transform-origin: bottom center;
     /* Drop shadow to ground them on the board */
@@ -452,8 +451,8 @@ body {
     top: 93.75%;
 }
 
-/* Center pieces in squares */
-/* Center pieces in squares */
+/* Centre pieces in squares */
+/* Centre pieces in squares */
 .chess-piece[class*="sq-"] {
     /* Override standard center for 3D billboard feel */
     transform: translate(-50%, -60%) rotateX(-35deg) scale(1.15);
@@ -1023,8 +1022,24 @@ body {
 }
 
 /* =========================================
-   HOVER STATES - Only on title hover
+   HOVER STATES - Interaction Logic
    ========================================= */
+
+/* Fix: Disable interaction on the container to prevent accidental triggering */
+.chess-portal {
+    pointer-events: none;
+}
+
+/* Enable interaction only on the title content */
+.chess-portal .portal-content {
+    pointer-events: auto;
+}
+
+/* Ensure the link wrapper does not capture events */
+.chess-portal .portal-link {
+    pointer-events: none;
+}
+
 .portal-content:hover .portal-tag {
     opacity: 1;
     transform: translateY(-5px);
@@ -1033,6 +1048,16 @@ body {
 .portal-title:hover {
     transform: scale(1.03);
     cursor: pointer;
+}
+
+/* On Title Hover: Hide the title/tag and reveal the board, but KEEP hint visible */
+.chess-portal .portal-content:hover .portal-title,
+.chess-portal .portal-content:hover .portal-tag {
+    opacity: 0;
+}
+
+.chess-portal .portal-content:hover {
+    transform: scale(1.1);
 }
 
 .portal-content:hover .portal-hint {

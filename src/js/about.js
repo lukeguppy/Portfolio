@@ -9,7 +9,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!document.querySelector('.about-experience')) return;
 
     // ================================================
-    // EXPERIENCE SECTION - Timeline with growing line
+    // EXPERIENCE SECTION - Timeline with Growing Line
     // ================================================
     const experienceSection = document.querySelector('.about-experience');
     const expTimeline = document.querySelector('.experience-timeline');
@@ -94,6 +94,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             });
 
+            // Each card gets equal segment of timeline progress
             // Each card gets equal segment of timeline progress
             const segmentSize = 1 / numCards;
 
@@ -189,7 +190,16 @@ document.addEventListener('DOMContentLoaded', () => {
             if (expTitle) expTitle.style.transform = `translateY(-${translateY}px)`;
         };
 
-        window.addEventListener('scroll', updateExperience, { passive: true });
+        let expTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!expTicking) {
+                window.requestAnimationFrame(() => {
+                    updateExperience();
+                    expTicking = false;
+                });
+                expTicking = true;
+            }
+        }, { passive: true });
         updateExperience();
     }
 
@@ -204,10 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // proper coordination with the solar system explosion
 
     // ================================================
-    // PAGE HEADER - Parallax fade
-    // ================================================
-    // ================================================
-    // HERO - Parallax fade
+    // HERO - Parallax Fade
     // ================================================
     const heroSection = document.querySelector('.about-hero');
     if (heroSection) {
@@ -229,7 +236,16 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         };
 
-        window.addEventListener('scroll', updateHero, { passive: true });
+        let heroTicking = false;
+        window.addEventListener('scroll', () => {
+            if (!heroTicking) {
+                window.requestAnimationFrame(() => {
+                    updateHero();
+                    heroTicking = false;
+                });
+                heroTicking = true;
+            }
+        }, { passive: true });
         updateHero();
     }
 });

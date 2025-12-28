@@ -113,16 +113,16 @@ class SelectionManager {
             `Group ${count} Items`,
             'Enter group name...',
             (name) => {
-                const safeColors = [
+                const safeColours = [
                     '#FF6B6B', '#4ECDC4', '#45B7D1', '#FFA07A', '#98D8C8',
                     '#F7DC6F', '#BB8FCE', '#82E0AA', '#F1948A', '#85C1E9'
                 ];
-                const randomColor = safeColors[Math.floor(Math.random() * safeColors.length)];
+                const randomColour = safeColours[Math.floor(Math.random() * safeColours.length)];
 
                 const newCategory = {
                     id: generateId('cat'),
                     name: name.trim(),
-                    color: randomColor,
+                    color: randomColour,
                     pins: [],
                     visible: true
                 };
@@ -150,8 +150,6 @@ class SelectionManager {
                 });
 
                 this.clear();
-                this.app.ui.updateUI();
-                this.app.saveToLocalStorage();
                 this.app.ui.showNotification(`Group "${name}" created with ${count} items`, 'success');
             },
             { buttonText: 'Create Group' }
@@ -159,7 +157,7 @@ class SelectionManager {
     }
 
     /**
-     * Initialize selection button listeners
+     * Initialise selection button listeners
      */
     initListeners() {
         const groupBtn = document.getElementById('group-selected-btn');

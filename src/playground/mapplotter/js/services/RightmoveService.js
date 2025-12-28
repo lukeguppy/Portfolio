@@ -11,7 +11,6 @@ class RightmoveService {
 
         for (const proxyUrl of proxies) {
             try {
-                console.log(`Trying proxy: ${proxyUrl}`);
                 const response = await fetch(proxyUrl);
 
                 if (!response.ok) throw new Error(`Proxy error: ${response.status}`);
@@ -33,8 +32,6 @@ class RightmoveService {
         if (!html) {
             throw new Error('All proxies failed to fetch content. ' + (diffError ? diffError.message : ''));
         }
-
-        console.log(`Fetched ${html.length} chars. Parsing...`);
 
         // Strategy 1: Look for window.PAGE_MODEL
         const marker = 'window.PAGE_MODEL =';
@@ -65,7 +62,7 @@ class RightmoveService {
                     }
                 }
             } catch (e) {
-                console.log('Failed to parse PAGE_MODEL with extractor', e);
+                // Failed to parse PAGE_MODEL
             }
         }
 
@@ -101,7 +98,7 @@ class RightmoveService {
                     }
                 }
             } catch (e) {
-                console.log('JSON-LD parse error:', e);
+                // JSON-LD parse error
             }
         }
 
@@ -129,7 +126,7 @@ class RightmoveService {
                     url: url
                 };
             }
-        } catch (e) { console.log('Meta tag parse error', e); }
+        } catch (e) { /* Meta tag parse error */ }
 
         return null;
     }

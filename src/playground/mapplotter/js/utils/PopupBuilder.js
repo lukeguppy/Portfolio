@@ -169,7 +169,7 @@ class PopupBuilder {
     /**
      * Build marker icon HTML
      */
-    static buildMarkerIcon(color) {
+    static buildMarkerIcon(colour) {
         const opacity = localStorage.getItem('marker-opacity') || '1';
         return `
             <div style="
@@ -182,7 +182,7 @@ class PopupBuilder {
                 cursor: pointer;
             ">
                 <div class="marker-pin" style="
-                    background: ${color};
+                    background: ${colour};
                     width: 14px;
                     height: 14px;
                     border-radius: 50%;
