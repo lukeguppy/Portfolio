@@ -1,7 +1,5 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    // Wait a brief moment to ensure everything is loaded, although DOMContentLoaded is usually enough.
-    // We want to verify Chess is available.
     if (typeof Chess === 'undefined') {
         console.error('Chess.js library not found!');
         return;
@@ -10,14 +8,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const chessboard = document.querySelector('.chessboard');
     if (!chessboard) return;
 
-    // 1. Capture Initial State for Reset
-    // We clone the innerHTML so we can easily restore it after the game loop ends.
+    // Capture initial board state for reset
     const initialBoardHTML = chessboard.innerHTML;
 
-    // 2. Game Setup
+    // Game setup
     const startFen = "r1bq1rk1/ppp1bp1p/2n1pnp1/1N1pN2Q/2BPP3/2P3P1/PP3PBP/R4RK1 w - - 0 1";
 
-    // The PGN provided by the user. 
+    // Complete game sequence in PGN format 
     const pgn = `[Variant "From Position"]
 [FEN "r1bq1rk1/ppp1bp1p/2n1pnp1/1N1pN2Q/2BPP3/2P3P1/PP3PBP/R4RK1 w - - 0 1"]
 
@@ -33,15 +30,14 @@ document.addEventListener('DOMContentLoaded', () => {
         // Use the initial board state we captured
         game = new Chess();
 
-        // 1. Explicitly load the starting position
-        // Utilise startFen defined above
+        // Load starting position
         const loadedFen = game.load(startFen);
         if (!loadedFen) {
             console.error("Failed to load starting FEN:", startFen);
             return;
         }
 
-        console.log("FEN loaded. Starting animation loop...");
+        console.log('FEN loaded. Starting animation loop...');
         isAnimating = true;
         playHistory();
     }
@@ -51,16 +47,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const moves = pgn.replace(/\d+\./g, '').replace(/\s+/g, ' ').trim().split(' ');
 
         for (const moveSan of moves) {
-            if (!isAnimating) break; // Stop if reset occurs
+            if (!isAnimating) break;
 
-            // Attempt to make the move in the engine to validate and get details
             const move = game.move(moveSan);
             if (!move) continue;
 
-            // Wait before performing the move for visual pacing
             await new Promise(resolve => setTimeout(resolve, 1400));
 
-            // Execute the visual update
             await performMove(move);
         }
 
@@ -69,10 +62,8 @@ document.addEventListener('DOMContentLoaded', () => {
             highlightCheckmate();
         }
 
-        // Pause before resetting the board
         await new Promise(resolve => setTimeout(resolve, 10000));
 
-        // Reset the cycle
         if (isAnimating) {
             resetGame();
         }
@@ -83,53 +74,43 @@ document.addEventListener('DOMContentLoaded', () => {
             const fromSquare = move.from;
             const toSquare = move.to;
 
-            // Identify the pieces involved
             const piece = chessboard.querySelector(`.sq-${fromSquare}:not(.captured)`);
             const targetPiece = chessboard.querySelector(`.sq-${toSquare}:not(.captured)`);
 
-            // Apply special handling for castling
+            // Handle castling
             if (move.flags.includes('k') || move.flags.includes('q')) {
                 handleCastling(move);
             }
 
-            // Handle captures (fade out the captured piece)
+            // Capture piece
             if (targetPiece) {
                 targetPiece.classList.add('captured');
-                // Note: We do not remove the square class to prevent layout shifts
             }
 
-            // Move the active piece
+            // Move piece via CSS class transition
             if (piece) {
-                // Apply the movement class for z-index layering
                 piece.classList.add('moving');
-
-                // DIRECT CSS TRANSITION:
-                // Instead of calculating transforms manually (which caused offsets/teleporting),
-                // we simply swap the position classes. The CSS transition property on 'left' and 'top'
-                // will handle the smooth animation to the new percentage coordinates automatically.
                 piece.classList.remove(`sq-${fromSquare}`);
                 piece.classList.add(`sq-${toSquare}`);
             }
 
             // Clean up after the animation completes
             setTimeout(() => {
-                // Handle Promotion (Queen by default)
+                // Handle pawn promotion
                 if (move.promotion) {
                     const colorPrefix = move.color;
                     const newType = move.promotion.toUpperCase();
 
-                    // Update the piece image
                     if (piece) {
                         const newSrc = `/Portfolio/images/chess-pieces/${colorPrefix}${newType}.svg`;
                         piece.src = newSrc;
-                        // Important: Remove 'pawn' class to reset sizing to standard piece dimensions
                         piece.classList.remove('pawn');
                     }
                 }
 
                 if (piece) piece.classList.remove('moving');
                 resolve(null);
-            }, 1200); // Matches the CSS transition duration
+            }, 1200);
         });
     }
 
@@ -137,15 +118,15 @@ document.addEventListener('DOMContentLoaded', () => {
         let rookFrom, rookTo;
 
         if (move.color === 'w') {
-            if (move.flags.includes('k')) { // Kingside
+            if (move.flags.includes('k')) {
                 rookFrom = 'h1'; rookTo = 'f1';
-            } else { // Queenside
+            } else {
                 rookFrom = 'a1'; rookTo = 'd1';
             }
         } else {
-            if (move.flags.includes('k')) { // Kingside
+            if (move.flags.includes('k')) {
                 rookFrom = 'h8'; rookTo = 'f8';
-            } else { // Queenside
+            } else {
                 rookFrom = 'a8'; rookTo = 'd8';
             }
         }
@@ -158,7 +139,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function highlightCheckmate() {
-        const turn = game.turn(); // 'w' or 'b' - who is in checkmate?
+        const turn = game.turn();
         const kingColor = turn === 'w' ? 'w' : 'b';
 
         // Locate the king on the board
@@ -169,7 +150,10 @@ document.addEventListener('DOMContentLoaded', () => {
             for (let c = 0; c < 8; c++) {
                 const p = board[r][c];
                 if (p && p.type === 'k' && p.color === kingColor) {
-                    kingSquare = p.square;
+                    // Convert board coordinates to square notation
+                    const file = String.fromCharCode(97 + c);
+                    const rank = 8 - r;
+                    kingSquare = file + rank;
                     break;
                 }
             }
@@ -177,23 +161,31 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         if (kingSquare) {
-            const kingPiece = document.querySelector(`.sq-${kingSquare}:not(.captured)`);
-            if (kingPiece) {
-                kingPiece.classList.add('checkmate-glow');
-            }
+            // Square centers (these match piece positioning)
+            const colMap = { 'a': 6.25, 'b': 18.75, 'c': 31.25, 'd': 43.75, 'e': 56.25, 'f': 68.75, 'g': 81.25, 'h': 93.75 };
+            const rowMap = { '8': 6.25, '7': 18.75, '6': 31.25, '5': 43.75, '4': 56.25, '3': 68.75, '2': 81.25, '1': 93.75 };
+            const col = kingSquare.charAt(0);
+            const row = kingSquare.charAt(1);
+
+            // Create glowing overlay on board square
+            const glowOverlay = document.createElement('div');
+            glowOverlay.className = 'checkmate-square-glow';
+            const leftPos = colMap[col];
+            const topPos = rowMap[row];
+            glowOverlay.style.left = leftPos + '%';
+            glowOverlay.style.top = topPos + '%';
+            chessboard.appendChild(glowOverlay);
         }
     }
 
     function resetGame() {
         isAnimating = false;
-        // Restore HTML
         chessboard.innerHTML = initialBoardHTML;
-        // Restart loop
         setTimeout(() => {
             initGame();
         }, 1000);
     }
 
-    // Start
+    // Start animation
     setTimeout(initGame, 1000);
 });
