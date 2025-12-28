@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Countries Quiz</title>
+  <!-- Removed Leaflet CSS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600&display=swap" rel="stylesheet">
+  <script type="module" crossorigin src="./assets/index-DBF92x0o.js"></script>
+  <link rel="stylesheet" crossorigin href="./assets/index-Cl0roL0U.css">
+</head>
+
+<body>
+  <div id="app">
+    <div class="nav-buttons">
+      <a href="../../" class="nav-btn" title="Home">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+      </a>
+      <a href="../" class="nav-btn" title="Back to Playground">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7"></rect>
+          <rect x="14" y="3" width="7" height="7"></rect>
+          <rect x="14" y="14" width="7" height="7"></rect>
+          <rect x="3" y="14" width="7" height="7"></rect>
+        </svg>
+      </a>
+    </div>
+    <canvas id="globe-canvas"></canvas>
+
+    <!-- Top Bar: Timer and Score -->
+    <div id="top-bar" class="ui-panel hidden">
+      <div class="stat-group">
+        <span class="label">Time</span>
+        <span id="timer" class="value">00:00</span>
+      </div>
+
+      <div id="progress-container">
+        <div id="progress-fill-green" class="progress-bar"></div>
+        <div id="progress-fill-orange" class="progress-bar"></div>
+        <div id="progress-fill-purple" class="progress-bar"></div>
+        <div id="progress-fill-red" class="progress-bar"></div>
+        <div id="progress-fill-empty" class="progress-bar"></div>
+      </div>
+
+      <div class="stat-group">
+        <span class="label">Score</span>
+        <span id="score" class="value">0 / 0</span>
+      </div>
+    </div>
+
+    <!-- Start Screen Overlay -->
+    <div id="start-overlay" class="overlay">
+      <div class="card">
+        <h1>World Quiz</h1>
+        <p>Test your geography skills. Select a region and guess the country highlighted on the map.</p>
+
+        <div class="mode-selector">
+          <button class="mode-btn active" data-mode="World">World</button>
+          <button class="mode-btn" data-mode="Africa">Africa</button>
+          <button class="mode-btn" data-mode="Asia">Asia</button>
+          <button class="mode-btn" data-mode="Europe">Europe</button>
+          <button class="mode-btn" data-mode="North America">N. America</button>
+          <button class="mode-btn" data-mode="South America">S. America</button>
+          <button class="mode-btn" data-mode="Oceania">Oceania</button>
+        </div>
+
+        <div class="settings-group">
+          <span class="setting-label">Lives:</span>
+          <div class="lives-selector">
+            <div class="hearts-select">
+              <svg class="heart-btn" data-val="1" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <svg class="heart-btn" data-val="2" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+              <svg class="heart-btn" data-val="3" width="28" height="28" viewBox="0 0 24 24" fill="currentColor">
+                <path
+                  d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+              </svg>
+            </div>
+
+            <div style="width: 1px; height: 16px; background: rgba(255,255,255,0.15); margin: 0 8px;"></div>
+
+            <button id="lives-zen" class="lives-option zen-btn" title="Unlimited Lives">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path
+                  d="M18.178 8c5.096 0 5.096 8 0 8-5.095 0-7.133-8-12.728-8-4.589 0-4.589 8 0 8 5.606 0 7.633-8 12.728-8z" />
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <button id="start-btn" class="primary-btn">Start Quiz</button>
+      </div>
+    </div>
+
+    <!-- Feedback Overlay (Center) -->
+    <div id="feedback-display" class="feedback-popup hidden">
+      <span class="feedback-icon">✕</span>
+      <div class="feedback-text">
+        <span class="label">The answer was</span>
+        <span id="feedback-country" class="country-name">Country Name</span>
+      </div>
+    </div>
+
+    <!-- Game Controls Overlay (Bottom Center) -->
+    <div id="game-controls" class="hidden">
+      <div id="lives-container">
+        <!-- SVG Heart 1 -->
+        <svg class="life-heart" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+        <!-- SVG Heart 2 -->
+        <svg class="life-heart" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+        <!-- SVG Heart 3 -->
+        <svg class="life-heart" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+          <path
+            d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z" />
+        </svg>
+      </div>
+
+      <div class="control-panel">
+        <input type="text" id="guess-input" placeholder="Enter country name..." autocomplete="off">
+        <div class="button-group">
+          <button id="skip-btn" class="secondary-btn">Skip</button>
+          <button id="pass-btn" class="danger-btn">Pass</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- End Screen Overlay -->
+    <div id="end-overlay" class="overlay hidden">
+      <div class="card">
+        <h2>Quiz Complete!</h2>
+        <div class="final-score">
+          <span id="final-score-val">0</span>
+          <span class="sub-text">Correct</span>
+        </div>
+        <p id="final-time-text">Time: 00:00</p>
+        <button id="restart-btn" class="primary-btn">Play Again</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
