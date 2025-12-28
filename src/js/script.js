@@ -10,225 +10,306 @@ document.addEventListener('DOMContentLoaded', () => {
     const pinnedSection = document.querySelector('.pinned-section');
     const exploreSection = document.querySelector('.explore-section');
     const techSection = document.querySelector('.tech-section');
+    const skillGroups = document.querySelectorAll('.skill-group');
+    const projectCards = document.querySelectorAll('.project-card');
+    const skillTags = document.querySelectorAll('.skill-tags span');
 
+    // === VISUALLY HIDDEN ON LOAD ===
     // Ensure all animated elements start hidden
     document.querySelectorAll('.word, .side-card, .explore-tile, .planet, .sun, .orbit').forEach(el => {
         el.classList.remove('visible', 'glowing', 'exploding');
     });
 
+    // === LAYOUT CACHE ===
+    // Store positions here so we don't query DOM in scroll loop
+    const layout = {
+        windowHeight: window.innerHeight,
+        hero: { start: 0, end: 0, exists: false },
+        pinned: { top: 0, height: 0, exists: false, words: [], cards: [] },
+        explore: { top: 0, height: 0, exists: false },
+        tech: { top: 0, exists: false },
+        skills: { items: [], exists: false },
+        projects: { items: [], exists: false }
+    };
+
+    const updateLayout = () => {
+        layout.windowHeight = window.innerHeight;
+
+        // Hero
+        if (hero) {
+            layout.hero.exists = true;
+            // Constant constants for hero
+            layout.hero.start = layout.windowHeight * 0.1;
+            layout.hero.end = layout.windowHeight * 0.7;
+        }
+
+        // Pinned
+        if (pinnedSection) {
+            layout.pinned.exists = true;
+            layout.pinned.top = pinnedSection.offsetTop;
+            layout.pinned.height = pinnedSection.offsetHeight;
+
+            // Cache elements
+            layout.pinned.words = Array.from(pinnedSection.querySelectorAll('.word'));
+            layout.pinned.cards = Array.from(pinnedSection.querySelectorAll('.side-card'));
+        }
+
+        // Explore
+        if (exploreSection) {
+            layout.explore.exists = true;
+            layout.explore.top = exploreSection.offsetTop;
+            layout.explore.height = exploreSection.offsetHeight;
+        }
+
+        // Tech
+        if (techSection) {
+            layout.tech.exists = true;
+            layout.tech.top = techSection.offsetTop;
+            layout.tech.height = techSection.offsetHeight;
+        }
+
+        // Skills
+        if (skillGroups.length > 0) {
+            layout.skills.exists = true;
+            layout.skills.items = Array.from(skillGroups).map(group => ({
+                el: group,
+                top: group.offsetTop,
+                height: group.offsetHeight,
+                tags: Array.from(group.querySelectorAll('.skill-tags span'))
+            }));
+        }
+
+        // Projects
+        if (projectCards.length > 0) {
+            layout.projects.exists = true;
+            layout.projects.items = Array.from(projectCards).map(card => ({
+                el: card,
+                top: card.offsetTop,
+                height: card.offsetHeight
+            }));
+        }
+    };
+
+    // Initialise layout
+    updateLayout();
+
+    // Debounced resize handler
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateLayout();
+            updateTransitions();
+            if (typeof updateSkillsAnimation === 'function') updateSkillsAnimation();
+            if (typeof updateProjectsAnimation === 'function') updateProjectsAnimation();
+        }, 100);
+    }, { passive: true });
+
+    // ResizeObserver to catch content shifts
+    const observer = new ResizeObserver(() => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            updateLayout();
+            updateTransitions();
+            if (typeof updateSkillsAnimation === 'function') updateSkillsAnimation();
+            if (typeof updateProjectsAnimation === 'function') updateProjectsAnimation();
+        }, 100);
+    });
+    if (document.body) observer.observe(document.body);
+
+
+
     // ===== MAIN SCROLL HANDLER =====
     const updateTransitions = () => {
         const scrollY = window.pageYOffset;
-        const windowHeight = window.innerHeight;
+        const wh = layout.windowHeight;
 
-        // === HERO FADE OUT ===
-        if (hero && heroContent) {
-            const fadeStart = windowHeight * 0.1;
-            const fadeEnd = windowHeight * 0.7;
-            const heroProgress = Math.max(0, Math.min(1, (scrollY - fadeStart) / (fadeEnd - fadeStart)));
+        // Hero fade out
+        if (layout.hero.exists && heroContent) {
+            const range = layout.hero.end - layout.hero.start;
+            // Avoid divide by zero
+            if (range > 0) {
+                const heroProgress = Math.max(0, Math.min(1, (scrollY - layout.hero.start) / range));
 
-            heroContent.style.opacity = 1 - heroProgress;
-            heroContent.style.transform = `translateY(${-scrollY * 0.3}px) scale(${1 - heroProgress * 0.1})`;
+                // Only write if changed/needed
+                if (heroProgress <= 1) {
+                    heroContent.style.opacity = 1 - heroProgress;
+                    heroContent.style.transform = `translateY(${-scrollY * 0.3}px) scale(${1 - heroProgress * 0.1})`;
+                }
+            }
         }
 
-        // === PINNED SECTION - ALL WORDS SAME TREATMENT ===
-        if (pinnedSection) {
-            const words = pinnedSection.querySelectorAll('.word');
-            const sideCards = pinnedSection.querySelectorAll('.side-card');
-            const allElements = [...words, ...sideCards];
-            // SCROLL-LINKED / SCRUBBING LOGIC
-            // Calculate progress specifically for when the section is "pinned"
-            const rect = pinnedSection.getBoundingClientRect();
-            const sectionHeight = rect.height;
-            const scrollDistance = sectionHeight - windowHeight;
+        // Pinned section
+        if (layout.pinned.exists) {
+            // Calculate current viewport relative position
+            const rectTop = layout.pinned.top - scrollY;
+            const sectionHeight = layout.pinned.height;
+            const scrollDistance = sectionHeight - wh;
 
-            // 1. PIN PROGRESS: For cards (0 when pinned, 1 when unpinned)
-            const pinProgress = Math.max(0, Math.min(1, -rect.top / scrollDistance));
+            if (scrollDistance > 0) {
+                // Pin progress
+                const pinProgress = Math.max(0, Math.min(1, -rectTop / scrollDistance));
 
-            // 2. ENTRY PROGRESS: For words (Starts BEFORE pin, when section is approaching)
-            // Starts when section top is at 50% viewport, ends when it hits top (0%)
-            const entryStart = windowHeight * 0.5;
-            const entryProgress = Math.max(0, Math.min(1, (entryStart - rect.top) / entryStart));
+                // Entry progress
+                const entryStart = wh * 0.5;
+                const entryProgress = Math.max(0, Math.min(1, (entryStart - rectTop) / entryStart));
 
-            allElements.forEach((el, index) => {
-                if (el.classList.contains('side-card')) {
-                    // Cards sequence: Start early (0.15) and flow till END (1.0)
-                    // Zero-base index for cards
-                    const cardIndex = index - words.length;
-
-                    // Spacing: 0.15 start, + 0.15 per card
-                    const cardStart = 0.15 + (cardIndex * 0.15);
-                    const cardDuration = 0.3;
-                    const cardEnd = cardStart + cardDuration;
-
-                    const p = Math.max(0, Math.min(1, (pinProgress - cardStart) / (cardEnd - cardStart)));
-
-                    el.style.opacity = p;
-                    // Use CSS Variables so hover works
-                    el.style.setProperty('--scale', 0.9 + (p * 0.1));
-                    el.style.transition = 'none'; // Disable transition for scrubbing
-
-                    const isLeft = el.classList.contains('from-left');
-                    const xStart = isLeft ? -50 : 50;
-
-                    // currentX goes from xStart -> 0
-                    const currentX = xStart * (1 - p);
-                    el.style.setProperty('--tx', `${currentX}px`);
-
-                } else {
-                    // Words: Animate on ENTRY (Approach), NOT while pinned
-                    // This ensures they are visible BEFORE the "blank screen" gap
-
-                    // Stagger: 0.0 to 0.8 during approach
+                // Words
+                layout.pinned.words.forEach((el, index) => {
                     const wordStart = index * 0.1;
                     const wordEnd = wordStart + 0.4;
                     const p = Math.max(0, Math.min(1, (entryProgress - wordStart) / (wordEnd - wordStart)));
 
-                    el.style.opacity = p;
-                    el.style.transform = `translateY(${150 * (1 - p)}px)`; // Slide up from 150px
+                    if (el._lastP === undefined || Math.abs(el._lastP - p) > 0.001) { // Optimisation: only update if changed enough
+                        el.style.opacity = p;
+                        el.style.transform = `translateY(${150 * (1 - p)}px)`;
+                        if (p > 0) el.classList.add('visible');
+                        else el.classList.remove('visible');
+                        el._lastP = p;
+                    }
+                });
 
-                    if (p > 0) el.classList.add('visible');
-                    else el.classList.remove('visible');
-                }
-            });
+                // Cards
+                layout.pinned.cards.forEach((el, index) => {
+                    const cardStart = 0.15 + (index * 0.15);
+                    const cardDuration = 0.3;
+                    const cardEnd = cardStart + cardDuration;
+                    const p = Math.max(0, Math.min(1, (pinProgress - cardStart) / (cardEnd - cardStart)));
+
+                    if (el._lastP === undefined || Math.abs(el._lastP - p) > 0.001) {
+                        el.style.opacity = p;
+                        el.style.setProperty('--scale', 0.9 + (p * 0.1));
+                        el.style.transition = 'none';
+                        const isLeft = el.classList.contains('from-left');
+                        const xStart = isLeft ? -50 : 50;
+                        el.style.setProperty('--tx', `${xStart * (1 - p)}px`);
+                        el._lastP = p;
+                    }
+                });
+            }
         }
 
-        // === EXPLORE SECTION - SCROLL BASED ===
-        if (exploreSection) {
-            const rect = exploreSection.getBoundingClientRect();
-            const tiles = exploreSection.querySelectorAll('.explore-tile');
-            const title = exploreSection.querySelector('.section-title');
+        // Explore section
+        if (layout.explore.exists) {
+            const rectTop = layout.explore.top - scrollY;
+            const sectionHeight = layout.explore.height;
+            const scrollDistance = sectionHeight - wh;
 
-            // 1. ENTRY PHASE (Approaching)
-            const entryStart = windowHeight * 0.5;
-            const entryEnd = windowHeight * -0.1;
-            const entryProgress = Math.max(0, Math.min(1, (entryStart - rect.top) / (entryStart - entryEnd)));
+            // Entry phase
+            const entryStart = wh * 0.5;
+            const entryEnd = wh * -0.1;
+            const entryProgress = Math.max(0, Math.min(1, (entryStart - rectTop) / (entryStart - entryEnd)));
 
-            // 2. STICKY PHASE (Pinned)
-            // rect.top becomes negative as we scroll past 0
-            const sectionHeight = rect.height; // 250vh
-            const scrollDistance = sectionHeight - windowHeight;
-            const stickyProgress = rect.top <= 0
-                ? Math.max(0, Math.min(1, -rect.top / scrollDistance))
+            // Sticky phase
+            const stickyProgress = rectTop <= 0 && scrollDistance > 0
+                ? Math.max(0, Math.min(1, -rectTop / scrollDistance))
                 : 0;
 
-            // ANIMATE TITLE
+            const title = exploreSection.querySelector('.section-title');
             if (title) {
                 if (entryProgress > 0 || stickyProgress > 0) {
                     title.classList.add('visible');
 
-                    let opacity, scale, topPercent;
 
+                    let opacity, scale, topPercent;
                     if (stickyProgress === 0) {
-                        // ENTRY: Rise from 70% -> 50%
                         opacity = entryProgress;
-                        scale = 1.4; // constant big scale entering
-                        topPercent = 70 - (entryProgress * 20); // 70 -> 50
+                        scale = 1.4;
+                        topPercent = 70 - (entryProgress * 20);
                     } else if (stickyProgress < 0.9) {
-                        // STICKY: Move 50% -> 20%, Scale 1.4 -> 1.0 (Matching Tech logic better)
-                        const shrinkPhase = Math.min(1, stickyProgress / 0.3); // Do it quickly in first 30%
+                        const shrinkPhase = Math.min(1, stickyProgress / 0.3);
                         opacity = 1;
                         scale = 1.4 - (shrinkPhase * 0.4);
-                        topPercent = 50 - (shrinkPhase * 30); // 50 -> 20
+                        topPercent = 50 - (shrinkPhase * 30);
                     } else {
-                        // EXIT
                         opacity = 1 - ((stickyProgress - 0.9) / 0.1);
                         scale = 1;
                         topPercent = 20;
                     }
 
-                    // Must use !important to override global section-title css
                     title.style.setProperty('opacity', opacity, 'important');
                     title.style.top = `${topPercent}%`;
                     title.style.transform = `translate(-50%, -50%) scale(${scale})`;
+
                 } else {
                     title.classList.remove('visible');
                     title.style.setProperty('opacity', '0', 'important');
                 }
             }
 
-            // ANIMATE TILES (Scrub based on sticky progress)
-            // Start appearing after title moves up (0.2)
+            const tiles = exploreSection.querySelectorAll('.explore-tile');
             tiles.forEach((tile, index) => {
                 const tileStart = 0.2 + (index * 0.15);
-                // Make duration slightly faster per tile for snappier feel
                 const tileEnd = tileStart + 0.25;
                 const p = Math.max(0, Math.min(1, (stickyProgress - tileStart) / (tileEnd - tileStart)));
 
-                if (p > 0) {
-                    tile.classList.add('visible');
-                    tile.style.opacity = p;
+                if (tile._lastP === undefined || Math.abs(tile._lastP - p) > 0.001) {
+                    if (p > 0) {
+                        tile.classList.add('visible');
+                        tile.style.opacity = p;
+                        const blur = 20 * (1 - p);
+                        const scale = 0.8 + (0.2 * p);
+                        const rotateX = 20 * (1 - p);
+                        const y = 60 * (1 - p);
 
-                    // Holographic Effect logic
-                    const blur = 20 * (1 - p); // 20px -> 0px
-                    const scale = 0.8 + (0.2 * p); // 0.8 -> 1.0 (Zoom in)
-                    const rotateX = 20 * (1 - p); // 20deg -> 0deg (Tilt forward)
-                    const y = 60 * (1 - p); // 60px -> 0px (Slide up)
 
-                    tile.style.filter = `blur(${blur}px)`;
-                    // Apply individual perspective for self-contained 3D tilt
-                    tile.style.transform = `perspective(1000px) rotateX(${rotateX}deg) scale(${scale}) translateY(${y}px)`;
-                    tile.style.transition = 'none'; // Ensure 0 latency scrubbing
-                } else {
-                    tile.classList.remove('visible');
-                    // Reset to initial state (hidden, blurred, tilted)
-                    tile.style.opacity = 0;
-                    tile.style.filter = 'blur(20px)';
-                    tile.style.transform = `perspective(1000px) rotateX(20deg) scale(0.8) translateY(60px)`;
+                        tile.style.filter = `blur(${blur}px)`;
+                        tile.style.transform = `perspective(1000px) rotateX(${rotateX}deg) scale(${scale}) translateY(${y}px)`;
+                        tile.style.transition = 'none';
+                    } else {
+                        tile.classList.remove('visible');
+                        tile.style.opacity = 0;
+                        tile.style.filter = 'blur(20px)';
+                        tile.style.transform = `perspective(1000px) rotateX(20deg) scale(0.8) translateY(60px)`;
+                    }
+                    tile._lastP = p;
                 }
             });
         }
 
-        // === TECH SECTION - FULLY SCROLL-BASED ===
-        // Skip if this is the about page version (handled by about-solar.js)
-        if (techSection && !techSection.classList.contains('about-tech-section')) {
-            const rect = techSection.getBoundingClientRect();
-            const solarSystem = techSection.querySelector('.solar-system');
-            const sun = techSection.querySelector('.sun');
-            const orbits = techSection.querySelectorAll('.orbit');
-            const planets = techSection.querySelectorAll('.planet');
-            const title = techSection.querySelector('.section-title');
+        // Tech section
+        if (layout.tech.exists && !techSection.classList.contains('about-tech-section')) {
+            const rectTop = layout.tech.top - scrollY;
+            const scrollDistance = layout.tech.height - wh;
 
-            // PHASE 1: ENTRY - Title fades in while previous section is leaving
-            // Start when tech section top is at entryStart fraction of viewport (earlier transition)
-            const entryStart = windowHeight;
-            const entryEnd = windowHeight * -0.1; // Complete slightly after reaching top
-            const entryProgress = Math.max(0, Math.min(1, (entryStart - rect.top) / (entryStart - entryEnd)));
 
-            // PHASE 2: STICKY - Section top is at/above viewport top
-            // This controls the shrink, move up, and sun animations
-            const stickyStart = 0; // When section top hits viewport top
-            const scrollDistance = windowHeight * 2; // Faster animation completion
-            const stickyProgress = rect.top <= 0
-                ? Math.max(0, Math.min(1, -rect.top / scrollDistance))
+            const entryStart = wh * 0.5;
+            const entryEnd = wh * -0.1;
+            const entryProgress = Math.max(0, Math.min(1, (entryStart - rectTop) / (entryStart - entryEnd)));
+
+            const stickyProgress = rectTop <= 0 && scrollDistance > 0
+                ? Math.max(0, Math.min(1, -rectTop / scrollDistance))
                 : 0;
 
+            const title = techSection.querySelector('.section-title');
+            const sun = techSection.querySelector('.sun');
+            const solarSystem = techSection.querySelector('.solar-system');
+            const orbits = techSection.querySelectorAll('.orbit');
+            const planets = techSection.querySelectorAll('.planet');
+
             if (title) {
-                // Title is visible during entry OR sticky phase (full range)
+
                 if (entryProgress > 0 || stickyProgress > 0) {
                     title.classList.add('visible');
 
-                    // PHASES:
-                    // Entry: Rise from slightly below (70% → 50%), scale (1.8 → 1.5), fade in
-                    // Sticky: Move up (50% → 20%), shrink (1.5 → 1)
-                    // Exit: Fade out, move up, shrink (after 95% progress)
+
 
                     let opacity, scale, topPercent;
 
                     if (stickyProgress === 0) {
-                        // ENTRY PHASE: Rising from below center, scaling down, fading in
+                        // Entry phase
                         opacity = entryProgress;
                         scale = 1.8 - (entryProgress * 0.3); // 1.8 → 1.5
                         topPercent = 100 - (entryProgress * 50); // 70% → 50%
                     } else if (stickyProgress < 0.95) {
-                        // STICKY PHASE: Shrink and move up to final position
-                        const shrinkPhase = Math.min(1, stickyProgress / 0.2); // Complete by 20%
+                        // Sticky phase
+                        const shrinkPhase = Math.min(1, stickyProgress / 0.2);
                         opacity = 1;
                         scale = 1.5 - (shrinkPhase * 0.5); // 1.5 → 1.0
                         topPercent = 50 - (shrinkPhase * 30); // 50% → 20%
                     } else {
-                        // EXIT PHASE: Fade out after planets are shown
-                        const exitPhase = Math.min(1, (stickyProgress - 0.95) / 0.05); // 95% to 100%
+                        // Exit phase
+                        const exitPhase = Math.min(1, (stickyProgress - 0.95) / 0.05);
                         opacity = 1 - exitPhase;
                         scale = 1 - (exitPhase * 0.2); // 1.0 → 0.8
                         topPercent = 20 - (exitPhase * 15); // 20% → 5%
@@ -256,7 +337,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     sun.style.transform = `translate(-50%, -50%) scale(${sunScale})`;
                     sun.style.boxShadow = `0 0 ${sunGlow}px var(--accent-glow)`;
 
-                    // Trigger explosion effect when sun fully appears
+
                     if (sunProgress >= 1 && !sun.classList.contains('exploding')) {
                         sun.classList.add('exploding');
                         if (solarSystem) solarSystem.classList.add('exploding');
@@ -309,7 +390,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 
-    // === HEADER ===
+    // Header
     const header = document.querySelector('header');
     let headerTicking = false;
 
@@ -324,7 +405,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }, { passive: true });
 
-    // === ANCHOR SCROLL ===
+    // Anchor scroll
     document.querySelectorAll('a[href^="#"]').forEach(a => {
         a.addEventListener('click', e => {
             e.preventDefault();
@@ -332,7 +413,7 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // === TILT ===
+    // Tilt effect
     document.querySelectorAll('.side-card, .explore-tile, .project-card').forEach(card => {
         card.addEventListener('mousemove', e => {
             const r = card.getBoundingClientRect();
@@ -408,10 +489,6 @@ document.addEventListener('DOMContentLoaded', () => {
         updateSectionHeadings();
     }
 
-    const skillGroups = document.querySelectorAll('.skill-group');
-    const projectCards = document.querySelectorAll('.project-card');
-    const skillTags = document.querySelectorAll('.skill-tags span');
-
     // Create intersection observer for scroll-triggered animations
     const createScrollObserver = (elements, options = {}) => {
         const { threshold = 0.2, staggerDelay = 100, rootMargin = '0px' } = options;
@@ -433,43 +510,49 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ================================================
-    // SKILLS SECTION - Scroll-linked reveal
+    // SKILLS SECTION - Scroll-linked reveal (Optimised)
     // ================================================
     if (skillGroups.length > 0) {
         const updateSkillsAnimation = () => {
-            const viewportCenter = window.innerHeight * 0.7;
+            if (!layout.skills.exists) return;
 
-            skillGroups.forEach((group, groupIndex) => {
-                const rect = group.getBoundingClientRect();
-                const elementCenter = rect.top + rect.height / 2;
+            const scrollY = window.pageYOffset;
+            const viewportCenter = layout.windowHeight * 0.7;
 
-                // Calculate progress: 0 when below viewport, 1 when at center
-                const progress = Math.max(0, Math.min(1, (viewportCenter - rect.top) / (viewportCenter * 0.5)));
+            layout.skills.items.forEach(item => {
 
-                group.style.setProperty('--group-progress', progress);
+                const rectTop = item.top - scrollY;
 
-                if (progress > 0) {
-                    group.classList.add('visible');
+                // Calculate progress: 0 when below viewport, 1 when at centre
+                const progress = Math.max(0, Math.min(1, (viewportCenter - rectTop) / (viewportCenter * 0.5)));
 
-                    // Animate skill tags with staggered delay
-                    const tags = group.querySelectorAll('.skill-tags span');
-                    tags.forEach((tag, i) => {
-                        const tagDelay = i * 0.08;
-                        const tagProgress = Math.max(0, Math.min(1, (progress - tagDelay) / 0.5));
-                        tag.style.setProperty('--tag-progress', tagProgress);
-                        if (tagProgress > 0) {
-                            tag.classList.add('visible');
-                        } else {
+                // Optimisation: Avoid setting style if not needed
+                if (item._lastP === undefined || Math.abs(item._lastP - progress) > 0.001) {
+                    item._lastP = progress;
+
+                    item.el.style.setProperty('--group-progress', progress);
+
+                    if (progress > 0) {
+                        item.el.classList.add('visible');
+
+                        // Animate skill tags with staggered delay
+                        item.tags.forEach((tag, i) => {
+                            const tagDelay = i * 0.08;
+                            const tagProgress = Math.max(0, Math.min(1, (progress - tagDelay) / 0.5));
+                            tag.style.setProperty('--tag-progress', tagProgress);
+                            if (tagProgress > 0) {
+                                tag.classList.add('visible');
+                            } else {
+                                tag.classList.remove('visible');
+                            }
+                        });
+                    } else {
+                        item.el.classList.remove('visible');
+                        item.tags.forEach(tag => {
                             tag.classList.remove('visible');
-                        }
-                    });
-                } else {
-                    group.classList.remove('visible');
-                    const tags = group.querySelectorAll('.skill-tags span');
-                    tags.forEach(tag => {
-                        tag.classList.remove('visible');
-                        tag.style.setProperty('--tag-progress', 0);
-                    });
+                            tag.style.setProperty('--tag-progress', 0);
+                        });
+                    }
                 }
             });
         };
@@ -484,21 +567,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 skillsTicking = true;
             }
         }, { passive: true });
-        updateSkillsAnimation();
+
+        // Initial check after layout is ready
+        if (layout.skills.exists) updateSkillsAnimation();
     }
 
     // ================================================
-    // PROJECTS SECTION - Scroll-linked grid reveal
+    // PROJECTS SECTION - Scroll-linked grid reveal (Optimised)
     // ================================================
     if (projectCards.length > 0) {
         const updateProjectsAnimation = () => {
-            const viewportTrigger = window.innerHeight * 0.75;
+            if (!layout.projects.exists) return;
 
-            projectCards.forEach((card, index) => {
-                const rect = card.getBoundingClientRect();
+            const scrollY = window.pageYOffset;
+            const viewportTrigger = layout.windowHeight * 0.75;
+
+            layout.projects.items.forEach((item, index) => {
+                const rectTop = item.top - scrollY;
 
                 // Calculate progress based on position
-                const progress = Math.max(0, Math.min(1, (viewportTrigger - rect.top) / (viewportTrigger * 0.4)));
+                const progress = Math.max(0, Math.min(1, (viewportTrigger - rectTop) / (viewportTrigger * 0.4)));
 
                 // Add stagger based on grid position (alternating left/right)
                 const row = Math.floor(index / 2);
@@ -506,12 +594,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 const stagger = (row * 0.1) + (col * 0.05);
                 const staggeredProgress = Math.max(0, Math.min(1, (progress - stagger) / 0.6));
 
-                card.style.setProperty('--card-progress', staggeredProgress);
+                if (item._lastP === undefined || Math.abs(item._lastP - staggeredProgress) > 0.001) {
+                    item._lastP = staggeredProgress;
 
-                if (staggeredProgress > 0) {
-                    card.classList.add('visible');
-                } else {
-                    card.classList.remove('visible');
+                    item.el.style.setProperty('--card-progress', staggeredProgress);
+
+                    if (staggeredProgress > 0) {
+                        item.el.classList.add('visible');
+                    } else {
+                        item.el.classList.remove('visible');
+                    }
                 }
             });
         };
@@ -526,7 +618,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 projectsTicking = true;
             }
         }, { passive: true });
-        updateProjectsAnimation();
+
+        // Initial check after layout is ready
+        if (layout.projects.exists) updateProjectsAnimation();
     }
+
+    // Trigger initial updates
+    updateTransitions();
 
 });
