@@ -94,7 +94,6 @@
         </div>
     </div>
     <div class="hero-scroll-indicator">
-        <span class="scroll-text">INITIALISE SEQUENCE</span>
         <div class="scroll-line"></div>
     </div>
 </section>
@@ -223,11 +222,16 @@
         </div>
     </div>
 
-    <div class="pdf-viewer-container">
-        <div class="pdf-window-header">
-            <span class="window-title">DISSERTATION.PDF</span>
+    <div class="pdf-viewer-container" id="pdf-container" data-base-url="/Portfolio/">
+        <div class="pdf-controls">
+            <button class="pdf-btn" id="zoom-out" title="Zoom Out">-</button>
+            <span class="pdf-zoom-level" id="zoom-value">100%</span>
+            <button class="pdf-btn" id="zoom-in" title="Zoom In">+</button>
         </div>
-        <iframe src="/Portfolio/dissertation.pdf" class="pdf-frame"></iframe>
+        <div class="pdf-loading">
+            <span class="scroll-text">DOWNLOADING DOCUMENT...</span>
+            <div class="scroll-line"></div>
+        </div>
     </div>
 </section>
     </main>

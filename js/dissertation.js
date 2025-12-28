@@ -398,4 +398,205 @@ document.addEventListener('DOMContentLoaded', () => {
         }, 1200);
     }
 
+
+    // ================================================
+    // 6. CUSTOM PDF RENDERING CONTROLLER
+    // ================================================
+    class PDFController {
+        constructor(container) {
+            this.container = container;
+            this.zoomLevel = 1.0;
+            this.baseWidth = 800; // Default document width
+            this.pdfDoc = null;
+            this.pdfjsLib = null;
+
+            // UI Elements
+            this.zoomInBtn = document.getElementById('zoom-in');
+            this.zoomOutBtn = document.getElementById('zoom-out');
+            this.zoomDisplay = document.getElementById('zoom-value');
+
+            this.init();
+        }
+
+        async init() {
+            try {
+                const basePath = this.container.dataset.baseUrl || '/';
+                const libPath = `${basePath}js/pdf.mjs`;
+                const workerPath = `${basePath}js/pdf.worker.mjs`;
+                const pdfPath = `${basePath}dissertation.pdf`;
+
+                // Import Library
+                this.pdfjsLib = await import(libPath);
+                this.pdfjsLib.GlobalWorkerOptions.workerSrc = workerPath;
+
+                // Load Document
+                const loadingTask = this.pdfjsLib.getDocument(pdfPath);
+                this.pdfDoc = await loadingTask.promise;
+
+                // Clear Loading
+                const loader = this.container.querySelector('.pdf-loading');
+                if (loader) loader.remove();
+
+                // Setup Controls
+                if (this.zoomInBtn) this.zoomInBtn.addEventListener('click', () => this.changeZoom(0.2));
+                if (this.zoomOutBtn) this.zoomOutBtn.addEventListener('click', () => this.changeZoom(-0.2));
+
+                // Initial Render
+                this.renderAllPages();
+
+            } catch (error) {
+                console.error('PDF Init Error:', error);
+                this.container.innerHTML = `<div class="error-msg" style="color:var(--tech-accent); padding:2rem; text-align:center;">SYSTEM FAILURE: ${error.message}</div>`;
+            }
+        }
+
+        changeZoom(delta) {
+            const newZoom = Math.round((this.zoomLevel + delta) * 10) / 10;
+            if (newZoom >= 0.6 && newZoom <= 3.0) {
+                this.zoomLevel = newZoom;
+                this.updateUI();
+                this.renderAllPages();
+            }
+        }
+
+        updateUI() {
+            if (this.zoomDisplay) {
+                this.zoomDisplay.textContent = `${Math.round(this.zoomLevel * 100)}%`;
+            }
+        }
+
+        async renderAllPages() {
+            // Remove existing pages, keep controls
+            const pages = this.container.querySelectorAll('.pdf-page-wrapper');
+            pages.forEach(p => p.remove());
+
+            for (let pageNum = 1; pageNum <= this.pdfDoc.numPages; pageNum++) {
+                await this.renderPage(pageNum);
+            }
+        }
+
+        async renderPage(pageNum) {
+            const page = await this.pdfDoc.getPage(pageNum);
+
+            // Container
+            const wrapper = document.createElement('div');
+            wrapper.className = 'pdf-page-wrapper';
+            this.container.appendChild(wrapper);
+
+            // Canvas
+            const canvas = document.createElement('canvas');
+            canvas.className = 'pdf-page-canvas';
+            wrapper.appendChild(canvas);
+
+            // Annotations (Links)
+            const annotationLayerDiv = document.createElement('div');
+            annotationLayerDiv.className = 'annotationLayer';
+            wrapper.appendChild(annotationLayerDiv);
+
+            // Scaling Logic
+            const viewportPadding = 40;
+            const containerWidth = this.container.clientWidth - viewportPadding;
+
+            // Standard width logic: 800px base or container width if smaller
+            const standardWidth = Math.min(containerWidth, 800);
+            const targetWidth = standardWidth * this.zoomLevel;
+
+            const unscaledViewport = page.getViewport({ scale: 1.0 });
+            const scale = targetWidth / unscaledViewport.width;
+            const viewport = page.getViewport({ scale: scale });
+
+            // Set dimensions
+            const outputScale = window.devicePixelRatio || 1;
+
+            canvas.width = Math.floor(viewport.width * outputScale);
+            canvas.height = Math.floor(viewport.height * outputScale);
+
+            canvas.style.width = `${Math.floor(viewport.width)}px`;
+            canvas.style.height = `${Math.floor(viewport.height)}px`;
+
+            wrapper.style.width = `${Math.floor(viewport.width)}px`;
+            wrapper.style.height = `${Math.floor(viewport.height)}px`;
+
+            // Render Canvas
+            const renderContext = {
+                canvasContext: canvas.getContext('2d'),
+                viewport: viewport,
+                transform: outputScale !== 1 ? [outputScale, 0, 0, outputScale, 0, 0] : null
+            };
+
+            await page.render(renderContext).promise;
+
+            // Render Annotations
+            const annotations = await page.getAnnotations();
+
+            if (annotations.length > 0) {
+                annotations.forEach(annotation => {
+                    // 1. External Links
+                    if (annotation.subtype === 'Link' && annotation.url) {
+                        const link = document.createElement('a');
+                        link.href = annotation.url;
+                        link.target = '_blank';
+                        link.title = annotation.url;
+
+                        const rect = viewport.convertToViewportRectangle(annotation.rect);
+                        // [xMin, yMin, xMax, yMax]
+                        const x = rect[0];
+                        const y = rect[1];
+                        const w = rect[2] - rect[0];
+                        const h = rect[3] - rect[1];
+
+                        link.style.left = `${x}px`;
+                        link.style.top = `${y}px`;
+                        link.style.width = `${w}px`;
+                        link.style.height = `${h}px`;
+                        link.style.position = 'absolute';
+
+                        annotationLayerDiv.appendChild(link);
+                    }
+
+                    // 2. Internal Links (Destinations)
+                    else if (annotation.subtype === 'Link' && annotation.dest) {
+                        const link = document.createElement('a');
+                        link.style.cursor = 'pointer';
+                        link.title = "Go to section";
+
+                        const rect = viewport.convertToViewportRectangle(annotation.rect);
+                        const x = rect[0];
+                        const y = rect[1];
+                        const w = rect[2] - rect[0];
+                        const h = rect[3] - rect[1];
+
+                        link.style.left = `${x}px`;
+                        link.style.top = `${y}px`;
+                        link.style.width = `${w}px`;
+                        link.style.height = `${h}px`;
+                        link.style.position = 'absolute';
+
+                        link.addEventListener('click', async (e) => {
+                            e.preventDefault();
+                            let dest = annotation.dest;
+                            if (typeof dest === 'string') {
+                                dest = await this.pdfDoc.getDestination(dest);
+                            }
+                            if (dest) {
+                                const pageIndex = await this.pdfDoc.getPageIndex(dest[0]);
+                                const targetWrapper = this.container.querySelectorAll('.pdf-page-wrapper')[pageIndex];
+                                if (targetWrapper) {
+                                    targetWrapper.scrollIntoView({ behavior: 'smooth' });
+                                }
+                            }
+                        });
+
+                        annotationLayerDiv.appendChild(link);
+                    }
+                });
+            }
+        }
+    }
+
+    const pdfContainer = document.getElementById('pdf-container');
+    if (pdfContainer) {
+        new PDFController(pdfContainer);
+    }
+
 });

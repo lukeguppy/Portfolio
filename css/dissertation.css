@@ -719,47 +719,140 @@ body {
 /* PDF Viewer */
 /* PDF Viewer */
 /* PDF Viewer */
+/* PDF Viewer */
 .pdf-viewer-container {
     width: 100%;
     height: 850px;
-    background: #000;
-    border: 4px solid var(--tech-border);
-    /* Thicker border */
+    background: #0b0c15;
+    /* Match page bg for transparency feel */
+    border: 1px solid var(--tech-border);
+    /* Thinner border */
     position: relative;
     display: flex;
     flex-direction: column;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    align-items: center;
+    box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.8);
     border-radius: 4px;
-    overflow: hidden;
+    overflow-y: auto;
+    padding: 2rem 0;
+
+    /* Custom Scrollbar */
+    scrollbar-width: thin;
+    scrollbar-color: var(--tech-accent) var(--tech-bg);
 }
 
-.pdf-window-header {
-    height: 40px;
-    background: var(--tech-card-bg);
-    border-bottom: 2px solid var(--tech-border);
+.pdf-viewer-container::-webkit-scrollbar {
+    width: 6px;
+}
+
+.pdf-viewer-container::-webkit-scrollbar-track {
+    background: var(--tech-bg);
+}
+
+.pdf-viewer-container::-webkit-scrollbar-thumb {
+    background-color: var(--tech-accent);
+    border-radius: 3px;
+}
+
+/* PDF Controls */
+.pdf-controls {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: rgba(11, 12, 21, 0.9);
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--tech-border);
+    border-radius: 20px;
+    backdrop-filter: blur(5px);
+}
+
+.pdf-btn {
+    background: transparent;
+    border: 1px solid var(--tech-accent);
+    color: var(--tech-accent);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
-    /* Center the title */
-    padding: 0 1rem;
-    font-family: var(--tech-font-mono);
+    cursor: pointer;
+    font-size: 1.2rem;
+    transition: all 0.2s;
 }
 
-.window-title {
+.pdf-btn:hover {
+    background: var(--tech-accent);
+    color: #000;
+}
+
+.pdf-zoom-level {
+    font-family: var(--tech-font-mono);
     color: var(--tech-text);
     font-size: 0.9rem;
-    /* Slightly larger */
-    letter-spacing: 2px;
-    font-weight: 700;
-    opacity: 0.9;
+    display: flex;
+    align-items: center;
+    min-width: 4ch;
+    justify-content: center;
 }
 
-.pdf-frame {
-    width: 100%;
+/* Annotation Layer (Links) */
+.pdf-page-wrapper {
+    position: relative;
+    /* For absolute positioning of annotation layer */
+    margin-bottom: 2rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+    background: #fff;
+    /* Optional: Invert colors for dark mode PDF if desired, but usually keep white */
+    /* filter: invert(0.9) hue-rotate(180deg); */
+}
+
+.annotationLayer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    overflow: hidden;
+    line-height: 1.0;
+}
+
+.annotationLayer>section {
+    color: transparent;
+    position: absolute;
+    white-space: pre;
+    cursor: text;
+    transform-origin: 0% 0%;
+}
+
+.annotationLayer a {
+    display: block;
+    position: absolute;
+    /* Fallback */
+}
+
+/* Hover effect for links to show they are clickable */
+.annotationLayer a:hover {
+    background: rgba(0, 243, 255, 0.1);
+    box-shadow: 0 0 10px rgba(0, 243, 255, 0.3);
+    border: 1px dashed var(--tech-accent);
+}
+
+.pdf-page-wrapper:last-child {
+    margin-bottom: 0;
+}
+
+.pdf-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     height: 100%;
-    flex-grow: 1;
-    border: none;
-    background: #1a1a1a;
+    width: 100%;
+    gap: 1rem;
 }
 
 /* Responsive */
