@@ -251,6 +251,18 @@
     padding-left: 1.25rem;
 }
 
+.role-group {
+    margin-top: 1.25rem;
+}
+
+.role-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-main, #fff);
+    /* Fallback to white if var missing */
+    margin-bottom: 0.5rem;
+}
+
 /* ================================================
    SKILLS CLOUD SECTION
    Like Technologies solar system
