@@ -120,7 +120,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Update the piece image
                     if (piece) {
-                        const newSrc = `/images/chess-pieces/${colorPrefix}${newType}.svg`;
+                        const newSrc = `/Portfolio/images/chess-pieces/${colorPrefix}${newType}.svg`;
                         piece.src = newSrc;
                         // Important: Remove 'pawn' class to reset sizing to standard piece dimensions
                         piece.classList.remove('pawn');

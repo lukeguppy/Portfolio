@@ -187,6 +187,25 @@ body {
     pointer-events: none;
 }
 
+/* Checkmate glow effect */
+.chess-piece.checkmate-glow {
+    filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(255, 0, 0, 0.6));
+    animation: checkmate-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes checkmate-pulse {
+
+    0%,
+    100% {
+        filter: drop-shadow(0 0 20px rgba(255, 0, 0, 0.8)) drop-shadow(0 0 40px rgba(255, 0, 0, 0.6));
+    }
+
+    50% {
+        filter: drop-shadow(0 0 30px rgba(255, 0, 0, 1)) drop-shadow(0 0 60px rgba(255, 0, 0, 0.8));
+    }
+}
+
+
 /* Optional: "Levitating" board breath */
 /* Optional: "Levitating" board breath */
 .chess-scene {
