@@ -884,6 +884,10 @@ body {
 /* Accent Colors for Titles */
 .chess-portal .portal-title {
     color: #fff;
+    background: linear-gradient(to bottom, #ffffff 30%, rgba(255, 255, 255, 0.2) 50%, #ffffff 70%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
     text-shadow: 0 0 60px rgba(197, 160, 89, 0.3);
 }
 
@@ -1031,7 +1035,7 @@ body {
 
 .quiz-portal .portal-title {
     color: #fff;
-    background: linear-gradient(to bottom, #fff 0%, #94a3b8 100%);
+    background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0.2) 50%, #fff 100%);
     -webkit-background-clip: text;
     background-clip: text;
     -webkit-text-fill-color: transparent;
