@@ -9,7 +9,9 @@ module.exports = function (eleventyConfig) {
     // Add Prism.js for code highlighting
     eleventyConfig.addPassthroughCopy({
         "node_modules/prismjs/themes/prism-tomorrow.css": "css/prism.css",
-        "node_modules/prismjs/prism.js": "js/prism.js"
+        "node_modules/prismjs/prism.js": "js/prism.js",
+        "node_modules/pdfjs-dist/build/pdf.mjs": "js/pdf.mjs",
+        "node_modules/pdfjs-dist/build/pdf.worker.mjs": "js/pdf.worker.mjs"
     });
 
     return {

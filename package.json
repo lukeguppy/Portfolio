@@ -12,5 +12,8 @@
     "prismjs": "^1.29.0"
   },
   "author": "Luke Guppy",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "pdfjs-dist": "^5.4.449"
+  }
 }
