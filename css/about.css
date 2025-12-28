@@ -487,8 +487,10 @@
     z-index: 1;
 
     /* GPU acceleration only - NO transitions (would fight JS animation) */
-    transform-style: preserve-3d;
+    transform-style: flat;
+    /* Avoid expensive 3D calculation if not needed */
     backface-visibility: hidden;
+    will-change: transform;
 }
 
 /* Title container - lives outside pinboard-bg so it doesn't shrink */
@@ -567,10 +569,16 @@
         0 4px 20px rgba(0, 0, 0, 0.3),
         0 8px 40px rgba(0, 0, 0, 0.2),
         inset 0 1px 0 rgba(255, 255, 255, 0.8);
-    transform: translateY(100px) rotate(var(--rotation, 0deg));
+    transform: translateY(100px) rotate(var(--rotation, 0deg)) translateZ(0);
+    /* Force GPU */
     opacity: 0;
     transition: none;
     --rotation: 0deg;
+
+    /* Performance Optimizations */
+    backface-visibility: hidden;
+    will-change: transform, opacity;
+    contain: paint layout;
 }
 
 .polaroid-card.pinned {

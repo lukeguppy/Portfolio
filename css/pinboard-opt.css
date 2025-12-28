@@ -1,0 +1,20 @@
+/* Performance Optimizations for Pinboard Animation */
+.polaroid-card {
+    /* Strict GPU Layer Promotion */
+    backface-visibility: hidden;
+    transform: translateZ(0);
+    will-change: transform, opacity;
+    /* Minimize paint region */
+    contain: paint layout;
+}
+
+.pinboard-content {
+    /* Promote container during scale */
+    will-change: transform;
+    backface-visibility: hidden;
+    transform-style: flat;
+    /* Avoid expensive 3D calculation if not needed */
+}
+
+/* Reduce shadow complexity during animation if possible? */
+/* Actually, simply ensuring they are GPU layers is usually enough. */

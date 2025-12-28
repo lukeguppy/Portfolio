@@ -38,72 +38,46 @@ document.addEventListener('DOMContentLoaded', () => {
     const zenGardenSection = document.querySelector('.zen-garden-section');
 
     // ========================================
-    // DYNAMIC SCROLL DURATION CALCULATION
-    // Calculates exactly how much scroll is needed for zen garden to be fully visible
+    // LAYOUT CACHE & RESIZE HANDLER
     // ========================================
-    function calculateProjectsLeaveScroll() {
-        if (!zenGardenSection) return 1.0; // Fallback
+    const layout = {
+        windowHeight: window.innerHeight,
+        pinboard: { top: 0, height: 0, bottom: 0 },
+        zenGarden: { top: 0 },
+        projects: { scrollBeforeLeave: 0 }
+    };
 
-        const vh = window.innerHeight;
+    function updateLayoutValues() {
+        layout.windowHeight = window.innerHeight;
 
-        // Get the height of pinboard section (before leave phase is added)
-        // This is approximately the scroll distance through all projects
-        // The zen garden section comes right after pinboard section
+        // Measure Pinboard
+        if (pinboardSection) {
+            // We need absolute position relative to document
+            layout.pinboard.top = pinboardSection.offsetTop;
+            // Height is set by buildProjectPhases -> projectsEndScroll
+        }
 
-        // When we're at the START of projects-leave phase:
-        // - We've scrolled through all project animations
-        // - The zen garden section is still below the viewport
+        // Measure Zen Garden
+        if (zenGardenSection) {
+            layout.zenGarden.top = zenGardenSection.offsetTop;
+        }
 
-        // When we're at the END of projects-leave phase:
-        // - The zen garden section top should be at viewport top (y=0)
-
-        // The distance from zen garden section to viewport top (initially) is:
-        // zenGardenSection.offsetTop - (scroll position when leave phase starts)
-
-        // For the zen garden to be fully visible, we need to scroll an additional:
-        // zenGardenSection.offsetTop - pinboardSection.offsetTop - allProjectScrollDistance
-
-        // Simplified: measure the gap between pinboard bottom and zen garden top
-        // plus one viewport height
-        const pinboardHeight = pinboardSection.offsetHeight;
-        const zenGardenTop = zenGardenSection.offsetTop;
-        const pinboardTop = pinboardSection.offsetTop;
-
-        // Distance from end of pinboard (after projects) to zen garden fully visible
-        // = zenGardenTop - pinboardTop - (projects scroll) + vh
-        // But we don't know exact projects scroll yet...
-
-        // Actually, simpler approach:
-        // The leave phase should take the user from seeing projects to seeing zen garden
-        // The zen garden section is positioned right after pinboard
-        // For its top to reach y=0, we need to scroll = zenGardenTop - currentScrollPosition
-
-        // At the start of leave phase, scrollPos within pinboard = projectsEndScroll (before leave)
-        // For zen garden top to reach 0: need to scroll until pinboardTop + scroll = zenGardenTop
-        // So additional scroll = zenGardenTop - pinboardTop - projectsEndScroll
-
-        // But we're calculating leave duration which IS part of projectsEndScroll...
-        // Let's use fixed calculation: distance between sections / vh
-
-        const distanceToZenGarden = zenGardenTop - pinboardTop;
-        const leaveScrollVH = distanceToZenGarden / vh;
-
-        // Return at least 1.0vh, cap at 5.0vh
-        return Math.max(1.0, Math.min(5.0, leaveScrollVH * 0.3));
+        updateCachedValues(); // Update CSS comparisons (padding etc)
     }
 
     // ========================================
-    // PROJECT ROWS
+    // PROJECTS PHASE BUILDER & TIMING
     // ========================================
+
+    // Define rows for animation logic
     const numProjectRows = Math.ceil(projectCards.length / CONFIG.cardsPerRow);
     const projectRows = [];
     for (let i = 0; i < projectCards.length; i += CONFIG.cardsPerRow) {
         projectRows.push(projectCards.slice(i, i + CONFIG.cardsPerRow));
     }
 
-    // ========================================
-    // PROJECTS PHASE BUILDER
-    // ========================================
+    let projectTimeline = { phases: [], projectsEndScroll: 0 };
+
     function buildProjectPhases() {
         const vh = window.innerHeight;
         const phases = [];
@@ -126,65 +100,36 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // NEW PHASE: Shrink content to fit all cards on screen before frame appears
+        if (pinboardContent) pinboardContent.style.willChange = 'transform';
         add('projects-shrink-to-fit', CONFIG.shrinkToFit);
 
         // ========================================
         // CALCULATE LEAVE SCROLL DURATION
-        // The transition should complete when zen garden section top reaches viewport top
         // ========================================
-        const projectsScrollBeforeLeave = pos; // Current scroll position before leave phase
+        const projectsScrollBeforeLeave = pos;
+        layout.projects.scrollBeforeLeave = projectsScrollBeforeLeave;
 
-        // Calculate how much more scrolling is needed for zen garden to be fully visible
-        // When user scrolls within pinboard section by X pixels:
-        //   window.scrollY = pinboardSection.offsetTop + X
-        // For zen garden top to reach viewport top (y=0):
-        //   window.scrollY = zenGardenSection.offsetTop
-        // Therefore: pinboardSection.offsetTop + scrollNeeded = zenGardenSection.offsetTop
-        //   scrollNeeded = zenGardenSection.offsetTop - pinboardSection.offsetTop
-        // But we've already scrolled projectsScrollBeforeLeave, so remaining scroll:
-        //   leaveScroll = zenGardenSection.offsetTop - pinboardSection.offsetTop - projectsScrollBeforeLeave
-
-        let leaveScrollDuration = 1.0; // Default fallback
-        if (zenGardenSection) {
-            const totalScrollToZenTop = zenGardenSection.offsetTop - pinboardSection.offsetTop;
-            const remainingScroll = totalScrollToZenTop - projectsScrollBeforeLeave;
-            // Convert to viewport heights (since add() multiplies by vh)
-            // Minimum 2.5vh for a slower, more dramatic transition
-            leaveScrollDuration = Math.max(2.5, remainingScroll / vh);
-
-            // DEBUG
-            console.log('=== SCROLL CALCULATION ===');
-            console.log('zenGardenSection.offsetTop:', zenGardenSection.offsetTop);
-            console.log('pinboardSection.offsetTop:', pinboardSection.offsetTop);
-            console.log('totalScrollToZenTop:', totalScrollToZenTop);
-            console.log('projectsScrollBeforeLeave:', projectsScrollBeforeLeave);
-            console.log('remainingScroll:', remainingScroll);
-            console.log('leaveScrollDuration (vh):', leaveScrollDuration);
-            console.log('leaveScrollDuration (px):', leaveScrollDuration * vh);
-        }
-
+        // Use fixed duration for consistency and performance
+        const leaveScrollDuration = 3.0;
         add('projects-leave', leaveScrollDuration, 'scroll');
 
         return { phases, projectsEndScroll: pos };
     }
 
-    let projectTimeline = buildProjectPhases();
-
     // ========================================
-    // CACHED VALUES for smoother animation
-    // Avoids expensive getComputedStyle/scrollHeight/querySelector every frame
+    // CACHED VALUES (Optimization)
     // ========================================
     let cachedPaddingTop = 0;
     let cachedContentHeight = 0;
     let cachedZenTree = null;
     let cachedLandingConfig = null;
+    let cachedScaleDelta = 0;
+    let cachedCenterOffset = 0;
+    let cachedContentTransform = '';
 
-    // Pre-computed animation values (reduces per-frame calculations)
-    let cachedScaleDelta = 0;        // (1 - landing.scale)
-    let cachedCenterOffset = 0;       // Content center offset for leave phase
-    let cachedContentTransform = '';  // Pre-built transform string for leave phase content
+    // Constants
     const FRAME_THRESHOLD = 0.15;
-    const FRAME_INVERSE = 1 / (1 - FRAME_THRESHOLD);  // Pre-compute division
+    const FRAME_INVERSE = 1 / (1 - FRAME_THRESHOLD);
     const CONTENT_SHRUNK_SCALE = 0.55;
 
     function updateCachedValues() {
@@ -195,35 +140,40 @@ document.addEventListener('DOMContentLoaded', () => {
         cachedZenTree = document.querySelector('.zen-tree-container');
         cachedLandingConfig = getPinboardLandingConfig();
 
-        // Pre-compute animation deltas
         cachedScaleDelta = 1 - cachedLandingConfig.scale;
 
-        // Pre-compute leave phase content transform (it's constant during leave)
         const scaledHeight = cachedContentHeight * CONTENT_SHRUNK_SCALE;
         const basicCenter = (vh - scaledHeight) / 2;
         cachedCenterOffset = basicCenter - (cachedPaddingTop * CONTENT_SHRUNK_SCALE / 2);
         cachedContentTransform = `translateY(${cachedCenterOffset}px) scale(${CONTENT_SHRUNK_SCALE})`;
     }
-    updateCachedValues();
-
-    // Add will-change for GPU acceleration
-    pinboardContent.style.willChange = 'transform, filter';
 
     // ========================================
-    // SECTION HEIGHT - accurately calculated
+    // MASTER LAYOUT UPDATE
     // ========================================
-    function updateSectionHeight() {
-        // Set section height to exactly match the scroll needed
-        // This ensures zen garden section starts exactly when pinboard phases end
-        // No buffer - the transition should complete exactly when zen garden is visible
+    function rebuildLayout() {
+        // 1. Build Phases (pure math)
+        projectTimeline = buildProjectPhases();
+
+        // 2. Update cached element metrics (forces layout read, do once)
+        updateCachedValues();
+
+        // 3. Set Section Height (Write)
         const height = projectTimeline.projectsEndScroll;
-
         pinboardSection.style.minHeight = `${height}px`;
+
+        // 4. Cache absolute positions (Read - now safe after write)
+        layout.windowHeight = window.innerHeight;
+        layout.pinboard.height = height;
+        // NOTE: We do NOT cache layout.pinboard.top anymore because it can shift 
+        // if previous sections (Experience) resize dynamically.
+        // We will read rect.top in the loop (Read-Then-Write pattern).
     }
-    updateSectionHeight();
+
+
 
     // ========================================
-    // HELPERS
+    // HELPERS (Optimized)
     // ========================================
     function getProjectPhaseInfo(scrollPos) {
         for (let i = 0; i < projectTimeline.phases.length; i++) {
@@ -252,322 +202,279 @@ document.addEventListener('DOMContentLoaded', () => {
         return offset;
     }
 
-    // ========================================
-    // PINBOARD LANDING CALCULATION
-    // Reads from ZEN_TREE_CONFIG (set by zen-tree.js)
-    // ========================================
     function getPinboardLandingConfig() {
         const cfg = window.ZEN_TREE_CONFIG || {
-            treeX: 0.25,
-            treeY: 0.95,
-            pinboardLandingOffsetX: 80,
-            pinboardLandingOffsetY: -300,
-            pinboardLandingRotation: -8,
-            pinboardScale: 0.15,
+            treeX: 0.25, treeY: 0.95, pinboardLandingOffsetX: 80, pinboardLandingOffsetY: -300,
+            pinboardLandingRotation: -8, pinboardScale: 0.15,
         };
-
-        // Calculate CSS transform values
-        // Tree position in vw/vh
-        const treeVW = cfg.treeX * 100; // e.g. 25vw
-        const treeVH = cfg.treeY * 100; // e.g. 95vh
-
-        // Center of screen is 50vw, so offset from center to tree
+        const treeVW = cfg.treeX * 100;
+        const treeVH = cfg.treeY * 100;
         const END_X = treeVW - 50 + (cfg.pinboardLandingOffsetX / window.innerWidth * 100);
         const END_Y = treeVH - 50 + (cfg.pinboardLandingOffsetY / window.innerHeight * 100);
-
-        return {
-            scale: cfg.pinboardScale,
-            x: END_X,  // vw from center
-            y: END_Y,  // vh from center  
-            rot: cfg.pinboardLandingRotation,
-        };
+        return { scale: cfg.pinboardScale, x: END_X, y: END_Y, rot: cfg.pinboardLandingRotation };
     }
 
-    // ========================================
-    // ANIMATION HELPERS
-    // ========================================
+    // Animation Helpers (DOM Writes)
     function animateTitle(el, progress) {
         if (!el) return;
         const p = Math.max(0, Math.min(1, progress));
+        if (Math.abs(el._lastP - p) < 0.001) return;
         el.style.opacity = String(p);
         el.style.transform = `translateY(${-30 * (1 - p)}px) rotate(${-2 * (1 - p)}deg)`;
         el.classList.toggle('pinned', p >= 0.9);
+        el._lastP = p;
     }
 
     function showTitle(el) {
-        if (!el) return;
+        if (!el || el._isVisible) return;
         el.style.opacity = '1';
         el.style.transform = 'translateY(0) rotate(0)';
         el.classList.add('pinned');
+        el._isVisible = true; el._lastP = 1;
     }
 
     function hideTitle(el) {
-        if (!el) return;
+        if (!el || !el._isVisible) return;
         el.style.opacity = '0';
         el.style.transform = 'translateY(-30px) rotate(-2deg)';
         el.classList.remove('pinned');
+        el._isVisible = false; el._lastP = 0;
     }
 
     function animateCard(card, progress, yDist = 80) {
         const p = Math.max(0, Math.min(1, progress));
-        const rot = getComputedStyle(card).getPropertyValue('--rotation') || '0deg';
+        if (Math.abs(card._lastP - p) < 0.001) return;
+        const finalRot = card._cachedRot || '0deg';
         card.style.opacity = String(p);
-        card.style.transform = `translateY(${yDist * (1 - p)}px) rotate(${rot})`;
+        card.style.transform = `translateY(${yDist * (1 - p)}px) rotate(${finalRot})`;
         card.classList.toggle('pinned', p >= 1);
+        card._lastP = p;
+        card._isVisible = p > 0;
     }
 
     function showCard(card) {
-        const rot = getComputedStyle(card).getPropertyValue('--rotation') || '0deg';
+        if (card._isVisible && card._lastP === 1) return;
+        const finalRot = card._cachedRot || '0deg';
         card.style.opacity = '1';
-        card.style.transform = `translateY(0) rotate(${rot})`;
+        card.style.transform = `translateY(0) rotate(${finalRot})`;
         card.classList.add('pinned');
+        card._isVisible = true; card._lastP = 1;
     }
 
-    function hideCard(card, yDist = 80) {
-        const rot = getComputedStyle(card).getPropertyValue('--rotation') || '0deg';
+    function hideCard(card) {
+        if (!card._isVisible && card._lastP === 0) return;
+        const finalRot = card._cachedRot || '0deg';
         card.style.opacity = '0';
-        card.style.transform = `translateY(${yDist}px) rotate(${rot})`;
+        card.style.transform = `translateY(80px) rotate(${finalRot})`;
         card.classList.remove('pinned');
+        card._isVisible = false; card._lastP = 0;
+    }
+
+    function cacheCardRotations() {
+        projectCards.forEach(card => {
+            const style = getComputedStyle(card);
+            card._cachedRot = style.getPropertyValue('--rotation') || '0deg';
+        });
     }
 
     // ========================================
-    // MAIN UPDATE
+    // MAIN UPDATE LOOP
     // ========================================
     function update() {
+        // 1. READ PHASE: Get position relative to viewport
+        // This is necessary because previous sections might change height
         const rect = pinboardSection.getBoundingClientRect();
-        const vh = window.innerHeight;
-        const scrollPos = Math.max(0, -rect.top);
+        const scrollPos = Math.max(0, -rect.top); // Pixels scrolled INTO the section
+
+        // Optimization: If completely off-screen (below) or far above, skip
+        // Note: rect.top is positive when section is below view
+        if (rect.top > layout.windowHeight) {
+            // Ensure it's hidden if offscreen
+            if (pinboardBg.classList.contains('visible')) pinboardBg.classList.remove('visible');
+            return;
+        }
+
+        // if (rect.bottom < 0) return; // REMOVED PREMATURE RETURN for testing
+
         const { phase, progress, idx } = getProjectPhaseInfo(scrollPos);
 
-        // --- BACKGROUND ---
-        // Visible when top enters viewport, invalid when bottom leaves viewport
-        const styles = getComputedStyle(pinboardSection);
-        const bottomOffset = parseFloat(styles.paddingBottom) || 0;
+        // --- BACKGROUND VISIBILITY ---
+        // Visible if: 
+        // 1. Projects Complete (Locked)
+        // 2. Projects Leave > 50% (Transitioning out)
+        // 3. In View (Top < 60vh AND Bottom > 10vh)
+        const isVisible = (phase.name === 'projects-complete') ||
+            (phase.name === 'projects-leave' && progress > 0.5) ||
+            (rect.top < layout.windowHeight * 0.8 && rect.bottom > 0); // Relaxed visibility rules
 
-        // --- ZOOM OUT TRANSITION ---
-        // When projects are leaving, scale everything down to stick on the tree
+        if (pinboardBg._cachedVis !== isVisible) {
+            pinboardBg.classList.toggle('visible', isVisible);
+            pinboardBg._cachedVis = isVisible;
+        }
+
         const zenBg = document.getElementById('zen-bg-container');
+        const vh = layout.windowHeight;
 
-        // NEW: Shrink content to fit all 6 cards on screen before frame appears
         if (phase.name === 'projects-shrink-to-fit') {
             const shrinkProgress = progress;
+            const frozenOffset = getProjectOffset(projectTimeline.phases.find(p => p.name === 'projects-shrink-to-fit').start);
 
-            // Get the scroll offset at the START of this phase (frozen position)
-            const shrinkPhase = projectTimeline.phases.find(p => p.name === 'projects-shrink-to-fit');
-            const frozenOffset = shrinkPhase ? getProjectOffset(shrinkPhase.start) : 0;
-
-            // Scale from 1.0 to 0.55 (45% smaller to fit both rows)
             const startScale = 1.0;
             const endScale = 0.55;
             const scale = startScale - (shrinkProgress * (startScale - endScale));
-
-            // TRANSITION the scroll offset from frozen to 0
-            // At progress=0: keep at frozenOffset (no jump, row 2 in view)
-            // At progress=1: offset is 0 (all cards visible from top)
             const currentOffset = frozenOffset * (1 - shrinkProgress);
 
-            // CALCULATE centerOffset to vertically center the shrunk CARDS
-            // Using cached values for smooth animation (no getComputedStyle per frame)
-            const scaledHeight = cachedContentHeight * scale;
-            // Basic centering for the container
-            const basicCenter = (vh - scaledHeight) / 2;
-            // But cards are offset by scaled padding inside container, so subtract that
-            const centerOffset = basicCenter - (cachedPaddingTop * scale / 2);
+            const dynamicCenter = ((vh - (cachedContentHeight * scale)) / 2) - (cachedPaddingTop * scale / 2);
 
-            // Apply the calculated center offset (only when progress > 0)
-            const finalCenterOffset = shrinkProgress * centerOffset;
-
-            // Apply to CONTENT only - background stays full screen
-            pinboardContent.style.transform = `translateY(-${currentOffset}px) translateY(${finalCenterOffset}px) scale(${scale})`;
+            pinboardContent.style.transform = `translateY(-${currentOffset}px) translateY(${dynamicCenter * shrinkProgress}px) scale(${scale})`;
             pinboardContent.style.transformOrigin = 'top center';
 
-            // Background stays normal
             pinboardBg.style.transform = 'none';
-            pinboardBg.style.border = '0px solid transparent';
             pinboardBg.style.borderRadius = '0';
-            pinboardContent.style.filter = 'none';
 
-            // Fade overlay in based on scroll progress (not time-based)
+            // ANIMATE BORDER IN DURING SHRINK
+            // APPLY TO OVERLAY BECAUSE IT SITS ON TOP
+            const borderWidth = shrinkProgress * 30;
             if (pinboardOverlay) {
-                pinboardOverlay.style.opacity = shrinkProgress;
+                pinboardOverlay.style.opacity = String(shrinkProgress);
+                pinboardOverlay.style.boxShadow = `inset 0 0 0 ${borderWidth}px #3e2723`;
             }
 
-            // Show zen-bg and tree during shrink (pre-load behind pinboard)
-            if (zenBg) zenBg.classList.add('visible');
-            if (cachedZenTree) cachedZenTree.classList.add('visible');
+            // Clear shadow from parent just in case
+            pinboardBg.style.boxShadow = 'none';
+            pinboardBg.style.border = '0px solid transparent';
+
+            if (zenBg && !zenBg._vis) { zenBg.classList.add('visible'); zenBg._vis = true; }
+            if (cachedZenTree && !cachedZenTree._vis) { cachedZenTree.classList.add('visible'); cachedZenTree._vis = true; }
+
+            // Fix: Ensure title is hidden during shrink
+            if (projectsTitle) {
+                projectsTitle.style.opacity = '0';
+                projectsTitle.style.transform = `translateY(${-30 * shrinkProgress}px)`;
+            }
 
         } else if (phase.name === 'projects-leave') {
             const leaveProgress = progress;
+            if (pinboardOverlay) pinboardOverlay.style.opacity = '1';
 
-            // Keep overlay at full opacity during leave
-            if (pinboardOverlay) {
-                pinboardOverlay.style.opacity = '1';
-            }
-
-            // Fade in Zen BG & Tree (using cached element)
             const showZen = leaveProgress > 0.05;
-            if (zenBg) zenBg.classList.toggle('visible', showZen);
-            if (cachedZenTree) cachedZenTree.classList.toggle('visible', showZen);
+            if (zenBg && zenBg._vis !== showZen) { zenBg.classList.toggle('visible', showZen); zenBg._vis = showZen; }
+            if (cachedZenTree && cachedZenTree._vis !== showZen) { cachedZenTree.classList.toggle('visible', showZen); cachedZenTree._vis = showZen; }
 
-            // Fade out the title (it's outside the pinboard-bg)
+            // Fix: Title should remain hidden
             if (projectsTitle) {
-                const titleOpacity = Math.max(0, 1 - (leaveProgress / FRAME_THRESHOLD));
-                projectsTitle.style.opacity = titleOpacity;
+                projectsTitle.style.opacity = '0';
             }
 
-            // Use pre-computed content transform (constant during leave phase)
             pinboardContent.style.transform = cachedContentTransform;
             pinboardContent.style.transformOrigin = 'top center';
 
-            // Calculate blur - simple multiply
-            const blurAmount = leaveProgress * 4;
+            // OPTIMIZATION: Use box-shadow inset instead of border-width to avoid layout thrashing
 
-            if (leaveProgress < FRAME_THRESHOLD) {
-                // STAGE 1: FRAME APPEARS (0% - 15%)
-                // Use pre-computed inverse for faster division
-                const pFrame = leaveProgress / FRAME_THRESHOLD;
-                const borderWidth = pFrame * 30;
+            // We removed FRAME_THRESHOLD logic because border animates in "shrink" phase now.
+            // Just scale and move immediately.
+            const scale = 1 - (leaveProgress * cachedScaleDelta);
+            const transX = cachedLandingConfig.x * leaveProgress;
+            const transY = cachedLandingConfig.y * leaveProgress;
+            const rot = cachedLandingConfig.rot * leaveProgress;
 
-                pinboardBg.style.transform = 'translateZ(0)';
-                pinboardBg.style.borderRadius = '0px';
-                pinboardBg.style.border = `${borderWidth}px solid #3e2723`;
-            } else {
-                // STAGE 2: SHRINK & MOVE (15% - 100%)
-                // Use pre-computed FRAME_INVERSE for faster math
-                const pShrink = (leaveProgress - FRAME_THRESHOLD) * FRAME_INVERSE;
+            pinboardBg.style.transform = `translate3d(${transX}vw, ${transY}vh, 0) scale(${scale}) rotate(${rot}deg)`;
+            pinboardBg.style.borderRadius = `${leaveProgress * 10}px`;
 
-                // Use pre-computed cachedScaleDelta
-                const scale = 1 - (pShrink * cachedScaleDelta);
-                const transX = cachedLandingConfig.x * pShrink;
-                const transY = cachedLandingConfig.y * pShrink;
-                const rot = cachedLandingConfig.rot * pShrink;
-
-                pinboardBg.style.transform = `translate3d(${transX}vw, ${transY}vh, 0) scale(${scale}) rotate(${rot}deg)`;
-                pinboardBg.style.borderRadius = `${pShrink * 10}px`;
-                pinboardBg.style.border = '30px solid #3e2723';
+            // Keep the visual border via box-shadow ON THE OVERLAY
+            if (pinboardOverlay) {
+                pinboardOverlay.style.boxShadow = `inset 0 0 0 30px #3e2723`;
+                // Ensure overlay roundness matches parent
+                pinboardOverlay.style.borderRadius = `${leaveProgress * 10}px`;
             }
+            pinboardBg.style.boxShadow = 'none';
+            pinboardBg.style.border = '0px solid transparent';
 
             pinboardBg.style.boxSizing = 'border-box';
-            // REMOVED: blur was causing stutter - it's expensive to compute every frame
-            // pinboardContent.style.filter = `blur(${blurAmount}px)`;
-            pinboardContent.style.filter = 'none';
 
         } else if (phase.name === 'projects-complete') {
-            // Fully shrunk state - LOCKED
-            if (zenBg) zenBg.classList.add('visible');
-            if (cachedZenTree) cachedZenTree.classList.add('visible');
+            if (zenBg && !zenBg._vis) { zenBg.classList.add('visible'); zenBg._vis = true; }
+            if (cachedZenTree && !cachedZenTree._vis) { cachedZenTree.classList.add('visible'); cachedZenTree._vis = true; }
 
-            // Final locked state - use translate3d for GPU
-            const transform = `translate3d(${cachedLandingConfig.x}vw, ${cachedLandingConfig.y}vh, 0) scale(${cachedLandingConfig.scale}) rotate(${cachedLandingConfig.rot}deg)`;
 
-            pinboardBg.style.border = '30px solid #3e2723';
+
+
+            // Match the box-shadow style ON OVERLAY
+            if (pinboardOverlay) {
+                pinboardOverlay.style.boxShadow = `inset 0 0 0 30px #3e2723`;
+                pinboardOverlay.style.borderRadius = '10px';
+            }
+            pinboardBg.style.boxShadow = 'none';
+            pinboardBg.style.border = '0px solid transparent';
             pinboardBg.style.boxSizing = 'border-box';
-            pinboardBg.style.transform = transform;
             pinboardBg.style.borderRadius = '10px';
             pinboardBg.classList.add('visible');
 
-            // Use pre-computed content transform (same as leave phase)
+            const transform = `translate3d(${cachedLandingConfig.x}vw, ${cachedLandingConfig.y}vh, 0) scale(${cachedLandingConfig.scale}) rotate(${cachedLandingConfig.rot}deg)`;
+            if (pinboardBg._currTransform !== transform) {
+                pinboardBg.style.transform = transform;
+                pinboardBg._currTransform = transform;
+            }
+
             pinboardContent.style.transform = cachedContentTransform;
             pinboardContent.style.transformOrigin = 'top center';
-            pinboardContent.style.filter = 'blur(4px)';
 
         } else {
-            // Normal state (row animations)
             const isLastRowPause = phase.name === `row-${numProjectRows - 1}-pause`;
-
-            // Show zen-bg early (during last row pause) to pre-load behind pinboard
-            if (isLastRowPause) {
-                if (zenBg) zenBg.classList.add('visible');
-                if (cachedZenTree) cachedZenTree.classList.add('visible');
-            } else {
-                if (zenBg) zenBg.classList.remove('visible');
-                if (cachedZenTree) cachedZenTree.classList.remove('visible');
+            if (isLastRowPause && (!zenBg || !zenBg._vis)) {
+                if (zenBg) { zenBg.classList.add('visible'); zenBg._vis = true; }
+                if (cachedZenTree) { cachedZenTree.classList.add('visible'); cachedZenTree._vis = true; }
+            } else if (!isLastRowPause && (zenBg && zenBg._vis)) {
+                if (zenBg) { zenBg.classList.remove('visible'); zenBg._vis = false; }
+                if (cachedZenTree) { cachedZenTree.classList.remove('visible'); cachedZenTree._vis = false; }
             }
 
             pinboardBg.style.border = '0px solid transparent';
+            pinboardBg.style.boxShadow = 'none'; // Ensure reset
             pinboardBg.style.transform = 'none';
             pinboardBg.style.borderRadius = '0';
-            pinboardContent.style.transform = 'none'; // Reset content scale
-            pinboardContent.style.filter = 'none';
-
-            // Reset overlay
+            pinboardContent.style.transform = 'none';
             if (pinboardOverlay) {
                 pinboardOverlay.style.opacity = '0';
+                pinboardOverlay.style.boxShadow = 'none';
+                pinboardOverlay.style.borderRadius = '0';
             }
-        }
 
-        // Toggle visibility based on section bounds
-        // Keep pinboard visible during leave phase and complete phase
-        if (phase.name === 'projects-complete' || (phase.name === 'projects-leave' && progress > 0.5)) {
-            // Keep visible - pinboard is shrunk and pinned to tree
-            pinboardBg.classList.add('visible');
-        } else if (phase.name !== 'projects-leave') {
-            // Only toggle visibility for normal phases
-            pinboardBg.classList.toggle('visible', rect.top < vh * 0.6 && rect.bottom > vh * 0.1);
-        }
-
-        // Keep tree visible once it appears
-        const zenTree = document.querySelector('.zen-tree-container');
-        if (zenTree && (phase.name === 'projects-leave' || phase.name === 'projects-complete')) {
-            zenTree.classList.add('visible');
-        }
-
-        // --- OFFSET CALCULATION ---
-        // For standard scroll phases, we just translate normally
-        // BUT skip this during shrink/leave/complete phases (already handled above)
-        if (phase.name !== 'projects-shrink-to-fit' && phase.name !== 'projects-leave' && phase.name !== 'projects-complete') {
             const projectOffset = getProjectOffset(scrollPos);
             pinboardContent.style.transform = `translateY(-${projectOffset}px)`;
-        }
 
-        // --- PROJECTS TITLE ---
-        // Title drops in during projects-title phase
-        // Stays visible through row-0-animate and row-0-pause
-        // Fades out during row-0-scrollup (when transitioning to row 1)
-        const projTitleIdx = getProjectIdx('projects-title');
-        const row0PauseIdx = getProjectIdx('row-0-pause');
-        const row0ScrollUpIdx = getProjectIdx('row-0-scrollup');
+            const projTitleIdx = getProjectIdx('projects-title');
+            const row0PauseIdx = getProjectIdx('row-0-pause');
 
-        if (phase.name === 'projects-title') {
-            // Dropping in
-            animateTitle(projectsTitle, progress);
-        } else if (phase.name === 'row-0-scrollup') {
-            // Fade out while scrolling to row 1
-            const fadeOut = 1 - progress;
-            if (projectsTitle) {
-                projectsTitle.style.opacity = String(fadeOut);
-                projectsTitle.style.transform = `translateY(${-30 * progress}px) rotate(0)`;
-            }
-        } else if (idx > projTitleIdx && idx <= row0PauseIdx) {
-            // Visible during row-0-animate and row-0-pause
-            showTitle(projectsTitle);
-        } else if (idx > row0PauseIdx) {
-            // Hidden after row-0-scrollup
-            hideTitle(projectsTitle);
-        } else {
-            hideTitle(projectsTitle);
-        }
+            if (phase.name === 'projects-title') animateTitle(projectsTitle, progress);
+            else if (phase.name === 'row-0-scrollup') {
+                const fadeOut = 1 - progress;
+                if (projectsTitle) {
+                    projectsTitle.style.opacity = String(fadeOut);
+                    projectsTitle.style.transform = `translateY(${-30 * progress}px) rotate(0)`;
+                }
+            } else if (idx > projTitleIdx && idx <= row0PauseIdx) showTitle(projectsTitle);
+            else hideTitle(projectsTitle);
 
-        // --- PROJECT ROWS ---
-        if (projectRows.length > 0) {
-            for (let i = 0; i < numProjectRows; i++) {
-                const rowIdx = getProjectIdx(`row-${i}-animate`);
-                if (phase.name === `row-${i}-animate`) {
-                    projectRows[i]?.forEach(c => animateCard(c, progress));
-                } else if (idx > rowIdx) {
-                    projectRows[i]?.forEach(c => showCard(c));
-                } else {
-                    projectRows[i]?.forEach(c => hideCard(c));
+            if (projectRows.length > 0) {
+                for (let i = 0; i < numProjectRows; i++) {
+                    const rowIdx = getProjectIdx(`row-${i}-animate`);
+                    if (phase.name === `row-${i}-animate`) {
+                        projectRows[i]?.forEach(c => animateCard(c, progress));
+                    } else if (idx > rowIdx) {
+                        projectRows[i]?.forEach(c => showCard(c));
+                    } else {
+                        projectRows[i]?.forEach(c => hideCard(c));
+                    }
                 }
             }
         }
     }
 
     // ========================================
-    // INIT - with RAF throttling for smooth animation
+    // INIT
     // ========================================
     let rafPending = false;
-
     function onScroll() {
         if (!rafPending) {
             rafPending = true;
@@ -578,13 +485,23 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', () => {
-        projectTimeline = buildProjectPhases();
-        updateCachedValues(); // Refresh cached values on resize
-        updateSectionHeight();
+    window.addEventListener('load', () => {
+        cacheCardRotations();
+        rebuildLayout();
         update();
-    }, { passive: true });
+    });
 
-    update();
+    cacheCardRotations();
+    rebuildLayout();
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            rebuildLayout();
+            update();
+        }, 100);
+    }, { passive: true });
 });
