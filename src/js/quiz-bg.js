@@ -15,11 +15,7 @@ class GlobeAutomation {
         this.strokeColor = 'rgba(148, 163, 184, 0.1)';
 
         // Colors for filling (Green, Yellow, Red)
-        this.fillColors = [
-            '#4ade80', // Green
-            '#facc15', // Yellow
-            '#ef4444'  // Red
-        ];
+        // Handled in getRandomColor()
 
         // State
         this.countries = [];
@@ -76,10 +72,31 @@ class GlobeAutomation {
             .translate([this.width / 2, this.height / 2]);
     }
 
+    getRandomColor() {
+        const rand = Math.random();
+        if (rand < 0.60) return '#4ade80'; // Green
+        else if (rand < 0.85) return '#facc15'; // Yellow
+        return '#ef4444'; // Red
+    }
+
     resetGame() {
         this.filledCountries.clear();
+
         // Shuffle countries to create a random order list
-        this.unfilledDependencies = [...this.countries].sort(() => Math.random() - 0.5);
+        const shuffled = [...this.countries].sort(() => Math.random() - 0.5);
+
+        // Pre-fill ~33%
+        const total = shuffled.length;
+        const preFillCount = Math.floor(total / 3);
+
+        const toFill = shuffled.slice(0, preFillCount);
+        this.unfilledDependencies = shuffled.slice(preFillCount);
+
+        // Instantly color the pre-filled ones
+        toFill.forEach(country => {
+            const color = this.getRandomColor();
+            this.filledCountries.set(country.id || country.properties.name, color);
+        });
     }
 
     nextTurn() {
@@ -98,13 +115,7 @@ class GlobeAutomation {
         // 1. Rotate to country
         this.rotateTo(nextCountry, () => {
             // 2. Color it
-            // Weighted Random: 60% Green, 25% Yellow, 15% Red
-            const rand = Math.random();
-            let color;
-            if (rand < 0.60) color = '#4ade80'; // Green
-            else if (rand < 0.85) color = '#facc15'; // Yellow (0.60 + 0.25)
-            else color = '#ef4444'; // Red
-
+            const color = this.getRandomColor();
             this.filledCountries.set(nextCountry.id || nextCountry.properties.name, color);
 
             // 3. Wait and repeat
