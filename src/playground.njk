@@ -80,6 +80,30 @@ hideFooter: true
         </a>
     </section>
 
+    <!-- 3. WORDLE SOLVER PORTAL -->
+    <section class="game-portal wordle-portal" id="wordle-realm">
+        <div class="portal-bg">
+            <div class="bg-layer layer-1"></div>
+            <div class="bg-layer layer-2"></div>
+            <!-- Wordle Animated Grid Background -->
+            <div class="wordle-scene-mini">
+                <div class="wordle-grid-mini" id="playground-wordle-grid">
+                    <!-- 6 rows of 5 cells generated in JS -->
+                </div>
+            </div>
+            <!-- Floating Background Letters -->
+            <div class="wordle-floating-bg-letters" id="playground-wordle-floating-letters">
+                <!-- Floating letters spawned in JS -->
+            </div>
+        </div>
+        <a href="{{ '/playground/wordle/' | url }}" class="portal-link">
+            <div class="portal-content">
+                <h2 class="portal-title">Wordle Solver</h2>
+                <p class="portal-hint">Click to play →</p>
+            </div>
+        </a>
+    </section>
+
     <!-- 3. MAP PLOTTER PORTAL -->
     <section class="game-portal map-portal" id="map-realm">
         <div class="portal-bg">
@@ -179,4 +203,5 @@ hideFooter: true
 <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.3/chess.min.js"></script>
 <script src="{{ '/js/chess-mechanics.js' | url }}"></script>
 <script src="{{ '/js/quiz-bg.js' | url }}"></script>
+<script src="{{ '/js/wordle-mechanics.js' | url }}"></script>
 {% endblock %}

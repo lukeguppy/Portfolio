@@ -27,6 +27,17 @@
       ]
     },
     {
+      "title": "Wordle Solver",
+      "description": "An interactive Wordle clone and precomputed decision tree solver with path visualization.",
+      "image": "/images/wordle.png",
+      "playUrl": "/playground/wordle/",
+      "tech": [
+        "JavaScript",
+        "HTML",
+        "CSS"
+      ]
+    },
+    {
       "title": "BlockBlast",
       "description": "A fun puzzle game where you place blocks to clear lines.",
       "image": "/images/blockblast.png",

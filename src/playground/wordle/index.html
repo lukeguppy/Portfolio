@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wordle Premium | Decision Tree Solver</title>
+    
+    <!-- Premium Google Font: Outfit -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons for premium feel -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <link rel="stylesheet" href="../../css/style.css">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Portfolio Navigation Header -->
+    <header>
+        <nav>
+            <div class="nav-container">
+                <h1>Wordle Solver</h1>
+                <ul>
+                    <li><a href="../../">Home</a></li>
+                    <li><a href="../">Playground</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <div class="app-background"></div>
+    
+    <!-- Top Bar Container (Static and centered, independent of tree layout changes) -->
+    <div class="top-bar-container">
+        <!-- Header -->
+        <div class="app-header">
+            <div class="logo">
+                <span class="logo-w">W</span>
+                <span class="logo-o">O</span>
+                <span class="logo-r">R</span>
+                <span class="logo-d">D</span>
+                <span class="logo-l">L</span>
+                <span class="logo-e">E</span>
+                <span class="badge">SOLVER</span>
+            </div>
+            
+            <div class="header-controls">
+                <label class="switch-container header-switch">
+                    <span class="switch-label">Helper</span>
+                    <input type="checkbox" id="toggle-helper" checked>
+                    <span class="slider round"></span>
+                </label>
+                <label class="switch-container header-switch">
+                    <span class="switch-label">No Anim</span>
+                    <input type="checkbox" id="toggle-animations">
+                    <span class="slider round"></span>
+                </label>
+                <label class="switch-container header-switch">
+                    <span class="switch-label">Auto-Continue</span>
+                    <input type="checkbox" id="toggle-continue">
+                    <span class="slider round"></span>
+                </label>
+                <button id="btn-help" class="icon-btn" title="How to Play">
+                    <i data-lucide="help-circle"></i>
+                </button>
+                <button id="btn-stats" class="icon-btn" title="Statistics">
+                    <i data-lucide="bar-chart-2"></i>
+                </button>
+                <button id="btn-reset" class="icon-btn highlight" title="New Game">
+                    <i data-lucide="rotate-ccw"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="tabs-container">
+            <button id="tab-play" class="tab-btn active"><i data-lucide="gamepad-2"></i> Play Wordle</button>
+            <button id="tab-sandbox" class="tab-btn"><i data-lucide="wrench"></i> Sandbox Solver</button>
+        </div>
+    </div>
+    
+    <div class="app-container">
+
+        <main class="main-layout">
+            <!-- Left Column: Tree Solver Map -->
+            <aside class="tree-aside hidden" id="tree-aside">
+                <div class="solver-card">
+                    <div class="solver-card-header">
+                        <div class="solver-title-container">
+                            <i data-lucide="git-branch" class="solver-icon" style="color: var(--color-primary);"></i>
+                            <h2>Solver Tree Map</h2>
+                        </div>
+                    </div>
+                    <div class="solver-card-body" style="overflow: hidden; display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;">
+                        <div id="tree-container" style="width: 100%; height: 100%; min-height: 520px; position: relative; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 0;">
+                            <!-- Tree layout generated in JS -->
+                        </div>
+                    </div>
+                </div>
+            </aside>
+
+            <!-- Center Side: Game Board & Keyboard -->
+            <section class="game-section">
+                <!-- Wordle Grid -->
+                <div class="grid-container">
+                    <div id="wordle-grid" class="wordle-grid">
+                        <!-- Generates 6 rows * 5 cells dynamically in JS -->
+                    </div>
+                    <div id="sandbox-grid" class="wordle-grid hidden">
+                        <!-- Generates 6 rows * 5 cells dynamically in JS -->
+                    </div>
+                </div>
+
+                <!-- Message Banner -->
+                <div id="toast-container" class="toast-container"></div>
+
+                <!-- On-screen Keyboard -->
+                <div class="keyboard-container">
+                    <div id="keyboard" class="keyboard">
+                        <!-- Key rows generated dynamically in JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Right Side: Solver & Autonomous Mode Dashboard -->
+            <aside class="solver-aside">
+                <!-- Play Solver Card -->
+                <div class="solver-card" id="play-solver-card">
+                    <div class="solver-card-header">
+                        <div class="solver-title-container">
+                            <i data-lucide="cpu" class="solver-icon"></i>
+                            <h2>Decision Tree Solver</h2>
+                        </div>
+                        <label class="switch-container">
+                            <span class="switch-label" style="font-size: 0.75rem;">Show Tree</span>
+                            <input type="checkbox" id="toggle-tree-play">
+                            <span class="slider round"></span>
+                        </label>
+                    </div>
+
+                    <div class="solver-card-body" id="solver-body">
+                        <!-- Stats Summary -->
+                        <div class="solver-stats-grid">
+                            <div class="stat-box">
+                                <span class="stat-num" id="possible-count">2,309</span>
+                                <span class="stat-lbl">Possibilities</span>
+                            </div>
+                            <div class="stat-box highlight" style="background: rgba(59, 130, 246, 0.05); border-color: rgba(59, 130, 246, 0.2);">
+                                <span class="stat-num" id="recommended-guess">RAISE</span>
+                                <span class="stat-lbl">Next Best Guess</span>
+                            </div>
+                        </div>
+
+                        <!-- Solver Progress bar -->
+                        <div class="progress-container">
+                            <div class="progress-header">
+                                <span>Search Space Eliminated</span>
+                                <span id="elimination-percentage">0%</span>
+                            </div>
+                            <div class="progress-bar-bg">
+                                <div id="progress-bar-fill" class="progress-bar-fill" style="width: 0%"></div>
+                            </div>
+                        </div>
+
+                        <!-- Autonomous Solve Controls -->
+                        <div class="control-panel">
+                            <h3>Autonomous Solve</h3>
+                            
+                            <div class="panel-buttons">
+                                <button id="btn-auto-play" class="btn btn-primary">
+                                    <i data-lucide="play"></i> <span>Auto Play</span>
+                                </button>
+                                <button id="btn-auto-step" class="btn btn-secondary">
+                                    <i data-lucide="skip-forward"></i> <span>Step Guess</span>
+                                </button>
+                                <button id="btn-autofill" class="btn btn-tertiary">
+                                    <i data-lucide="copy"></i> <span>Autofill</span>
+                                </button>
+                            </div>
+
+                            <!-- Speed Slider -->
+                            <div class="speed-slider-container">
+                                <div class="slider-header">
+                                    <span>Solve Speed (Delay)</span>
+                                    <span id="slider-speed-val">1.0s</span>
+                                </div>
+                                <div class="slider-wrapper">
+                                    <i data-lucide="zap" class="slider-icon min"></i>
+                                    <input type="range" id="solve-speed" min="100" max="3000" step="100" value="1000">
+                                    <i data-lucide="clock" class="slider-icon max"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Solver Tree Path -->
+                        <div class="solver-path-section">
+                            <h3>Solve Path</h3>
+                            <div id="solver-path" class="solver-path">
+                                <div class="path-placeholder">Start guessing to see the solve path...</div>
+                            </div>
+                        </div>
+
+                        <!-- Remaining Words List -->
+                        <div class="remaining-words-section">
+                            <div class="remaining-header">
+                                <h3>Possible Words (<span id="possible-list-count">2309</span>)</h3>
+                                <button id="btn-toggle-words" class="text-btn">Hide List</button>
+                            </div>
+                            <div id="remaining-words-list" class="words-list">
+                                <!-- Generated list of remaining words -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sandbox Solver Card -->
+                <div class="solver-card hidden" id="sandbox-solver-card">
+                    <div class="solver-card-header">
+                        <div class="solver-title-container">
+                            <i data-lucide="wrench" class="solver-icon" style="color: var(--color-present)"></i>
+                            <h2>Sandbox Solver</h2>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 8px;">
+                            <label class="switch-container">
+                                <span class="switch-label" style="font-size: 0.75rem;">Show Tree</span>
+                                <input type="checkbox" id="toggle-tree-sandbox">
+                                <span class="slider round"></span>
+                            </label>
+                            <button id="btn-reset-sandbox" class="icon-btn highlight" title="Reset Sandbox" style="margin: 0;">
+                                <i data-lucide="rotate-ccw"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="solver-card-body">
+                        <!-- Stats Summary -->
+                        <div class="solver-stats-grid">
+                            <div class="stat-box">
+                                <span class="stat-num" id="sandbox-possible-count">2,309</span>
+                                <span class="stat-lbl">Possibilities</span>
+                            </div>
+                            <div class="stat-box highlight" style="background: rgba(245, 158, 11, 0.05); border-color: rgba(245, 158, 11, 0.2); display: flex; flex-direction: column; align-items: center;">
+                                <span class="stat-num" id="sandbox-recommended-guess" style="color: var(--color-present); text-shadow: 0 0 10px rgba(245, 158, 11, 0.3);">RAISE</span>
+                                <span class="stat-lbl">Next Best Guess</span>
+                                <button id="btn-sandbox-autofill" title="Autofill this recommendation">
+                                    <i data-lucide="copy" style="width: 12px; height: 12px;"></i> <span>Autofill</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Instructions Panel -->
+                        <div class="control-panel">
+                            <h3>Sandbox Mode</h3>
+                            <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.4; margin-bottom: 0.5rem;">
+                                Enter your guess on the board. Click the letters on the current row to toggle their status colors (Gray &rarr; Yellow &rarr; Green), then click <strong>Submit Step</strong>.
+                            </p>
+                            <button id="btn-submit-sandbox-step" class="btn btn-primary btn-large" style="background: var(--color-present);">
+                                <i data-lucide="check-circle"></i> <span>Submit Step</span>
+                            </button>
+                        </div>
+
+                        <!-- Sandbox Path -->
+                        <div class="solver-path-section">
+                            <h3>Sandbox Solve Path</h3>
+                            <div id="sandbox-solver-path" class="solver-path">
+                                <div class="path-placeholder">Enter a guess on the board to start...</div>
+                            </div>
+                        </div>
+
+                        <!-- Sandbox Possible Words List -->
+                        <div class="remaining-words-section">
+                            <div class="remaining-header">
+                                <h3>Possible Words (<span id="sandbox-possible-list-count">2309</span>)</h3>
+                                <button id="btn-toggle-sandbox-words" class="text-btn">Hide List</button>
+                            </div>
+                            <div id="sandbox-remaining-words-list" class="words-list">
+                                <!-- Generated list of remaining words -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+    </div>
+
+    <!-- How to Play Modal -->
+    <div id="modal-help" class="modal">
+        <div class="modal-content">
+            <span class="close-btn" id="close-help">&times;</span>
+            <h2>How To Play</h2>
+            <p>Guess the Wordle in 6 tries. Each guess must be a valid 5-letter word.</p>
+            <p>The color of the tiles will change to show how close your guess was to the word:</p>
+            
+            <div class="example-row">
+                <div class="tile correct">W</div>
+                <div class="tile">E</div>
+                <div class="tile">A</div>
+                <div class="tile">R</div>
+                <div class="tile">Y</div>
+            </div>
+            <p><strong>W</strong> is in the word and in the correct spot.</p>
+
+            <div class="example-row">
+                <div class="tile">P</div>
+                <div class="tile present">I</div>
+                <div class="tile">L</div>
+                <div class="tile">O</div>
+                <div class="tile">T</div>
+            </div>
+            <p><strong>I</strong> is in the word but in the wrong spot.</p>
+
+            <div class="example-row">
+                <div class="tile">V</div>
+                <div class="tile">A</div>
+                <div class="tile">G</div>
+                <div class="tile absent">U</div>
+                <div class="tile">E</div>
+            </div>
+            <p><strong>U</strong> is not in the word in any spot.</p>
+            
+            <hr>
+            
+            <h3>Solver Features</h3>
+            <p><i data-lucide="cpu" class="inline-icon"></i> <strong>Decision Tree Solver:</strong> Integrates a precalculated decision tree starting with <strong>SALET</strong>. It recommends the mathematically optimal guess at each state.</p>
+            <p><i data-lucide="play" class="inline-icon"></i> <strong>Autonomous Solve:</strong> Sit back and watch the AI solve the Wordle board in real-time. Control the speed with the slider.</p>
+        </div>
+    </div>
+
+    <!-- Statistics Modal -->
+    <div id="modal-stats" class="modal">
+        <div class="modal-content text-center">
+            <span class="close-btn" id="close-stats">&times;</span>
+            <h2>STATISTICS</h2>
+            
+            <div class="stats-container">
+                <div class="stat-item">
+                    <span class="stat-value" id="stats-played">0</span>
+                    <span class="stat-label">Played</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stats-win-pct">0%</span>
+                    <span class="stat-label">Win %</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stats-streak">0</span>
+                    <span class="stat-label">Current Streak</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="stats-max-streak">0</span>
+                    <span class="stat-label">Max Streak</span>
+                </div>
+            </div>
+
+            <h3>GUESS DISTRIBUTION</h3>
+            <div id="guess-distribution" class="dist-container">
+                <!-- Bars will be generated in JS -->
+            </div>
+
+            <div id="game-over-summary" class="game-over-summary hidden">
+                <h2 id="game-result-title">YOU WIN!</h2>
+                <p>The word was: <strong id="game-secret-word" class="secret-highlight">xxxxx</strong></p>
+                <div id="solver-match-info" class="solver-match-info"></div>
+                <button id="btn-play-again" class="btn btn-primary btn-large">Play Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script src="words.js"></script>
+    <script src="solver_tree.js"></script>
+    <script src="constants_state.js"></script>
+    <script src="utils.js"></script>
+    <script src="tree.js"></script>
+    <script src="game.js"></script>
+    <script src="sandbox.js"></script>
+    <script src="solver.js"></script>
+    <script src="ui.js"></script>
+    <script src="app.js"></script>
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+    </script>
+</body>
+</html>
