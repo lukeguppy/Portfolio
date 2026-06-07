@@ -216,7 +216,7 @@ body {
 /* Main Layout */
 .main-layout {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
     gap: 1.5rem;
     flex: 1;
     min-height: 0;
@@ -248,8 +248,8 @@ body {
 .wordle-grid {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
-    gap: 8px;
-    max-width: 330px;
+    gap: clamp(4px, 1vh, 8px);
+    max-width: clamp(280px, 58vh * 5 / 6, 400px);
     width: 100%;
 }
 
@@ -350,7 +350,7 @@ body {
 /* Keyboard */
 .keyboard-container {
     width: 100%;
-    max-width: 500px;
+    max-width: clamp(430px, 65vh, 580px);
 }
 
 .keyboard {
@@ -372,12 +372,12 @@ body {
     color: var(--text-primary);
     border: none;
     border-radius: 6px;
-    height: 50px;
+    height: clamp(38px, 5.5vh, 54px);
     flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 1rem;
+    font-size: clamp(0.8rem, 1.8vh, 1.05rem);
     font-weight: 600;
     cursor: pointer;
     user-select: none;
@@ -396,7 +396,7 @@ body {
 
 .key.large {
     flex: 1.5;
-    font-size: 0.9rem;
+    font-size: clamp(0.75rem, 1.6vh, 0.95rem);
 }
 
 /* Keyboard status coloring */
@@ -761,6 +761,8 @@ input[type="range"]::-webkit-slider-thumb:hover {
     display: flex;
     flex-direction: column;
     gap: 8px;
+    flex: 1;
+    min-height: 140px;
 }
 
 .remaining-header {
@@ -795,7 +797,9 @@ input[type="range"]::-webkit-slider-thumb:hover {
     border: 1px solid var(--border-glass);
     border-radius: 16px;
     padding: 0.75rem;
-    max-height: 120px;
+    flex: 1;
+    min-height: 100px;
+    max-height: clamp(120px, 38vh, 450px);
     overflow-y: auto;
     display: flex;
     flex-wrap: wrap;
@@ -804,6 +808,7 @@ input[type="range"]::-webkit-slider-thumb:hover {
 }
 
 .words-list.collapsed {
+    flex: none;
     max-height: 0;
     padding-top: 0;
     padding-bottom: 0;
@@ -1157,7 +1162,7 @@ input:checked + .slider:before {
     }
     
     .main-layout {
-        grid-template-columns: 1fr;
+        grid-template-columns: minmax(0, 1fr);
         gap: 1.5rem;
     }
     
@@ -1312,7 +1317,7 @@ body.no-animations .key.absent {
 }
 
 .main-layout.has-tree {
-    grid-template-columns: 1.8fr 1.15fr 1fr;
+    grid-template-columns: minmax(0, 1.8fr) minmax(0, 1.15fr) minmax(0, 1fr);
     gap: 1.5rem;
 }
 
