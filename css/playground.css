@@ -11,6 +11,8 @@
     --block-accent: #00f0ff;
     --map-bg: #0f1a14;
     --map-accent: #4ade80;
+    --wordle-bg: #090d16;
+    --wordle-accent: #14b8a6;
 }
 
 /* =========================================
@@ -1193,4 +1195,164 @@ body {
 .portal-link:hover .portal-hint {
     opacity: 0.7;
     transform: translateY(0);
+}
+
+/* --- WORDLE SOLVER PORTAL --- */
+.wordle-portal {
+    background: radial-gradient(circle at center, #0f172a 0%, #080b11 100%);
+    pointer-events: none;
+}
+
+.wordle-portal .portal-content {
+    pointer-events: auto;
+}
+
+.wordle-portal .portal-link {
+    pointer-events: none;
+}
+
+.wordle-portal .portal-content:hover .portal-title {
+    opacity: 0;
+}
+
+.wordle-portal .portal-content:hover {
+    transform: scale(1.1);
+}
+
+.wordle-portal .layer-1 {
+    /* Dotted background pattern */
+    background-image: radial-gradient(rgba(20, 184, 166, 0.05) 1.5px, transparent 1.5px);
+    background-size: 32px 32px;
+    opacity: 0.4;
+}
+
+.wordle-portal .layer-2 {
+    /* Glowing radial background */
+    background:
+        radial-gradient(circle at 30% 30%, rgba(20, 184, 166, 0.12) 0%, transparent 40%), /* Teal */
+        radial-gradient(circle at 70% 70%, rgba(16, 185, 129, 0.08) 0%, transparent 40%), /* Green */
+        radial-gradient(circle at 50% 50%, rgba(245, 158, 11, 0.05) 0%, transparent 50%);  /* Yellow */
+}
+
+.wordle-portal .portal-title {
+    color: #fff;
+    text-shadow: 
+        0 0 40px rgba(20, 184, 166, 0.4), 
+        0 0 80px rgba(16, 185, 129, 0.3),
+        0 0 120px rgba(245, 158, 11, 0.2);
+}
+
+.wordle-portal .portal-hint {
+    text-shadow:
+        0 0 5px #070b12,
+        0 0 10px #070b12,
+        0 0 15px #070b12;
+}
+
+/* === MINI WORDLE SCENE === */
+.wordle-scene-mini {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) perspective(1000px) rotateX(25deg) rotateY(-10deg);
+    transform-style: preserve-3d;
+    z-index: 2;
+    pointer-events: none;
+    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.wordle-portal:hover .wordle-scene-mini {
+    transform: translate(-50%, -50%) perspective(1000px) rotateX(30deg) rotateY(-12deg) scale(1.08);
+}
+
+.wordle-grid-mini {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    background: rgba(17, 24, 39, 0.65);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 12px;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+}
+
+.wordle-row-mini {
+    display: flex;
+    gap: 6px;
+}
+
+.wordle-cell-mini {
+    width: 38px;
+    height: 38px;
+    border: 1.5px solid #1e293b;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    color: #fff;
+    background: transparent;
+    transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.4s ease;
+    transform-style: preserve-3d;
+}
+
+.wordle-cell-mini.typed {
+    border-color: #64748b;
+    transform: scale(1.08);
+}
+
+.wordle-cell-mini.correct {
+    background-color: #10b981;
+    border-color: transparent;
+    transform: rotateX(360deg);
+}
+
+.wordle-cell-mini.present {
+    background-color: #f59e0b;
+    border-color: transparent;
+    transform: rotateX(360deg);
+}
+
+.wordle-cell-mini.absent {
+    background-color: #374151;
+    border-color: transparent;
+    transform: rotateX(360deg);
+}
+
+/* Floating 3D Background Letters for Portal Card */
+.wordle-floating-bg-letters {
+    position: absolute;
+    inset: 0;
+    perspective: 1000px;
+    pointer-events: none;
+    z-index: 1;
+}
+
+.wordle-floating-bg-letters .floating-letter {
+    position: absolute;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.08);
+    pointer-events: none;
+    user-select: none;
+    transform-style: preserve-3d;
+    animation: floatAround 25s linear infinite;
+}
+
+.wordle-floating-bg-letters .floating-letter.green {
+    color: rgba(16, 185, 129, 0.06);
+    text-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+}
+
+.wordle-floating-bg-letters .floating-letter.yellow {
+    color: rgba(245, 158, 11, 0.05);
+    text-shadow: 0 0 15px rgba(245, 158, 11, 0.15);
+}
+
+.wordle-floating-bg-letters .floating-letter.gray {
+    color: rgba(55, 65, 81, 0.07);
 }
