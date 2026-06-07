@@ -1331,10 +1331,6 @@ body {
     margin-left: clamp(16px, 2.2vw, 36px);
     /* Bebas optical fix: match padding-top of tiles */
     padding-top: 0.15em;
-    text-shadow:
-        0 0 40px rgba(106, 170, 100, 0.6),
-        0 0 80px rgba(106, 170, 100, 0.35),
-        0 0 140px rgba(83, 141, 78, 0.2);
 }
 
 .wordle-portal .portal-hint {
