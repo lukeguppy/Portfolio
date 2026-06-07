@@ -1218,6 +1218,11 @@ body {
     opacity: 1;
 }
 
+.wordle-portal .portal-content:hover .wordle-tile-letters {
+    opacity: 1;
+    transition: opacity 0.2s ease;
+}
+
 .wordle-portal .portal-content:hover {
     transform: scale(1.03);
 }
@@ -1256,6 +1261,7 @@ body {
     gap: clamp(4px, 0.6vw, 9px);
     align-items: center;
     opacity: 0.8;
+    transition: opacity 0.2s ease;
 }
 
 .wtile {
