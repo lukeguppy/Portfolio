@@ -1319,7 +1319,7 @@ body {
 
 .wordle-solver-text {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(3.5rem, 15.5vw, 13rem);
+    font-size: clamp(3.5rem, 15.5vw, 11rem);
     font-weight: 400;
     color: #fff;
     letter-spacing: 0.05em;
