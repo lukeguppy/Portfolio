@@ -133,39 +133,52 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const guess = path.guesses[currentRow];
         const feedback = path.feedbacks[currentRow];
+        const LETTER_DELAY = 130; // ms between each typed letter
+        const FLIP_DELAY   = 120; // ms between each colour flip
+        const PAUSE_BEFORE_FLIP = 300; // pause after last letter before flipping
 
-        // Type letters
+        // Type letters one-by-one
         for (let c = 0; c < 5; c++) {
-            const cell = document.getElementById(`mini-cell-${currentRow}-${c}`);
-            if (cell) {
-                cell.textContent = guess[c];
-                cell.classList.add('typed');
-            }
+            ((col) => {
+                solveTimeoutId = setTimeout(() => {
+                    const cell = document.getElementById(`mini-cell-${currentRow}-${col}`);
+                    if (cell) {
+                        cell.textContent = guess[col];
+                        cell.classList.add('typed');
+                    }
+                }, col * LETTER_DELAY);
+            })(c);
         }
 
-        // Wait 600ms, then flip and color tiles
-        solveTimeoutId = setTimeout(() => {
-            for (let c = 0; c < 5; c++) {
-                const cell = document.getElementById(`mini-cell-${currentRow}-${c}`);
-                if (cell) {
-                    cell.classList.remove('typed');
-                    
-                    const fb = feedback[c];
-                    if (fb === "2") {
-                        cell.classList.add("correct");
-                    } else if (fb === "1") {
-                        cell.classList.add("present");
-                    } else {
-                        cell.classList.add("absent");
+        // After all letters typed + short pause, flip tiles one-by-one
+        const flipStart = 5 * LETTER_DELAY + PAUSE_BEFORE_FLIP;
+        for (let c = 0; c < 5; c++) {
+            ((col) => {
+                setTimeout(() => {
+                    const cell = document.getElementById(`mini-cell-${currentRow}-${col}`);
+                    if (cell) {
+                        cell.classList.remove('typed');
+                        const fb = feedback[col];
+                        if (fb === "2") {
+                            cell.classList.add("correct");
+                        } else if (fb === "1") {
+                            cell.classList.add("present");
+                        } else {
+                            cell.classList.add("absent");
+                        }
                     }
-                }
-            }
-            
-            // Advance to next row after 2.0s
+                }, flipStart + col * FLIP_DELAY);
+            })(c);
+        }
+
+        // Advance to next row after all flips done + rest pause
+        const totalRowTime = flipStart + 5 * FLIP_DELAY + 1800;
+        solveTimeoutId = setTimeout(() => {
             currentRow++;
-            solveTimeoutId = setTimeout(runStep, 2000);
-        }, 600);
+            runStep();
+        }, totalRowTime);
     }
+
 
     // Start simulation loop
     startSimulation();
