@@ -3,51 +3,64 @@ document.addEventListener('DOMContentLoaded', () => {
     const lettersContainer = document.getElementById('playground-wordle-floating-letters');
     if (!gridContainer || !lettersContainer) return;
 
-    // 1. Initialise Floating 3D Background Letters
+    // 1. Initialise Floating Wordle Tile Background
     const lettersList = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const colorClasses = ["green", "yellow", "gray"];
-    const letterCount = 15;
+    const tileCount = 18;
 
-    for (let i = 0; i < letterCount; i++) {
-        const span = document.createElement("span");
-        span.className = "floating-letter " + colorClasses[Math.floor(Math.random() * colorClasses.length)];
-        span.textContent = lettersList[Math.floor(Math.random() * lettersList.length)];
-        
-        // Random sizes
-        const size = (1.2 + Math.random() * 4.5).toFixed(1) + "rem";
-        span.style.fontSize = size;
-        
-        // Random positions and rotations for 3D translation
-        const startX = (Math.random() * 100).toFixed(0) + "%";
-        const startY = (Math.random() * 100).toFixed(0) + "%";
-        const startZ = (-150 - Math.random() * 200).toFixed(0) + "px";
-        
-        const endX = (Math.random() * 100).toFixed(0) + "%";
-        const endY = (Math.random() * 100).toFixed(0) + "%";
-        const endZ = (50 + Math.random() * 150).toFixed(0) + "px";
-        
-        const rotX = (Math.random() * 360).toFixed(0) + "deg";
-        const rotY = (Math.random() * 360).toFixed(0) + "deg";
-        const rotZ = (Math.random() * 360).toFixed(0) + "deg";
-        
-        span.style.setProperty("--start-x", startX);
-        span.style.setProperty("--start-y", startY);
-        span.style.setProperty("--start-z", startZ);
-        span.style.setProperty("--end-x", endX);
-        span.style.setProperty("--end-y", endY);
-        span.style.setProperty("--end-z", endZ);
-        span.style.setProperty("--rot-x", rotX);
-        span.style.setProperty("--rot-y", rotY);
-        span.style.setProperty("--rot-z", rotZ);
-        
-        // Durations & negative delays so they are already moving on page load
-        const duration = (15 + Math.random() * 20).toFixed(1) + "s";
-        const delay = (-Math.random() * 15).toFixed(1) + "s";
-        span.style.animationDuration = duration;
-        span.style.animationDelay = delay;
-        
-        lettersContainer.appendChild(span);
+    for (let i = 0; i < tileCount; i++) {
+        const tile = document.createElement("div");
+        tile.className = "floating-tile " + colorClasses[Math.floor(Math.random() * colorClasses.length)];
+        tile.textContent = lettersList[Math.floor(Math.random() * lettersList.length)];
+
+        // Random size for the tile square (40px - 90px)
+        const size = Math.floor(40 + Math.random() * 50);
+        tile.style.width = size + "px";
+        tile.style.height = size + "px";
+        tile.style.fontSize = Math.round(size * 0.52) + "px";
+        tile.style.lineHeight = size + "px";
+        tile.style.textAlign = "center";
+
+        // Position within the container (keeping tiles inside, not in corners)
+        // Use left/top as percentage-based center, with margins to keep inside bounds
+        const marginPx = size + 20;
+        const containerW = 100; // % based
+        const containerH = 100;
+        // Random position as percentage, but avoid placing near 0 or 100% edges tightly
+        const leftPct = 5 + Math.random() * 88; // 5% to 93%
+        const topPct  = 5 + Math.random() * 88;
+        tile.style.left = leftPct.toFixed(1) + "%";
+        tile.style.top  = topPct.toFixed(1) + "%";
+        tile.style.transform = "translate(-50%, -50%)"; // center on position
+
+        // Float animation: gentle translate + rotate using CSS vars
+        const txStart = (Math.random() * 30 - 15).toFixed(1) + "px";
+        const tyStart = (Math.random() * 30 - 15).toFixed(1) + "px";
+        const txEnd   = (Math.random() * 40 - 20).toFixed(1) + "px";
+        const tyEnd   = (Math.random() * 40 - 20).toFixed(1) + "px";
+        const rotStart = (Math.random() * 30 - 15).toFixed(1) + "deg";
+        const rotEnd   = (Math.random() * 30 - 15).toFixed(1) + "deg";
+        const opStart  = (0.15 + Math.random() * 0.25).toFixed(2);
+        const opEnd    = (0.3 + Math.random() * 0.35).toFixed(2);
+        const duration = (8 + Math.random() * 14).toFixed(1) + "s";
+        const delay    = (-Math.random() * 12).toFixed(1) + "s";
+        const scale    = (0.85 + Math.random() * 0.3).toFixed(2);
+
+        tile.style.setProperty("--tx-start", txStart);
+        tile.style.setProperty("--ty-start", tyStart);
+        tile.style.setProperty("--tx-end", txEnd);
+        tile.style.setProperty("--ty-end", tyEnd);
+        tile.style.setProperty("--rot-start", rotStart);
+        tile.style.setProperty("--rot-end", rotEnd);
+        tile.style.setProperty("--op-start", opStart);
+        tile.style.setProperty("--op-end", opEnd);
+        tile.style.setProperty("--duration", duration);
+        tile.style.setProperty("--delay", delay);
+        tile.style.setProperty("--scale", scale);
+
+        lettersContainer.appendChild(tile);
     }
+
 
     // 2. Wordle Auto-Solve Simulation
     // Simulated solver paths: [Target, [Guesses, Feedbacks]]
