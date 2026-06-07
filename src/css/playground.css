@@ -1,4 +1,4 @@
-/* =========================================
+﻿/* =========================================
    PLAYGROUND - IMMERSIVE PORTAL DESIGN
    ========================================= */
 
@@ -1199,60 +1199,61 @@ body {
 
 /* --- WORDLE SOLVER PORTAL --- */
 .wordle-portal {
-    background:
-        radial-gradient(ellipse at 50% 0%, rgba(106, 170, 100, 0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 20% 80%, rgba(106, 170, 100, 0.12) 0%, transparent 45%),
-        radial-gradient(ellipse at 80% 60%, rgba(201, 180, 88, 0.08) 0%, transparent 40%),
-        linear-gradient(175deg, #081209 0%, #0c1a0e 40%, #071008 100%);
+    /* Actual Wordle dark-mode palette: very dark charcoal base */
+    background: #121213;
     pointer-events: none;
 }
 
 .wordle-portal .portal-content {
     pointer-events: auto;
+    position: relative;
+    z-index: 10;
 }
 
 .wordle-portal .portal-link {
     pointer-events: none;
 }
 
-/* Title stays visible - do NOT hide on hover */
 .wordle-portal .portal-content:hover .portal-title {
     opacity: 1;
 }
 
 .wordle-portal .portal-content:hover {
-    transform: scale(1.04);
+    transform: scale(1.03);
 }
 
+/* Layer 1: subtle Wordle board square grid */
 .wordle-portal .layer-1 {
     background-image:
-        radial-gradient(rgba(106, 170, 100, 0.07) 1.5px, transparent 1.5px),
-        linear-gradient(rgba(106, 170, 100, 0.03) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(106, 170, 100, 0.03) 1px, transparent 1px);
-    background-size: 32px 32px, 80px 80px, 80px 80px;
-    opacity: 0.7;
+        linear-gradient(rgba(255,255,255,0.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,0.025) 1px, transparent 1px);
+    background-size: 62px 62px;
+    opacity: 1;
 }
 
+/* Layer 2: focused green + amber glows */
 .wordle-portal .layer-2 {
     background:
-        radial-gradient(circle at 25% 25%, rgba(106, 170, 100, 0.15) 0%, transparent 45%),
-        radial-gradient(circle at 75% 75%, rgba(201, 180, 88, 0.10) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(106, 170, 100, 0.05) 0%, transparent 60%);
+        radial-gradient(ellipse 55% 45% at 50% 50%, rgba(83, 141, 78, 0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 35% 35% at 20% 75%, rgba(181, 159, 59, 0.15) 0%, transparent 60%),
+        radial-gradient(ellipse 40% 40% at 80% 20%, rgba(83, 141, 78, 0.1) 0%, transparent 55%),
+        radial-gradient(ellipse 100% 60% at 50% 100%, rgba(18, 18, 19, 0.7) 0%, transparent 60%);
 }
 
-/* === WORDLE TILE LETTERS in the title === */
+/* === WORDLE TILE LETTERS in the title â€” match reference logo size === */
 .wordle-portal-title {
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-wrap: wrap;
-    gap: 0;
-    line-height: 1.1;
+    gap: 0.4em;
+    line-height: 1;
+    /* Override the base portal-title font-size so tiles control layout */
+    font-size: 0 !important;
 }
 
 .wordle-tile-letters {
     display: inline-flex;
-    gap: clamp(3px, 0.5vw, 7px);
+    gap: clamp(4px, 0.6vw, 9px);
     align-items: center;
 }
 
@@ -1260,48 +1261,50 @@ body {
     display: inline-flex;
     justify-content: center;
     align-items: center;
-    width: clamp(42px, 6vw, 88px);
-    height: clamp(42px, 6vw, 88px);
-    border-radius: 6px;
+    /* Match cap-height of SOLVER: at 18vw Bebas, cap â‰ˆ 12.6vw */
+    width: clamp(64px, 11vw, 155px);
+    height: clamp(64px, 11vw, 155px);
+    border-radius: clamp(4px, 0.5vw, 8px);
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(1.8rem, 3.8vw, 5.5rem);
+    font-size: clamp(2.4rem, 7.5vw, 10rem);
     font-weight: 700;
     color: #fff;
     letter-spacing: 0;
     border: 3px solid transparent;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.15);
-    animation: tileEntrance 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.18);
+    animation: tileEntrance 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    flex-shrink: 0;
 }
 
 .wtile:nth-child(1) { animation-delay: 0.05s; }
-.wtile:nth-child(2) { animation-delay: 0.15s; }
-.wtile:nth-child(3) { animation-delay: 0.25s; }
-.wtile:nth-child(4) { animation-delay: 0.35s; }
-.wtile:nth-child(5) { animation-delay: 0.45s; }
-.wtile:nth-child(6) { animation-delay: 0.55s; }
+.wtile:nth-child(2) { animation-delay: 0.18s; }
+.wtile:nth-child(3) { animation-delay: 0.31s; }
+.wtile:nth-child(4) { animation-delay: 0.44s; }
+.wtile:nth-child(5) { animation-delay: 0.57s; }
+.wtile:nth-child(6) { animation-delay: 0.70s; }
 
 .wtile.correct {
     background: #538d4e;
     border-color: #6aaa64;
-    box-shadow: 0 4px 20px rgba(83, 141, 78, 0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+    box-shadow: 0 6px 28px rgba(83, 141, 78, 0.7), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
 .wtile.present {
     background: #b59f3b;
     border-color: #c9b458;
-    box-shadow: 0 4px 20px rgba(181, 159, 59, 0.6), inset 0 1px 0 rgba(255,255,255,0.15);
+    box-shadow: 0 6px 28px rgba(181, 159, 59, 0.65), inset 0 1px 0 rgba(255,255,255,0.18);
 }
 
 .wtile.absent {
     background: #3a3a3c;
-    border-color: #818384;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.5), inset 0 1px 0 rgba(255,255,255,0.08);
+    border-color: #565758;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
 @keyframes tileEntrance {
     from {
         opacity: 0;
-        transform: scale(0.5) rotateY(-90deg);
+        transform: scale(0.4) rotateY(-90deg);
     }
     to {
         opacity: 1;
@@ -1311,39 +1314,45 @@ body {
 
 .wordle-solver-text {
     font-family: 'Bebas Neue', sans-serif;
-    font-size: clamp(5rem, 18vw, 14rem);
+    font-size: clamp(4rem, 18vw, 14rem);
     font-weight: 400;
     color: #fff;
     letter-spacing: 0.05em;
-    line-height: 0.9;
+    line-height: 1;
+    /* Match cap-height of tiles: Bebas cap â‰ˆ 0.78em */
+    display: inline-flex;
+    align-items: center;
+    height: clamp(64px, 11vw, 155px);
+    /* vertical align with tile squares */
     text-shadow:
-        0 0 40px rgba(106, 170, 100, 0.5),
-        0 0 80px rgba(106, 170, 100, 0.3),
-        0 0 120px rgba(201, 180, 88, 0.2);
-    display: inline-block;
-    vertical-align: middle;
+        0 0 40px rgba(106, 170, 100, 0.6),
+        0 0 80px rgba(106, 170, 100, 0.35),
+        0 0 140px rgba(83, 141, 78, 0.2);
 }
 
 .wordle-portal .portal-hint {
     text-shadow:
-        0 0 5px #041005,
-        0 0 10px #041005,
-        0 0 15px #041005;
+        0 0 8px #000,
+        0 0 16px #000;
+    margin-top: 1.5rem;
 }
 
-/* === MINI WORDLE SCENE - bigger + animated === */
+/* === MINI WORDLE BOARD â€” bigger + dramatic 3D float === */
 @keyframes wordleSceneFloat {
-    0%, 100% {
-        transform: translate(-50%, -50%) perspective(1200px) rotateX(28deg) rotateY(-12deg) rotateZ(1deg) translateY(0px);
+    0% {
+        transform: translate(-50%, -50%) perspective(900px) rotateX(32deg) rotateY(-18deg) rotateZ(3deg) translateY(0px) scale(1);
     }
-    25% {
-        transform: translate(-50%, -50%) perspective(1200px) rotateX(22deg) rotateY(-8deg) rotateZ(-1deg) translateY(-12px);
+    20% {
+        transform: translate(-50%, -50%) perspective(900px) rotateX(24deg) rotateY(-10deg) rotateZ(-2deg) translateY(-18px) scale(1.03);
     }
-    50% {
-        transform: translate(-50%, -50%) perspective(1200px) rotateX(30deg) rotateY(-15deg) rotateZ(2deg) translateY(-6px);
+    45% {
+        transform: translate(-50%, -50%) perspective(900px) rotateX(36deg) rotateY(-22deg) rotateZ(4deg) translateY(-8px) scale(0.98);
     }
-    75% {
-        transform: translate(-50%, -50%) perspective(1200px) rotateX(24deg) rotateY(-10deg) rotateZ(-0.5deg) translateY(-16px);
+    70% {
+        transform: translate(-50%, -50%) perspective(900px) rotateX(28deg) rotateY(-14deg) rotateZ(-1deg) translateY(-22px) scale(1.02);
+    }
+    100% {
+        transform: translate(-50%, -50%) perspective(900px) rotateX(32deg) rotateY(-18deg) rotateZ(3deg) translateY(0px) scale(1);
     }
 }
 
@@ -1351,85 +1360,85 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) perspective(1200px) rotateX(28deg) rotateY(-12deg) rotateZ(1deg);
+    transform: translate(-50%, -50%) perspective(900px) rotateX(32deg) rotateY(-18deg) rotateZ(3deg);
     transform-style: preserve-3d;
     z-index: 2;
     pointer-events: none;
-    animation: wordleSceneFloat 10s ease-in-out infinite;
+    animation: wordleSceneFloat 9s ease-in-out infinite;
+    filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(83,141,78,0.3));
 }
 
 .wordle-portal:hover .wordle-scene-mini {
     animation-play-state: paused;
-    transform: translate(-50%, -50%) perspective(1200px) rotateX(35deg) rotateY(-18deg) rotateZ(2deg) scale(1.1);
-    transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    filter: drop-shadow(0 40px 80px rgba(0,0,0,0.9)) drop-shadow(0 0 60px rgba(83,141,78,0.5));
 }
 
 .wordle-grid-mini {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    background: rgba(10, 18, 10, 0.75);
-    border: 1px solid rgba(106, 170, 100, 0.2);
-    border-radius: 14px;
-    padding: 16px;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    gap: 9px;
+    background: rgba(18, 18, 19, 0.88);
+    border: 1px solid rgba(83, 141, 78, 0.35);
+    border-radius: 16px;
+    padding: 18px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
     box-shadow:
-        0 30px 60px rgba(0, 0, 0, 0.7),
-        0 0 40px rgba(106, 170, 100, 0.1),
-        inset 0 1px 0 rgba(106, 170, 100, 0.15);
+        0 40px 80px rgba(0, 0, 0, 0.8),
+        0 0 50px rgba(83, 141, 78, 0.18),
+        inset 0 1px 0 rgba(83, 141, 78, 0.2);
 }
 
 .wordle-row-mini {
     display: flex;
-    gap: 8px;
+    gap: 9px;
 }
 
 .wordle-cell-mini {
-    width: 52px;
-    height: 52px;
-    border: 2px solid #1a2e1a;
-    border-radius: 6px;
+    width: 66px;
+    height: 66px;
+    border: 2px solid #3a3a3c;
+    border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-family: 'Inter', sans-serif;
-    font-weight: 800;
-    font-size: 1.4rem;
+    font-family: 'Bebas Neue', sans-serif;
+    font-weight: 700;
+    font-size: 2rem;
     text-transform: uppercase;
     color: #fff;
-    background: rgba(15, 25, 15, 0.6);
-    transition: background-color 0.4s ease, border-color 0.4s ease, transform 0.5s ease;
+    background: rgba(18, 18, 19, 0.7);
+    transition: background-color 0.45s ease, border-color 0.45s ease, transform 0.5s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.4s ease;
     transform-style: preserve-3d;
 }
 
 .wordle-cell-mini.typed {
-    border-color: #4a7a4a;
-    background: rgba(30, 50, 30, 0.7);
-    transform: scale(1.1);
+    border-color: #818384;
+    background: rgba(40, 40, 42, 0.8);
+    transform: scale(1.12);
 }
 
 .wordle-cell-mini.correct {
     background-color: #538d4e;
     border-color: #6aaa64;
-    box-shadow: 0 0 12px rgba(106, 170, 100, 0.4);
+    box-shadow: 0 0 18px rgba(83, 141, 78, 0.55), 0 0 35px rgba(83, 141, 78, 0.2);
     transform: rotateX(360deg);
 }
 
 .wordle-cell-mini.present {
     background-color: #b59f3b;
     border-color: #c9b458;
-    box-shadow: 0 0 12px rgba(201, 180, 88, 0.4);
+    box-shadow: 0 0 18px rgba(181, 159, 59, 0.55), 0 0 35px rgba(181, 159, 59, 0.2);
     transform: rotateX(360deg);
 }
 
 .wordle-cell-mini.absent {
     background-color: #3a3a3c;
-    border-color: #818384;
+    border-color: #565758;
     transform: rotateX(360deg);
 }
 
-/* Floating Wordle Tile Cards for Portal Background */
+/* Floating Wordle Tile Cards */
 .wordle-floating-bg-letters {
     position: absolute;
     inset: 0;
@@ -1438,7 +1447,6 @@ body {
     z-index: 1;
 }
 
-/* Each floating item is now a tile div, not a span */
 .wordle-floating-bg-letters .floating-tile {
     position: absolute;
     display: flex;
@@ -1447,45 +1455,49 @@ body {
     border-radius: 6px;
     font-family: 'Bebas Neue', sans-serif;
     font-weight: 700;
-    color: #fff;
+    color: rgba(255, 255, 255, 0.7);
     pointer-events: none;
     user-select: none;
     border: 2px solid transparent;
-    animation: floatTile var(--duration, 20s) var(--delay, 0s) ease-in-out infinite alternate;
+    /* Use translate3d in the keyframe â€” base position via left/top/margin */
+    animation: floatTile var(--duration, 18s) var(--delay, 0s) ease-in-out infinite alternate;
     will-change: transform, opacity;
 }
 
 .wordle-floating-bg-letters .floating-tile.green {
-    background: rgba(83, 141, 78, 0.18);
-    border-color: rgba(106, 170, 100, 0.3);
-    box-shadow: 0 0 20px rgba(106, 170, 100, 0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+    background: rgba(83, 141, 78, 0.22);
+    border-color: rgba(106, 170, 100, 0.45);
+    box-shadow: 0 0 24px rgba(106, 170, 100, 0.2), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .wordle-floating-bg-letters .floating-tile.yellow {
-    background: rgba(181, 159, 59, 0.15);
-    border-color: rgba(201, 180, 88, 0.28);
-    box-shadow: 0 0 20px rgba(201, 180, 88, 0.15), inset 0 1px 0 rgba(255,255,255,0.08);
+    background: rgba(181, 159, 59, 0.2);
+    border-color: rgba(201, 180, 88, 0.4);
+    box-shadow: 0 0 24px rgba(201, 180, 88, 0.18), inset 0 1px 0 rgba(255,255,255,0.1);
 }
 
 .wordle-floating-bg-letters .floating-tile.gray {
-    background: rgba(58, 58, 60, 0.2);
-    border-color: rgba(129, 131, 132, 0.25);
-    box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    background: rgba(58, 58, 60, 0.28);
+    border-color: rgba(86, 87, 88, 0.4);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
 }
 
+/* Animation only moves the tile around its base position â€” centering done via margin in JS */
 @keyframes floatTile {
     0% {
-        transform:
-            translate(var(--tx-start, 0px), var(--ty-start, 0px))
-            rotate(var(--rot-start, 0deg))
-            scale(var(--scale, 1));
-        opacity: var(--op-start, 0.25);
+        transform: translate3d(var(--tx-a, -8px), var(--ty-a, -10px), 0) rotate(var(--rot-a, -8deg));
+        opacity: var(--op-a, 0.2);
+    }
+    33% {
+        transform: translate3d(var(--tx-b, 6px), var(--ty-b, -18px), 0) rotate(var(--rot-b, 4deg));
+        opacity: var(--op-b, 0.38);
+    }
+    66% {
+        transform: translate3d(var(--tx-c, 12px), var(--ty-c, -6px), 0) rotate(var(--rot-c, -3deg));
+        opacity: var(--op-c, 0.3);
     }
     100% {
-        transform:
-            translate(var(--tx-end, 20px), var(--ty-end, -30px))
-            rotate(var(--rot-end, 15deg))
-            scale(var(--scale, 1));
-        opacity: var(--op-end, 0.5);
+        transform: translate3d(var(--tx-a, -8px), var(--ty-a, -10px), 0) rotate(var(--rot-a, -8deg));
+        opacity: var(--op-a, 0.2);
     }
 }
