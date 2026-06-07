@@ -1275,9 +1275,9 @@ body {
     box-shadow: 0 6px 24px rgba(0,0,0,0.6), inset 0 1px 0 rgba(255,255,255,0.18);
     animation: tileEntrance 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
     flex-shrink: 0;
-    /* Bebas Neue optical centering: large ascender makes glyphs sit high */
-    padding-bottom: 0.12em;
-    padding-top: 0;
+    /* Bebas Neue optical centering: large ascender sits high, push DOWN with padding-top */
+    padding-top: 0.15em;
+    padding-bottom: 0;
 }
 
 .wtile:nth-child(1) { animation-delay: 0.05s; }
@@ -1331,6 +1331,10 @@ body {
     /* Clip the line box to tile height so descenders don't make it taller */
     height: clamp(64px, 11vw, 155px);
     overflow: hidden;
+    /* Explicit gap from WORDLE tiles - gap on parent doesn't work when font-size is 0 */
+    margin-left: clamp(16px, 2.2vw, 36px);
+    /* Bebas optical fix: match padding-top of tiles */
+    padding-top: 0.15em;
     text-shadow:
         0 0 40px rgba(106, 170, 100, 0.6),
         0 0 80px rgba(106, 170, 100, 0.35),
@@ -1344,22 +1348,22 @@ body {
     margin-top: 1.5rem;
 }
 
-/* === MINI WORDLE BOARD — bigger + dramatic 3D float === */
+/* === MINI WORDLE BOARD — nearly face-on, slow gentle 3D wobble === */
 @keyframes wordleSceneFloat {
     0% {
-        transform: translate(-50%, -50%) perspective(800px) rotateX(20deg) rotateY(-10deg) rotateZ(0.5deg) translateY(0px) scale(1);
+        transform: translate(-50%, -50%) perspective(700px) rotateX(6deg) rotateY(4deg) rotateZ(0deg) translateY(0px) scale(1);
     }
-    25% {
-        transform: translate(-50%, -50%) perspective(800px) rotateX(14deg) rotateY(-5deg) rotateZ(-0.5deg) translateY(-20px) scale(1.04);
+    20% {
+        transform: translate(-50%, -50%) perspective(700px) rotateX(2deg) rotateY(-2deg) rotateZ(0.5deg) translateY(-16px) scale(1.04);
     }
-    50% {
-        transform: translate(-50%, -50%) perspective(800px) rotateX(22deg) rotateY(-13deg) rotateZ(1deg) translateY(-10px) scale(0.97);
+    45% {
+        transform: translate(-50%, -50%) perspective(700px) rotateX(9deg) rotateY(6deg) rotateZ(-0.5deg) translateY(-8px) scale(0.97);
     }
-    75% {
-        transform: translate(-50%, -50%) perspective(800px) rotateX(16deg) rotateY(-7deg) rotateZ(-0.3deg) translateY(-26px) scale(1.03);
+    70% {
+        transform: translate(-50%, -50%) perspective(700px) rotateX(4deg) rotateY(1deg) rotateZ(0.3deg) translateY(-22px) scale(1.03);
     }
     100% {
-        transform: translate(-50%, -50%) perspective(800px) rotateX(20deg) rotateY(-10deg) rotateZ(0.5deg) translateY(0px) scale(1);
+        transform: translate(-50%, -50%) perspective(700px) rotateX(6deg) rotateY(4deg) rotateZ(0deg) translateY(0px) scale(1);
     }
 }
 
@@ -1367,11 +1371,11 @@ body {
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%) perspective(800px) rotateX(20deg) rotateY(-10deg) rotateZ(0.5deg);
+    transform: translate(-50%, -50%) perspective(700px) rotateX(6deg) rotateY(4deg) rotateZ(0deg);
     transform-style: preserve-3d;
     z-index: 2;
     pointer-events: none;
-    animation: wordleSceneFloat 18s ease-in-out infinite;
+    animation: wordleSceneFloat 25s ease-in-out infinite;
     filter: drop-shadow(0 30px 60px rgba(0,0,0,0.8)) drop-shadow(0 0 40px rgba(83,141,78,0.3));
 }
 
