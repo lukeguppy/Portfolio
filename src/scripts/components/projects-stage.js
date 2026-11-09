@@ -575,8 +575,10 @@ export function initProjectsStage() {
       const active = t.dataset.projectTab === mode;
       t.classList.toggle('is-active', active);
       t.setAttribute('aria-selected', active ? 'true' : 'false');
-      if (active && typeof t.scrollIntoView === 'function') {
-        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      if (!immediate && active && t.parentElement) {
+        const container = t.parentElement;
+        const targetLeft = t.offsetLeft - (container.clientWidth - t.clientWidth) / 2;
+        container.scrollTo({ left: targetLeft, behavior: 'smooth' });
       }
     });
 
