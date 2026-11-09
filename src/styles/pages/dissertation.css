@@ -743,4 +743,44 @@
       padding: 1rem 1.5rem;
     }
   }
+
+  @media (max-width: 40rem) {
+    .pipeline-track {
+      left: 1rem;
+    }
+
+    .pipeline-module,
+    .pipeline-module.align-right {
+      padding: 0 0 0 2.25rem;
+    }
+
+    .module-marker,
+    .pipeline-module.align-right .module-marker {
+      width: 2.2rem;
+      height: 2.2rem;
+      font-size: 0.75rem;
+      left: -0.1rem;
+    }
+
+    .module-content {
+      padding: 1.25rem 1rem;
+    }
+
+    .hero-stats {
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+    }
+
+    .pdf-viewer-container {
+      height: min(560px, 72vh);
+    }
+
+    .pdf-controls {
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 0.35rem 0.75rem;
+    }
+  }
+
 }

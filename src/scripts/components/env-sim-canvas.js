@@ -17,7 +17,7 @@ export function initEnvSimCanvas(canvas, options = {}) {
   function resize() {
     const rect = canvas.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = Math.max(280, rect.width);
+    width = Math.max(160, rect.width);
     height = Math.max(180, rect.height);
     canvas.width = Math.floor(width * dpr);
     canvas.height = Math.floor(height * dpr);

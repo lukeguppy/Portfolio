@@ -112,7 +112,7 @@
 
   .contact-toast {
     position: fixed;
-    bottom: 2.5rem;
+    bottom: max(2.5rem, calc(env(safe-area-inset-bottom, 0px) + 2rem));
     left: 50%;
     transform: translate(-50%, 0.8rem);
     display: inline-flex;
@@ -147,3 +147,22 @@
     flex-shrink: 0;
   }
 }
+
+
+  @media (max-width: 30rem) {
+    .contact-title {
+      font-size: 2.25rem;
+    }
+    .contact-row {
+      padding: 1.15rem 0;
+      gap: 0.85rem;
+    }
+    .contact-row__value {
+      font-size: 0.98rem;
+    }
+    .contact-row__icon {
+      width: 2.25rem;
+      height: 2.25rem;
+    }
+  }
+

@@ -204,7 +204,7 @@ body[data-page="playground"] {
 /* Bottom scroll cue */
 .scroll-indicator {
   position: fixed;
-  bottom: 2rem;
+  bottom: max(1.75rem, calc(env(safe-area-inset-bottom, 0px) + 1.25rem));
   left: 50%;
   transform: translateX(-50%);
   display: flex;

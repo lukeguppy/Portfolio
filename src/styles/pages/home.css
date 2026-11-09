@@ -776,6 +776,7 @@
 
     .portal-stage__viewport {
       position: static;
+      margin-top: 0;
     }
   }
 
@@ -799,8 +800,17 @@
     }
 
     .portal-stage__frame {
-      height: min(440px, 60vh);
-      min-height: 340px;
+      height: auto;
+      min-height: 320px;
+    }
+
+    .portal-stage__experience {
+      padding: 1.25rem 1rem;
+    }
+
+    .stage-exp-timeline {
+      padding-left: 1.15rem;
+      gap: 0.95rem;
     }
 
     .stage-contact-item {

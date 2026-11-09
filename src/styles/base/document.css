@@ -6,6 +6,7 @@ html {
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
 }
 
 button,
