@@ -168,6 +168,8 @@ function renderBoard() {
         row.forEach((cell, colIndex) => {
             const cellElement = document.createElement('div');
             cellElement.classList.add('cell');
+            cellElement.dataset.row = rowIndex;
+            cellElement.dataset.col = colIndex;
             if (cell) {
                 cellElement.style.backgroundColor = cell;
                 cellElement.classList.add('filled');
@@ -527,35 +529,59 @@ function updateTouchPosition(touch) {
     const previewW = currentDraggingBlock.shape[0].length * cellWidth;
     const previewH = currentDraggingBlock.shape.length * cellWidth;
 
+    // Offset the preview comfortably above the player's finger so thumbs don't obscure the placement
     const posX = touch.clientX - previewW / 2;
-    const posY = touch.clientY - previewH - 30;
+    const posY = touch.clientY - previewH - 45;
 
     draggablePreviewElement.style.left = `${posX}px`;
     draggablePreviewElement.style.top = `${posY}px`;
 
-    const targetX = touch.clientX;
-    const targetY = touch.clientY - previewH / 2 - 30;
-
-    const el = document.elementFromPoint(targetX, targetY);
-    const cell = el ? el.closest('.cell') : null;
+    // Target coordinates: the center of the dragged block
+    const targetX = posX + previewW / 2;
+    const targetY = posY + previewH / 2;
 
     clearDragOverHighlight();
     dragOverCells = [];
     potentialDropPosition = null;
 
-    if (cell && currentDraggingBlock) {
-        const row = parseInt(cell.dataset.row);
-        const col = parseInt(cell.dataset.col);
+    let hoverRow = -1;
+    let hoverCol = -1;
+
+    // Robust grid coordinate detection via board bounding box
+    const boardRect = boardElement.getBoundingClientRect();
+    if (
+        targetX >= boardRect.left &&
+        targetX <= boardRect.right &&
+        targetY >= boardRect.top &&
+        targetY <= boardRect.bottom
+    ) {
+        hoverCol = Math.floor(((targetX - boardRect.left) / boardRect.width) * boardWidth);
+        hoverRow = Math.floor(((targetY - boardRect.top) / boardRect.height) * boardHeight);
+    } else {
+        // Fallback: DOM elementFromPoint
+        const el = document.elementFromPoint(targetX, targetY);
+        const cell = el ? el.closest('.cell') : null;
+        if (cell && cell.dataset.row !== undefined) {
+            hoverRow = parseInt(cell.dataset.row);
+            hoverCol = parseInt(cell.dataset.col);
+        }
+    }
+
+    if (hoverRow >= 0 && hoverRow < boardHeight && hoverCol >= 0 && hoverCol < boardWidth && currentDraggingBlock) {
         const blockH = currentDraggingBlock.shape.length;
         const blockW = currentDraggingBlock.shape[0].length;
-        const startRow = row - Math.floor(blockH / 2);
-        const startCol = col - Math.floor(blockW / 2);
+        const startRow = hoverRow - Math.floor(blockH / 2);
+        const startCol = hoverCol - Math.floor(blockW / 2);
 
         if (canPlaceBlock(currentDraggingBlock.shape, startRow, startCol)) {
             potentialDropPosition = { row: startRow, col: startCol };
             highlightDropArea(currentDraggingBlock.shape, startRow, startCol, currentDraggingBlock.colour);
         } else {
-            const deltas = [{ r: 0, c: 0 }, { r: -1, c: 0 }, { r: 1, c: 0 }, { r: 0, c: -1 }, { r: 0, c: 1 }];
+            // Magnetic snap to nearest valid adjacent position
+            const deltas = [
+                { r: 0, c: 0 }, { r: -1, c: 0 }, { r: 1, c: 0 }, { r: 0, c: -1 }, { r: 0, c: 1 },
+                { r: -1, c: -1 }, { r: -1, c: 1 }, { r: 1, c: -1 }, { r: 1, c: 1 }
+            ];
             for (const d of deltas) {
                 if (canPlaceBlock(currentDraggingBlock.shape, startRow + d.r, startCol + d.c)) {
                     potentialDropPosition = { row: startRow + d.r, col: startCol + d.c };

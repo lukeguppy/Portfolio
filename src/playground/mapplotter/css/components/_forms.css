@@ -191,42 +191,42 @@
 
 .dark-preview {
     background-color: #1a1a1a;
-    background-image: url('https://a.basemaps.cartocdn.com/dark_all/12/2048/1362.png');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/4/5/3');
 }
 
 .light-preview {
     background-color: #f0f0f0;
-    background-image: url('https://a.basemaps.cartocdn.com/light_all/12/2048/1362.png');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/4/5/3');
 }
 
 .voyager-preview {
     background-color: #f4f7f6;
-    background-image: url('https://a.basemaps.cartocdn.com/rastertiles/voyager/12/2048/1362.png');
+    background-image: url('https://a.tile.openstreetmap.fr/hot/4/8/5.png');
 }
 
 .minimal-light-preview {
     background-color: #ffffff;
-    background-image: url('https://a.basemaps.cartocdn.com/light_nolabels/12/2048/1362.png');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Light_Gray_Base/MapServer/tile/4/5/3');
 }
 
 .minimal-dark-preview {
     background-color: #2c2c2c;
-    background-image: url('https://a.basemaps.cartocdn.com/dark_nolabels/12/2048/1362.png');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/4/5/3');
 }
 
 .osm-preview {
     background-color: #f2efe9;
-    background-image: url('https://a.tile.openstreetmap.org/12/2048/1362.png');
+    background-image: url('https://a.tile.openstreetmap.org/4/8/5.png');
 }
 
 .satellite-preview {
     background-color: #1a2c1a;
-    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/12/1362/2048');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/4/5/8');
 }
 
 .terrain-preview {
     background-color: #f4f1de;
-    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/12/1362/2048');
+    background-image: url('https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/4/5/8');
 }
 
 #marker-opacity {

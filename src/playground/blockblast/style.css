@@ -330,38 +330,58 @@ body::after {
 /* === RESPONSIVE === */
 @media (max-width: 600px) {
     :root {
-        --board-size: min(85vw, 50vh, 350px);
+        --board-size: min(86vw, calc(100svh - 260px), 360px);
     }
 
     .game-wrapper {
-        padding: 70px 15px 15px;
-        gap: 12px;
+        padding-top: max(96px, calc(env(safe-area-inset-top, 0px) + 76px));
+        padding-bottom: max(16px, env(safe-area-inset-bottom, 16px));
+        padding-left: 12px;
+        padding-right: 12px;
+        gap: 8px;
+        justify-content: space-between;
     }
 
     #score-display {
         font-size: 2rem;
     }
 
+    #combo-display {
+        min-height: 1.2em;
+        font-size: 1rem;
+    }
+
+    #game-area {
+        gap: 14px;
+    }
+
     .block-preview .preview-cell {
-        width: 10px;
-        height: 10px;
+        width: 11px;
+        height: 11px;
     }
 
     #block-options {
-        gap: 12px;
+        gap: 10px;
     }
 
     .block-option {
-        padding: 6px;
+        padding: 8px;
+        touch-action: none; /* Prevents scroll interference while dragging blocks */
     }
 }
 
-@media (max-height: 600px) {
+@media (max-height: 650px) {
     :root {
-        --board-size: min(50vw, 45vh, 300px);
+        --board-size: min(75vw, calc(100svh - 220px), 280px);
     }
 
     .game-wrapper {
+        padding-top: max(80px, calc(env(safe-area-inset-top, 0px) + 60px));
+        padding-bottom: max(10px, env(safe-area-inset-bottom, 10px));
+        gap: 4px;
+    }
+
+    #game-area {
         gap: 8px;
     }
 }
