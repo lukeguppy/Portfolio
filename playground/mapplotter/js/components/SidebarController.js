@@ -7,6 +7,29 @@ class SidebarController {
         this.app = app;
         this.collapsed = false;
         this._initIcons();
+        this._initMobileHandlers();
+    }
+
+    _initMobileHandlers() {
+        const closeBtn = document.getElementById('sidebar-close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar && !sidebar.classList.contains('collapsed')) {
+                    this.toggle();
+                }
+            });
+        }
+
+        const backdrop = document.getElementById('sidebar-backdrop');
+        if (backdrop) {
+            backdrop.addEventListener('click', () => {
+                const sidebar = document.querySelector('.sidebar');
+                if (sidebar && !sidebar.classList.contains('collapsed')) {
+                    this.toggle();
+                }
+            });
+        }
     }
 
     /**
@@ -61,14 +84,17 @@ class SidebarController {
 
         if (!sidebar || !mainContent) return;
 
+        const backdrop = document.getElementById('sidebar-backdrop');
         if (this.collapsed) {
             sidebar.classList.remove('collapsed');
             toggleBtn?.classList.remove('collapsed');
             mainContent.classList.remove('sidebar-collapsed');
+            backdrop?.classList.add('active');
         } else {
             sidebar.classList.add('collapsed');
             toggleBtn?.classList.add('collapsed');
             mainContent.classList.add('sidebar-collapsed');
+            backdrop?.classList.remove('active');
         }
 
         // Save preference
@@ -86,9 +112,11 @@ class SidebarController {
      * Load saved sidebar state from localStorage
      */
     loadState() {
-        const sidebarCollapsed = localStorage.getItem('explore-sidebar-collapsed') === 'true';
-        if (sidebarCollapsed) {
-            this.collapsed = false;
+        const isMobile = window.innerWidth <= 768;
+        const saved = localStorage.getItem('explore-sidebar-collapsed');
+        const shouldBeHidden = saved !== null ? saved !== 'true' : isMobile;
+        if (shouldBeHidden) {
+            this.collapsed = true;
             this.toggle();
         }
     }
