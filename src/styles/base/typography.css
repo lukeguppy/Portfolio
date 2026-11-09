@@ -48,3 +48,17 @@ strong {
 .quiet {
   color: var(--text-quiet);
 }
+
+
+code,
+pre,
+kbd,
+samp {
+  font-family: var(--font-mono);
+  max-width: 100%;
+}
+
+pre {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
