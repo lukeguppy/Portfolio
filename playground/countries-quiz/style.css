@@ -176,7 +176,7 @@ body {
 /* Game Controls */
 #game-controls {
   position: absolute;
-  bottom: 40px;
+  bottom: calc(40px + var(--keyboard-offset, 0px));
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -186,7 +186,7 @@ body {
   width: 90%;
   max-width: 400px;
   z-index: 1000;
-  transition: opacity 0.3s ease, transform 0.3s ease;
+  transition: opacity 0.3s ease, transform 0.3s ease, bottom 0.22s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .control-panel {
@@ -679,10 +679,37 @@ html, body, #app {
   }
 
   #game-controls {
-    bottom: max(14px, env(safe-area-inset-bottom, 14px));
+    bottom: calc(max(14px, env(safe-area-inset-bottom, 14px)) + var(--keyboard-offset, 0px));
     width: calc(100vw - 20px);
     max-width: 380px;
     gap: 0.65rem;
+  }
+
+  html.keyboard-open #game-controls,
+  #game-controls.keyboard-active,
+  #game-controls:focus-within {
+    bottom: calc(max(14px, env(safe-area-inset-bottom, 14px)) + max(var(--keyboard-offset, 0px), 280px)) !important;
+    z-index: 3000;
+  }
+
+  html.keyboard-open #lives-container,
+  #game-controls.keyboard-active #lives-container,
+  #game-controls:focus-within #lives-container {
+    display: none !important;
+  }
+
+  html.keyboard-open .control-panel,
+  #game-controls.keyboard-active .control-panel,
+  #game-controls:focus-within .control-panel {
+    padding: 0.5rem 0.75rem;
+    gap: 0.5rem;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  html.keyboard-open #guess-input,
+  #game-controls.keyboard-active #guess-input,
+  #game-controls:focus-within #guess-input {
+    padding: 0.6rem;
   }
 
   .control-panel {
