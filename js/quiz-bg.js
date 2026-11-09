@@ -58,14 +58,16 @@ class GlobeAutomation {
         }
 
         try {
+            const isGhPages = window.location.pathname.startsWith('/Portfolio');
+            const prefix = isGhPages ? '/Portfolio' : '';
             let data;
             try {
-                data = await d3.json('/Portfolio/playground/countries-quiz/world.geojson');
+                data = await d3.json(`${prefix}/playground/countries-quiz/world.geojson`);
             } catch {
                 try {
                     data = await d3.json('./playground/countries-quiz/world.geojson');
                 } catch {
-                    data = await d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
+                    data = await d3.json('../playground/countries-quiz/world.geojson');
                 }
             }
             const ignored = ["Antarctica", "French Southern and Antarctic Lands"];
