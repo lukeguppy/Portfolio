@@ -570,6 +570,9 @@ export function initProjectsStage() {
       const active = t.dataset.projectTab === mode;
       t.classList.toggle('is-active', active);
       t.setAttribute('aria-selected', active ? 'true' : 'false');
+      if (active && typeof t.scrollIntoView === 'function') {
+        t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+      }
     });
 
     if (immediate || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
@@ -1078,10 +1081,15 @@ export function initProjectsStage() {
     const topLaneY = roadTop + roadH * 0.26;
     const bottomLaneY = roadTop + roadH * 0.74;
 
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    // Road asphalt and curbs
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.95)';
     ctx.fillRect(0, roadTop, w, roadH);
 
-    ctx.strokeStyle = 'rgba(148, 163, 184, 0.28)';
+    ctx.fillStyle = 'rgba(51, 65, 85, 0.6)';
+    ctx.fillRect(0, roadTop - 4, w, 4);
+    ctx.fillRect(0, roadBot, w, 4);
+
+    ctx.strokeStyle = 'rgba(148, 163, 184, 0.35)';
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(0, roadTop);
@@ -1093,16 +1101,16 @@ export function initProjectsStage() {
     ctx.save();
     ctx.setLineDash([18, 16]);
     ctx.lineDashOffset = (t * 165 * state.ppoSpeedTarget) % 34;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
     ctx.beginPath();
     ctx.moveTo(0, h * 0.5);
     ctx.lineTo(w, h * 0.5);
     ctx.stroke();
     ctx.restore();
 
-    const egoX = w * 0.28;
-    const cycleSpan = w + 260;
-    const obsX = w + 130 - ((t * 95 * state.ppoSpeedTarget) % cycleSpan);
+    const egoX = Math.max(52, w * 0.25);
+    const cycleSpan = Math.max(340, w + 140);
+    const obsX = w + 30 - ((t * 115 * state.ppoSpeedTarget) % cycleSpan);
     const obsY = topLaneY;
     const carHalfL = 22;
     const carHalfW = 11;
@@ -1128,19 +1136,19 @@ export function initProjectsStage() {
 
     const egoY = topLaneY + evade * (bottomLaneY - topLaneY);
 
+    const maxRayRange = Math.min(215, Math.max(140, w * 0.65));
     const rays = [
-      { ang: -0.52, range: 195 },
-      { ang: -0.39, range: 200 },
-      { ang: -0.26, range: 205 },
-      { ang: -0.13, range: 210 },
-      { ang: 0, range: 215 },
-      { ang: 0.13, range: 210 },
-      { ang: 0.26, range: 205 },
-      { ang: 0.39, range: 200 },
-      { ang: 0.52, range: 195 },
-      { ang: -1.15, range: 82 },
-      { ang: -1.57, range: 78 },
-      { ang: -2.05, range: 82 },
+      { ang: -0.52, range: maxRayRange * 0.9 },
+      { ang: -0.39, range: maxRayRange * 0.95 },
+      { ang: -0.26, range: maxRayRange * 0.98 },
+      { ang: 0, range: maxRayRange },
+      { ang: 0.13, range: maxRayRange },
+      { ang: 0.26, range: maxRayRange * 0.98 },
+      { ang: 0.39, range: maxRayRange * 0.95 },
+      { ang: 0.52, range: maxRayRange * 0.9 },
+      { ang: -1.15, range: 75 },
+      { ang: -1.57, range: 70 },
+      { ang: -2.05, range: 75 },
     ];
 
     rays.forEach(({ ang, range }) => {
@@ -1181,11 +1189,13 @@ export function initProjectsStage() {
       ctx.fill();
     });
 
+    // Obstacle vehicle
     ctx.fillStyle = 'rgba(244, 63, 94, 0.88)';
     ctx.beginPath();
     ctx.roundRect(obsX - carHalfL, obsY - carHalfW, carHalfL * 2, carHalfW * 2, 5);
     ctx.fill();
 
+    // PPO autonomous agent vehicle
     ctx.save();
     ctx.translate(egoX, egoY);
     ctx.rotate(heading);
@@ -1194,6 +1204,22 @@ export function initProjectsStage() {
     ctx.roundRect(-carHalfL, -carHalfW, carHalfL * 2, carHalfW * 2, 5);
     ctx.fill();
     ctx.restore();
+
+    // PPO Telemetry HUD
+    const hudW = Math.min(270, w - 24);
+    ctx.fillStyle = 'rgba(15, 23, 42, 0.85)';
+    ctx.strokeStyle = 'rgba(45, 212, 191, 0.35)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.roundRect(12, 10, hudW, 26, 4);
+    ctx.fill();
+    ctx.stroke();
+
+    ctx.font = '700 9px "JetBrains Mono Variable", monospace';
+    ctx.textAlign = 'left';
+    ctx.fillStyle = '#2dd4bf';
+    const stateLabel = evade > 0.05 ? (evade >= 0.95 ? 'LANE CHANGE [HOLD]' : 'PPO EVADING') : 'CRUISING [TOP LANE]';
+    ctx.fillText(`PPO VEL: ${(state.ppoSpeedTarget * 45).toFixed(1)} KM/H · ${stateLabel}`, 18, 26);
   }
 
   // 4. Wave Diffraction Simulator Visualisation
@@ -2080,8 +2106,8 @@ export function initProjectsStage() {
     );
 
     // Momentum bar
-    const barX = 252;
-    const barW = 95;
+    const barX = Math.min(Math.max(14, w - 105), 252);
+    const barW = Math.max(30, Math.min(95, w - barX - 14));
     const barH = 11;
     ctx.fillStyle = 'rgba(255, 255, 255, 0.08)';
     ctx.fillRect(barX, 22, barW, barH);
