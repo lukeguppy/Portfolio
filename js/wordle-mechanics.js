@@ -115,14 +115,23 @@ document.addEventListener('DOMContentLoaded', () => {
     let currentPathIndex = 0;
     let currentRow = 0;
     let solveTimeoutId = null;
+    let isWordleVisible = true;
 
     function startSimulation() {
+        if (!isWordleVisible) {
+            solveTimeoutId = setTimeout(startSimulation, 500);
+            return;
+        }
         buildGrid();
         currentRow = 0;
         runStep();
     }
 
     function runStep() {
+        if (!isWordleVisible) {
+            solveTimeoutId = setTimeout(runStep, 500);
+            return;
+        }
         const path = solvePaths[currentPathIndex];
         if (currentRow >= path.guesses.length) {
             // Solved! Wait 4 seconds, then start next word
@@ -179,6 +188,19 @@ document.addEventListener('DOMContentLoaded', () => {
         }, totalRowTime);
     }
 
+
+    
+
+    // Viewport-aware lifecycle: freeze simulation when user scrolls to other portals
+    const wordlePortal = document.getElementById('wordle-realm') || gridContainer;
+    if ('IntersectionObserver' in window) {
+        const wordleObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                isWordleVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.05 });
+        wordleObserver.observe(wordlePortal);
+    }
 
     // Start simulation loop
     startSimulation();

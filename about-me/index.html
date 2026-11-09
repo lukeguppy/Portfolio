@@ -2,312 +2,326 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me</title>
-    <meta name="description" content="Portfolio of Luke Guppy">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="/Portfolio/css/style.css">
-    <link rel="stylesheet" href="/Portfolio/css/prism.css">
-    
-    <link rel="stylesheet" href="/Portfolio/css/about.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>About Me · Luke Guppy</title>
+    <meta name="description" content="Luke Guppy — AI Software Engineer at AlphaSights. Experience at AlphaSights, Leonardo Helicopters, University of Warwick (1st Class BSc CS), and other projects.">
+    <link rel="preload" href="/Portfolio/assets/fonts/overpass-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/Portfolio/assets/fonts/literata-latin-wght-normal.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="stylesheet" href="/Portfolio/assets/styles/main.css">
+    <link rel="stylesheet" href="/Portfolio/assets/styles/pages/about.css">
     
 </head>
-<body>
-    <header>
-    <nav>
-        <div class="nav-container">
-            <h1>About Me</h1>
-            <ul>
+<body data-chrome="default" data-page="about">
+    <a class="skip-link" href="#main">Skip to content</a>
+    <div class="page">
+        <header class="site-header" id="site-header">
+    <div class="site-header__pill">
+        <a class="site-header__brand" href="/Portfolio/">
+            <span class="site-header__name">About Me</span>
+        </a>
+
+        <button class="site-header__toggle" type="button" aria-expanded="false" aria-controls="site-nav">
+            Menu
+        </button>
+
+        <nav class="site-nav" id="site-nav" aria-label="Main">
+            <ul class="site-nav__list">
                 
+                <li>
+                    <a href="/Portfolio/">Home</a>
+                </li>
                 
-                    
-                        <li><a href="/Portfolio/">Home</a></li>
-                    
+                <li>
+                    <a href="/Portfolio/about-me/" aria-current="page">About Me</a>
+                </li>
                 
-                    
+                <li>
+                    <a href="/Portfolio/dissertation/">Dissertation</a>
+                </li>
                 
-                    
-                        <li><a href="/Portfolio/dissertation/">Dissertation</a></li>
-                    
+                <li>
+                    <a href="/Portfolio/playground/">Playground</a>
+                </li>
                 
-                    
-                        <li><a href="/Portfolio/playground/">Playground</a></li>
-                    
-                
-                    
-                        <li><a href="/Portfolio/contact/">Contact</a></li>
-                    
+                <li>
+                    <a href="/Portfolio/contact/">Contact</a>
+                </li>
                 
             </ul>
-            <div class="social-links">
-                <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" class="nav-social-link" aria-label="LinkedIn">
-                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
-                        <defs>
-                            <linearGradient id="metal-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" style="stop-color:#f3f4f6" />
-                                <stop offset="50%" style="stop-color:#d1d5db" />
-                                <stop offset="100%" style="stop-color:#9ca3af" />
-                            </linearGradient>
-                            <filter id="glow-shadow" x="-50%" y="-50%" width="200%" height="200%">
-                                <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="rgba(0,0,0,0.3)"/>
-                            </filter>
-                        </defs>
-                        <path fill="url(#metal-gradient)" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>
-                    </svg>
-                </a>
-                <a href="https://github.com/lukeguppy" target="_blank" class="nav-social-link" aria-label="GitHub">
-                    <svg viewBox="0 0 24 24" fill="none" class="social-icon">
-                        <path fill="url(#metal-gradient)" d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                    </svg>
-                </a>
+        </nav>
+
+        <div class="site-header__socials">
+            <a href="" target="_blank" rel="noopener" aria-label="LinkedIn" title="LinkedIn">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/>
+                </svg>
+            </a>
+            <a href="" target="_blank" rel="noopener" aria-label="GitHub" title="GitHub">
+                <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true">
+                    <path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/>
+                </svg>
+            </a>
+        </div>
+    </div>
+</header>
+
+        <main id="main">
+            
+<!-- Fixed Full-Viewport Interactive Background -->
+<div id="about-bg-container" aria-hidden="true"></div>
+
+<!-- 1. INTRO — Full-Viewport Chapter -->
+<section class="about-hero" data-about-hero>
+    <div class="about-wrap">
+        <div class="about-hero__intro figma-building">
+            <h1 class="about-hero__title" style="--i: 0">
+                <span>About Me</span>
+                <span class="about-hero__subtitle">AI Software Engineer @ AlphaSights</span>
+            </h1>
+
+            <p class="about-hero__lead" style="--i: 1">
+                I’m a Software Engineer on the AI team at <strong>AlphaSights</strong>, focused on backend systems—developing internal and external AI chat platforms, client-facing MCP servers, custom tools, and AI jobs for data processing that shape the company’s AI foundations.
+            </p>
+
+            <div class="about-hero__timeline-stage figma-stage__timeline-stage" data-timeline-stage></div>
+
+            <div class="about-hero__pillars" style="--i: 2">
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Feb 2026 – Present</span>
+                    <strong class="about-pillar__title">AlphaSights</strong>
+                    <span class="about-pillar__subtitle">Software Engineer I</span>
+                    <p class="about-pillar__desc">Building external &amp; internal AI chat platforms, client-facing MCP servers, and AI workflow jobs on the AI team.</p>
+                </div>
+
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Aug 2024 – Jan 2026</span>
+                    <strong class="about-pillar__title">Leonardo Helicopters</strong>
+                    <span class="about-pillar__subtitle">Graduate Software Engineer</span>
+                    <p class="about-pillar__desc">Autonomy and Tactical Processing—RL drone sims, solvers, and C++/Docker mission systems.</p>
+                </div>
+
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Sep 2021 – Jul 2024</span>
+                    <strong class="about-pillar__title">University of Warwick</strong>
+                    <span class="about-pillar__subtitle">BSc Computer Science (1st Class Hons)</span>
+                    <p class="about-pillar__desc">Final-year dissertation on PPO deep reinforcement learning for autonomous driving in Unity.</p>
+                </div>
             </div>
         </div>
-    </nav>
-</header>
-    <main>
-        
-<div id="about-bg-container"></div>
-<div id="zen-bg-container"></div> <!-- Moved here for global layering -->
-
-<section class="about-hero">
-    <div class="hero-content">
-        <h1 class="hero-title">About Me</h1>
-        <p class="hero-sub">My skills, experience, and projects</p>
     </div>
+
+    <a href="#experience" class="about-scroll-cue" data-about-scroll-cue aria-label="Scroll to experience">
+        <span>Experience</span>
+        <div class="about-scroll-cue__line"></div>
+    </a>
 </section>
 
-<!-- EXPERIENCE - Timeline with growing line and dots (KEEP AS-IS) -->
-<section class="about-experience">
-    <div class="experience-container">
-        <div class="experience-title">
-            <span class="word">My</span>
-            <span class="word">Experience</span>
-        </div>
-        <div class="experience-timeline">
-            <!-- Fixed dots on timeline - always visible after title -->
-            <div class="timeline-dots">
-                <span class="timeline-dot" data-card="0"></span>
+<!-- 2. EXPERIENCE & EDUCATION — Chronological Vertical Timeline -->
+<section class="about-experience" id="experience" data-reveal-section aria-labelledby="experience-heading">
+    <div class="about-wrap">
+        <header class="experience-header" data-reveal-item>
+            <h2 class="experience-title" id="experience-heading">Experience</h2>
+        </header>
+
+        <div class="experience-timeline" data-experience-timeline>
+            <div class="timeline-spine" aria-hidden="true">
+                <div class="timeline-spine__fill" data-spine-fill></div>
+                <div class="timeline-spine__head" data-spine-head></div>
+            </div>
+
+            <div class="timeline-dots" aria-hidden="true">
+                <span class="timeline-dot is-active" data-card="0"></span>
                 <span class="timeline-dot" data-card="1"></span>
                 <span class="timeline-dot" data-card="2"></span>
+                <span class="timeline-dot" data-card="3"></span>
             </div>
-            <!-- Centered scanner/progress bar -->
-            <div class="timeline-scanner"></div>
-            <!-- Cards scroll through, appear when their dot passes scanner -->
-            <div class="timeline-cards">
-                <article class="exp-card">
-                    <h3>Software Engineer I — AI Team</h3>
-                    <p class="meta">AlphaSights · Feb 2026 – Present</p>
-                    <p>Starting soon — details to follow.</p>
-                </article>
-                <article class="exp-card">
-                    <h3>Graduate Software Engineer</h3>
-                    <p class="meta">Leonardo Helicopters · Aug 2024 – Jan 2026</p>
-                    <div class="role-group">
-                        <h4 class="role-title">Autonomy - Technology and Innovation</h4>
-                        <ul>
-                            <li>Implemented <strong>optimisation solvers</strong> for task assignment, supporting scalable autonomous systems.</li>
-                            <li>Built <strong>Python ROS2/Docker drone simulations</strong> for prototyping reinforcement learning and multi-agent autonomy.</li>
-                            <li>Designed <strong>behaviour tree architectures</strong> for mission control, improving decision-making reliability.</li>
-                        </ul>
-                    </div>
-                    
-                    <div class="role-group">
-                        <h4 class="role-title">Tactical Processing</h4>
-                        <ul>
-                            <li>Developed a <strong>C++/Docker mission management system</strong> with decision-tree infrastructure.</li>
-                            <li>Built and validated <strong>gRPC services</strong> for robust multi-system communication and customer demonstrations.</li>
-                        </ul>
-                    </div>
-                </article>
-                <article class="exp-card">
-                    <h3>Work Experience Placement</h3>
-                    <p class="meta">Metaswitch Networks · 2019</p>
-                    <p>Implemented and tested error checking for translation software during a two-week placement in a professional development environment.</p>
-                </article>
-            </div>
-        </div>
-    </div>
-</section>
 
-<!-- PINBOARD SECTION - Projects + Tech pin onto cork board -->
-<section class="pinboard-section">
-    <!-- Projects title - OUTSIDE pinboard-bg so it doesn't shrink -->
-    <div class="pinboard-title-container">
-        <h2 class="pinboard-title" data-phase="title">Projects</h2>
-    </div>
-    
-    <!-- Cork board background - CONTAINS the content that shrinks -->
-    <div class="pinboard-bg">
-        <!-- Solid color overlay - fades in during shrink for performance -->
-        <div class="pinboard-overlay"></div>
-        <!-- Projects cards only (no title) -->
-        <div class="pinboard-content">
-            <div class="polaroid-grid projects-grid">
-                <article class="polaroid-card" data-index="0">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🎓</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Final Year Dissertation</h3>
-                        <span class="polaroid-tech">C#, Unity, PPO</span>
-                        <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation.</p>
-                        <a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub →</a>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="1">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🤖</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>LLM Token Predictor</h3>
-                        <span class="polaroid-tech">Python</span>
-                        <p>A scaled-down transformer system implementing next word prediction capabilities.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="2">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">📊</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>AI Scheduling</h3>
-                        <span class="polaroid-tech">Python</span>
-                        <p>Optimisation algorithms for dynamic pricing using discount criteria.</p>
+            <div class="timeline-entries">
+
+                <!-- 1. ALPHASIGHTS -->
+                <article class="exp-entry is-active" data-exp-card="0" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">Feb 2026 – Present</span>
+                        <h3 class="exp-entry__role">Software Engineer I — AI Team</h3>
+                        <p class="exp-entry__company">AlphaSights</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Developing internal AI workflows, internal and external AI chats, MCP servers, and custom tools—shaping the AI foundations for the company as it adapts to the new AI era.
+                    </p>
+
+                    <div class="exp-phases">
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">AI Processes II</h4>
+                                <span class="exp-phase__period">Jun 2026 – Present</span>
+                            </div>
+                            <ul>
+                                <li>Designing and implementing the <strong>external-facing AI chat</strong> and its custom backend tools.</li>
+                                <li>Designing and implementing the <strong>client-facing MCP (Model Context Protocol)</strong> server for external AI integrations.</li>
+                                <li>Optimising workflows with <strong>AI jobs for data processing</strong> and exploring new AI capabilities across the platform.</li>
+                            </ul>
+                        </div>
+
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">AI Processes I</h4>
+                                <span class="exp-phase__period">Mar 2026 – Jun 2026</span>
+                            </div>
+                            <ul>
+                                <li>Developed and scaled the <strong>internal AI chat</strong> platform, building backend LLM orchestration and workflow integrations used across the company.</li>
+                            </ul>
+                        </div>
                     </div>
                 </article>
-                
-                <article class="polaroid-card" data-index="3">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">📡</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Delay-Tolerant Networking</h3>
-                        <span class="polaroid-tech">C++, NS3</span>
-                        <p>Routing protocols for mobile nodes in intermittent connectivity.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="4">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🌊</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Wave Diffraction Simulator</h3>
-                        <span class="polaroid-tech">C#, WPF</span>
-                        <p>Interactive wave diffraction pattern simulation with visualisation.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="5">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🎮</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>3D Browser Game</h3>
-                        <span class="polaroid-tech">JavaScript, THREE.js</span>
-                        <p>Browser-based 3D game using THREE.js for interactive environments.</p>
+
+                <!-- 2. LEONARDO HELICOPTERS -->
+                <article class="exp-entry" data-exp-card="1" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">Aug 2024 – Jan 2026</span>
+                        <h3 class="exp-entry__role">Graduate Software Engineer</h3>
+                        <p class="exp-entry__company">Leonardo Helicopters</p>
+                    </header>
+
+                    <div class="exp-phases">
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">Autonomy — Technology and Innovation</h4>
+                            </div>
+                            <ul>
+                                <li>Implemented <strong>optimisation solvers</strong> for task assignment, supporting scalable autonomous systems.</li>
+                                <li>Built <strong>Python ROS2/Docker drone simulations</strong> for prototyping reinforcement learning and multi-agent autonomy.</li>
+                                <li>Designed <strong>behaviour tree architectures</strong> for mission control, improving decision-making reliability.</li>
+                            </ul>
+                        </div>
+
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">Tactical Processing</h4>
+                            </div>
+                            <ul>
+                                <li>Developed a <strong>C++/Docker mission management system</strong> with decision-tree infrastructure.</li>
+                                <li>Built and validated <strong>gRPC services</strong> for multi-system communication and customer demonstrations.</li>
+                            </ul>
+                        </div>
                     </div>
                 </article>
+
+                <!-- 3. UNIVERSITY OF WARWICK -->
+                <article class="exp-entry" data-exp-card="2" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">2021 – 2024</span>
+                        <h3 class="exp-entry__role">BSc Computer Science (1st Class Honours)</h3>
+                        <p class="exp-entry__company">University of Warwick</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Graduated with First-Class Honours in Computer Science. Engineered a <strong>Proximal Policy Optimisation (PPO)</strong> deep reinforcement learning agent in <strong>C# and Unity</strong> for autonomous urban driving as my Final Year Dissertation, alongside projects in transformer next-token prediction, dynamic-pricing scheduling, and delay-tolerant networking.
+                    </p>
+                </article>
+
+                <!-- 4. METASWITCH NETWORKS -->
+                <article class="exp-entry" data-exp-card="3" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">2019</span>
+                        <h3 class="exp-entry__role">Work Experience Placement</h3>
+                        <p class="exp-entry__company">Metaswitch Networks</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Implemented and tested error checking for translation software during a two-week placement in a professional development environment.
+                    </p>
+                </article>
+
             </div>
         </div>
     </div>
 </section>
 
-<!-- TECH - ZEN GARDEN (Stones on Sand) -->
-<section class="zen-garden-section">
-    
-    <!-- The Tree (SVG) - Procedurally generated -->
-    <div class="zen-tree-container">
-        <!-- SVG will be created by zen-tree.js -->
-    </div>
+<!-- 3. OTHER PROJECTS -->
+<section class="projects-showcase" id="projects" data-reveal-section aria-labelledby="projects-heading">
+    <div class="about-wrap">
+        <div class="section-header" data-reveal-item>
+            <h2 class="projects-heading-title" id="projects-heading">Other Projects</h2>
+        </div>
 
-    
-    <div class="zen-content">
-        <h2 class="zen-title">Technologies</h2>
-        
-        <div class="stone-grid">
-            <!-- Languages -->
-            <div class="stone-group">
-                <h3 class="stone-category">Languages</h3>
-                <div class="stones">
-                    <div class="tech-stone" data-tech="python">
-                        <span class="stone-icon">🐍</span>
-                        <span class="stone-label">Python</span>
-                    </div>
-                    <div class="tech-stone" data-tech="cpp">
-                        <span class="stone-icon">⚡</span>
-                        <span class="stone-label">C++</span>
-                    </div>
-                    <div class="tech-stone" data-tech="csharp">
-                        <span class="stone-icon">🎯</span>
-                        <span class="stone-label">C#</span>
-                    </div>
-                    <div class="tech-stone" data-tech="java">
-                        <span class="stone-icon">☕</span>
-                        <span class="stone-label">Java</span>
-                    </div>
-                    <div class="tech-stone" data-tech="js">
-                        <span class="stone-icon">🌐</span>
-                        <span class="stone-label">JavaScript</span>
+        <div class="workbench" data-projects-workbench data-reveal-item>
+            <div class="workbench__tabs" role="tablist" aria-label="Other projects">
+                <button type="button" class="workbench__tab is-active" role="tab" aria-selected="true" data-project-tab="llm">
+                    <span class="workbench__tab-name">LLM Token Predictor</span>
+                    <span class="workbench__tab-stack">Python</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="scheduling">
+                    <span class="workbench__tab-name">AI Show Scheduling</span>
+                    <span class="workbench__tab-stack">Python, CSP / AI</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="dissertation">
+                    <span class="workbench__tab-name">Final Year Dissertation</span>
+                    <span class="workbench__tab-stack">C#, Unity, PPO</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="diffraction">
+                    <span class="workbench__tab-name">Wave Diffraction Simulator</span>
+                    <span class="workbench__tab-stack">C#, WPF</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="dtn">
+                    <span class="workbench__tab-name">Packet Security Inspector</span>
+                    <span class="workbench__tab-stack">C / NS-3, Networking</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="game3d">
+                    <span class="workbench__tab-name">3D Parkour Game</span>
+                    <span class="workbench__tab-stack">JavaScript, THREE.js</span>
+                </button>
+            </div>
+
+            <div class="workbench__stage">
+                <div class="workbench__panel" data-wb-panel>
+                    <h3 class="workbench__title" data-wb-title>LLM Token Predictor</h3>
+                    <div class="workbench__skills" data-wb-skills aria-label="Key technologies"></div>
+                    <p class="workbench__desc" data-wb-desc>
+                        A scaled-down transformer system implementing next word prediction capabilities.
+                    </p>
+
+                    <div class="workbench__controls" data-wb-controls aria-label="Simulation controls"></div>
+
+                    <div class="workbench__links" data-wb-links hidden>
+                        <a href="/Portfolio/dissertation/" class="project-link project-link--primary">System walkthrough</a>
+                        <a href="https://lukeguppy.github.io/dissertation/" target="_blank" rel="noopener" class="project-link">Live simulation</a>
+                        <a href="https://github.com/lukeguppy/dissertation" target="_blank" rel="noopener" class="project-link">GitHub repository</a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tools & Systems -->
-            <div class="stone-group">
-                <h3 class="stone-category">Tools & Systems</h3>
-                <div class="stones">
-                    <div class="tech-stone" data-tech="ml">
-                        <span class="stone-icon">🤖</span>
-                        <span class="stone-label">ML/AI</span>
-                    </div>
-                    <div class="tech-stone" data-tech="ros">
-                        <span class="stone-icon">🔧</span>
-                        <span class="stone-label">ROS2</span>
-                    </div>
-                    <div class="tech-stone" data-tech="docker">
-                        <span class="stone-icon">🐳</span>
-                        <span class="stone-label">Docker</span>
-                    </div>
-                    <div class="tech-stone" data-tech="git">
-                        <span class="stone-icon">📦</span>
-                        <span class="stone-label">Git</span>
-                    </div>
-                    <div class="tech-stone" data-tech="linux">
-                        <span class="stone-icon">🐧</span>
-                        <span class="stone-label">Linux</span>
-                    </div>
+                <div class="workbench__viewport">
+                    <canvas id="projects-stage-canvas" aria-label="Interactive project visualisation"></canvas>
                 </div>
             </div>
         </div>
+
+        <p class="workbench__disclaimer" data-reveal-item>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Note: The interactive stages above are simulated visual demonstrations of the system concepts and algorithms, not the standalone production applications themselves.</span>
+        </p>
     </div>
 </section>
-    </main>
-    
-    <script src="/Portfolio/js/script.js"></script>
-    <script src="/Portfolio/js/prism.js"></script>
-    
-    
-    
-    <script src="/Portfolio/js/about.js"></script>
-    
-    <script src="/Portfolio/js/about-bg.js"></script>
-    
-    <script src="/Portfolio/js/about-pinboard.js"></script>
-    
-    <script src="/Portfolio/js/about-zen.js"></script>
-    
-    <script src="/Portfolio/js/zen-tree.js"></script>
-    
+
+        </main>
+        <footer class="site-footer">
+    <div class="wrap site-footer__inner">
+        <p>&copy; 2026 Luke Guppy</p>
+        <ul class="site-footer__links">
+            <li><a href="mailto:lukewguppy@gmail.com">Email</a></li>
+            <li><a href="https://www.linkedin.com/in/lukeguppy" rel="noopener">LinkedIn</a></li>
+            <li><a href="https://github.com/lukeguppy" rel="noopener">GitHub</a></li>
+        </ul>
+    </div>
+</footer>
+
+    </div>
+    <script type="module" src="/Portfolio/assets/scripts/main.js"></script>
+    <script type="module" src="/Portfolio/assets/scripts/pages/about.js"></script>
     
 </body>
 </html>
