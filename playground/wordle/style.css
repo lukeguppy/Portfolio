@@ -1194,6 +1194,27 @@ input:checked + .slider:before {
     .solver-aside {
         order: 2; /* Move solver panel below the board on small screens */
     }
+
+    .app-header {
+        flex-wrap: wrap;
+        gap: 0.65rem;
+        justify-content: center;
+    }
+    .header-controls {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 0.4rem;
+    }
+    .header-switch {
+        height: 36px;
+        padding: 0 0.5rem;
+        gap: 6px;
+        font-size: 0.75rem;
+    }
+    .icon-btn {
+        width: 36px;
+        height: 36px;
+    }
 }
 
 .hidden {
