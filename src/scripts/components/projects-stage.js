@@ -28,6 +28,10 @@ export function initProjectsStage() {
   const hudReadoutEl = root.querySelector('[data-wb-hud-readout]');
   const captionEl = root.querySelector('[data-wb-caption]');
 
+
+  let isWorkbenchVisible = true;
+  let workbenchRafId = null;
+
   const state = {
     mode: 'llm',
     // 1. LLM Token Predictor state
@@ -2148,10 +2152,6 @@ export function initProjectsStage() {
       workbenchRafId = null;
     }
   }
-
-  let isWorkbenchVisible = true;
-  let workbenchRafId = null;
-
   function startWorkbenchLoop() {
     if (!workbenchRafId && isWorkbenchVisible) {
       workbenchRafId = requestAnimationFrame(loop);

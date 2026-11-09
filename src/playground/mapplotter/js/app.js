@@ -51,10 +51,8 @@ class MapPlotter {
     // --- Initialization ---
     async init() {
         // Restore active tab immediately to prevent flicker
-        const savedTab = localStorage.getItem('mapplotter-active-tab');
-        if (savedTab) {
-            this.switchMainTab(savedTab);
-        }
+        const savedTab = localStorage.getItem('mapplotter-active-tab') || 'add';
+        this.switchMainTab(savedTab);
 
         this.mapManager.initMap();
         this.eventController.initKeyboardShortcuts();

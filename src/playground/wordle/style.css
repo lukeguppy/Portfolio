@@ -1576,6 +1576,76 @@ body.no-animations .key.absent {
     flex-shrink: 0;
 }
 
+@media (max-width: 900px) {
+    .main-layout,
+    .main-layout.has-tree {
+        display: flex !important;
+        flex-direction: column !important;
+        grid-template-columns: 1fr !important;
+        gap: 0.75rem !important;
+        overflow-y: auto !important;
+        height: auto !important;
+    }
+
+    .tree-aside {
+        display: none !important;
+    }
+
+    .game-section {
+        width: 100% !important;
+        max-width: 100% !important;
+        flex: 0 0 auto !important;
+        display: flex !important;
+        flex-direction: column !important;
+        align-items: center !important;
+    }
+
+    .grid-container {
+        width: 100% !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .wordle-grid {
+        max-width: min(85vw, calc(100svh - 320px), 320px) !important;
+        margin: 0.25rem auto 0.5rem auto !important;
+        width: 100% !important;
+    }
+
+    .keyboard-container {
+        width: 100% !important;
+        max-width: min(100vw - 8px, 500px) !important;
+        padding: 0 4px !important;
+        margin: 0 auto !important;
+    }
+
+    .keyboard-row {
+        width: 100% !important;
+        gap: 4px !important;
+        display: flex !important;
+        justify-content: center !important;
+    }
+
+    .key {
+        flex: 1 !important;
+        min-width: 0 !important;
+        height: clamp(44px, 6vh, 52px) !important;
+        font-size: 1rem !important;
+    }
+
+    .key.large {
+        flex: 1.5 !important;
+        font-size: 0.75rem !important;
+    }
+
+    .solver-aside {
+        width: 100% !important;
+        max-width: 100% !important;
+        order: 2 !important;
+        margin-top: 1rem !important;
+    }
+}
+
 @media (max-width: 500px) {
     .keyboard-container {
         padding: 0 2px;
