@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Explore - Interactive Business Mapping</title>
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <link rel="stylesheet" href="css/styles.css?v=202611090338">
+    <link rel="stylesheet" href="css/styles.css?v=202611090343">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -41,14 +41,14 @@
                         <rect x="14" y="14" width="7" height="7"></rect>
                         <rect x="3" y="14" width="7" height="7"></rect>
                     </svg>
-                    Playground
+                    <span class="btn-text">Playground</span>
                 </a>
                 <a href="../../" class="btn btn-secondary" style="text-decoration: none;">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
                         <polyline points="9 22 9 12 15 12 15 22"></polyline>
                     </svg>
-                    Home
+                    <span class="btn-text">Home</span>
                 </a>
                 <!-- Undo/Redo Buttons -->
                 <button id="undo-btn" class="btn-icon-circle" title="Undo (Ctrl+Z)">
@@ -121,7 +121,7 @@
 
             <div class="sidebar-content">
                 <!-- ADD TAB CONTENT -->
-                <div class="main-tab-content" id="add-tab-content">
+                <div class="main-tab-content active" id="add-tab-content">
                     <div class="sidebar-section">
                         <!-- Search Radius -->
 

@@ -67,12 +67,34 @@
         justify-content: center;
     }
 
+    .header-actions .btn span.btn-text,
     .header-actions .btn span:not(.btn-icon) {
-        display: none;
+        display: none !important;
+    }
+
+    .header-actions .btn {
+        padding: 6px;
+        min-width: 36px;
+        width: 36px;
+        height: 36px;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 
     .btn-icon-circle {
         width: 36px;
+        height: 36px;
+        min-width: 36px;
+    }
+
+    @media (max-width: 540px) {
+        #undo-btn,
+        #redo-btn {
+            display: none !important;
+        }
+    }
         height: 36px;
         min-width: 36px;
     }
