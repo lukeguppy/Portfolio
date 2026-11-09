@@ -114,15 +114,56 @@ body {
 }
 
 .chess-portal .portal-title {
-    -webkit-text-stroke: 5px #3d2817;
+    color: #caa062;
+    background:
+        repeating-linear-gradient(
+            91.5deg,
+            rgba(70, 36, 12, 0.24) 0px,
+            rgba(70, 36, 12, 0.24) 1.2px,
+            transparent 1.2px,
+            transparent 4px,
+            rgba(255, 235, 185, 0.22) 4px,
+            rgba(255, 235, 185, 0.22) 5.2px,
+            transparent 5.2px,
+            transparent 9px
+        ),
+        repeating-linear-gradient(
+            88.8deg,
+            rgba(55, 28, 8, 0.18) 0px,
+            rgba(55, 28, 8, 0.18) 3px,
+            transparent 3px,
+            transparent 16px,
+            rgba(255, 225, 165, 0.16) 16px,
+            rgba(255, 225, 165, 0.16) 19px,
+            transparent 19px,
+            transparent 34px
+        ),
+        radial-gradient(
+            ellipse 130% 90% at 50% -10%,
+            rgba(255, 240, 210, 0.35) 0%,
+            rgba(185, 130, 65, 0.16) 50%,
+            rgba(70, 35, 12, 0.3) 100%
+        ),
+        linear-gradient(
+            to bottom,
+            #deb177 0%,
+            #caa062 26%,
+            #b8864b 64%,
+            #9d6c34 100%
+        );
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    -webkit-text-stroke: 4.5px #2b1709;
     paint-order: stroke fill;
     text-shadow:
-        2px 2px 0 #5c3d1e,
-        3px 3px 0 #4a3118,
-        4px 4px 0 #3d2817,
-        5px 5px 0 #2f1e10,
-        6px 6px 0 #241708,
-        8px 10px 15px rgba(0, 0, 0, 0.9);
+        1px 1px 0 #5c3d1e,
+        2px 2px 0 #4a3118,
+        3px 3px 0 #3d2817,
+        4px 4px 0 #2f1e10,
+        5px 5px 0 #241708,
+        6px 6px 0 #180f05,
+        8px 10px 16px rgba(0, 0, 0, 0.85);
 }
 
 /* === 3D CHESS SCENE === */
@@ -996,14 +1037,7 @@ body {
 }
 
 /* Accent Colors for Titles */
-.chess-portal .portal-title {
-    color: #fff;
-    background: linear-gradient(to bottom, #ffffff 0%, rgba(255, 255, 255, 0.2) 30%, rgba(255, 255, 255, 0.2) 70%, #ffffff 100%);
-    -webkit-background-clip: text;
-    background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-shadow: 0 0 60px rgba(197, 160, 89, 0.3);
-}
+/* .chess-portal .portal-title styled with wood grain above */
 
 .block-portal .portal-title {
     color: #fff;
@@ -1169,7 +1203,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    opacity: 0.6;
+    opacity: 1;
     pointer-events: none;
 }
 

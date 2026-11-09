@@ -1,4 +1,3 @@
-
 class GlobeAutomation {
     constructor(canvasId) {
         this.canvas = document.getElementById(canvasId);
@@ -11,18 +10,25 @@ class GlobeAutomation {
         // Configuration
         this.baseScale = Math.min(this.width, this.height) / 2.5;
         this.globeColor = '#1e293b';
-        this.waterColor = 'rgba(56, 189, 248, 0.05)';
-        this.landColor = 'rgba(255, 255, 255, 0.1)';
-        this.strokeColor = 'rgba(148, 163, 184, 0.1)';
-
-        // Colors for filling (Green, Yellow, Red)
-        // Handled in getRandomColor()
+        this.waterColor = '#0b1426';
+        this.landColor = 'rgba(255, 255, 255, 0.16)';
+        this.strokeColor = 'rgba(148, 163, 184, 0.22)';
 
         // State
         this.countries = [];
         this.unfilledDependencies = [];
-        this.filledCountries = new Map(); // ID -> Color
+        this.filledCountries = new Map(); // Country Object -> Color string
         this.currentCountry = null;
+        this.isVisible = true;
+
+        // Master Animation Loop State
+        this.isRotating = false;
+        this.rotateStart = null;
+        this.rotateDuration = 1400;
+        this.startRotate = [0, 0];
+        this.targetRotate = [0, 0];
+        this.rotateCallback = null;
+        this.waitTimer = null;
 
         // D3 Setup
         this.projection = d3.geoOrthographic()
@@ -39,34 +45,55 @@ class GlobeAutomation {
 
     async init() {
         this.resize();
-        window.addEventListener('resize', () => this.resize());
+        window.addEventListener('resize', () => this.resize(), { passive: true });
 
-        // Load Data (Same source as the main app)
+        // Pause animation when scrolled out of view on playground
+        if ('IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach((e) => {
+                    this.isVisible = e.isIntersecting;
+                });
+            }, { threshold: 0.05 });
+            observer.observe(this.canvas);
+        }
+
         try {
-            const data = await d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
-
-            // Filter
-            const ignored = ["Antarctica", "Somaliland", "Kosovo"];
+            let data;
+            try {
+                data = await d3.json('/Portfolio/playground/countries-quiz/world.geojson');
+            } catch {
+                try {
+                    data = await d3.json('./playground/countries-quiz/world.geojson');
+                } catch {
+                    data = await d3.json('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
+                }
+            }
+            const ignored = ["Antarctica", "French Southern and Antarctic Lands"];
             this.countries = data.features.filter(d => !ignored.includes(d.properties.name));
+
+            // Pre-calculate spherical centroids once on load to avoid heavy geometry math per frame
+            this.countries.forEach(c => {
+                c._centroid = d3.geoCentroid(c);
+            });
 
             this.resetGame();
 
-            // Start Loop
-            this.animate();
-            this.nextTurn();
-
+            // Start ONE unified frame loop
+            this.startMasterLoop();
+            this.scheduleNextTurn(600);
         } catch (error) {
-            console.error("Failed to load globe data:", error);
+            // Ignore network errors if offline
         }
     }
 
     resize() {
-        this.width = this.canvas.parentElement.offsetWidth;
-        this.height = this.canvas.parentElement.offsetHeight;
+        const parent = this.canvas.parentElement;
+        this.width = parent ? parent.offsetWidth : window.innerWidth;
+        this.height = parent ? parent.offsetHeight : window.innerHeight;
         this.canvas.width = this.width;
         this.canvas.height = this.height;
 
-        this.baseScale = Math.min(this.width, this.height) / 2.2; // Slightly larger for background
+        this.baseScale = Math.min(this.width, this.height) / 2.2;
 
         this.projection
             .scale(this.baseScale)
@@ -83,119 +110,193 @@ class GlobeAutomation {
     resetGame() {
         this.filledCountries.clear();
 
-        // Shuffle countries to create a random order list
         const shuffled = [...this.countries].sort(() => Math.random() - 0.5);
-
-        // Pre-fill ~33%
-        const total = shuffled.length;
-        const preFillCount = Math.floor(total / 3);
+        const preFillCount = Math.floor(shuffled.length / 3);
 
         const toFill = shuffled.slice(0, preFillCount);
         this.unfilledDependencies = shuffled.slice(preFillCount);
 
-        // Instantly color the pre-filled ones
         toFill.forEach(country => {
-            const color = this.getRandomColor();
-            this.filledCountries.set(country.id || country.properties.name, color);
+            this.filledCountries.set(country, this.getRandomColor());
         });
+    }
+
+    scheduleNextTurn(delayMs) {
+        if (this.waitTimer) clearTimeout(this.waitTimer);
+        this.waitTimer = setTimeout(() => {
+            this.nextTurn();
+        }, delayMs);
     }
 
     nextTurn() {
         if (this.unfilledDependencies.length === 0) {
-            // Reset if full
-            setTimeout(() => {
-                this.resetGame();
-                this.nextTurn();
-            }, 2000);
+            this.scheduleNextTurn(1800);
+            this.resetGame();
             return;
         }
 
         const nextCountry = this.unfilledDependencies.pop();
         this.currentCountry = nextCountry;
 
-        // 1. Rotate to country
-        this.rotateTo(nextCountry, () => {
-            // 2. Color it
-            const color = this.getRandomColor();
-            this.filledCountries.set(nextCountry.id || nextCountry.properties.name, color);
-
-            // 3. Wait and repeat
-            setTimeout(() => {
-                this.nextTurn();
-            }, 1000); // Stay on country for 1s
+        // Smooth flight to target country centroid
+        const target = [-nextCountry._centroid[0], -nextCountry._centroid[1]];
+        this.startRotateTo(target, () => {
+            this.filledCountries.set(nextCountry, this.getRandomColor());
+            this.scheduleNextTurn(1000);
         });
     }
 
-    rotateTo(country, callback) {
-        const centroid = d3.geoCentroid(country);
-        const targetRotate = [-centroid[0], -centroid[1]];
-        const startRotate = this.projection.rotate();
-
-        const duration = 1500; // 1.5s rotation
-        const start = performance.now();
-
-        const animateRotation = (time) => {
-            const elapsed = time - start;
-            const t = Math.min(1, elapsed / duration);
-            const ease = d3.easeCubicInOut(t);
-
-            this.projection.rotate(d3.interpolate(startRotate, targetRotate)(ease));
-
-            if (t < 1) {
-                requestAnimationFrame(animateRotation);
-            } else {
-                if (callback) callback();
-            }
-        };
-
-        requestAnimationFrame(animateRotation);
+    startRotateTo(targetRotate, callback) {
+        this.startRotate = this.projection.rotate();
+        this.targetRotate = targetRotate;
+        this.rotateStart = performance.now();
+        this.isRotating = true;
+        this.rotateCallback = callback;
     }
 
-    animate() {
-        const render = () => {
-            this.context.clearRect(0, 0, this.width, this.height);
+    startMasterLoop() {
+        const tick = (now) => {
+            requestAnimationFrame(tick);
+            if (!this.isVisible) return; // Zero CPU/GPU work when portal is not visible
 
-            // Water
-            this.context.beginPath();
-            this.path({ type: "Sphere" });
-            this.context.fillStyle = this.waterColor;
-            this.context.fill();
+            // 1. Frame-synchronized rotation update
+            if (this.isRotating) {
+                const elapsed = now - this.rotateStart;
+                const t = Math.min(1.0, elapsed / this.rotateDuration);
+                const ease = d3.easeCubicInOut(t);
 
-            // All Countries (Base)
-            this.context.beginPath();
-            this.path({ type: "FeatureCollection", features: this.countries });
-            this.context.fillStyle = this.landColor;
-            this.context.fill();
-            this.context.lineWidth = 0.5;
-            this.context.strokeStyle = this.strokeColor;
-            this.context.stroke();
+                const current = d3.interpolate(this.startRotate, this.targetRotate)(ease);
+                this.projection.rotate(current);
 
-            // Filled Countries
-            this.filledCountries.forEach((color, id) => {
-                const country = this.countries.find(c => (c.id || c.properties.name) === id);
-                if (country) {
-                    this.context.beginPath();
-                    this.path(country);
-                    this.context.fillStyle = color;
-                    this.context.fill();
-                    this.context.stroke();
+                if (t >= 1.0) {
+                    this.projection.rotate(this.targetRotate);
+                    this.isRotating = false;
+                    const cb = this.rotateCallback;
+                    this.rotateCallback = null;
+                    if (cb) cb();
                 }
-            });
+            } else {
+                // Subtle organic idle drift while waiting between countries
+                const rot = this.projection.rotate();
+                this.projection.rotate([rot[0] + 0.02, rot[1]]);
+            }
 
-            // Atmosphere / Outline
-            this.context.beginPath();
-            this.path({ type: "Sphere" });
-            this.context.lineWidth = 1;
-            this.context.strokeStyle = 'rgba(255, 255, 255, 0.15)';
-            this.context.stroke();
-
-            requestAnimationFrame(render);
+            // 2. High-performance batched render
+            this.renderFrame();
         };
-        requestAnimationFrame(render);
+
+        requestAnimationFrame(tick);
+    }
+
+    renderFrame() {
+        const ctx = this.context;
+        ctx.clearRect(0, 0, this.width, this.height);
+
+        const cx = this.width / 2;
+        const cy = this.height / 2;
+        const rad = this.baseScale;
+
+        // 1. Solid opaque base sphere to prevent any transparency clipping
+        ctx.beginPath();
+        ctx.arc(cx, cy, rad, 0, Math.PI * 2);
+        ctx.fillStyle = '#080e1c';
+        ctx.fill();
+
+        // 2. Spherical radial gradient for ocean
+        const oceanGrad = ctx.createRadialGradient(
+            cx, cy, rad * 0.15,
+            cx, cy, rad
+        );
+        oceanGrad.addColorStop(0, '#101d38');
+        oceanGrad.addColorStop(0.75, '#0a1426');
+        oceanGrad.addColorStop(1, '#050a14');
+
+        ctx.beginPath();
+        this.path({ type: "Sphere" });
+        ctx.fillStyle = oceanGrad;
+        ctx.fill();
+
+        // 3. Batched Draw: Base Unfilled Countries & Color Buckets
+        // Fast hemisphere culling using precomputed centroids
+        const rot = this.projection.rotate();
+        const centerLon = -rot[0];
+        const centerLat = -rot[1];
+        const maxAng = Math.PI / 2 + 0.35; // Front visible hemisphere + margin
+
+        const baseFeatures = [];
+        const greenFeatures = [];
+        const yellowFeatures = [];
+        const redFeatures = [];
+
+        for (let i = 0; i < this.countries.length; i++) {
+            const country = this.countries[i];
+            // Skip backface countries completely (saves ~50% path computation)
+            if (d3.geoDistance([centerLon, centerLat], country._centroid) > maxAng) {
+                continue;
+            }
+
+            const color = this.filledCountries.get(country);
+            if (!color) {
+                baseFeatures.push(country);
+            } else if (color === '#4ade80') {
+                greenFeatures.push(country);
+            } else if (color === '#facc15') {
+                yellowFeatures.push(country);
+            } else if (color === '#ef4444') {
+                redFeatures.push(country);
+            } else {
+                baseFeatures.push(country);
+            }
+        }
+
+        // Batch 1: Unfilled land (1 draw call)
+        if (baseFeatures.length > 0) {
+            ctx.beginPath();
+            this.path({ type: "FeatureCollection", features: baseFeatures });
+            ctx.fillStyle = this.landColor;
+            ctx.fill();
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = this.strokeColor;
+            ctx.stroke();
+        }
+
+        // Batch 2: Green countries (1 draw call)
+        if (greenFeatures.length > 0) {
+            ctx.beginPath();
+            this.path({ type: "FeatureCollection", features: greenFeatures });
+            ctx.fillStyle = '#4ade80';
+            ctx.fill();
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = this.strokeColor;
+            ctx.stroke();
+        }
+
+        // Batch 3: Yellow countries (1 draw call)
+        if (yellowFeatures.length > 0) {
+            ctx.beginPath();
+            this.path({ type: "FeatureCollection", features: yellowFeatures });
+            ctx.fillStyle = '#facc15';
+            ctx.fill();
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = this.strokeColor;
+            ctx.stroke();
+        }
+
+        // Batch 4: Red countries (1 draw call)
+        if (redFeatures.length > 0) {
+            ctx.beginPath();
+            this.path({ type: "FeatureCollection", features: redFeatures });
+            ctx.fillStyle = '#ef4444';
+            ctx.fill();
+            ctx.lineWidth = 0.5;
+            ctx.strokeStyle = this.strokeColor;
+            ctx.stroke();
+        }
+
+        // Rim outline removed per user instruction
     }
 }
 
-// Initialize on load
 document.addEventListener('DOMContentLoaded', () => {
     new GlobeAutomation('quiz-bg-canvas');
 });

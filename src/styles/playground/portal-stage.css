@@ -1,0 +1,266 @@
+/*
+ * Playground stage: five full-viewport monumental interactive portals
+ * with scroll-scrubbed depth parallax, scale choreography, and edge blending.
+ */
+
+body[data-page="playground"] {
+  background: #000;
+  color: #fff;
+  overflow: hidden;
+}
+
+.playground-stage {
+  height: 100svh;
+  width: 100vw;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  overscroll-behavior-y: contain;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.playground-stage::-webkit-scrollbar {
+  display: none;
+}
+
+.game-portal {
+  position: relative;
+  height: 100svh;
+  width: 100vw;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  --portal-offset: 0;
+  --portal-focus: 1;
+}
+
+/* Soft top and bottom atmospheric blend so portals transition smoothly */
+.game-portal::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  background: linear-gradient(
+    to bottom,
+    rgba(3, 5, 10, 0.72) 0%,
+    transparent 16%,
+    transparent 84%,
+    rgba(3, 5, 10, 0.72) 100%
+  );
+}
+
+/* Pause background keyframe animations when a portal is offscreen */
+.game-portal:not([data-active]) .portal-bg *,
+.game-portal:not([data-active]) .portal-bg *::before,
+.game-portal:not([data-active]) .portal-bg *::after {
+  animation-play-state: paused !important;
+}
+
+.portal-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  overflow: hidden;
+  transform: translate3d(0, calc(var(--portal-offset, 0) * -12%), 0)
+    scale(calc(1 + (1 - var(--portal-focus, 1)) * 0.08));
+  opacity: calc(0.2 + var(--portal-focus, 1) * 0.8);
+  will-change: transform, opacity;
+}
+
+.bg-layer {
+  position: absolute;
+  inset: 0;
+  transition: transform 0.8s ease-out, opacity 0.5s ease;
+}
+
+.portal-link {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  position: relative;
+  z-index: 10;
+  pointer-events: auto;
+}
+
+.portal-content {
+  position: relative;
+  z-index: 3;
+  text-align: center;
+  padding: 2rem;
+  transform: translate3d(0, calc(var(--portal-offset, 0) * 60px), 0)
+    scale(calc(0.92 + var(--portal-focus, 1) * 0.08));
+  opacity: calc(var(--portal-focus, 1));
+  transition: opacity 0.35s ease, transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+
+.portal-title {
+  font-family: var(--font-portal);
+  font-size: clamp(4.5rem, 17vw, 13.5rem);
+  font-weight: 400;
+  margin: 0;
+  line-height: 0.9;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), text-shadow 0.5s ease, opacity 0.4s ease;
+}
+
+.portal-hint {
+  font-family: var(--font-sans);
+  font-size: 0.92rem;
+  font-weight: 500;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.4s ease 0.08s, transform 0.4s ease 0.08s;
+  margin-top: 1.75rem;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.portal-link:hover .portal-title,
+.portal-content:hover .portal-title {
+  transform: scale(1.03);
+}
+
+.portal-link:hover .portal-hint,
+.portal-content:hover .portal-hint {
+  opacity: 0.85;
+  transform: translateY(0);
+}
+
+/* Right-side portal progress rail */
+.portal-index {
+  position: fixed;
+  inset-block-start: 50%;
+  inset-inline-end: 1.5rem;
+  transform: translateY(-50%);
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 0.65rem;
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+}
+
+.portal-index a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  color: rgba(255, 255, 255, 0.55);
+  text-decoration: none;
+  padding: 0.25rem 0.4rem;
+  transition: color 0.25s ease, transform 0.25s ease;
+}
+
+.portal-index a span {
+  opacity: 0;
+  transform: translateX(8px);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: #070b14;
+  border: 1px solid rgba(148, 163, 184, 0.18);
+  pointer-events: none;
+  transition: opacity 0.22s ease, transform 0.22s ease;
+}
+
+.portal-index:hover a span,
+.portal-index:focus-within a span {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.portal-index a::after {
+  content: "";
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.35);
+  transition: transform 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.portal-index a:hover {
+  color: #fff;
+}
+
+.portal-index a[aria-current="location"] {
+  color: #fff;
+  font-weight: 700;
+}
+
+.portal-index a[aria-current="location"]::after {
+  background: var(--accent);
+  transform: scale(1.45);
+  box-shadow: 0 0 10px var(--accent);
+}
+
+/* Bottom scroll cue */
+.scroll-indicator {
+  position: fixed;
+  bottom: 2rem;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  opacity: 0.6;
+  pointer-events: none;
+  z-index: 40;
+  transition: opacity 0.35s ease;
+}
+
+.scroll-indicator[hidden],
+.scroll-indicator.hidden {
+  opacity: 0;
+}
+
+.scroll-indicator span {
+  font-family: var(--font-mono);
+  font-size: 0.74rem;
+}
+
+.scroll-arrow {
+  width: 18px;
+  height: 18px;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+  transform: rotate(45deg);
+  animation: scrollDown 1.3s ease-in-out infinite;
+}
+
+@keyframes scrollDown {
+  0% {
+    transform: rotate(45deg) translate(-4px, -4px);
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: rotate(45deg) translate(7px, 7px);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 52rem) {
+  .portal-title {
+    font-size: clamp(3.2rem, 19vw, 6.5rem);
+  }
+
+  .portal-index {
+    display: none;
+  }
+
+  .portal-hint {
+    opacity: 0.72;
+    transform: none;
+  }
+}

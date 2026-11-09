@@ -4,16 +4,21 @@
   "description": "Luke Guppy's Portfolio site using Eleventy",
   "scripts": {
     "build": "eleventy",
-    "serve": "eleventy --serve",
-    "start": "npm run serve"
+    "dev": "eleventy --serve --port=8080",
+    "serve": "eleventy --serve --port=8080",
+    "preview": "npm run build && node tools/preview.mjs",
+    "start": "npm run dev"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.1",
-    "prismjs": "^1.29.0"
+    "@fontsource-variable/jetbrains-mono": "^5.3.0",
+    "@fontsource/bebas-neue": "^5.3.0",
+    "esbuild": "^0.27.4"
   },
   "author": "Luke Guppy",
   "license": "MIT",
   "dependencies": {
-    "pdfjs-dist": "^5.4.449"
+    "@fontsource-variable/literata": "^5.2.8",
+    "@fontsource-variable/overpass": "^5.2.8"
   }
 }

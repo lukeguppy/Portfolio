@@ -1,0 +1,18 @@
+/*
+ * Motion identity: one curve, three durations, one entrance pattern.
+ * Everything animates transform or opacity only.
+ */
+:root {
+  --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  --dur-fast: 140ms;   /* feedback: press, hover, focus */
+  --dur-base: 320ms;   /* state change */
+  --dur-slow: 560ms;   /* page and scene */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0.01ms;
+    --dur-base: 0.01ms;
+    --dur-slow: 0.01ms;
+  }
+}

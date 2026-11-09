@@ -1,0 +1,43 @@
+/*
+ * Cross-document page transitions (Chromium, Safari 18.2+). Browsers without
+ * support ignore @view-transition and simply navigate; nothing else depends on it.
+ * The header has its own name so it stays put while the page beneath it changes.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-group(*) {
+    animation-duration: var(--dur-slow);
+    animation-timing-function: var(--ease);
+  }
+
+  ::view-transition-old(root) {
+    animation: vt-out var(--dur-fast) var(--ease) both;
+  }
+
+  ::view-transition-new(root) {
+    animation: vt-in var(--dur-slow) var(--ease) both;
+  }
+
+  /* The header is identical on every page: no crossfade, just stay. */
+  ::view-transition-old(site-header),
+  ::view-transition-new(site-header) {
+    animation: none;
+    mix-blend-mode: normal;
+  }
+}
+
+@keyframes vt-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}

@@ -1,0 +1,38 @@
+/* Countries Quiz portal: interactive orthographic globe + monumental display typography */
+
+.quiz-portal {
+  background: radial-gradient(circle at center, #1e293b 0%, #0b1120 100%);
+}
+
+.quiz-portal .layer-1 {
+  background-image: radial-gradient(#38bdf8 1px, transparent 1px);
+  background-size: 30px 30px;
+  opacity: 0.2;
+}
+
+.quiz-portal .layer-2 {
+  background: radial-gradient(circle at 50% 50%, rgba(56, 189, 248, 0.16) 0%, transparent 60%);
+}
+
+#quiz-bg-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 1;
+  pointer-events: none;
+}
+
+.quiz-portal .portal-title {
+  color: #fff;
+  background: linear-gradient(90deg, #fff 0%, rgba(255, 255, 255, 0.32) 50%, #fff 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 0 32px rgba(56, 189, 248, 0.32));
+}
+
+.quiz-portal:hover .layer-1 {
+  transform: scale(1.05) rotate(1.5deg);
+  transition: transform 8s ease-out;
+}

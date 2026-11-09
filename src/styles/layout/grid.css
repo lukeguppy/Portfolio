@@ -1,0 +1,16 @@
+/* 12-column grid. Children place themselves with --col-start / --col-span so templates stay free of per-page grid CSS. */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: var(--gutter);
+}
+
+.grid > * {
+  grid-column: var(--col-start, 1) / span var(--col-span, 12);
+}
+
+@media (max-width: 47.99rem) {
+  .grid > * {
+    grid-column: 1 / -1;
+  }
+}

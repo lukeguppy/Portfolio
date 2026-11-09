@@ -1,0 +1,35 @@
+/*
+ * A list of destinations or actions: large title, one plain line of explanation.
+ * Used on Home, Dissertation and Contact so link lists look the same everywhere.
+ */
+.link-list {
+  display: grid;
+  gap: var(--space-5);
+  padding: 0;
+  list-style: none;
+}
+
+.link-list__item {
+  display: grid;
+  gap: var(--space-1) var(--gutter);
+  align-items: baseline;
+  max-width: none;
+}
+
+@media (min-width: 48rem) {
+  .link-list__item {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+  }
+}
+
+.link-list__title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: var(--step-2);
+  line-height: var(--leading-heading);
+  letter-spacing: -0.01em;
+}
+
+.link-list__note {
+  color: var(--text-quiet);
+}

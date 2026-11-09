@@ -1,0 +1,75 @@
+/* Minimal shared top bar for standalone playground game pages (Chess, Wordle, BlockBlast) */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  position: fixed;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 1000;
+  width: calc(100% - 2rem);
+  max-width: 1200px;
+  background: rgba(16, 26, 74, 0.72);
+  border: 1px solid rgba(246, 247, 244, 0.14);
+  padding: 0.65rem 1.25rem;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: 44px;
+}
+
+.nav-container h1 {
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: #f6f7f4;
+}
+
+nav ul {
+  display: flex;
+  gap: 1.5rem;
+  list-style: none;
+}
+
+nav ul li a {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0.25rem 0.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: rgba(246, 247, 244, 0.82);
+  text-decoration: none;
+}
+
+nav ul li a:hover {
+  color: #f2c230;
+  text-decoration: underline;
+}
+
+.social-links {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.social-links a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+}
+
+.social-icon {
+  width: 24px;
+  height: 24px;
+}

@@ -1,0 +1,32 @@
+/* Self-hosted fonts, latin subset. Preloaded from the base template to avoid layout shift. */
+@font-face {
+  font-family: "Overpass Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("../fonts/overpass-latin-wght-normal.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Literata Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 900;
+  src: url("../fonts/literata-latin-wght-normal.woff2") format("woff2-variations");
+}
+
+@font-face {
+  font-family: "Bebas Neue";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("../fonts/bebas-neue-latin-400-normal.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "JetBrains Mono Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 800;
+  src: url("../fonts/jetbrains-mono-latin-wght-normal.woff2") format("woff2-variations");
+}

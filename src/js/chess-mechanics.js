@@ -1,9 +1,6 @@
 
 document.addEventListener('DOMContentLoaded', () => {
-    if (typeof Chess === 'undefined') {
-        console.error('Chess.js library not found!');
-        return;
-    }
+        if (typeof Chess === 'undefined') return;
 
     const chessboard = document.querySelector('.chessboard');
     if (!chessboard) return;
@@ -22,22 +19,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let game;
     let isAnimating = false;
+    let isVisible = true;
 
     // Initialize Game
     function initGame() {
-        console.log("Initialising Chess Animation...");
-
-        // Use the initial board state we captured
         game = new Chess();
 
-        // Load starting position
         const loadedFen = game.load(startFen);
-        if (!loadedFen) {
-            console.error("Failed to load starting FEN:", startFen);
-            return;
-        }
+        if (!loadedFen) return;
 
-        console.log('FEN loaded. Starting animation loop...');
         isAnimating = true;
         playHistory();
     }
@@ -49,10 +39,17 @@ document.addEventListener('DOMContentLoaded', () => {
         for (const moveSan of moves) {
             if (!isAnimating) break;
 
+            // Pause move progression if user scrolled to a different portal
+            while (!isVisible && isAnimating) {
+                await new Promise(r => setTimeout(r, 350));
+            }
+            if (!isAnimating) break;
+
             const move = game.move(moveSan);
             if (!move) continue;
 
             await new Promise(resolve => setTimeout(resolve, 1400));
+            if (!isAnimating) break;
 
             await performMove(move);
         }
@@ -184,6 +181,17 @@ document.addEventListener('DOMContentLoaded', () => {
         setTimeout(() => {
             initGame();
         }, 1000);
+    }
+
+    // Viewport-aware lifecycle: freeze piece moves when user scrolls away
+    const portalEl = document.getElementById('chess-realm') || chessboard;
+    if ('IntersectionObserver' in window) {
+        const chessObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                isVisible = entry.isIntersecting;
+            });
+        }, { threshold: 0.05 });
+        chessObserver.observe(portalEl);
     }
 
     // Start animation

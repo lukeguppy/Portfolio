@@ -1,137 +1,228 @@
 ---
 layout: base.njk
 title: Home
-pageTitle: Home
-pageScripts:
-  - /js/neural-bg.js
-  - /js/pinned-bg.js
-  - /js/section-bg.js
+pageTitle: Luke Guppy
+description: Luke Guppy — AI Software Engineer at AlphaSights.
+pageCss: home
+pageJs: home
 ---
 
+<!-- Fixed full-viewport interactive neural latent-space field -->
+<canvas id="autonomy-canvas" aria-hidden="true"></canvas>
 
-<section class="hero">
-    <div class="hero-glow"></div>
-    <div class="hero-content">
-        <span class="hero-tag">Hi, I'm</span>
-        <h1 class="hero-title">
-            <span class="title-line">Luke</span>
-            <span class="title-line accent">Guppy</span>
-        </h1>
-        <p class="hero-sub">Joining <strong>AlphaSights</strong> AI team Feb 2026. Currently at <strong>Leonardo Helicopters</strong> building autonomous systems.</p>
+<!-- 1. HERO STAGE + SELF-PLAYING AI BRIEFING SHOWCASE -->
+<section class="home-hero">
+    <div class="home-hero__grid">
 
-    </div>
-</section>
+        <!-- Left column: Identity & primary navigation -->
+        <div class="home-hero__intro">
+            <h1 class="home-hero__title">
+                <span class="home-hero__name">Luke Guppy</span>
+                <span class="home-hero__statement">AI Software Engineer @ AlphaSights</span>
+            </h1>
 
-<!-- PINNED SECTION: What I Build -->
-<section class="pinned-section" id="skills">
-    <div class="pin-container">
-        <div class="pin-content">
-            <div class="stagger-words">
-                <span class="word" data-order="1">What</span>
-                <span class="word" data-order="2">I</span>
-                <span class="word" data-order="3">Build</span>
-            </div>
-            <div class="cards-from-sides">
-                <article class="side-card from-left" data-order="4">
-                    <div class="card-icon-wrap">
-                        <!-- Robot Face (Matches Solar System) -->
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <rect x="3" y="11" width="18" height="10" rx="2" />
-                            <circle cx="12" cy="5" r="2" />
-                            <path d="M12 7v4" />
-                            <line x1="8" y1="16" x2="8" y2="16" />
-                            <line x1="16" y1="16" x2="16" y2="16" />
-                        </svg>
-                    </div>
-                    <h3>Autonomous Systems</h3>
-                    <p>Reinforcement learning and multi-agent coordination for robotics.</p>
-                </article>
-                <article class="side-card from-right" data-order="5">
-                    <div class="card-icon-wrap">
-                        <!-- Neural Core / Network (For ML) -->
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="12" cy="12" r="3" />
-                            <circle cx="6" cy="6" r="2" />
-                            <circle cx="18" cy="6" r="2" />
-                            <circle cx="6" cy="18" r="2" />
-                            <circle cx="18" cy="18" r="2" />
-                            <path d="M12 9V6" />
-                            <path d="M12 15v3" />
-                            <path d="M9 12H6" />
-                            <path d="M15 12h3" />
-                            <path d="M10 10l-2.5-2.5" />
-                            <path d="M14 10l2.5-2.5" />
-                            <path d="M10 14l-2.5 2.5" />
-                            <path d="M14 14l2.5 2.5" />
-                        </svg>
-                    </div>
-                    <h3>Machine Learning</h3>
-                    <p>Neural networks and PPO agents for real-world applications.</p>
-                </article>
-                <article class="side-card from-left" data-order="6">
-                    <div class="card-icon-wrap">
-                        <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                    </div>
-                    <h3>Software Engineering</h3>
-                    <p>Python, C++, Docker, ROS2 — robust systems that deliver.</p>
-                </article>
-            </div>
+            <p class="home-hero__lead">
+                Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing that shape the company’s AI foundations.
+            </p>
+
+            <nav class="home-hero__actions" aria-label="Explore portfolio pages">
+                <a href="{{ '/about-me/' | url }}" class="home-nav-link">
+                    <span class="home-nav-link__label">Experience</span>
+                </a>
+                <a href="{{ '/dissertation/' | url }}" class="home-nav-link">
+                    <span class="home-nav-link__label">Dissertation</span>
+                </a>
+                <a href="{{ '/playground/' | url }}" class="home-nav-link">
+                    <span class="home-nav-link__label">Playground</span>
+                </a>
+                <a href="{{ '/contact/' | url }}" class="home-nav-link">
+                    <span class="home-nav-link__label">Contact Me</span>
+                </a>
+            </nav>
         </div>
+
+        <!-- Right column: Choreographed AI Briefing Terminal -->
+        <aside class="luke-agent" data-luke-agent aria-label="Interactive Overview Terminal">
+            <!-- Simulated User Prompt Bar -->
+            <div class="luke-agent__prompt-box">
+                <div class="luke-agent__prompt-line">
+                    <span class="luke-agent__prompt-chevron" aria-hidden="true">&gt;</span>
+                    <span class="luke-agent__prompt-text" data-agent-prompt-text></span>
+                    <span class="luke-agent__cursor" data-agent-prompt-cursor aria-hidden="true"></span>
+                </div>
+            </div>
+
+            <!-- Streamed AI Response Body -->
+            <div class="luke-agent__stage" data-agent-stage aria-live="polite">
+                <div class="luke-agent__thinking" data-agent-thinking hidden>
+                    <span class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                    <span>Thinking...</span>
+                </div>
+
+                <div class="luke-agent__summary" data-agent-summary></div>
+
+                <div class="luke-agent__dossier" data-agent-dossier></div>
+            </div>
+
+            <!-- Preset Question Switcher -->
+            <div class="luke-agent__presets" aria-label="Ask a question">
+                <button type="button" class="luke-agent__chip is-active" data-agent-chip="intro">Overview</button>
+                <button type="button" class="luke-agent__chip" data-agent-chip="alphasights">AlphaSights Role</button>
+                <button type="button" class="luke-agent__chip" data-agent-chip="experience">Past Experience</button>
+                <button type="button" class="luke-agent__chip" data-agent-chip="projects">Projects</button>
+            </div>
+        </aside>
+
     </div>
+
+    <a href="#interactive-index" class="home-scroll-cue" data-home-scroll-cue aria-label="Scroll to sections">
+        <span>Scroll</span>
+        <div class="home-scroll-cue__line"></div>
+    </a>
 </section>
 
-<!-- EXPLORE SECTION -->
-<section class="explore-section" id="explore">
-    <div class="explore-inner">
-        <h2 class="section-title reveal-up">Explore</h2>
-        <div class="explore-grid">
-            <a href="{{ "/about-me/" | url }}" class="explore-tile reveal-up" data-color="teal" style="--delay: 0.1s">
-                <div class="tile-content">
-                    <span class="tile-label">Experience</span>
-                    <h3>Skills & Career</h3>
-                    <p>Work history and technical expertise</p>
-                </div>
-                <div class="tile-arrow">→</div>
-            </a>
-            <a href="{{ "/dissertation/" | url }}" class="explore-tile reveal-up" data-color="purple" style="--delay: 0.2s">
-                <div class="tile-content">
-                    <span class="tile-label">Research</span>
-                    <h3>Dissertation</h3>
-                    <p>Autonomous driving with PPO</p>
-                </div>
-                <div class="tile-arrow">→</div>
-            </a>
-            <a href="{{ "/playground/" | url }}" class="explore-tile tile-wide reveal-up" data-color="blue" style="--delay: 0.3s">
-                <div class="tile-content">
-                    <span class="tile-label">Projects</span>
-                    <h3>Playground</h3>
-                    <p>Interactive demos and experiments</p>
-                </div>
-                <div class="tile-arrow">→</div>
-            </a>
-        </div>
-    </div>
-</section>
+<!-- 2. INTERACTIVE DESTINATION STAGE -->
+<section class="home-portal-stage" id="interactive-index" data-home-portal-stage aria-labelledby="index-heading">
+    <div class="home-wrap">
+        <div class="portal-stage__layout">
 
-<!-- TECH SOLAR SYSTEM -->
-<section class="tech-section" id="skills">
-    <div class="tech-inner">
-        <h2 class="section-title reveal-up">Technologies</h2>
-        <div class="solar-system">
-            <div class="sun"></div>
-            <div class="orbit orbit-1">
-                <span class="planet" style="--start: 15deg">Python</span>
-                <span class="planet" style="--start: 105deg">C++</span>
-                <span class="planet" style="--start: 200deg">C#</span>
-                <span class="planet" style="--start: 290deg">Java</span>
+            <!-- Left: Section navigation -->
+            <div class="portal-stage__index">
+                <header class="portal-stage__head">
+                    <h2 class="portal-stage__title" id="index-heading">Explore</h2>
+                </header>
+
+                <nav class="portal-stage__list" aria-label="Primary portfolio sections">
+                    <a href="{{ '/about-me/' | url }}" class="portal-stage__item is-active" data-portal-scene="about">
+                        <div class="portal-stage__item-top">
+                            <h3>Experience</h3>
+                        </div>
+                        <p>Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
+                    </a>
+
+                    <a href="{{ '/dissertation/' | url }}" class="portal-stage__item" data-portal-scene="dissertation">
+                        <div class="portal-stage__item-top">
+                            <h3>Dissertation</h3>
+                        </div>
+                        <p>Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
+                    </a>
+
+                    <a href="{{ '/playground/' | url }}" class="portal-stage__item" data-portal-scene="playground">
+                        <div class="portal-stage__item-top">
+                            <h3>Playground</h3>
+                        </div>
+                        <p>Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
+                    </a>
+
+                    <a href="{{ '/contact/' | url }}" class="portal-stage__item" data-portal-scene="contact">
+                        <div class="portal-stage__item-top">
+                            <h3>Contact Me</h3>
+                        </div>
+                        <p>Get in touch directly via email, LinkedIn, or GitHub.</p>
+                    </a>
+                </nav>
             </div>
-            <div class="orbit orbit-2">
-                <span class="planet" style="--start: 45deg">ML</span>
-                <span class="planet" style="--start: 117deg">ROS2</span>
-                <span class="planet" style="--start: 189deg">Docker</span>
-                <span class="planet" style="--start: 261deg">Git</span>
-                <span class="planet" style="--start: 333deg">Linux</span>
+
+                <!-- Right: Live morphing simulation viewport -->
+                <div class="portal-stage__viewport">
+                    <div class="portal-stage__frame">
+                        <!-- Crisp DOM Experience Timeline (shown when Experience is selected) -->
+                        <div class="portal-stage__experience" data-stage-experience>
+                            <div class="stage-exp-timeline">
+                                <article class="stage-exp-entry is-primary">
+                                    <header class="stage-exp-head">
+                                        <div class="stage-exp-title">
+                                            <strong>AlphaSights</strong>
+                                            <span class="stage-exp-role">Software Engineer I — AI Team</span>
+                                        </div>
+                                        <span class="stage-exp-period">Feb 2026 – Present</span>
+                                    </header>
+                                    <div class="stage-exp-phases">
+                                        <div class="stage-exp-phase">
+                                            <h4>AI Processes II <span>Jun 2026 – Present</span></h4>
+                                            <p>External AI chat, client-facing MCP server &amp; AI data jobs</p>
+                                        </div>
+                                        <div class="stage-exp-phase">
+                                            <h4>AI Processes I <span>Mar – Jun 2026</span></h4>
+                                            <p>Engineered and scaled the internal AI chat platform</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="stage-exp-entry">
+                                    <header class="stage-exp-head">
+                                        <div class="stage-exp-title">
+                                            <strong>Leonardo Helicopters</strong>
+                                            <span class="stage-exp-role">Graduate Software Engineer</span>
+                                        </div>
+                                        <span class="stage-exp-period">Aug 2024 – Jan 2026</span>
+                                    </header>
+                                    <div class="stage-exp-phases">
+                                        <div class="stage-exp-phase">
+                                            <h4>Autonomy, Technology &amp; Innovation</h4>
+                                            <p>Optimisation solvers, Python ROS2/Docker RL drone sims &amp; behaviour trees</p>
+                                        </div>
+                                        <div class="stage-exp-phase">
+                                            <h4>Tactical Processing</h4>
+                                            <p>C++/Docker mission management system &amp; gRPC multi-system services</p>
+                                        </div>
+                                    </div>
+                                </article>
+
+                                <article class="stage-exp-entry">
+                                    <header class="stage-exp-head">
+                                        <div class="stage-exp-title">
+                                            <strong>University of Warwick</strong>
+                                            <span class="stage-exp-role">BSc Computer Science (1st Class Honours)</span>
+                                        </div>
+                                        <span class="stage-exp-period">2021 – 2024</span>
+                                    </header>
+                                    <div class="stage-exp-phases">
+                                        <div class="stage-exp-phase">
+                                            <h4>Final Year Dissertation</h4>
+                                            <p>Deep Reinforcement Learning (PPO) autonomous driving in C# &amp; Unity</p>
+                                        </div>
+                                    </div>
+                                </article>
+                            </div>
+                        </div>
+
+                        <canvas id="home-stage-canvas" aria-hidden="true" hidden></canvas>
+
+                        <!-- Interactive Contact Links (shown when Contact Me is selected) -->
+                    <div class="portal-stage__contact" data-stage-contact hidden>
+                        <div class="stage-contact-list">
+                            <div class="stage-contact-item">
+                                <a href="mailto:lukewguppy@gmail.com" class="stage-contact-link">
+                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                        <rect x="2" y="4" width="20" height="16" rx="2.5"/>
+                                        <path d="M22 6.5L12 13L2 6.5"/>
+                                    </svg>
+                                    <span>lukewguppy@gmail.com</span>
+                                </a>
+                                <button type="button" class="stage-copy-btn" data-home-copy-email="lukewguppy@gmail.com">Copy</button>
+                            </div>
+
+                            <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener" class="stage-contact-item stage-contact-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
+                                    <rect x="2" y="9" width="4" height="12"/>
+                                    <circle cx="4" cy="4" r="2"/>
+                                </svg>
+                                <span>linkedin.com/in/lukeguppy</span>
+                            </a>
+
+                            <a href="https://github.com/lukeguppy" target="_blank" rel="noopener" class="stage-contact-item stage-contact-link">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
+                                </svg>
+                                <span>github.com/lukeguppy</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
+
         </div>
     </div>
 </section>

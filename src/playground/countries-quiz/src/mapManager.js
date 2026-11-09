@@ -75,18 +75,21 @@ export class MapManager {
 
     async loadWorldData() {
         try {
-            const response = await fetch('https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/world.geojson');
+            // Load clean, local curated GeoJSON (offline, fast, accurate borders)
+            let response;
+            try {
+                response = await fetch('./world.geojson');
+                if (!response.ok) throw new Error('Local fetch failed');
+            } catch {
+                response = await fetch('/Portfolio/playground/countries-quiz/world.geojson');
+            }
             const data = await response.json();
             this.worldData = data;
-            // Filter out Antarctica and Kosvo/Somaliland if desired
-            const ignored = ["Antarctica", "Somaliland", "Kosovo"];
+            // Only filter out uninhabited polar lands; Kosovo and all recognized nations remain
+            const ignored = ["Antarctica", "French Southern and Antarctic Lands"];
             this.countries = data.features.filter(d => !ignored.includes(d.properties.name));
 
             this.countries.forEach(c => {
-                // Political Merges:
-                // We force IDs to be the English Names to ensure "Northern Cyprus" (merged to "Cyprus")
-                // matches the main "Cyprus" (which would otherwise default to ISO "CYP").
-
                 const rawName = c.properties.name;
 
                 if (rawName === "Northern Cyprus") {
@@ -104,8 +107,10 @@ export class MapManager {
                 } else if (rawName === "USA") {
                     c.id = "United States of America";
                     c.name = "United States of America";
+                } else if (rawName === "Burma") {
+                    c.id = "Myanmar";
+                    c.name = "Myanmar";
                 } else {
-                    // Use Name as ID for everything to ensure consistency
                     c.id = rawName;
                     c.name = rawName;
                 }
@@ -208,19 +213,35 @@ export class MapManager {
     }
 
     render(time) {
-        if (!this.context || !this.worldData) return; // Just return, loop continues via startRenderLoop wrapper
+        if (!this.context || !this.worldData) return;
 
         const ctx = this.context;
-        // Don't clear rect if we want trails? No, we want clean.
         ctx.clearRect(0, 0, this.width, this.height);
 
-        // 1. Draw Water
+        const currentScale = this.projection.scale();
+        const [tx, ty] = this.projection.translate();
+
+        // 1. Solid opaque base sphere to prevent any transparency clipping
         ctx.beginPath();
-        this.path({ type: "Sphere" });
-        ctx.fillStyle = COLOURS.water;
+        ctx.arc(tx, ty, currentScale, 0, Math.PI * 2);
+        ctx.fillStyle = '#080e1c';
         ctx.fill();
 
-        // 2. Draw Countries (Batched)
+        // 2. Spherical radial gradient for ocean matching the playground globe
+        const oceanGrad = ctx.createRadialGradient(
+            tx, ty, currentScale * 0.15,
+            tx, ty, currentScale
+        );
+        oceanGrad.addColorStop(0, '#101d38');
+        oceanGrad.addColorStop(0.75, '#0a1426');
+        oceanGrad.addColorStop(1, '#050a14');
+
+        ctx.beginPath();
+        this.path({ type: "Sphere" });
+        ctx.fillStyle = oceanGrad;
+        ctx.fill();
+
+        // 3. Draw Default Countries (Batched)
         ctx.beginPath();
         let hasDefault = false;
         this.countries.forEach(feature => {
@@ -240,7 +261,7 @@ export class MapManager {
             ctx.stroke();
         }
 
-        // Special
+        // 4. Draw Active / Guessed Countries
         this.countries.forEach(feature => {
             const status = this.countryStates.get(feature.id);
             if (status && status !== 'default') {
@@ -255,20 +276,11 @@ export class MapManager {
                     default: ctx.fillStyle = COLOURS.default;
                 }
                 ctx.fill();
-                ctx.lineWidth = 0.5;
-                ctx.strokeStyle = COLOURS.stroke;
+                ctx.lineWidth = status === 'selected' ? 1.4 : 0.6;
+                ctx.strokeStyle = status === 'selected' ? '#ffffff' : COLOURS.stroke;
                 ctx.stroke();
             }
         });
-
-        // 3. Draw Atmosphere
-        ctx.beginPath();
-        this.path({ type: "Sphere" });
-        ctx.strokeStyle = "rgba(255, 255, 255, 0.1)";
-        ctx.lineWidth = 1;
-        ctx.stroke();
-
-        // NO recursive requestAnimationFrame here - handled by startRenderLoop logic
     }
 }
 

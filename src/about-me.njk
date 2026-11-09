@@ -2,236 +2,247 @@
 layout: base.njk
 title: About Me
 pageTitle: About Me
-pageStyle: /css/about.css
-pageScripts:
-  - /js/about.js
-  - /js/about-bg.js
-  - /js/about-pinboard.js
-  - /js/about-zen.js
-  - /js/zen-tree.js
-hideFooter: true
+description: Luke Guppy — AI Software Engineer at AlphaSights. Experience at AlphaSights, Leonardo Helicopters, University of Warwick (1st Class BSc CS), and other projects.
+pageCss: about
+pageJs: about
 ---
 
-<div id="about-bg-container"></div>
-<div id="zen-bg-container"></div> <!-- Moved here for global layering -->
+<!-- Fixed Full-Viewport Interactive Background -->
+<div id="about-bg-container" aria-hidden="true"></div>
 
-<section class="about-hero">
-    <div class="hero-content">
-        <h1 class="hero-title">About Me</h1>
-        <p class="hero-sub">My skills, experience, and projects</p>
+<!-- 1. INTRO — Full-Viewport Chapter -->
+<section class="about-hero" data-about-hero>
+    <div class="about-wrap">
+        <div class="about-hero__intro figma-building">
+            <h1 class="about-hero__title" style="--i: 0">
+                <span>About Me</span>
+                <span class="about-hero__subtitle">AI Software Engineer @ AlphaSights</span>
+            </h1>
+
+            <p class="about-hero__lead" style="--i: 1">
+                I’m a Software Engineer on the AI team at <strong>AlphaSights</strong>, focused on backend systems—developing internal and external AI chat platforms, client-facing MCP servers, custom tools, and AI jobs for data processing that shape the company’s AI foundations.
+            </p>
+
+            <div class="about-hero__timeline-stage figma-stage__timeline-stage" data-timeline-stage></div>
+
+            <div class="about-hero__pillars" style="--i: 2">
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Feb 2026 – Present</span>
+                    <strong class="about-pillar__title">AlphaSights</strong>
+                    <span class="about-pillar__subtitle">Software Engineer I</span>
+                    <p class="about-pillar__desc">Building external &amp; internal AI chat platforms, client-facing MCP servers, and AI workflow jobs on the AI team.</p>
+                </div>
+
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Aug 2024 – Jan 2026</span>
+                    <strong class="about-pillar__title">Leonardo Helicopters</strong>
+                    <span class="about-pillar__subtitle">Graduate Software Engineer</span>
+                    <p class="about-pillar__desc">Autonomy and Tactical Processing—RL drone sims, solvers, and C++/Docker mission systems.</p>
+                </div>
+
+                <div class="about-pillar">
+                    <span class="about-pillar__meta">Sep 2021 – Jul 2024</span>
+                    <strong class="about-pillar__title">University of Warwick</strong>
+                    <span class="about-pillar__subtitle">BSc Computer Science (1st Class Hons)</span>
+                    <p class="about-pillar__desc">Final-year dissertation on PPO deep reinforcement learning for autonomous driving in Unity.</p>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <a href="#experience" class="about-scroll-cue" data-about-scroll-cue aria-label="Scroll to experience">
+        <span>Experience</span>
+        <div class="about-scroll-cue__line"></div>
+    </a>
 </section>
 
-<!-- EXPERIENCE - Timeline with growing line and dots (KEEP AS-IS) -->
-<section class="about-experience">
-    <div class="experience-container">
-        <div class="experience-title">
-            <span class="word">My</span>
-            <span class="word">Experience</span>
-        </div>
-        <div class="experience-timeline">
-            <!-- Fixed dots on timeline - always visible after title -->
-            <div class="timeline-dots">
-                <span class="timeline-dot" data-card="0"></span>
+<!-- 2. EXPERIENCE & EDUCATION — Chronological Vertical Timeline -->
+<section class="about-experience" id="experience" data-reveal-section aria-labelledby="experience-heading">
+    <div class="about-wrap">
+        <header class="experience-header" data-reveal-item>
+            <h2 class="experience-title" id="experience-heading">Experience</h2>
+        </header>
+
+        <div class="experience-timeline" data-experience-timeline>
+            <div class="timeline-spine" aria-hidden="true">
+                <div class="timeline-spine__fill" data-spine-fill></div>
+                <div class="timeline-spine__head" data-spine-head></div>
+            </div>
+
+            <div class="timeline-dots" aria-hidden="true">
+                <span class="timeline-dot is-active" data-card="0"></span>
                 <span class="timeline-dot" data-card="1"></span>
                 <span class="timeline-dot" data-card="2"></span>
+                <span class="timeline-dot" data-card="3"></span>
             </div>
-            <!-- Centered scanner/progress bar -->
-            <div class="timeline-scanner"></div>
-            <!-- Cards scroll through, appear when their dot passes scanner -->
-            <div class="timeline-cards">
-                <article class="exp-card">
-                    <h3>Software Engineer I — AI Team</h3>
-                    <p class="meta">AlphaSights · Feb 2026 – Present</p>
-                    <p>Starting soon — details to follow.</p>
-                </article>
-                <article class="exp-card">
-                    <h3>Graduate Software Engineer</h3>
-                    <p class="meta">Leonardo Helicopters · Aug 2024 – Jan 2026</p>
-                    <div class="role-group">
-                        <h4 class="role-title">Autonomy - Technology and Innovation</h4>
-                        <ul>
-                            <li>Implemented <strong>optimisation solvers</strong> for task assignment, supporting scalable autonomous systems.</li>
-                            <li>Built <strong>Python ROS2/Docker drone simulations</strong> for prototyping reinforcement learning and multi-agent autonomy.</li>
-                            <li>Designed <strong>behaviour tree architectures</strong> for mission control, improving decision-making reliability.</li>
-                        </ul>
+
+            <div class="timeline-entries">
+
+                <!-- 1. ALPHASIGHTS -->
+                <article class="exp-entry is-active" data-exp-card="0" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">Feb 2026 – Present</span>
+                        <h3 class="exp-entry__role">Software Engineer I — AI Team</h3>
+                        <p class="exp-entry__company">AlphaSights</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Developing internal AI workflows, internal and external AI chats, MCP servers, and custom tools—shaping the AI foundations for the company as it adapts to the new AI era.
+                    </p>
+
+                    <div class="exp-phases">
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">AI Processes II</h4>
+                                <span class="exp-phase__period">Jun 2026 – Present</span>
+                            </div>
+                            <ul>
+                                <li>Designing and implementing the <strong>external-facing AI chat</strong> and its custom backend tools.</li>
+                                <li>Designing and implementing the <strong>client-facing MCP (Model Context Protocol)</strong> server for external AI integrations.</li>
+                                <li>Optimising workflows with <strong>AI jobs for data processing</strong> and exploring new AI capabilities across the platform.</li>
+                            </ul>
+                        </div>
+
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">AI Processes I</h4>
+                                <span class="exp-phase__period">Mar 2026 – Jun 2026</span>
+                            </div>
+                            <ul>
+                                <li>Developed and scaled the <strong>internal AI chat</strong> platform, building backend LLM orchestration and workflow integrations used across the company.</li>
+                            </ul>
+                        </div>
                     </div>
-                    
-                    <div class="role-group">
-                        <h4 class="role-title">Tactical Processing</h4>
-                        <ul>
-                            <li>Developed a <strong>C++/Docker mission management system</strong> with decision-tree infrastructure.</li>
-                            <li>Built and validated <strong>gRPC services</strong> for robust multi-system communication and customer demonstrations.</li>
-                        </ul>
+                </article>
+
+                <!-- 2. LEONARDO HELICOPTERS -->
+                <article class="exp-entry" data-exp-card="1" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">Aug 2024 – Jan 2026</span>
+                        <h3 class="exp-entry__role">Graduate Software Engineer</h3>
+                        <p class="exp-entry__company">Leonardo Helicopters</p>
+                    </header>
+
+                    <div class="exp-phases">
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">Autonomy — Technology and Innovation</h4>
+                            </div>
+                            <ul>
+                                <li>Implemented <strong>optimisation solvers</strong> for task assignment, supporting scalable autonomous systems.</li>
+                                <li>Built <strong>Python ROS2/Docker drone simulations</strong> for prototyping reinforcement learning and multi-agent autonomy.</li>
+                                <li>Designed <strong>behaviour tree architectures</strong> for mission control, improving decision-making reliability.</li>
+                            </ul>
+                        </div>
+
+                        <div class="exp-phase">
+                            <div class="exp-phase__head">
+                                <h4 class="exp-phase__title">Tactical Processing</h4>
+                            </div>
+                            <ul>
+                                <li>Developed a <strong>C++/Docker mission management system</strong> with decision-tree infrastructure.</li>
+                                <li>Built and validated <strong>gRPC services</strong> for multi-system communication and customer demonstrations.</li>
+                            </ul>
+                        </div>
                     </div>
                 </article>
-                <article class="exp-card">
-                    <h3>Work Experience Placement</h3>
-                    <p class="meta">Metaswitch Networks · 2019</p>
-                    <p>Implemented and tested error checking for translation software during a two-week placement in a professional development environment.</p>
+
+                <!-- 3. UNIVERSITY OF WARWICK -->
+                <article class="exp-entry" data-exp-card="2" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">2021 – 2024</span>
+                        <h3 class="exp-entry__role">BSc Computer Science (1st Class Honours)</h3>
+                        <p class="exp-entry__company">University of Warwick</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Graduated with First-Class Honours in Computer Science. Engineered a <strong>Proximal Policy Optimisation (PPO)</strong> deep reinforcement learning agent in <strong>C# and Unity</strong> for autonomous urban driving as my Final Year Dissertation, alongside projects in transformer next-token prediction, dynamic-pricing scheduling, and delay-tolerant networking.
+                    </p>
                 </article>
+
+                <!-- 4. METASWITCH NETWORKS -->
+                <article class="exp-entry" data-exp-card="3" data-reveal-item>
+                    <header class="exp-entry__header">
+                        <span class="exp-entry__period">2019</span>
+                        <h3 class="exp-entry__role">Work Experience Placement</h3>
+                        <p class="exp-entry__company">Metaswitch Networks</p>
+                    </header>
+
+                    <p class="exp-entry__summary">
+                        Implemented and tested error checking for translation software during a two-week placement in a professional development environment.
+                    </p>
+                </article>
+
             </div>
         </div>
     </div>
 </section>
 
-<!-- PINBOARD SECTION - Projects + Tech pin onto cork board -->
-<section class="pinboard-section">
-    <!-- Projects title - OUTSIDE pinboard-bg so it doesn't shrink -->
-    <div class="pinboard-title-container">
-        <h2 class="pinboard-title" data-phase="title">Projects</h2>
-    </div>
-    
-    <!-- Cork board background - CONTAINS the content that shrinks -->
-    <div class="pinboard-bg">
-        <!-- Solid color overlay - fades in during shrink for performance -->
-        <div class="pinboard-overlay"></div>
-        <!-- Projects cards only (no title) -->
-        <div class="pinboard-content">
-            <div class="polaroid-grid projects-grid">
-                <article class="polaroid-card" data-index="0">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🎓</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Final Year Dissertation</h3>
-                        <span class="polaroid-tech">C#, Unity, PPO</span>
-                        <p>Built a PPO deep reinforcement learning agent to control a car navigating a custom Unity simulation.</p>
-                        <a href="https://github.com/lukeguppy/dissertation" target="_blank">View on GitHub →</a>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="1">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🤖</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>LLM Token Predictor</h3>
-                        <span class="polaroid-tech">Python</span>
-                        <p>A scaled-down transformer system implementing next word prediction capabilities.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="2">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">📊</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>AI Scheduling</h3>
-                        <span class="polaroid-tech">Python</span>
-                        <p>Optimisation algorithms for dynamic pricing using discount criteria.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="3">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">📡</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Delay-Tolerant Networking</h3>
-                        <span class="polaroid-tech">C++, NS3</span>
-                        <p>Routing protocols for mobile nodes in intermittent connectivity.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="4">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🌊</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>Wave Diffraction Simulator</h3>
-                        <span class="polaroid-tech">C#, WPF</span>
-                        <p>Interactive wave diffraction pattern simulation with visualisation.</p>
-                    </div>
-                </article>
-                
-                <article class="polaroid-card" data-index="5">
-                    <div class="polaroid-tape"></div>
-                    <div class="polaroid-image">
-                        <span class="polaroid-icon">🎮</span>
-                    </div>
-                    <div class="polaroid-caption">
-                        <h3>3D Browser Game</h3>
-                        <span class="polaroid-tech">JavaScript, THREE.js</span>
-                        <p>Browser-based 3D game using THREE.js for interactive environments.</p>
-                    </div>
-                </article>
-            </div>
+<!-- 3. OTHER PROJECTS -->
+<section class="projects-showcase" id="projects" data-reveal-section aria-labelledby="projects-heading">
+    <div class="about-wrap">
+        <div class="section-header" data-reveal-item>
+            <h2 class="projects-heading-title" id="projects-heading">Other Projects</h2>
         </div>
-    </div>
-</section>
 
-<!-- TECH - ZEN GARDEN (Stones on Sand) -->
-<section class="zen-garden-section">
-    
-    <!-- The Tree (SVG) - Procedurally generated -->
-    <div class="zen-tree-container">
-        <!-- SVG will be created by zen-tree.js -->
-    </div>
+        <div class="workbench" data-projects-workbench data-reveal-item>
+            <div class="workbench__tabs" role="tablist" aria-label="Other projects">
+                <button type="button" class="workbench__tab is-active" role="tab" aria-selected="true" data-project-tab="llm">
+                    <span class="workbench__tab-name">LLM Token Predictor</span>
+                    <span class="workbench__tab-stack">Python</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="scheduling">
+                    <span class="workbench__tab-name">AI Show Scheduling</span>
+                    <span class="workbench__tab-stack">Python, CSP / AI</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="dissertation">
+                    <span class="workbench__tab-name">Final Year Dissertation</span>
+                    <span class="workbench__tab-stack">C#, Unity, PPO</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="diffraction">
+                    <span class="workbench__tab-name">Wave Diffraction Simulator</span>
+                    <span class="workbench__tab-stack">C#, WPF</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="dtn">
+                    <span class="workbench__tab-name">Packet Security Inspector</span>
+                    <span class="workbench__tab-stack">C / NS-3, Networking</span>
+                </button>
+                <button type="button" class="workbench__tab" role="tab" aria-selected="false" data-project-tab="game3d">
+                    <span class="workbench__tab-name">3D Parkour Game</span>
+                    <span class="workbench__tab-stack">JavaScript, THREE.js</span>
+                </button>
+            </div>
 
-    
-    <div class="zen-content">
-        <h2 class="zen-title">Technologies</h2>
-        
-        <div class="stone-grid">
-            <!-- Languages -->
-            <div class="stone-group">
-                <h3 class="stone-category">Languages</h3>
-                <div class="stones">
-                    <div class="tech-stone" data-tech="python">
-                        <span class="stone-icon">🐍</span>
-                        <span class="stone-label">Python</span>
-                    </div>
-                    <div class="tech-stone" data-tech="cpp">
-                        <span class="stone-icon">⚡</span>
-                        <span class="stone-label">C++</span>
-                    </div>
-                    <div class="tech-stone" data-tech="csharp">
-                        <span class="stone-icon">🎯</span>
-                        <span class="stone-label">C#</span>
-                    </div>
-                    <div class="tech-stone" data-tech="java">
-                        <span class="stone-icon">☕</span>
-                        <span class="stone-label">Java</span>
-                    </div>
-                    <div class="tech-stone" data-tech="js">
-                        <span class="stone-icon">🌐</span>
-                        <span class="stone-label">JavaScript</span>
+            <div class="workbench__stage">
+                <div class="workbench__panel" data-wb-panel>
+                    <h3 class="workbench__title" data-wb-title>LLM Token Predictor</h3>
+                    <div class="workbench__skills" data-wb-skills aria-label="Key technologies"></div>
+                    <p class="workbench__desc" data-wb-desc>
+                        A scaled-down transformer system implementing next word prediction capabilities.
+                    </p>
+
+                    <div class="workbench__controls" data-wb-controls aria-label="Simulation controls"></div>
+
+                    <div class="workbench__links" data-wb-links hidden>
+                        <a href="{{ '/dissertation/' | url }}" class="project-link project-link--primary">System walkthrough</a>
+                        <a href="https://lukeguppy.github.io/dissertation/" target="_blank" rel="noopener" class="project-link">Live simulation</a>
+                        <a href="https://github.com/lukeguppy/dissertation" target="_blank" rel="noopener" class="project-link">GitHub repository</a>
                     </div>
                 </div>
-            </div>
 
-            <!-- Tools & Systems -->
-            <div class="stone-group">
-                <h3 class="stone-category">Tools & Systems</h3>
-                <div class="stones">
-                    <div class="tech-stone" data-tech="ml">
-                        <span class="stone-icon">🤖</span>
-                        <span class="stone-label">ML/AI</span>
-                    </div>
-                    <div class="tech-stone" data-tech="ros">
-                        <span class="stone-icon">🔧</span>
-                        <span class="stone-label">ROS2</span>
-                    </div>
-                    <div class="tech-stone" data-tech="docker">
-                        <span class="stone-icon">🐳</span>
-                        <span class="stone-label">Docker</span>
-                    </div>
-                    <div class="tech-stone" data-tech="git">
-                        <span class="stone-icon">📦</span>
-                        <span class="stone-label">Git</span>
-                    </div>
-                    <div class="tech-stone" data-tech="linux">
-                        <span class="stone-icon">🐧</span>
-                        <span class="stone-label">Linux</span>
-                    </div>
+                <div class="workbench__viewport">
+                    <canvas id="projects-stage-canvas" aria-label="Interactive project visualisation"></canvas>
                 </div>
             </div>
         </div>
+
+        <p class="workbench__disclaimer" data-reveal-item>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"></circle>
+                <line x1="12" y1="16" x2="12" y2="12"></line>
+                <line x1="12" y1="8" x2="12.01" y2="8"></line>
+            </svg>
+            <span>Note: The interactive stages above are simulated visual demonstrations of the system concepts and algorithms, not the standalone production applications themselves.</span>
+        </p>
     </div>
 </section>

@@ -1,0 +1,27 @@
+/*
+ * Entry point. Cascade order is declared once, here.
+ * Later layers win over earlier ones regardless of selector specificity,
+ * so components never need !important or specificity hacks.
+ */
+@layer reset, tokens, base, layout, components, pages, transitions;
+
+@import "./base/reset.css" layer(reset);
+
+@import "./tokens/color.css" layer(tokens);
+@import "./tokens/type.css" layer(tokens);
+@import "./tokens/space.css" layer(tokens);
+@import "./tokens/motion.css" layer(tokens);
+
+@import "./base/fonts.css" layer(base);
+@import "./base/document.css" layer(base);
+@import "./base/typography.css" layer(base);
+@import "./base/links.css" layer(base);
+
+@import "./layout/shell.css" layer(layout);
+@import "./layout/grid.css" layer(layout);
+
+@import "./components/site-header.css" layer(components);
+@import "./components/site-footer.css" layer(components);
+@import "./components/link-list.css" layer(components);
+
+@import "./transitions.css" layer(transitions);

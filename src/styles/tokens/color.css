@@ -1,0 +1,40 @@
+/*
+ * Dark-mode engineering & simulation palette.
+ * Grounded in deep obsidian surfaces (#05070c -> #0c1220), crisp alabaster type,
+ * electric teal/cyan signal lines (#2dd4bf / #00f0ff), and warm amber telemetry (#f59e0b).
+ */
+:root {
+  --bg-void: #05070c;
+  --bg-base: #070a12;
+  --bg-deep: #0b101d;
+  --bg-surface: rgba(13, 19, 33, 0.72);
+  --bg-elevated: rgba(19, 27, 46, 0.84);
+  --bg-glass: rgba(10, 14, 24, 0.76);
+
+  --text: #f1f5f9;
+  --text-quiet: #94a3b8;
+  --text-dim: #64748b;
+
+  --accent: #2dd4bf;
+  --accent-bright: #00f0ff;
+  --accent-glow: rgba(45, 212, 191, 0.34);
+  --accent-soft: rgba(45, 212, 191, 0.12);
+
+  --paint: #f59e0b;
+  --signal: #f43f5e;
+  --signal-pos: #10b981;
+  --signal-neg: #f43f5e;
+
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-mid: rgba(255, 255, 255, 0.14);
+  --border-active: rgba(45, 212, 191, 0.45);
+
+  /* Compatibility aliases */
+  --ground: var(--bg-base);
+  --ink: var(--text);
+  --kerb: var(--border-subtle);
+  --chalk: var(--text);
+  --on-ink: var(--text);
+  --on-ink-quiet: var(--text-quiet);
+  --focus: var(--accent);
+}

@@ -1,0 +1,26 @@
+/* Page shell: header is out of flow, main fills the viewport, footer sits below. */
+.page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+}
+
+.page > main {
+  flex: 1;
+}
+
+/* Horizontal page padding and max width, used by every section. */
+.wrap {
+  width: min(100% - 2 * var(--gutter), var(--page-max));
+  margin-inline: auto;
+}
+
+/* Vertical rhythm between top-level sections. */
+.section {
+  padding-block: clamp(var(--space-8), 10vw, var(--space-10));
+}
+
+/* Space above the first section so content clears the absolutely positioned header. */
+.section--first {
+  padding-block-start: calc(var(--header-h) + clamp(var(--space-7), 8vw, var(--space-9)));
+}

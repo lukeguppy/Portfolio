@@ -33,7 +33,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: radial-gradient(circle at center, #1e293b 0%, #0f172a 100%);
+  background: radial-gradient(circle at center, #0c172e 0%, #040812 100%);
   /* Starfield-ish gradient */
 }
 

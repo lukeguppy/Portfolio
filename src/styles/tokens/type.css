@@ -1,0 +1,20 @@
+/* Type system: Overpass Variable for UI & headings, Bebas Neue for monumental portal titles, JetBrains Mono for telemetry */
+:root {
+  --font-display: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-serif: "Literata Variable", "Literata", Georgia, serif;
+  --font-portal: "Bebas Neue", "Overpass Variable", sans-serif;
+  --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --step--1: clamp(0.82rem, 0.8rem + 0.12vw, 0.92rem);
+  --step-0: clamp(1rem, 0.96rem + 0.25vw, 1.125rem);
+  --step-1: clamp(1.25rem, 1.12rem + 0.65vw, 1.6rem);
+  --step-2: clamp(1.65rem, 1.3rem + 1.6vw, 2.4rem);
+  --step-3: clamp(2.25rem, 1.5rem + 3.4vw, 4rem);
+  --step-4: clamp(3.2rem, 1.8rem + 6.5vw, 7.2rem);
+
+  --leading-tight: 0.96;
+  --leading-heading: 1.08;
+  --leading-body: 1.65;
+  --measure: 64ch;
+}

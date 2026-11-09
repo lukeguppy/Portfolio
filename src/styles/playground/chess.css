@@ -1,0 +1,231 @@
+/* Chess portal: 3D tilted chessboard scene playing an immortal game */
+
+.chess-portal {
+  background: linear-gradient(160deg, #0a0805 0%, #1a1510 50%, #0d0a08 100%);
+  pointer-events: none;
+}
+
+.chess-portal .portal-link {
+  pointer-events: none;
+}
+
+.chess-portal .portal-content {
+  pointer-events: auto;
+}
+
+.chess-portal .layer-1 {
+  background-image: conic-gradient(
+    rgba(40, 30, 20, 0.3) 90deg,
+    rgba(20, 15, 10, 0.3) 90deg 180deg,
+    rgba(40, 30, 20, 0.3) 180deg 270deg,
+    rgba(20, 15, 10, 0.3) 270deg
+  );
+  background-size: 60px 60px;
+  opacity: 0.5;
+}
+
+.chess-portal .layer-2 {
+  background:
+    radial-gradient(ellipse at 50% 60%, rgba(197, 160, 89, 0.25) 0%, transparent 50%),
+    radial-gradient(circle at 30% 30%, rgba(197, 160, 89, 0.12) 0%, transparent 30%),
+    radial-gradient(circle at 80% 20%, rgba(255, 220, 150, 0.08) 0%, transparent 25%),
+    radial-gradient(circle at 15% 75%, rgba(139, 90, 43, 0.1) 0%, transparent 20%);
+}
+
+.chess-portal .portal-title {
+  color: #caa062;
+  background:
+    /* Fine vertical wood grain fibers */
+    repeating-linear-gradient(
+      91.5deg,
+      rgba(70, 36, 12, 0.24) 0px,
+      rgba(70, 36, 12, 0.24) 1.2px,
+      transparent 1.2px,
+      transparent 4px,
+      rgba(255, 235, 185, 0.22) 4px,
+      rgba(255, 235, 185, 0.22) 5.2px,
+      transparent 5.2px,
+      transparent 9px
+    ),
+    /* Annual growth ring grain bands */
+    repeating-linear-gradient(
+      88.8deg,
+      rgba(55, 28, 8, 0.18) 0px,
+      rgba(55, 28, 8, 0.18) 3px,
+      transparent 3px,
+      transparent 16px,
+      rgba(255, 225, 165, 0.16) 16px,
+      rgba(255, 225, 165, 0.16) 19px,
+      transparent 19px,
+      transparent 34px
+    ),
+    /* Organic wood grain growth contour */
+    radial-gradient(
+      ellipse 130% 90% at 50% -10%,
+      rgba(255, 240, 210, 0.35) 0%,
+      rgba(185, 130, 65, 0.16) 50%,
+      rgba(70, 35, 12, 0.3) 100%
+    ),
+    /* Lighter, warmer honey-amber maple/teak wood tone */
+    linear-gradient(
+      to bottom,
+      #deb177 0%,
+      #caa062 26%,
+      #b8864b 64%,
+      #9d6c34 100%
+    );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  -webkit-text-stroke: 4.5px #2b1709;
+  paint-order: stroke fill;
+  text-shadow:
+    1px 1px 0 #5c3d1e,
+    2px 2px 0 #4a3118,
+    3px 3px 0 #3d2817,
+    4px 4px 0 #2f1e10,
+    5px 5px 0 #241708,
+    6px 6px 0 #180f05,
+    8px 10px 16px rgba(0, 0, 0, 0.85);
+}
+
+.chess-portal .portal-hint {
+  text-shadow:
+    0 0 5px #3d2817,
+    0 0 10px #3d2817,
+    0 2px 8px #000;
+}
+
+/* Hovering the Chess title fades the title so the user can watch the 3D chess game underneath */
+.chess-portal .portal-content:hover .portal-title {
+  opacity: 0;
+}
+
+.chess-portal .portal-content:hover {
+  transform: scale(1.08);
+}
+
+.chess-scene {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) rotateZ(0deg);
+  width: min(617px, 82vmin);
+  height: min(617px, 82vmin);
+  transform-style: preserve-3d;
+  animation: boardWobble 12s ease-in-out infinite;
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+@keyframes boardWobble {
+  0%, 100% {
+    transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) rotateY(0deg) rotateZ(0deg);
+  }
+  25% {
+    transform: translate(-50%, -50%) perspective(1500px) rotateX(-3deg) rotateY(2deg) rotateZ(0deg);
+  }
+  50% {
+    transform: translate(-50%, -50%) perspective(1500px) rotateX(0deg) rotateY(-2deg) rotateZ(1deg);
+  }
+  75% {
+    transform: translate(-50%, -50%) perspective(1500px) rotateX(3deg) rotateY(0deg) rotateZ(-1deg);
+  }
+}
+
+.chessboard {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  border: 15px solid #2d1b0e;
+  box-sizing: border-box;
+  background:
+    repeating-linear-gradient(45deg, rgba(0, 0, 0, 0.03) 0px, rgba(0, 0, 0, 0.03) 2px, transparent 2px, transparent 4px),
+    conic-gradient(#e8cfa4 90deg, #8f5e36 90deg 180deg, #e8cfa4 180deg 270deg, #8f5e36 270deg);
+  background-size: 25% 25%;
+  box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5);
+  transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+  pointer-events: none;
+}
+
+.chessboard::before {
+  content: "";
+  position: absolute;
+  top: 100%;
+  left: -15px;
+  right: -15px;
+  height: 30px;
+  background: linear-gradient(to bottom, #2d1b0e, #1a0f08);
+  transform-origin: top;
+  transform: rotateX(-90deg);
+  box-shadow: 0 40px 80px rgba(0, 0, 0, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: none;
+}
+
+.chess-piece {
+  position: absolute;
+  width: 200px;
+  height: 200px;
+  filter: drop-shadow(0 6px 12px rgba(0, 0, 0, 0.7));
+  pointer-events: none;
+  transition:
+    filter 0.3s ease,
+    transform 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+    opacity 0.5s ease,
+    left 1.2s cubic-bezier(0.4, 0, 0.2, 1),
+    top 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+  will-change: transform, left, top;
+  transform-origin: bottom center;
+  transform: translate(-50%, -90%) rotateX(-35deg) scale(0.275);
+  z-index: 10;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  transform-style: preserve-3d;
+}
+
+.chess-piece.moving {
+  z-index: 100;
+}
+
+.chess-piece.captured {
+  opacity: 0;
+  transform: translate(-50%, -60%) rotateX(-35deg) scale(0);
+  pointer-events: none;
+}
+
+.checkmate-square-glow {
+  position: absolute;
+  width: 40%;
+  height: 40%;
+  background: radial-gradient(circle, rgba(255, 0, 0, 0.6) 0%, rgba(255, 0, 0, 0.3) 15%, rgba(255, 0, 0, 0.1) 30%, rgba(255, 0, 0, 0.03) 50%, rgba(255, 0, 0, 0) 80%);
+  pointer-events: none;
+  z-index: 5;
+  animation: checkmate-square-pulse 1.5s ease-in-out infinite;
+  border-radius: 40%;
+  transform: translate(-50%, -50%);
+}
+
+@keyframes checkmate-square-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 0.9; }
+}
+
+/* File positions (a–h) */
+.sq-a1, .sq-a2, .sq-a3, .sq-a4, .sq-a5, .sq-a6, .sq-a7, .sq-a8 { left: 6.25%; }
+.sq-b1, .sq-b2, .sq-b3, .sq-b4, .sq-b5, .sq-b6, .sq-b7, .sq-b8 { left: 18.75%; }
+.sq-c1, .sq-c2, .sq-c3, .sq-c4, .sq-c5, .sq-c6, .sq-c7, .sq-c8 { left: 31.25%; }
+.sq-d1, .sq-d2, .sq-d3, .sq-d4, .sq-d5, .sq-d6, .sq-d7, .sq-d8 { left: 43.75%; }
+.sq-e1, .sq-e2, .sq-e3, .sq-e4, .sq-e5, .sq-e6, .sq-e7, .sq-e8 { left: 56.25%; }
+.sq-f1, .sq-f2, .sq-f3, .sq-f4, .sq-f5, .sq-f6, .sq-f7, .sq-f8 { left: 68.75%; }
+.sq-g1, .sq-g2, .sq-g3, .sq-g4, .sq-g5, .sq-g6, .sq-g7, .sq-g8 { left: 81.25%; }
+.sq-h1, .sq-h2, .sq-h3, .sq-h4, .sq-h5, .sq-h6, .sq-h7, .sq-h8 { left: 93.75%; }
+
+/* Rank positions (8–1) */
+.sq-a8, .sq-b8, .sq-c8, .sq-d8, .sq-e8, .sq-f8, .sq-g8, .sq-h8 { top: 6.25%; }
+.sq-a7, .sq-b7, .sq-c7, .sq-d7, .sq-e7, .sq-f7, .sq-g7, .sq-h7 { top: 18.75%; }
+.sq-a6, .sq-b6, .sq-c6, .sq-d6, .sq-e6, .sq-f6, .sq-g6, .sq-h6 { top: 31.25%; }
+.sq-a5, .sq-b5, .sq-c5, .sq-d5, .sq-e5, .sq-f5, .sq-g5, .sq-h5 { top: 43.75%; }
+.sq-a4, .sq-b4, .sq-c4, .sq-d4, .sq-e4, .sq-f4, .sq-g4, .sq-h4 { top: 56.25%; }
+.sq-a3, .sq-b3, .sq-c3, .sq-d3, .sq-e3, .sq-f3, .sq-g3, .sq-h3 { top: 68.75%; }
+.sq-a2, .sq-b2, .sq-c2, .sq-d2, .sq-e2, .sq-f2, .sq-g2, .sq-h2 { top: 81.25%; }
+.sq-a1, .sq-b1, .sq-c1, .sq-d1, .sq-e1, .sq-f1, .sq-g1, .sq-h1 { top: 93.75%; }

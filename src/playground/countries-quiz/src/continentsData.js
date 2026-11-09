@@ -40,7 +40,7 @@ export const CONTINENTS = {
     "Luxembourg": "Europe", "Macedonia": "Europe", "Malta": "Europe", "Moldova": "Europe",
     "Monaco": "Europe", "Montenegro": "Europe", "Netherlands": "Europe", "Norway": "Europe",
     "Poland": "Europe", "Portugal": "Europe", "Romania": "Europe", "San Marino": "Europe",
-    "Republic of Serbia": "Europe", "Slovakia": "Europe", "Slovenia": "Europe", "Spain": "Europe",
+    "Republic of Serbia": "Europe", "Serbia": "Europe", "Kosovo": "Europe", "Slovakia": "Europe", "Slovenia": "Europe", "Spain": "Europe",
     "Sweden": "Europe", "Switzerland": "Europe", "Ukraine": "Europe", "United Kingdom": "Europe",
     "England": "Europe", "Vatican": "Europe",
 
@@ -53,13 +53,13 @@ export const CONTINENTS = {
     "Mexico": "North America", "Nicaragua": "North America", "Panama": "North America",
     "Saint Kitts and Nevis": "North America", "Saint Lucia": "North America",
     "Saint Vincent and the Grenadines": "North America", "Trinidad and Tobago": "North America",
-    "USA": "North America", "Greenland": "North America",
+    "USA": "North America", "United States of America": "North America", "Greenland": "North America", "Puerto Rico": "North America",
 
     // Oceania
     "Australia": "Oceania", "Fiji": "Oceania", "Kiribati": "Oceania", "Marshall Islands": "Oceania",
     "Micronesia": "Oceania", "Nauru": "Oceania", "New Zealand": "Oceania", "Palau": "Oceania",
     "Papua New Guinea": "Oceania", "Samoa": "Oceania", "Solomon Islands": "Oceania",
-    "Tonga": "Oceania", "Tuvalu": "Oceania", "Vanuatu": "Oceania", "Falkland Islands": "South America", // Arguable, geographically SA
+    "Tonga": "Oceania", "Tuvalu": "Oceania", "Vanuatu": "Oceania", "New Caledonia": "Oceania", "Falkland Islands": "South America", // Arguable, geographically SA
 
     // South America
     "Argentina": "South America", "Bolivia": "South America", "Brazil": "South America",
