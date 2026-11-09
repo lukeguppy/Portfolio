@@ -159,6 +159,45 @@
     </div>
   </div>
 
+  <script>
+    (function () {
+      const input = document.getElementById('guess-input');
+      const controls = document.getElementById('game-controls');
+
+      function updateKeyboard() {
+        if (!window.visualViewport) return;
+        const offsetBottom = Math.max(0, window.innerHeight - window.visualViewport.height - window.visualViewport.offsetTop);
+        document.documentElement.style.setProperty('--keyboard-offset', `${offsetBottom}px`);
+        if (controls) {
+          controls.classList.toggle('keyboard-active', offsetBottom > 60 || document.activeElement === input);
+        }
+      }
+
+      if (window.visualViewport) {
+        window.visualViewport.addEventListener('resize', updateKeyboard);
+        window.visualViewport.addEventListener('scroll', updateKeyboard);
+      }
+
+      if (input) {
+        input.addEventListener('focus', function () {
+          document.documentElement.classList.add('keyboard-open');
+          if (controls) controls.classList.add('keyboard-active');
+          setTimeout(function () {
+            updateKeyboard();
+            if (controls) {
+              controls.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            }
+          }, 250);
+        });
+
+        input.addEventListener('blur', function () {
+          document.documentElement.classList.remove('keyboard-open');
+          if (controls) controls.classList.remove('keyboard-active');
+          document.documentElement.style.setProperty('--keyboard-offset', '0px');
+        });
+      }
+    })();
+  </script>
 </body>
 
 </html>
