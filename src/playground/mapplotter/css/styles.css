@@ -4,12 +4,12 @@
 
 /* Layout */
 @import url('layout/_header.css');
-@import url('layout/_sidebar.css');
+@import url('layout/_sidebar.css?v=202611090338');
 @import url('layout/_map.css');
 
 /* Components */
 @import url('components/_buttons.css');
-@import url('components/_forms.css');
+@import url('components/_forms.css?v=202611090338');
 @import url('components/_tabs.css');
 @import url('components/_categories.css');
 @import url('components/_modals.css');
@@ -21,4 +21,4 @@
 
 /* Utilities */
 @import url('utilities/_animations.css');
-@import url('utilities/_responsive.css');
+@import url('utilities/_responsive.css?v=202611090338');
