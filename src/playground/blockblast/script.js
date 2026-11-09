@@ -226,6 +226,9 @@ function renderAvailableBlocks() {
         blockOption.dataset.blockIndex = index;
         blockOption.draggable = true;
         blockOption.addEventListener('dragstart', handleDragStart);
+        blockOption.addEventListener('touchstart', handleTouchStart, { passive: false });
+        blockOption.addEventListener('touchmove', handleTouchMove, { passive: false });
+        blockOption.addEventListener('touchend', handleTouchEnd, { passive: false });
 
         const blockPreview = document.createElement('div');
         blockPreview.classList.add('block-preview');
@@ -475,6 +478,149 @@ function handleDrop(event) {
 
     potentialDropPosition = null;
     currentDraggingBlock = null;
+}
+
+function handleTouchStart(event) {
+    if (event.touches.length !== 1) return;
+    const touch = event.touches[0];
+    const blockIndex = parseInt(event.currentTarget.dataset.blockIndex);
+    currentDraggingBlock = availableBlocks[blockIndex];
+    if (!currentDraggingBlock) return;
+
+    event.preventDefault();
+    event.currentTarget.classList.add('dragging');
+
+    if (draggablePreviewElement) draggablePreviewElement.remove();
+
+    draggablePreviewElement = document.createElement('div');
+    draggablePreviewElement.classList.add('draggable-block-preview-container');
+    draggablePreviewElement.style.position = 'fixed';
+    draggablePreviewElement.style.pointerEvents = 'none';
+    draggablePreviewElement.style.opacity = '0.85';
+    draggablePreviewElement.style.zIndex = '9999';
+    draggablePreviewElement.style.display = 'grid';
+    const cellWidth = getBoardCellWidth();
+    draggablePreviewElement.style.gridTemplateColumns = `repeat(${currentDraggingBlock.shape[0].length}, ${cellWidth}px)`;
+    draggablePreviewElement.style.gridTemplateRows = `repeat(${currentDraggingBlock.shape.length}, ${cellWidth}px)`;
+
+    currentDraggingBlock.shape.forEach((row) => {
+        row.forEach((cell) => {
+            const previewSquare = document.createElement('div');
+            previewSquare.classList.add('draggable-block-preview-square');
+            if (cell) {
+                previewSquare.classList.add('filled');
+                previewSquare.style.backgroundColor = currentDraggingBlock.colour;
+            } else {
+                previewSquare.style.backgroundColor = 'transparent';
+            }
+            draggablePreviewElement.appendChild(previewSquare);
+        });
+    });
+
+    document.body.appendChild(draggablePreviewElement);
+    updateTouchPosition(touch);
+}
+
+function updateTouchPosition(touch) {
+    if (!draggablePreviewElement || !currentDraggingBlock) return;
+    const cellWidth = getBoardCellWidth();
+    const previewW = currentDraggingBlock.shape[0].length * cellWidth;
+    const previewH = currentDraggingBlock.shape.length * cellWidth;
+
+    const posX = touch.clientX - previewW / 2;
+    const posY = touch.clientY - previewH - 30;
+
+    draggablePreviewElement.style.left = `${posX}px`;
+    draggablePreviewElement.style.top = `${posY}px`;
+
+    const targetX = touch.clientX;
+    const targetY = touch.clientY - previewH / 2 - 30;
+
+    const el = document.elementFromPoint(targetX, targetY);
+    const cell = el ? el.closest('.cell') : null;
+
+    clearDragOverHighlight();
+    dragOverCells = [];
+    potentialDropPosition = null;
+
+    if (cell && currentDraggingBlock) {
+        const row = parseInt(cell.dataset.row);
+        const col = parseInt(cell.dataset.col);
+        const blockH = currentDraggingBlock.shape.length;
+        const blockW = currentDraggingBlock.shape[0].length;
+        const startRow = row - Math.floor(blockH / 2);
+        const startCol = col - Math.floor(blockW / 2);
+
+        if (canPlaceBlock(currentDraggingBlock.shape, startRow, startCol)) {
+            potentialDropPosition = { row: startRow, col: startCol };
+            highlightDropArea(currentDraggingBlock.shape, startRow, startCol, currentDraggingBlock.colour);
+        } else {
+            const deltas = [{ r: 0, c: 0 }, { r: -1, c: 0 }, { r: 1, c: 0 }, { r: 0, c: -1 }, { r: 0, c: 1 }];
+            for (const d of deltas) {
+                if (canPlaceBlock(currentDraggingBlock.shape, startRow + d.r, startCol + d.c)) {
+                    potentialDropPosition = { row: startRow + d.r, col: startCol + d.c };
+                    highlightDropArea(currentDraggingBlock.shape, startRow + d.r, startCol + d.c, currentDraggingBlock.colour);
+                    break;
+                }
+            }
+        }
+    }
+}
+
+function handleTouchMove(event) {
+    if (!currentDraggingBlock || event.touches.length !== 1) return;
+    event.preventDefault();
+    updateTouchPosition(event.touches[0]);
+}
+
+function handleTouchEnd(event) {
+    if (!currentDraggingBlock) return;
+    event.preventDefault();
+
+    clearDragOverHighlight();
+    dragOverCells = [];
+
+    if (draggablePreviewElement) {
+        draggablePreviewElement.remove();
+        draggablePreviewElement = null;
+    }
+
+    const draggedOption = document.querySelector('.block-option.dragging');
+    if (draggedOption) draggedOption.classList.remove('dragging');
+
+    if (potentialDropPosition !== null && canPlaceBlock(currentDraggingBlock.shape, potentialDropPosition.row, potentialDropPosition.col)) {
+        placeBlockOnBoard(currentDraggingBlock.shape, potentialDropPosition.row, potentialDropPosition.col, currentDraggingBlock.colour);
+        updatePlaceScore();
+
+        const blockIndex = availableBlocks.indexOf(currentDraggingBlock);
+        if (blockIndex > -1) {
+            availableBlocks.splice(blockIndex, 1);
+            renderAvailableBlocks();
+        }
+
+        const linesClearedThisDrop = checkAndClearLines();
+        if (linesClearedThisDrop > 0) {
+            turnsWithoutClear = 0;
+            currentCombo++;
+            linesClearedOnPreviousTurn = true;
+            updateScore(linesClearedThisDrop);
+        } else {
+            turnsWithoutClear++;
+            linesClearedOnPreviousTurn = false;
+            if (turnsWithoutClear >= 3) {
+                currentCombo = 0;
+            }
+        }
+
+        if (availableBlocks.length === 0) {
+            generateNewBlocks();
+        } else if (isGameOver()) {
+            endGame();
+        }
+    }
+
+    currentDraggingBlock = null;
+    potentialDropPosition = null;
 }
 
 

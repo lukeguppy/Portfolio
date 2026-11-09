@@ -41,6 +41,24 @@ export class MapManager {
             .projection(this.projection)
             .context(this.context);
 
+        // Add touch/mouse drag handler
+        const drag = d3.drag()
+            .on('start', () => {
+                if (this.animationId) {
+                    cancelAnimationFrame(this.animationId);
+                    this.animationId = null;
+                }
+            })
+            .on('drag', (event) => {
+                const rotate = this.projection.rotate();
+                const k = 75 / this.projection.scale();
+                this.projection.rotate([
+                    rotate[0] + event.dx * k,
+                    Math.max(-85, Math.min(85, rotate[1] - event.dy * k))
+                ]);
+            });
+        d3.select(this.canvas).call(drag);
+
         await this.loadWorldData();
 
         // Start ONE single render loop
@@ -76,12 +94,19 @@ export class MapManager {
     async loadWorldData() {
         try {
             // Load clean, local curated GeoJSON (offline, fast, accurate borders)
+            const isGhPages = window.location.pathname.startsWith('/Portfolio');
+            const prefix = isGhPages ? '/Portfolio' : '';
             let response;
             try {
                 response = await fetch('./world.geojson');
                 if (!response.ok) throw new Error('Local fetch failed');
             } catch {
-                response = await fetch('/Portfolio/playground/countries-quiz/world.geojson');
+                try {
+                    response = await fetch(${prefix}/playground/countries-quiz/world.geojson);
+                    if (!response.ok) throw new Error('Prefix fetch failed');
+                } catch {
+                    response = await fetch('/playground/countries-quiz/world.geojson');
+                }
             }
             const data = await response.json();
             this.worldData = data;

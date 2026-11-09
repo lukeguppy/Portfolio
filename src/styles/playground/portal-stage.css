@@ -252,7 +252,10 @@ body[data-page="playground"] {
 
 @media (max-width: 52rem) {
   .portal-title {
-    font-size: clamp(3.2rem, 19vw, 6.5rem);
+    font-size: clamp(2.4rem, 14vw, 5rem);
+    letter-spacing: clamp(1px, 0.6vw, 4px);
+    max-width: 94vw;
+    padding: 0 0.5rem;
   }
 
   .portal-index {

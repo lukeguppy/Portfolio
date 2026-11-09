@@ -5,6 +5,27 @@ html {
   scroll-padding-top: calc(var(--header-h) + var(--space-5));
   scrollbar-width: none;
   -ms-overflow-style: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+button,
+a,
+[role="button"],
+[role="tab"] {
+  touch-action: manipulation;
+}
+
+button,
+[role="button"],
+[role="tab"] {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+input,
+select,
+textarea {
+  font-size: 16px; /* Prevents iOS auto-zoom on input focus */
 }
 
 html::-webkit-scrollbar,

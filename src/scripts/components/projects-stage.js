@@ -614,11 +614,25 @@ export function initProjectsStage() {
     ctx.imageSmoothingQuality = 'high';
   }
 
-  canvas.addEventListener('mousemove', (e) => {
+    canvas.addEventListener('mousemove', (e) => {
     const r = canvas.getBoundingClientRect();
     pointer.x = (e.clientX - r.left) / r.width;
     pointer.y = (e.clientY - r.top) / r.height;
   });
+
+  canvas.addEventListener('touchmove', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    const r = canvas.getBoundingClientRect();
+    pointer.x = (e.touches[0].clientX - r.left) / r.width;
+    pointer.y = (e.touches[0].clientY - r.top) / r.height;
+  }, { passive: true });
+
+  canvas.addEventListener('touchstart', (e) => {
+    if (!e.touches || !e.touches[0]) return;
+    const r = canvas.getBoundingClientRect();
+    pointer.x = (e.touches[0].clientX - r.left) / r.width;
+    pointer.y = (e.touches[0].clientY - r.top) / r.height;
+  }, { passive: true });
 
   window.addEventListener('resize', resize, { passive: true });
   resize();

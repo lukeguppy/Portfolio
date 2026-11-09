@@ -479,6 +479,8 @@
   }
 
   .workbench__tabs {
+    -webkit-overflow-scrolling: touch;
+    scroll-snap-type: x mandatory;
     display: grid;
     grid-template-columns: repeat(6, minmax(135px, 1fr));
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
@@ -492,6 +494,9 @@
   }
 
   .workbench__tab {
+    scroll-snap-align: start;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
     position: relative;
     display: flex;
     flex-direction: column;
@@ -1167,3 +1172,32 @@
     line-height: 1.5;
   }
 }
+
+
+  @media (max-width: 48rem) {
+    .workbench__tabs {
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+    }
+    .workbench__tab {
+      padding: 0.75rem 0.85rem;
+      min-height: 44px;
+    }
+    .workbench__panel {
+      padding: 1.25rem 1rem;
+    }
+    .workbench__viewport {
+      min-height: 280px;
+    }
+    .workbench__controls {
+      gap: 0.75rem;
+    }
+    .workbench__control-row {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0.35rem;
+    }
+    .workbench__skills {
+      gap: 0.35rem;
+    }
+  }
+
