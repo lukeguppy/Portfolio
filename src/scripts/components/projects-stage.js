@@ -564,6 +564,7 @@ export function initProjectsStage() {
 
   function setMode(mode, immediate = false) {
     if (!PROJECTS[mode]) return;
+    startWorkbenchLoop();
     if (mode === state.mode && !immediate) return;
 
     tabs.forEach((t) => {
@@ -1914,7 +1915,7 @@ export function initProjectsStage() {
     }
 
     // 7. Kinetic Jump Pad on Landing Roof
-    const padZ = (320 - zOffset + loopSpan) % loopSpan;
+    const padZ = (320 - zPos + loopSpan) % loopSpan;
     if (padZ > 24 && padZ < 400) {
       const padProj = project3D(0, 60, padZ);
       const rad = 28 * padProj.scale;
@@ -2130,12 +2131,16 @@ export function initProjectsStage() {
     const dpr = Math.max(window.devicePixelRatio || 1, 1);
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    if (state.mode === 'llm') drawLlm();
-    else if (state.mode === 'scheduling') drawScheduling();
-    else if (state.mode === 'dissertation') drawDissertation();
-    else if (state.mode === 'diffraction') drawDiffraction();
-    else if (state.mode === 'dtn') drawDtn();
-    else drawGame3d();
+    try {
+      if (state.mode === 'llm') drawLlm();
+      else if (state.mode === 'scheduling') drawScheduling();
+      else if (state.mode === 'dissertation') drawDissertation();
+      else if (state.mode === 'diffraction') drawDiffraction();
+      else if (state.mode === 'dtn') drawDtn();
+      else drawGame3d();
+    } catch (err) {
+      console.error('Error drawing project stage:', state.mode, err);
+    }
 
     if (isWorkbenchVisible) {
       workbenchRafId = requestAnimationFrame(loop);
