@@ -131,13 +131,18 @@ export function initPipelineScroll() {
         activePhase = item.el.dataset.phase || activePhase;
       }
 
-      // Micro subtle parallax & progressive opacity
-      const distFromVp = item.docCenterY - (smoothScrollY + vh * 0.5);
-      const enterNorm = clamp(1 - (distFromVp / (vh * 0.65)), 0, 1);
-      const ease = enterNorm * enterNorm * (3 - 2 * enterNorm);
-      const parallaxOffset = clamp(distFromVp * 0.035, -16, 16);
-      item.el.style.transform = `translate3d(0, ${parallaxOffset.toFixed(2)}px, 0)`;
-      item.el.style.opacity = (0.32 + 0.68 * ease).toFixed(3);
+      const isMobile = window.innerWidth <= 768;
+      if (isMobile) {
+        item.el.style.transform = 'none';
+        item.el.style.opacity = '1';
+      } else {
+        const distFromVp = item.docCenterY - (smoothScrollY + vh * 0.5);
+        const enterNorm = clamp(1 - (distFromVp / (vh * 0.65)), 0, 1);
+        const ease = enterNorm * enterNorm * (3 - 2 * enterNorm);
+        const parallaxOffset = clamp(distFromVp * 0.035, -16, 16);
+        item.el.style.transform = `translate3d(0, ${parallaxOffset.toFixed(2)}px, 0)`;
+        item.el.style.opacity = (0.5 + 0.5 * ease).toFixed(3);
+      }
     });
 
     requestAnimationFrame(tick);

@@ -102,33 +102,27 @@ export function initTimelineScroll() {
     // -------------------------------------------------------------------------
     // 1. HERO PARALLAX & DEPTH RECESSION (Active only on scroll down)
     // -------------------------------------------------------------------------
-    if (smoothScrollY > 12) {
-      const heroExitP = clamp(smoothScrollY / (vh * 0.68), 0, 1);
+    const isMobile = window.innerWidth <= 768;
+    if (!isMobile && smoothScrollY > 12) {
       if (heroTitle) {
-        const y = smoothScrollY * 0.34;
-        const scale = 1 - heroExitP * 0.12;
-        const op = 1 - heroExitP;
-        heroTitle.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-        heroTitle.style.opacity = op.toFixed(3);
+        const y = smoothScrollY * 0.18;
+        heroTitle.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+        heroTitle.style.opacity = '1';
       }
       if (heroLead) {
-        const y = smoothScrollY * 0.22;
-        const scale = 1 - heroExitP * 0.08;
-        const op = clamp(1 - heroExitP * 1.1, 0, 1);
-        heroLead.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-        heroLead.style.opacity = op.toFixed(3);
+        const y = smoothScrollY * 0.12;
+        heroLead.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+        heroLead.style.opacity = '1';
       }
       if (heroPillars) {
-        const y = smoothScrollY * 0.12;
-        const scale = 1 - heroExitP * 0.06;
-        const op = clamp(1 - heroExitP * 1.2, 0, 1);
-        heroPillars.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
-        heroPillars.style.opacity = op.toFixed(3);
+        const y = smoothScrollY * 0.08;
+        heroPillars.style.transform = `translate3d(0, ${y.toFixed(2)}px, 0)`;
+        heroPillars.style.opacity = '1';
       }
     } else {
-      if (heroTitle && heroTitle.style.transform) heroTitle.style.transform = '';
-      if (heroLead && heroLead.style.transform) heroLead.style.transform = '';
-      if (heroPillars && heroPillars.style.transform) heroPillars.style.transform = '';
+      if (heroTitle) { heroTitle.style.transform = ''; heroTitle.style.opacity = '1'; }
+      if (heroLead) { heroLead.style.transform = ''; heroLead.style.opacity = '1'; }
+      if (heroPillars) { heroPillars.style.transform = ''; heroPillars.style.opacity = '1'; }
     }
 
     // -------------------------------------------------------------------------
