@@ -16,7 +16,7 @@ export function initPipelineScroll() {
   const bgCanvas = document.getElementById('dissertation-bg-canvas');
   const heroRadarCanvas = document.getElementById('hero-radar-canvas');
 
-  // 1. Cipher decode effect on hero title ("Autonomous")
+  // 1. Cipher decode effect on hero title ("Autonomous") — deliberate, readable pacing
   const glitchEl = document.querySelector('.glitch-text');
   if (glitchEl) {
     const finalText = glitchEl.getAttribute('data-text') || 'Autonomous';
@@ -34,8 +34,8 @@ export function initPipelineScroll() {
         window.clearInterval(interval);
         glitchEl.textContent = finalText;
       }
-      iteration += 1 / 3;
-    }, 32);
+      iteration += 1 / 5;
+    }, 48);
   }
 
   let activePhase = 'overview';
@@ -1491,6 +1491,16 @@ export function initPipelineScroll() {
           ctx.arc(x, y, radius, 0, Math.PI * 2);
           ctx.fill();
         });
+
+        // Atmospheric Horizon Fog (softly dissolves the grid into dark space above the horizon — ZERO cutoff line)
+        const fogH = Math.max(140, height * 0.42);
+        const fogGrad = ctx.createLinearGradient(0, horizonY - 60, 0, horizonY + fogH);
+        fogGrad.addColorStop(0, '#080c14');
+        fogGrad.addColorStop(0.28, '#080c14');
+        fogGrad.addColorStop(0.65, 'rgba(8, 12, 20, 0.75)');
+        fogGrad.addColorStop(1, 'rgba(8, 12, 20, 0)');
+        ctx.fillStyle = fogGrad;
+        ctx.fillRect(0, 0, width, horizonY + fogH);
 
         requestAnimationFrame(renderBg);
       };
