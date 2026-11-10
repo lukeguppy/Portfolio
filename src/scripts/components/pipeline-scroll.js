@@ -311,8 +311,7 @@ export function initPipelineScroll() {
         let p3 = { x: 0, y: 0 };
 
         const isLeft = (fromDir + 3) % 4 === toDir;
-        // k=13 keeps right turns tight to the center, never clipping waiting lanes
-        const k = isLeft ? 6.0 : 13.0;
+        const isUTurn = (fromDir + 2) % 4 === toDir;
 
         // Entry point P0 at intersection boundary in incoming lane
         if (fromDir === 0) p0 = { x: X0 - H, y: Y0 - L };
@@ -321,18 +320,37 @@ export function initPipelineScroll() {
         else if (fromDir === 3) p0 = { x: X0 - L, y: Y0 + H };
 
         // Exit point P3 at intersection boundary in target lane
-        if (toDir === 0) p3 = { x: X0 + H, y: Y0 - L };
-        else if (toDir === 1) p3 = { x: X0 + L, y: Y0 + H };
-        else if (toDir === 2) p3 = { x: X0 - H, y: Y0 + L };
-        else if (toDir === 3) p3 = { x: X0 - L, y: Y0 - H };
+        if (isUTurn) {
+          // U-turn loops 180° back into opposite lane of the same approach
+          if (fromDir === 0) p3 = { x: X0 - H, y: Y0 + L };
+          else if (fromDir === 1) p3 = { x: X0 - L, y: Y0 - H };
+          else if (fromDir === 2) p3 = { x: X0 + H, y: Y0 - L };
+          else if (fromDir === 3) p3 = { x: X0 + L, y: Y0 + H };
+        } else {
+          if (toDir === 0) p3 = { x: X0 + H, y: Y0 - L };
+          else if (toDir === 1) p3 = { x: X0 + L, y: Y0 + H };
+          else if (toDir === 2) p3 = { x: X0 - H, y: Y0 + L };
+          else if (toDir === 3) p3 = { x: X0 - L, y: Y0 - H };
+        }
 
         const d0 = DIRS[fromDir];
         const d3 = DIRS[toDir];
-        const p1 = { x: p0.x + d0.dx * k, y: p0.y + d0.dy * k };
-        const p2 = { x: p3.x - d3.dx * k, y: p3.y - d3.dy * k };
-        const length = isLeft ? 16 : 38;
 
-        return { p0, p1, p2, p3, length, isLeft };
+        let p1, p2, length;
+        if (isUTurn) {
+          // Smooth 180° U-turn loop that curves inside the junction box past center and exits cleanly
+          p1 = { x: p0.x + d0.dx * 26, y: p0.y + d0.dy * 26 };
+          p2 = { x: p3.x - d3.dx * 26, y: p3.y - d3.dy * 26 };
+          length = 48;
+        } else {
+          // k=13 keeps right turns tight to center, avoiding stop lines
+          const k = isLeft ? 6.0 : 13.0;
+          p1 = { x: p0.x + d0.dx * k, y: p0.y + d0.dy * k };
+          p2 = { x: p3.x - d3.dx * k, y: p3.y - d3.dy * k };
+          length = isLeft ? 16 : 38;
+        }
+
+        return { p0, p1, p2, p3, length, isLeft, isUTurn };
       }
 
       // 15-step Continuous Autonomous Circuit for Luke's Ego Vehicle (100% on-screen perpetual loop)
@@ -366,7 +384,7 @@ export function initPipelineScroll() {
           return { maneuver: 'straight', toDir: car.dir };
         }
 
-        // Environment vehicles: planned intention
+        // Environment vehicles: planned intention (with 3% rare U-turn probability)
         if (car.plannedTurnDir === undefined || car.plannedTurnInt !== intObj) {
           const atWest = intObj.xi === 0 && car.dir === 2;
           const atEast = intObj.xi === 2 && car.dir === 0;
@@ -375,18 +393,23 @@ export function initPipelineScroll() {
 
           let targetDir = car.dir;
           if (atWest) {
-            targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+            if (Math.random() < 0.03) targetDir = 0; // 3% U-turn
+            else targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
           } else if (atEast) {
-            targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+            if (Math.random() < 0.03) targetDir = 2; // 3% U-turn
+            else targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
           } else if (atNorth) {
-            targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+            if (Math.random() < 0.03) targetDir = 1; // 3% U-turn
+            else targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
           } else if (atSouth) {
-            targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+            if (Math.random() < 0.03) targetDir = 3; // 3% U-turn
+            else targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
           } else {
             const rnd = Math.random();
-            if (rnd < 0.25) targetDir = (car.dir + 1) % 4; // Right turn
-            else if (rnd < 0.50) targetDir = (car.dir + 3) % 4; // Left turn
-            else targetDir = car.dir; // Straight
+            if (rnd < 0.03) targetDir = (car.dir + 2) % 4; // 3% chance U-turn
+            else if (rnd < 0.28) targetDir = (car.dir + 1) % 4; // 25% chance right turn
+            else if (rnd < 0.53) targetDir = (car.dir + 3) % 4; // 25% chance left turn
+            else targetDir = car.dir; // 47% chance straight
           }
           car.plannedTurnDir = targetDir;
           car.plannedTurnInt = intObj;
@@ -395,13 +418,14 @@ export function initPipelineScroll() {
         const toDir = car.plannedTurnDir;
         if (toDir === car.dir) return { maneuver: 'straight', toDir };
         if ((car.dir + 3) % 4 === toDir) return { maneuver: 'left', toDir };
+        if ((car.dir + 2) % 4 === toDir) return { maneuver: 'uturn', toDir };
         return { maneuver: 'right', toDir };
       }
 
       // British Right-of-Way Rules (Highway Code Rule 174 Box Junction & Priority):
       // 1. Straight-through traffic has Priority over vehicles turning across traffic.
       // 2. Left turns (near-side) do not cross opposing traffic, so they do NOT yield to the other side.
-      // 3. Right turns (across oncoming lane) MUST yield to oncoming straight and left-turn traffic ON THE SAME ROAD!
+      // 3. Right turns and U-turns (across oncoming lane) MUST yield to oncoming straight and left-turn traffic ON THE SAME ROAD!
       // 4. Yellow Box Junction rule: If ANY vehicle is turning inside the box, vehicles must wait behind the stop line.
       function shouldYieldAtIntersection(carA, intObj) {
         // Yellow Box Rule: If junction is reserved by another vehicle, approaching vehicles MUST wait
@@ -423,9 +447,9 @@ export function initPipelineScroll() {
         const currentDir = DIRS[carA.dir];
         const oppositeDir = (carA.dir + 2) % 4;
 
-        // Right-turn Yielding: if Car A is turning right across oncoming traffic,
+        // Right-turn & U-turn Yielding: if Car A is turning across oncoming traffic,
         // Car A MUST yield to oncoming vehicles traveling straight or left ON THE EXACT SAME ROAD!
-        if (maneuverA === 'right') {
+        if (maneuverA === 'right' || maneuverA === 'uturn') {
           for (let i = 0; i < vehicles.length; i++) {
             const carB = vehicles[i];
             if (carB.id === carA.id || carB.isOffscreen) continue;
@@ -933,6 +957,14 @@ export function initPipelineScroll() {
                   const mustYield = shouldYieldAtIntersection(car, intObj);
                   const boxOccupied = intObj.occupantCarId !== null && intObj.occupantCarId !== car.id;
 
+                  // Signal turn intention early on approach (within 65px)
+                  if (distAlongDir < 65) {
+                    const { toDir: targetDir } = getCarManeuver(car, intObj);
+                    if (targetDir !== car.dir) {
+                      car.turnSignal = (car.dir + 3) % 4 === targetDir ? 'left' : 'right';
+                    }
+                  }
+
                   const stopLineDist = HALF_ROAD + 2; // 21px from center
                   const safeStopDist = stopLineDist + (car.length / 2) + 3; // 35px from center (front bumper 3px behind stop line)
 
@@ -979,6 +1011,7 @@ export function initPipelineScroll() {
                 if (car.hasTurnedInInt && distToCenter > HALF_ROAD + 14) {
                   car.hasTurnedInInt = false;
                   car.plannedTurnDir = undefined;
+                  car.turnSignal = null;
                   if (intObj.occupantCarId === car.id) {
                     intObj.occupantCarId = null;
                   }
@@ -1252,26 +1285,37 @@ export function initPipelineScroll() {
             ctx.roundRect(1, -w / 2 + 2.5, 6, w - 5, 1.5);
             ctx.fill();
 
-            // Headlights (Clean LED points on bumper corners — ZERO dark wedge)
-            ctx.fillStyle = car.isEgo ? '#99f6e4' : '#f8fafc';
+            // Headlights & Tail Lights with integrated Indicators (directly on the light clusters)
+            const isLeftBlink = car.turnSignal === 'left' && (Math.floor(simTimeSec * 5) % 2 === 0);
+            const isRightBlink = car.turnSignal === 'right' && (Math.floor(simTimeSec * 5) % 2 === 0);
+
+            // Front Left Corner (Headlight or Amber Indicator)
+            ctx.fillStyle = isLeftBlink ? '#f59e0b' : (car.isEgo ? '#99f6e4' : '#f8fafc');
+            if (isLeftBlink) { ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 4; }
             ctx.fillRect(len / 2 - 1.5, -w * 0.4, 2, 2);
+            ctx.shadowBlur = 0;
+
+            // Front Right Corner (Headlight or Amber Indicator)
+            ctx.fillStyle = isRightBlink ? '#f59e0b' : (car.isEgo ? '#99f6e4' : '#f8fafc');
+            if (isRightBlink) { ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 4; }
             ctx.fillRect(len / 2 - 1.5, w * 0.4 - 2, 2, 2);
+            ctx.shadowBlur = 0;
 
-            // Tail / Brake Lights (Red LEDs)
+            // Tail / Brake Lights (Red LEDs or Amber Indicators)
             const brakeGlow = car.isBraking;
-            ctx.fillStyle = brakeGlow ? '#f43f5e' : 'rgba(244, 63, 94, 0.35)';
-            ctx.fillRect(-len / 2 - 0.5, -w * 0.42, 2, brakeGlow ? 3 : 2);
-            ctx.fillRect(-len / 2 - 0.5, w * 0.42 - (brakeGlow ? 3 : 2), 2, brakeGlow ? 3 : 2);
+            const normRed = brakeGlow ? '#f43f5e' : 'rgba(244, 63, 94, 0.45)';
 
-            // Turn Signal Indicator (blinking amber LED on turning side)
-            if (car.isTurning && car.turnSignal) {
-              const blink = Math.floor(simTimeSec * 5) % 2 === 0;
-              if (blink) {
-                ctx.fillStyle = '#f59e0b';
-                const sigY = car.turnSignal === 'left' ? -w * 0.42 : w * 0.42 - 2;
-                ctx.fillRect(len * 0.1, sigY, 2.5, 2);
-              }
-            }
+            // Rear Left Corner
+            ctx.fillStyle = isLeftBlink ? '#f59e0b' : normRed;
+            if (isLeftBlink) { ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 3; }
+            ctx.fillRect(-len / 2 - 0.5, -w * 0.42, 2, brakeGlow ? 3 : 2);
+            ctx.shadowBlur = 0;
+
+            // Rear Right Corner
+            ctx.fillStyle = isRightBlink ? '#f59e0b' : normRed;
+            if (isRightBlink) { ctx.shadowColor = '#f59e0b'; ctx.shadowBlur = 3; }
+            ctx.fillRect(-len / 2 - 0.5, w * 0.42 - (brakeGlow ? 3 : 2), 2, brakeGlow ? 3 : 2);
+            ctx.shadowBlur = 0;
 
             ctx.restore();
           });
