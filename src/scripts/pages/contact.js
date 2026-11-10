@@ -1,3 +1,7 @@
+import { initNetworkBackground } from '../components/network-background.js';
+
+initNetworkBackground('contact-bg-container', { nodeCount: 36 });
+
 /**
  * Contact page: one-click clipboard copy for `lukewguppy@gmail.com`.
  */
