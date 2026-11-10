@@ -1,8 +1,11 @@
 import { initLukeAgent } from '../components/luke-agent.js';
 import { initHomePortalStage } from '../components/home-portal-stage.js';
-import { initNetworkBackground } from '../components/network-background.js';
+import { createDeepNeuralNetworkBackground } from '../components/home-backgrounds.js';
 
-initNetworkBackground('home-bg-container', { nodeCount: 42 });
+const homeBgContainer = document.getElementById('home-bg-container');
+if (homeBgContainer) {
+  createDeepNeuralNetworkBackground(homeBgContainer, { subtlety: 1.0 });
+}
 initLukeAgent(document.querySelector('[data-luke-agent]'));
 initHomePortalStage(document.querySelector('[data-home-portal-stage]'));
 

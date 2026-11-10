@@ -1,0 +1,100 @@
+<!-- TOP FLOATING SWITCHER DOCK -->
+<nav class="preview-dock" aria-label="Background Concept Selector">
+    <span class="preview-dock__label">Concepts:</span>
+    <div class="preview-dock__tabs" role="tablist">
+        <button type="button" class="preview-tab {% if activeConcept == 'neural' or not activeConcept %}is-active{% endif %}" data-preview-tab="neural" role="tab" aria-selected="{% if activeConcept == 'neural' or not activeConcept %}true{% else %}false{% endif %}">
+            <span>1. Deep Neural Network</span>
+        </button>
+        <button type="button" class="preview-tab {% if activeConcept == 'transformer' %}is-active{% endif %}" data-preview-tab="transformer" role="tab" aria-selected="{% if activeConcept == 'transformer' %}true{% else %}false{% endif %}">
+            <span>2. Transformer Attention</span>
+        </button>
+        <button type="button" class="preview-tab {% if activeConcept == 'matrix' %}is-active{% endif %}" data-preview-tab="matrix" role="tab" aria-selected="{% if activeConcept == 'matrix' %}true{% else %}false{% endif %}">
+            <span>3. Serene Matrix</span>
+        </button>
+        <button type="button" class="preview-tab {% if activeConcept == 'mcp' %}is-active{% endif %}" data-preview-tab="mcp" role="tab" aria-selected="{% if activeConcept == 'mcp' %}true{% else %}false{% endif %}">
+            <span>4. MCP Socket Bus</span>
+        </button>
+    </div>
+
+    <div class="preview-dock__divider" aria-hidden="true"></div>
+
+    <div class="preview-dock__controls">
+        <button type="button" class="preview-control-btn" id="btn-toggle-fg" title="Toggle foreground content on/off to inspect background alone">
+            FG: Visible
+        </button>
+        <button type="button" class="preview-control-btn" id="btn-toggle-subtlety" title="Cycle background line & pulse intensity">
+            Subtlety: Normal (1.0x)
+        </button>
+    </div>
+</nav>
+
+<!-- LIVE CANVAS STAGE -->
+<div id="preview-bg-stage" class="preview-bg-stage" data-initial-concept="{{ activeConcept or 'neural' }}" aria-hidden="true"></div>
+
+<!-- FOREGROUND HERO STAGE (IDENTICAL TO REAL HOME PAGE FOR DIRECT CONTRAST TESTING) -->
+<div id="preview-foreground" class="preview-foreground">
+    <section class="home-hero">
+        <div class="home-hero__grid">
+
+            <!-- Left column: Identity & primary navigation -->
+            <div class="home-hero__intro">
+                <h1 class="home-hero__title">
+                    <span class="home-hero__name">Luke Guppy</span>
+                    <span class="home-hero__statement">AI Software Engineer @ AlphaSights</span>
+                </h1>
+
+                <p class="home-hero__lead">
+                    Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing that shape the company’s AI foundations.
+                </p>
+
+                <nav class="home-hero__actions" aria-label="Explore portfolio pages">
+                    <a href="{{ '/about-me/' | url }}" class="home-nav-link">
+                        <span class="home-nav-link__label">Experience</span>
+                    </a>
+                    <a href="{{ '/dissertation/' | url }}" class="home-nav-link">
+                        <span class="home-nav-link__label">Dissertation</span>
+                    </a>
+                    <a href="{{ '/playground/' | url }}" class="home-nav-link">
+                        <span class="home-nav-link__label">Playground</span>
+                    </a>
+                    <a href="{{ '/contact/' | url }}" class="home-nav-link">
+                        <span class="home-nav-link__label">Contact Me</span>
+                    </a>
+                </nav>
+            </div>
+
+            <!-- Right column: Choreographed AI Briefing Terminal (Fully Interactive) -->
+            <aside class="luke-agent" data-luke-agent aria-label="Interactive Overview Terminal">
+                <!-- Simulated User Prompt Bar -->
+                <div class="luke-agent__prompt-box">
+                    <div class="luke-agent__prompt-line">
+                        <span class="luke-agent__prompt-chevron" aria-hidden="true">&gt;</span>
+                        <span class="luke-agent__prompt-text" data-agent-prompt-text></span>
+                        <span class="luke-agent__cursor" data-agent-prompt-cursor aria-hidden="true"></span>
+                    </div>
+                </div>
+
+                <!-- Streamed AI Response Body -->
+                <div class="luke-agent__stage" data-agent-stage aria-live="polite">
+                    <div class="luke-agent__thinking" data-agent-thinking hidden>
+                        <span class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>
+                        <span>Thinking...</span>
+                    </div>
+
+                    <div class="luke-agent__summary" data-agent-summary></div>
+
+                    <div class="luke-agent__dossier" data-agent-dossier></div>
+                </div>
+
+                <!-- Preset Question Switcher -->
+                <div class="luke-agent__presets" aria-label="Ask a question">
+                    <button type="button" class="luke-agent__chip is-active" data-agent-chip="intro">Overview</button>
+                    <button type="button" class="luke-agent__chip" data-agent-chip="alphasights">AlphaSights Role</button>
+                    <button type="button" class="luke-agent__chip" data-agent-chip="experience">Past Experience</button>
+                    <button type="button" class="luke-agent__chip" data-agent-chip="projects">Projects</button>
+                </div>
+            </aside>
+
+        </div>
+    </section>
+</div>
