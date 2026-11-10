@@ -423,39 +423,58 @@ export function initPipelineScroll() {
       }
 
       // British Right-of-Way Rules (Highway Code Rule 174 Box Junction & Priority):
-      // 1. Straight-through traffic has Priority over vehicles turning across traffic.
-      // 2. Left turns (near-side) do not cross opposing traffic, so they do NOT yield to the other side.
-      // 3. Right turns and U-turns (across oncoming lane) MUST yield to oncoming straight and left-turn traffic ON THE SAME ROAD!
-      // 4. Yellow Box Junction rule: If ANY vehicle is turning inside the box, vehicles must wait behind the stop line.
+      // 1. Left turns (near-side) stay completely in their own corner and NEVER yield to oncoming traffic.
+      // 2. Straight-through traffic has Priority over vehicles turning across traffic; parallel straight cars pass with zero conflict.
+      // 3. Right turns and U-turns (across oncoming lane) MUST yield to oncoming straight and left-turn traffic ON THE SAME ROAD.
       function shouldYieldAtIntersection(carA, intObj) {
-        // Yellow Box Rule: If junction is reserved by another vehicle, approaching vehicles MUST wait
-        if (intObj.occupantCarId !== null && intObj.occupantCarId !== carA.id) {
-          return true;
-        }
-
-        // If another vehicle is physically inside the junction box, yield
-        for (let i = 0; i < vehicles.length; i++) {
-          const carB = vehicles[i];
-          if (carB.id === carA.id || carB.isOffscreen) continue;
-          const distBToCenter = Math.hypot(carB.x - intObj.x, carB.y - intObj.y);
-          if (distBToCenter < HALF_ROAD + 2) {
-            return true;
-          }
-        }
-
         const { maneuver: maneuverA } = getCarManeuver(carA, intObj);
         const currentDir = DIRS[carA.dir];
         const oppositeDir = (carA.dir + 2) % 4;
 
-        // Right-turn & U-turn Yielding: if Car A is turning across oncoming traffic,
-        // Car A MUST yield to oncoming vehicles traveling straight or left ON THE EXACT SAME ROAD!
+        // 1. LEFT TURNS:
+        // In British LHD, a left turn is near-side and stays strictly within its own corner quadrant.
+        // It never crosses the centerline or oncoming lanes, so it executes with ZERO hesitation!
+        if (maneuverA === 'left') {
+          return false;
+        }
+
+        // 2. STRAIGHT TRAFFIC:
+        // Parallel opposing traffic passes side-by-side without conflict.
+        // Straight only yields if a vehicle is currently turning across its path inside the box.
+        if (maneuverA === 'straight') {
+          if (intObj.occupantCarId !== null && intObj.occupantCarId !== carA.id) {
+            const occ = vehicles.find((v) => v.id === intObj.occupantCarId);
+            if (occ && (occ.isTurning || Math.hypot(occ.x - intObj.x, occ.y - intObj.y) < HALF_ROAD + 2)) {
+              return true; // Another vehicle is crossing its lane
+            }
+          }
+          return false;
+        }
+
+        // 3. RIGHT TURNS & U-TURNS:
+        // Cross oncoming traffic! Must yield if another vehicle is holding the box reservation,
+        // or if oncoming traffic on the same road is approaching straight or turning left.
         if (maneuverA === 'right' || maneuverA === 'uturn') {
+          if (intObj.occupantCarId !== null && intObj.occupantCarId !== carA.id) {
+            return true;
+          }
+
+          // If another vehicle is physically inside the junction box:
+          for (let i = 0; i < vehicles.length; i++) {
+            const carB = vehicles[i];
+            if (carB.id === carA.id || carB.isOffscreen) continue;
+            const distBToCenter = Math.hypot(carB.x - intObj.x, carB.y - intObj.y);
+            if (distBToCenter < HALF_ROAD + 2) {
+              return true;
+            }
+          }
+
+          // Yield to oncoming traffic on the same road:
           for (let i = 0; i < vehicles.length; i++) {
             const carB = vehicles[i];
             if (carB.id === carA.id || carB.isOffscreen) continue;
 
             if (carB.dir === oppositeDir) {
-              // Crucial Fix: carB MUST be on the exact same road corridor, not another avenue!
               const lateralDist = currentDir.isNS
                 ? Math.abs(carB.x - intObj.x)
                 : Math.abs(carB.y - intObj.y);
@@ -468,7 +487,7 @@ export function initPipelineScroll() {
                 if (distBAlong > -5 && distBAlong < 95) {
                   const { maneuver: maneuverB } = getCarManeuver(carB, intObj);
                   if (maneuverB === 'straight' || maneuverB === 'left') {
-                    return true; // Yield to oncoming traffic on this road
+                    return true;
                   }
                 }
               }
@@ -476,7 +495,6 @@ export function initPipelineScroll() {
           }
         }
 
-        // Straight traffic and left turns have right-of-way!
         return false;
       }
 
@@ -951,48 +969,60 @@ export function initPipelineScroll() {
                 const lateralDist = Math.abs(dxToInt * currentDir.dy - dyToInt * currentDir.dx);
 
                 // Approaching intersection from incoming lane
-                if (distAlongDir > 0 && distAlongDir < 90 && lateralDist < 14) {
+                if (distAlongDir > 0 && distAlongDir < 95 && lateralDist < 14) {
                   const signal = getSignalState(intObj, simTimeSec);
                   const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
+                  const { toDir: targetDir, maneuver } = getCarManeuver(car, intObj);
                   const mustYield = shouldYieldAtIntersection(car, intObj);
+
+                  // Box reservation: only blocks right turns & U-turns across oncoming traffic
                   const boxOccupied = intObj.occupantCarId !== null && intObj.occupantCarId !== car.id;
+                  const needsWait = !isGreen || mustYield || ((maneuver === 'right' || maneuver === 'uturn') && boxOccupied);
 
                   // Signal turn intention early on approach (within 65px)
                   if (distAlongDir < 65) {
-                    const { toDir: targetDir } = getCarManeuver(car, intObj);
                     if (targetDir !== car.dir) {
                       car.turnSignal = (car.dir + 3) % 4 === targetDir ? 'left' : 'right';
                     }
                   }
 
                   const stopLineDist = HALF_ROAD + 2; // 21px from center
-                  const safeStopDist = stopLineDist + (car.length / 2) + 3; // 35px from center (front bumper 3px behind stop line)
+                  // Safe standoff distance: front bumper stops 4px behind the white line
+                  const safeStopDist = stopLineDist + (car.length / 2) + 7; // 39px from center
+                  // If the front bumper is ALREADY at or past the stop line when it goes red, DO NOT STOP! JUST GO!
+                  const isPastStopLine = distAlongDir <= (stopLineDist + 2);
 
-                  if (!isGreen || mustYield || boxOccupied) {
+                  if (!isPastStopLine && needsWait) {
                     const distToStopPoint = distAlongDir - safeStopDist;
-                    if (distToStopPoint <= 3) {
+                    if (distToStopPoint <= 2) {
                       targetSpeed = 0;
                       brakeReason = true;
                       if (distToStopPoint <= 0) car.speed = 0;
-                    } else if (distToStopPoint < 55) {
-                      targetSpeed = Math.min(targetSpeed, (distToStopPoint / 45) * car.maxSpeed);
+                    } else if (distToStopPoint < 65) {
+                      targetSpeed = Math.min(targetSpeed, Math.max(0, (distToStopPoint / 55) * car.maxSpeed));
                       brakeReason = true;
                     }
                   }
 
                   // Intersection Decision Point: entrance boundary (distAlongDir <= HALF_ROAD + 4)
                   if (distAlongDir <= HALF_ROAD + 4 && distAlongDir > 0 && !car.hasTurnedInInt) {
-                    if (isGreen && !mustYield && !boxOccupied) {
+                    // Enter if:
+                    // 1. Clear to enter (green, not yielding, box clear), OR
+                    // 2. Car has already crossed the stop line (committed to clearing the intersection)
+                    const canEnter = (isGreen && !mustYield && !(maneuver === 'right' && boxOccupied)) || isPastStopLine;
+
+                    if (canEnter) {
                       car.hasTurnedInInt = true;
-                      const { toDir: targetDir } = getCarManeuver(car, intObj);
 
                       if (car.isEgo) {
                         car.routeIndex = (car.routeIndex + 1) % EGO_ROUTE.length;
                       }
 
-                      // Claim exclusive junction occupancy
-                      intObj.occupantCarId = car.id;
-                      intObj.occupantUntil = simTimeSec + 3.5;
+                      // Only right turns and U-turns claim exclusive box occupancy across oncoming traffic
+                      if (maneuver === 'right' || maneuver === 'uturn') {
+                        intObj.occupantCarId = car.id;
+                        intObj.occupantUntil = simTimeSec + 3.5;
+                      }
 
                       if (targetDir !== car.dir) {
                         // Start smooth Bezier corner turn!
