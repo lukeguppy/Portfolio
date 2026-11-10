@@ -220,6 +220,8 @@ export function initPipelineScroll() {
               xi,
               yi,
               phaseOffset: ((xi * 2.3 + yi * 2.9) % 8.8),
+              occupantCarId: null,
+              occupantUntil: 0,
             });
           });
         });
@@ -247,9 +249,85 @@ export function initPipelineScroll() {
         { angle: -Math.PI / 2, dx: 0, dy: -1, isNS: true },
       ];
 
-      // 6 Agent Cars: Car 0 is Luke's PPO Agent (Ego), Cars 1-5 are traffic
+      // Cubic Bezier curve helpers for smooth curved turning round corners
+      function evalCubicBezier(p0, p1, p2, p3, t) {
+        const mt = 1 - t;
+        const mt2 = mt * mt;
+        const mt3 = mt2 * mt;
+        const t2 = t * t;
+        const t3 = t2 * t;
+        return {
+          x: mt3 * p0.x + 3 * mt2 * t * p1.x + 3 * mt * t2 * p2.x + t3 * p3.x,
+          y: mt3 * p0.y + 3 * mt2 * t * p1.y + 3 * mt * t2 * p2.y + t3 * p3.y,
+        };
+      }
+
+      function evalCubicBezierTangent(p0, p1, p2, p3, t) {
+        const mt = 1 - t;
+        const mt2 = mt * mt;
+        const t2 = t * t;
+        return {
+          x: 3 * mt2 * (p1.x - p0.x) + 6 * mt * t * (p2.x - p1.x) + 3 * t2 * (p3.x - p2.x),
+          y: 3 * mt2 * (p1.y - p0.y) + 6 * mt * t * (p2.y - p1.y) + 3 * t2 * (p3.y - p2.y),
+        };
+      }
+
+      function getTurnBezier(intObj, fromDir, toDir) {
+        const X0 = intObj.x;
+        const Y0 = intObj.y;
+        const H = HALF_ROAD; // 19
+        const L = LANE_OFF;  // 9.5
+
+        let p0 = { x: 0, y: 0 };
+        let p3 = { x: 0, y: 0 };
+
+        const isLeft = (fromDir + 3) % 4 === toDir;
+        const k = isLeft ? 6.0 : 18.0;
+
+        // Entry point P0 at intersection boundary in incoming lane
+        if (fromDir === 0) p0 = { x: X0 - H, y: Y0 - L };
+        else if (fromDir === 1) p0 = { x: X0 + L, y: Y0 - H };
+        else if (fromDir === 2) p0 = { x: X0 + H, y: Y0 + L };
+        else if (fromDir === 3) p0 = { x: X0 - L, y: Y0 + H };
+
+        // Exit point P3 at intersection boundary in target lane
+        if (toDir === 0) p3 = { x: X0 + H, y: Y0 - L };
+        else if (toDir === 1) p3 = { x: X0 + L, y: Y0 + H };
+        else if (toDir === 2) p3 = { x: X0 - H, y: Y0 + L };
+        else if (toDir === 3) p3 = { x: X0 - L, y: Y0 - H };
+
+        const d0 = DIRS[fromDir];
+        const d3 = DIRS[toDir];
+        const p1 = { x: p0.x + d0.dx * k, y: p0.y + d0.dy * k };
+        const p2 = { x: p3.x - d3.dx * k, y: p3.y - d3.dy * k };
+        const length = isLeft ? 16 : 42;
+
+        return { p0, p1, p2, p3, length, isLeft };
+      }
+
+      // 15-step Continuous Autonomous Circuit for Luke's Ego Vehicle (100% on-screen perpetual loop)
+      const EGO_ROUTE = [
+        { xi: 1, yi: 1, fromDir: 0, action: 'straight', toDir: 0 },
+        { xi: 2, yi: 1, fromDir: 0, action: 'right', toDir: 1 },
+        { xi: 2, yi: 2, fromDir: 1, action: 'right', toDir: 2 },
+        { xi: 1, yi: 2, fromDir: 2, action: 'straight', toDir: 2 },
+        { xi: 0, yi: 2, fromDir: 2, action: 'right', toDir: 3 },
+        { xi: 0, yi: 1, fromDir: 3, action: 'straight', toDir: 3 },
+        { xi: 0, yi: 0, fromDir: 3, action: 'right', toDir: 0 },
+        { xi: 1, yi: 0, fromDir: 0, action: 'straight', toDir: 0 },
+        { xi: 2, yi: 0, fromDir: 0, action: 'right', toDir: 1 },
+        { xi: 2, yi: 1, fromDir: 1, action: 'right', toDir: 2 },
+        { xi: 1, yi: 1, fromDir: 2, action: 'straight', toDir: 2 },
+        { xi: 0, yi: 1, fromDir: 2, action: 'left', toDir: 1 },
+        { xi: 0, yi: 2, fromDir: 1, action: 'left', toDir: 0 },
+        { xi: 1, yi: 2, fromDir: 0, action: 'left', toDir: 3 },
+        { xi: 1, yi: 1, fromDir: 3, action: 'right', toDir: 0 },
+      ];
+
+      // 11 Vehicles: Vehicle 0 is Luke's PPO Agent (Ego), Vehicles 1-10 are Traffic
       const vehicles = [
         {
+          id: 0,
           isEgo: true,
           color: '#2dd4bf',
           length: 24,
@@ -259,114 +337,105 @@ export function initPipelineScroll() {
           dir: 0,
           angle: 0,
           speed: 28,
-          maxSpeed: 32,
-          isBraking: false,
-        },
-        {
-          isEgo: false,
-          color: '#475569',
-          length: 22,
-          width: 11,
-          x: 0,
-          y: 0,
-          dir: 1,
-          angle: Math.PI / 2,
-          speed: 26,
           maxSpeed: 30,
           isBraking: false,
+          isTurning: false,
+          turnT: 0,
+          turnBezier: null,
+          routeIndex: 0,
+          hasTurnedInInt: false,
+          turnSignal: null,
         },
-        {
-          isEgo: false,
-          color: '#334155',
-          length: 22,
-          width: 11,
-          x: 0,
-          y: 0,
-          dir: 2,
-          angle: Math.PI,
-          speed: 27,
-          maxSpeed: 31,
-          isBraking: false,
-        },
-        {
-          isEgo: false,
-          color: '#64748b',
-          length: 22,
-          width: 11,
-          x: 0,
-          y: 0,
-          dir: 3,
-          angle: -Math.PI / 2,
-          speed: 25,
-          maxSpeed: 29,
-          isBraking: false,
-        },
-        {
-          isEgo: false,
-          color: '#38495e',
-          length: 22,
-          width: 11,
-          x: 0,
-          y: 0,
-          dir: 0,
-          angle: 0,
-          speed: 27,
-          maxSpeed: 30,
-          isBraking: false,
-        },
-        {
-          isEgo: false,
-          color: '#1e293b',
-          length: 22,
-          width: 11,
-          x: 0,
-          y: 0,
-          dir: 2,
-          angle: Math.PI,
-          speed: 26,
-          maxSpeed: 30,
-          isBraking: false,
-        },
+        { id: 1, isEgo: false, color: '#475569', length: 22, width: 11, x: 0, y: 0, dir: 0, angle: 0, speed: 25, maxSpeed: 28, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 2, isEgo: false, color: '#334155', length: 22, width: 11, x: 0, y: 0, dir: 2, angle: Math.PI, speed: 26, maxSpeed: 29, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 3, isEgo: false, color: '#64748b', length: 22, width: 11, x: 0, y: 0, dir: 2, angle: Math.PI, speed: 25, maxSpeed: 27, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 4, isEgo: false, color: '#38495e', length: 22, width: 11, x: 0, y: 0, dir: 0, angle: 0, speed: 27, maxSpeed: 30, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 5, isEgo: false, color: '#1e293b', length: 22, width: 11, x: 0, y: 0, dir: 2, angle: Math.PI, speed: 25, maxSpeed: 28, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 6, isEgo: false, color: '#4b5563', length: 22, width: 11, x: 0, y: 0, dir: 1, angle: Math.PI / 2, speed: 26, maxSpeed: 29, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 7, isEgo: false, color: '#374151', length: 22, width: 11, x: 0, y: 0, dir: 3, angle: -Math.PI / 2, speed: 25, maxSpeed: 28, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 8, isEgo: false, color: '#2b394d', length: 22, width: 11, x: 0, y: 0, dir: 1, angle: Math.PI / 2, speed: 24, maxSpeed: 27, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 9, isEgo: false, color: '#526071', length: 22, width: 11, x: 0, y: 0, dir: 3, angle: -Math.PI / 2, speed: 26, maxSpeed: 29, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
+        { id: 10, isEgo: false, color: '#1f2937', length: 22, width: 11, x: 0, y: 0, dir: 1, angle: Math.PI / 2, speed: 25, maxSpeed: 28, isBraking: false, isTurning: false, turnT: 0, turnBezier: null, hasTurnedInInt: false, turnSignal: null },
       ];
 
       function resetVehiclePositions() {
         if (!X_STREETS.length || !Y_STREETS.length) return;
 
-        // Ego Car: Eastbound on North Avenue
-        vehicles[0].x = X_STREETS[0] - 60;
-        vehicles[0].y = Y_STREETS[0] - LANE_OFF;
+        // Ego Car: Middle Avenue between West and Center streets, heading East
+        vehicles[0].x = X_STREETS[0] + 50;
+        vehicles[0].y = Y_STREETS[1] - LANE_OFF;
         vehicles[0].dir = 0;
         vehicles[0].angle = 0;
+        vehicles[0].routeIndex = 0;
+        vehicles[0].isTurning = false;
+        vehicles[0].turnBezier = null;
+        vehicles[0].hasTurnedInInt = false;
 
-        // Car 1: Southbound on Central Street
-        vehicles[1].x = X_STREETS[1] + LANE_OFF;
-        vehicles[1].y = Y_STREETS[0] - 50;
-        vehicles[1].dir = 1;
-        vehicles[1].angle = Math.PI / 2;
+        // Car 1: North Avenue, Eastbound, between West and Center
+        vehicles[1].x = X_STREETS[0] + 45;
+        vehicles[1].y = Y_STREETS[0] - LANE_OFF;
+        vehicles[1].dir = 0;
+        vehicles[1].angle = 0;
 
-        // Car 2: Westbound on South Avenue
-        vehicles[2].x = X_STREETS[2] + 60;
-        vehicles[2].y = Y_STREETS[2] + LANE_OFF;
+        // Car 2: North Avenue, Westbound, between East and Center
+        vehicles[2].x = X_STREETS[2] - 50;
+        vehicles[2].y = Y_STREETS[0] + LANE_OFF;
         vehicles[2].dir = 2;
         vehicles[2].angle = Math.PI;
 
-        // Car 3: Northbound on East Street
-        vehicles[3].x = X_STREETS[2] - LANE_OFF;
-        vehicles[3].y = Y_STREETS[2] + 70;
-        vehicles[3].dir = 3;
-        vehicles[3].angle = -Math.PI / 2;
+        // Car 3: Central Avenue, Westbound, between Center and West
+        vehicles[3].x = X_STREETS[1] - 60;
+        vehicles[3].y = Y_STREETS[1] + LANE_OFF;
+        vehicles[3].dir = 2;
+        vehicles[3].angle = Math.PI;
 
-        // Car 4: Eastbound on Central Avenue
-        vehicles[4].x = X_STREETS[0] + 80;
-        vehicles[4].y = Y_STREETS[1] - LANE_OFF;
+        // Car 4: South Avenue, Eastbound, between West and Center
+        vehicles[4].x = X_STREETS[0] + 70;
+        vehicles[4].y = Y_STREETS[2] - LANE_OFF;
         vehicles[4].dir = 0;
         vehicles[4].angle = 0;
 
-        // Car 5: Westbound on North Avenue
-        vehicles[5].x = X_STREETS[1] + 120;
-        vehicles[5].y = Y_STREETS[0] + LANE_OFF;
+        // Car 5: South Avenue, Westbound, between East and Center
+        vehicles[5].x = X_STREETS[2] - 65;
+        vehicles[5].y = Y_STREETS[2] + LANE_OFF;
         vehicles[5].dir = 2;
         vehicles[5].angle = Math.PI;
+
+        // Car 6: West Street, Southbound, between North and Middle
+        vehicles[6].x = X_STREETS[0] + LANE_OFF;
+        vehicles[6].y = Y_STREETS[0] + 55;
+        vehicles[6].dir = 1;
+        vehicles[6].angle = Math.PI / 2;
+
+        // Car 7: West Street, Northbound, between South and Middle
+        vehicles[7].x = X_STREETS[0] - LANE_OFF;
+        vehicles[7].y = Y_STREETS[2] - 55;
+        vehicles[7].dir = 3;
+        vehicles[7].angle = -Math.PI / 2;
+
+        // Car 8: Center Street, Southbound, between North and Middle
+        vehicles[8].x = X_STREETS[1] + LANE_OFF;
+        vehicles[8].y = Y_STREETS[0] + 65;
+        vehicles[8].dir = 1;
+        vehicles[8].angle = Math.PI / 2;
+
+        // Car 9: Center Street, Northbound, between South and Middle
+        vehicles[9].x = X_STREETS[1] - LANE_OFF;
+        vehicles[9].y = Y_STREETS[2] - 65;
+        vehicles[9].dir = 3;
+        vehicles[9].angle = -Math.PI / 2;
+
+        // Car 10: East Street, Southbound, between Middle and South
+        vehicles[10].x = X_STREETS[2] + LANE_OFF;
+        vehicles[10].y = Y_STREETS[1] + 55;
+        vehicles[10].dir = 1;
+        vehicles[10].angle = Math.PI / 2;
+
+        for (let i = 1; i < vehicles.length; i++) {
+          vehicles[i].isTurning = false;
+          vehicles[i].turnBezier = null;
+          vehicles[i].hasTurnedInInt = false;
+        }
       }
 
       // 9 Lidar Rays (-40° to +40°)
@@ -599,151 +668,203 @@ export function initPipelineScroll() {
           });
 
           // -------------------------------------------------------------
-          // 4. UPDATE VEHICLE DYNAMICS (British LHD, Guaranteed on-road)
+          // 4. UPDATE VEHICLE DYNAMICS (British LHD, Smooth Bezier Turns, Non-Collision)
           // -------------------------------------------------------------
-          vehicles.forEach((car, i) => {
-            const currentDir = DIRS[car.dir];
+          vehicles.forEach((car) => {
             let targetSpeed = car.maxSpeed;
             let brakeReason = false;
 
-            // Anti-Collision Headway
-            vehicles.forEach((other, j) => {
-              if (i === j) return;
-              const ox = other.x - car.x;
-              const oy = other.y - car.y;
-              const forwardDist = ox * currentDir.dx + oy * currentDir.dy;
-              const lateralDist = Math.abs(ox * currentDir.dy - oy * currentDir.dx);
+            // A. Anti-Collision Headway against all other vehicles
+            vehicles.forEach((other) => {
+              if (other.id === car.id) return;
+              const dx = other.x - car.x;
+              const dy = other.y - car.y;
+              // Project relative offset onto car's current heading
+              const fwd = dx * Math.cos(car.angle) + dy * Math.sin(car.angle);
+              const lat = Math.abs(-dx * Math.sin(car.angle) + dy * Math.cos(car.angle));
 
-              if (forwardDist > 0 && forwardDist < 52 && lateralDist < 16) {
-                if (forwardDist < 24) {
+              if (fwd > 0 && fwd < 58 && lat < 14) {
+                if (fwd < 29) {
                   targetSpeed = 0;
                   brakeReason = true;
+                  if (fwd < 26) {
+                    car.speed = 0;
+                  }
                 } else {
-                  targetSpeed = Math.min(targetSpeed, other.speed * 0.85);
+                  targetSpeed = Math.min(targetSpeed, Math.max(0, other.speed * 0.8));
                   brakeReason = true;
                 }
               }
             });
 
-            // Intersection Approach & Traffic Signal Yielding (British LHD)
-            intersections.forEach((intObj) => {
-              const dxToInt = intObj.x - car.x;
-              const dyToInt = intObj.y - car.y;
-              const distAlongDir = dxToInt * currentDir.dx + dyToInt * currentDir.dy;
-              const lateralDist = Math.abs(dxToInt * currentDir.dy - dyToInt * currentDir.dx);
+            // B. Traffic Signals and Intersection Entry Logic (only if not already turning)
+            if (!car.isTurning) {
+              const currentDir = DIRS[car.dir];
 
-              if (distAlongDir > 0 && distAlongDir < 85 && lateralDist < 14) {
-                const signal = getSignalState(intObj, simTimeSec);
-                const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
+              intersections.forEach((intObj) => {
+                const dxToInt = intObj.x - car.x;
+                const dyToInt = intObj.y - car.y;
+                const distAlongDir = dxToInt * currentDir.dx + dyToInt * currentDir.dy;
+                const lateralDist = Math.abs(dxToInt * currentDir.dy - dyToInt * currentDir.dx);
 
-                if (!isGreen) {
-                  // British LHD: Stop line is (HALF_ROAD + 2) from intersection center.
-                  // Car front bumper is (car.length / 2) = 12px ahead of car center.
-                  // We halt 14px BEFORE the stop line so lidar rays cast forward and continuously strike the red stop bar.
-                  const stopThreshold = HALF_ROAD + 2 + (car.length / 2) + 14; // 19 + 2 + 12 + 14 = 47px
-                  const distToStopPoint = distAlongDir - stopThreshold;
+                // Approaching intersection from incoming lane
+                if (distAlongDir > 0 && distAlongDir < 85 && lateralDist < 14) {
+                  const signal = getSignalState(intObj, simTimeSec);
+                  const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
 
-                  if (distToStopPoint <= 4) {
-                    targetSpeed = 0;
-                    brakeReason = true;
-                    if (distToStopPoint <= 0) {
-                      car.speed = 0;
+                  if (!isGreen) {
+                    // Halt 14px before stop line (47px from center)
+                    const stopThreshold = HALF_ROAD + 2 + (car.length / 2) + 14;
+                    const distToStopPoint = distAlongDir - stopThreshold;
+                    if (distToStopPoint <= 4) {
+                      targetSpeed = 0;
+                      brakeReason = true;
+                      if (distToStopPoint <= 0) car.speed = 0;
+                    } else if (distToStopPoint < 55) {
+                      targetSpeed = Math.min(targetSpeed, (distToStopPoint / 45) * car.maxSpeed);
+                      brakeReason = true;
                     }
-                  } else if (distToStopPoint < 55) {
-                    targetSpeed = Math.min(targetSpeed, (distToStopPoint / 45) * car.maxSpeed);
-                    brakeReason = true;
+                  } else {
+                    // Green light: Yield if intersection is currently occupied by another car
+                    if (intObj.occupantCarId && intObj.occupantCarId !== car.id && simTimeSec < intObj.occupantUntil) {
+                      const yieldThreshold = HALF_ROAD + (car.length / 2) + 6; // ~37px
+                      const distToYield = distAlongDir - yieldThreshold;
+                      if (distToYield <= 4) {
+                        targetSpeed = 0;
+                        brakeReason = true;
+                        if (distToYield <= 0) car.speed = 0;
+                      } else if (distToYield < 45) {
+                        targetSpeed = Math.min(targetSpeed, (distToYield / 35) * car.maxSpeed);
+                        brakeReason = true;
+                      }
+                    }
+                  }
+
+                  // C. Intersection Decision Point (reaching entrance: distAlongDir <= HALF_ROAD + 4)
+                  if (distAlongDir <= HALF_ROAD + 4 && distAlongDir > 0 && !car.hasTurnedInInt) {
+                    const signal = getSignalState(intObj, simTimeSec);
+                    const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
+                    const isClear = !intObj.occupantCarId || intObj.occupantCarId === car.id || simTimeSec >= intObj.occupantUntil;
+
+                    if (isGreen && isClear) {
+                      // Claim the intersection
+                      intObj.occupantCarId = car.id;
+                      intObj.occupantUntil = simTimeSec + 2.5;
+                      car.hasTurnedInInt = true;
+
+                      let targetDir = car.dir;
+
+                      if (car.isEgo) {
+                        // Follow closed circuit
+                        const wp = EGO_ROUTE[car.routeIndex];
+                        if (wp && wp.xi === intObj.xi && wp.yi === intObj.yi) {
+                          targetDir = wp.toDir;
+                          car.routeIndex = (car.routeIndex + 1) % EGO_ROUTE.length;
+                        }
+                      } else {
+                        // Environment cars: boundary vs interior
+                        const atWest = intObj.xi === 0 && car.dir === 2;
+                        const atEast = intObj.xi === 2 && car.dir === 0;
+                        const atNorth = intObj.yi === 0 && car.dir === 3;
+                        const atSouth = intObj.yi === 2 && car.dir === 1;
+
+                        if (atWest) {
+                          targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+                        } else if (atEast) {
+                          targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+                        } else if (atNorth) {
+                          targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+                        } else if (atSouth) {
+                          targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+                        } else {
+                          const rnd = Math.random();
+                          if (rnd < 0.25) {
+                            targetDir = (car.dir + 1) % 4; // Turn Right
+                          } else if (rnd < 0.50) {
+                            targetDir = (car.dir + 3) % 4; // Turn Left
+                          }
+                        }
+                      }
+
+                      if (targetDir !== car.dir) {
+                        // Start smooth Bezier corner turn!
+                        car.isTurning = true;
+                        car.turnBezier = getTurnBezier(intObj, car.dir, targetDir);
+                        car.turnT = 0;
+                        car.targetDir = targetDir;
+                        car.turnSignal = (car.dir + 3) % 4 === targetDir ? 'left' : 'right';
+                      }
+                    }
                   }
                 }
-              }
-            });
 
-            // Pointer Avoidance
+                // Release intersection once comfortably exited
+                const distToCenter = Math.hypot(car.x - intObj.x, car.y - intObj.y);
+                if (distToCenter > HALF_ROAD + 12) {
+                  if (intObj.occupantCarId === car.id) {
+                    intObj.occupantCarId = null;
+                  }
+                  if (car.hasTurnedInInt && distToCenter > HALF_ROAD + 16) {
+                    car.hasTurnedInInt = false;
+                  }
+                }
+              });
+            }
+
+            // D. Pointer Avoidance
             if (pointerActive) {
               const px = pointerX - car.x;
               const py = pointerY - car.y;
-              const fDist = px * currentDir.dx + py * currentDir.dy;
-              const lDist = Math.abs(px * currentDir.dy - py * currentDir.dx);
-              if (fDist > 0 && fDist < 55 && lDist < 22) {
+              const fDist = px * Math.cos(car.angle) + py * Math.sin(car.angle);
+              const lDist = Math.abs(-px * Math.sin(car.angle) + py * Math.cos(car.angle));
+              if (fDist > 0 && fDist < 55 && lDist < 20) {
                 targetSpeed = 0;
                 brakeReason = true;
               }
             }
 
+            // Cap speed slightly during turn for natural cornering
+            if (car.isTurning) {
+              targetSpeed = Math.min(targetSpeed, 20);
+            }
+
             // Smooth Acceleration / Deceleration
             if (car.speed > targetSpeed) {
-              car.speed = Math.max(targetSpeed, car.speed - 50 * dt);
+              car.speed = Math.max(targetSpeed, car.speed - 60 * dt);
               car.isBraking = brakeReason || car.speed < 12;
             } else {
               car.speed = Math.min(targetSpeed, car.speed + 25 * dt);
               car.isBraking = false;
             }
 
-            // Integrate Position
-            car.x += currentDir.dx * car.speed * dt;
-            car.y += currentDir.dy * car.speed * dt;
-            car.angle = currentDir.angle;
+            // E. Position Integration (Cruising vs Turning along Bezier Arc)
+            if (car.isTurning && car.turnBezier) {
+              const bz = car.turnBezier;
+              car.turnT += (car.speed * dt) / bz.length;
 
-            // Handle Intersection Passage & Turning (British LHD)
-            intersections.forEach((intObj) => {
-              const dx = car.x - intObj.x;
-              const dy = car.y - intObj.y;
-              const distAlongTravel = dx * currentDir.dx + dy * currentDir.dy;
-              const distLateral = Math.abs(dx * currentDir.dy - dy * currentDir.dx);
-
-              // Car reaches the intersection center
-              if (Math.abs(distAlongTravel) < 7 && distLateral <= HALF_ROAD + 2 && !car.hasTurnedInInt) {
-                car.hasTurnedInInt = true;
-
-                // Decision: Boundary vs Interior
-                const atWest = intObj.xi === 0 && car.dir === 2;
-                const atEast = intObj.xi === 2 && car.dir === 0;
-                const atNorth = intObj.yi === 0 && car.dir === 3;
-                const atSouth = intObj.yi === 2 && car.dir === 1;
-
-                if (atWest) {
-                  car.dir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
-                } else if (atEast) {
-                  car.dir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
-                } else if (atNorth) {
-                  car.dir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
-                } else if (atSouth) {
-                  car.dir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
-                } else {
-                  const rnd = Math.random();
-                  if (rnd < 0.25) {
-                    car.dir = (car.dir + 1) % 4; // Turn Right
-                  } else if (rnd < 0.50) {
-                    car.dir = (car.dir + 3) % 4; // Turn Left
-                  }
-                }
-
-                // Snap strictly to the British Left-Hand Lane for the new direction
-                if (car.dir === 0) { car.y = intObj.y - LANE_OFF; car.angle = DIRS[0].angle; }
-                else if (car.dir === 2) { car.y = intObj.y + LANE_OFF; car.angle = DIRS[2].angle; }
-                else if (car.dir === 1) { car.x = intObj.x + LANE_OFF; car.angle = DIRS[1].angle; }
-                else if (car.dir === 3) { car.x = intObj.x - LANE_OFF; car.angle = DIRS[3].angle; }
-              } else if (Math.hypot(dx, dy) > HALF_ROAD + 8) {
-                car.hasTurnedInInt = false;
+              if (car.turnT >= 1) {
+                // Completed turn smoothly into new lane
+                car.turnT = 1;
+                car.x = bz.p3.x;
+                car.y = bz.p3.y;
+                car.dir = car.targetDir;
+                car.angle = DIRS[car.targetDir].angle;
+                car.isTurning = false;
+                car.turnBezier = null;
+                car.turnSignal = null;
+              } else {
+                const pt = evalCubicBezier(bz.p0, bz.p1, bz.p2, bz.p3, car.turnT);
+                const tang = evalCubicBezierTangent(bz.p0, bz.p1, bz.p2, bz.p3, car.turnT);
+                car.x = pt.x;
+                car.y = pt.y;
+                car.angle = Math.atan2(tang.y, tang.x);
               }
-            });
-
-            // Boundary Reversal & Lane Clamping: cars NEVER leave the street network
-            if (car.dir === 0 && car.x > X_STREETS[2] + 40) {
-              car.dir = 2; // reverse to Westbound
-              const nearestY = Y_STREETS.reduce((prev, curr) => Math.abs(curr - car.y) < Math.abs(prev - car.y) ? curr : prev);
-              car.y = nearestY + LANE_OFF; // snap to Westbound bottom lane
-            } else if (car.dir === 2 && car.x < X_STREETS[0] - 40) {
-              car.dir = 0; // reverse to Eastbound
-              const nearestY = Y_STREETS.reduce((prev, curr) => Math.abs(curr - car.y) < Math.abs(prev - car.y) ? curr : prev);
-              car.y = nearestY - LANE_OFF; // snap to Eastbound top lane
-            } else if (car.dir === 1 && car.y > Y_STREETS[2] + 40) {
-              car.dir = 3; // reverse to Northbound
-              const nearestX = X_STREETS.reduce((prev, curr) => Math.abs(curr - car.x) < Math.abs(prev - car.x) ? curr : prev);
-              car.x = nearestX - LANE_OFF; // snap to Northbound left lane
-            } else if (car.dir === 3 && car.y < Y_STREETS[0] - 40) {
-              car.dir = 1; // reverse to Southbound
-              const nearestX = X_STREETS.reduce((prev, curr) => Math.abs(curr - car.x) < Math.abs(prev - car.x) ? curr : prev);
-              car.x = nearestX + LANE_OFF; // snap to Southbound right lane
+            } else {
+              // Cruising straight in lane
+              const currentDir = DIRS[car.dir];
+              car.x += currentDir.dx * car.speed * dt;
+              car.y += currentDir.dy * car.speed * dt;
+              car.angle = currentDir.angle;
             }
           });
 
@@ -751,15 +872,15 @@ export function initPipelineScroll() {
           // 5. ACCURATE LIDAR SENSOR RAYCASTING (Matches Dissertation Specs)
           // -------------------------------------------------------------
           const ego = vehicles[0];
-          const egoDir = DIRS[ego.dir];
-          const egoBumperX = ego.x + egoDir.dx * (ego.length / 2);
-          const egoBumperY = ego.y + egoDir.dy * (ego.length / 2);
+          const egoAngle = ego.angle;
+          const egoBumperX = ego.x + Math.cos(egoAngle) * (ego.length / 2);
+          const egoBumperY = ego.y + Math.sin(egoAngle) * (ego.length / 2);
 
           const lidarEndpoints = [];
           let closeObstacleWarning = false;
 
           rayAngles.forEach((relAngle) => {
-            const rayAngle = ego.angle + relAngle;
+            const rayAngle = egoAngle + relAngle;
             const rCos = Math.cos(rayAngle);
             const rSin = Math.sin(rayAngle);
 
@@ -867,7 +988,7 @@ export function initPipelineScroll() {
 
             lidarEndpoints.push({ x: endX, y: endY, isHit, hitType, dist: bestDist });
 
-            // Draw Laser Ray Line
+            // Draw Laser Ray Line (NO darkening between lasers!)
             ctx.beginPath();
             ctx.moveTo(egoBumperX, egoBumperY);
             ctx.lineTo(endX, endY);
@@ -893,24 +1014,15 @@ export function initPipelineScroll() {
               ctx.fillStyle = hitType === 'car' || hitType === 'obstacle'
                 ? '#f59e0b'
                 : (hitType === 'signal' ? '#f43f5e' : '#2dd4bf');
+              ctx.shadowColor = ctx.fillStyle;
+              ctx.shadowBlur = 6;
               ctx.fill();
+              ctx.shadowBlur = 0;
             }
           });
 
-          // Fill Lidar Field-of-View Cone
-          if (lidarEndpoints.length > 0) {
-            ctx.beginPath();
-            ctx.moveTo(egoBumperX, egoBumperY);
-            lidarEndpoints.forEach((pt) => ctx.lineTo(pt.x, pt.y));
-            ctx.closePath();
-            ctx.fillStyle = closeObstacleWarning
-              ? 'rgba(245, 158, 11, 0.05)'
-              : 'rgba(45, 212, 191, 0.035)';
-            ctx.fill();
-          }
-
           // -------------------------------------------------------------
-          // 6. RENDER ALL VEHICLES (Clean, NO Orange Dot)
+          // 6. RENDER ALL VEHICLES (Clean, NO Dark Wedge, NO Orange Dot)
           // -------------------------------------------------------------
           vehicles.forEach((car) => {
             ctx.save();
@@ -920,44 +1032,41 @@ export function initPipelineScroll() {
             const len = car.length;
             const w = car.width;
 
-            // Headlight beams
-            const headGrad = ctx.createLinearGradient(len / 2, 0, len / 2 + 28, 0);
-            headGrad.addColorStop(0, car.isEgo ? 'rgba(45, 212, 191, 0.3)' : 'rgba(255, 255, 255, 0.18)');
-            headGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
-            ctx.fillStyle = headGrad;
-            ctx.beginPath();
-            ctx.moveTo(len / 2, -w * 0.4);
-            ctx.lineTo(len / 2 + 28, -w * 0.9);
-            ctx.lineTo(len / 2 + 28, w * 0.9);
-            ctx.lineTo(len / 2, w * 0.4);
-            ctx.closePath();
-            ctx.fill();
-
             // Vehicle Body
             ctx.beginPath();
             ctx.roundRect(-len / 2, -w / 2, len, w, 3.5);
             ctx.fillStyle = car.color;
             ctx.fill();
-            ctx.strokeStyle = car.isEgo ? '#5eead4' : 'rgba(255, 255, 255, 0.2)';
+            ctx.strokeStyle = car.isEgo ? '#5eead4' : 'rgba(255, 255, 255, 0.18)';
             ctx.lineWidth = 1;
             ctx.stroke();
 
             // Cockpit / Windshield
-            ctx.fillStyle = car.isEgo ? '#042f2e' : '#0f172a';
+            ctx.fillStyle = car.isEgo ? '#042f2e' : '#0a0f1d';
             ctx.beginPath();
             ctx.roundRect(1, -w / 2 + 2.5, 6, w - 5, 1.5);
             ctx.fill();
 
-            // Headlights
+            // Headlights (Clean LED points on bumper corners — ZERO dark wedge)
             ctx.fillStyle = car.isEgo ? '#99f6e4' : '#f8fafc';
             ctx.fillRect(len / 2 - 1.5, -w * 0.4, 2, 2);
             ctx.fillRect(len / 2 - 1.5, w * 0.4 - 2, 2, 2);
 
             // Tail / Brake Lights (Red LEDs)
             const brakeGlow = car.isBraking;
-            ctx.fillStyle = brakeGlow ? '#f43f5e' : 'rgba(244, 63, 94, 0.4)';
+            ctx.fillStyle = brakeGlow ? '#f43f5e' : 'rgba(244, 63, 94, 0.35)';
             ctx.fillRect(-len / 2 - 0.5, -w * 0.42, 2, brakeGlow ? 3 : 2);
             ctx.fillRect(-len / 2 - 0.5, w * 0.42 - (brakeGlow ? 3 : 2), 2, brakeGlow ? 3 : 2);
+
+            // Turn Signal Indicator (blinking amber LED on turning side)
+            if (car.isTurning && car.turnSignal) {
+              const blink = Math.floor(simTimeSec * 5) % 2 === 0;
+              if (blink) {
+                ctx.fillStyle = '#f59e0b';
+                const sigY = car.turnSignal === 'left' ? -w * 0.42 : w * 0.42 - 2;
+                ctx.fillRect(len * 0.1, sigY, 2.5, 2);
+              }
+            }
 
             ctx.restore();
           });
