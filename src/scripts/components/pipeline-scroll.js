@@ -150,7 +150,7 @@ export function initPipelineScroll() {
 
   requestAnimationFrame(tick);
 
-  // 4. Hero Tactical GTA Minimap City Grid & Real Lidar Agent Simulation
+  // 4. Hero Tactical GTA Minimap City Grid & Real Lidar Agent Simulation (British LHD)
   if (heroRadarCanvas) {
     const ctx = heroRadarCanvas.getContext('2d');
     if (ctx) {
@@ -161,7 +161,7 @@ export function initPipelineScroll() {
       let pointerY = -9999;
       let pointerActive = false;
 
-      // Street Grid Dimensions
+      // British Road Dimensions
       const ROAD_W = 38;
       const HALF_ROAD = 19;
       const LANE_OFF = 9.5;
@@ -169,7 +169,6 @@ export function initPipelineScroll() {
       let X_STREETS = [];
       let Y_STREETS = [];
       let buildings = [];
-      let wallSegments = [];
       let intersections = [];
 
       function rebuildCityLayout() {
@@ -246,16 +245,6 @@ export function initPipelineScroll() {
           },
         ];
 
-        // Wall segments for raycasting
-        wallSegments = [];
-        buildings.forEach((b) => {
-          if (b.w <= 0 || b.h <= 0) return;
-          wallSegments.push({ x1: b.x, y1: b.y, x2: b.x + b.w, y2: b.y });
-          wallSegments.push({ x1: b.x + b.w, y1: b.y, x2: b.x + b.w, y2: b.y + b.h });
-          wallSegments.push({ x1: b.x + b.w, y1: b.y + b.h, x2: b.x, y2: b.y + b.h });
-          wallSegments.push({ x1: b.x, y1: b.y + b.h, x2: b.x, y2: b.y });
-        });
-
         // 9 Intersections (3x3)
         intersections = [];
         X_STREETS.forEach((x, xi) => {
@@ -281,8 +270,11 @@ export function initPipelineScroll() {
         return 'ALL_RED';
       }
 
-      // Vehicles Structure
-      // Direction types: 0: East (+X), 1: South (+Y), 2: West (-X), 3: North (-Y)
+      // British Left-Hand Traffic (Drive on the LEFT):
+      // 0: Eastbound (+X) -> Top lane (y = Y - LANE_OFF), angle 0
+      // 1: Southbound (+Y) -> Right lane (x = X + LANE_OFF), angle PI/2
+      // 2: Westbound (-X) -> Bottom lane (y = Y + LANE_OFF), angle PI
+      // 3: Northbound (-Y) -> Left lane (x = X - LANE_OFF), angle -PI/2
       const DIRS = [
         { angle: 0, dx: 1, dy: 0, isNS: false },
         { angle: Math.PI / 2, dx: 0, dy: 1, isNS: true },
@@ -304,8 +296,6 @@ export function initPipelineScroll() {
           speed: 28,
           maxSpeed: 32,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 0, sIdx: 0 },
         },
         {
           isEgo: false,
@@ -319,8 +309,6 @@ export function initPipelineScroll() {
           speed: 26,
           maxSpeed: 30,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 1, sIdx: 1 },
         },
         {
           isEgo: false,
@@ -334,8 +322,6 @@ export function initPipelineScroll() {
           speed: 27,
           maxSpeed: 31,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 2, sIdx: 0 },
         },
         {
           isEgo: false,
@@ -349,8 +335,6 @@ export function initPipelineScroll() {
           speed: 25,
           maxSpeed: 29,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 0, sIdx: 2 },
         },
         {
           isEgo: false,
@@ -364,8 +348,6 @@ export function initPipelineScroll() {
           speed: 27,
           maxSpeed: 30,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 1, sIdx: 0 },
         },
         {
           isEgo: false,
@@ -379,54 +361,52 @@ export function initPipelineScroll() {
           speed: 26,
           maxSpeed: 30,
           isBraking: false,
-          stuckTimer: 0,
-          route: { type: 'street', idx: 0, sIdx: 1 },
         },
       ];
 
       function resetVehiclePositions() {
         if (!X_STREETS.length || !Y_STREETS.length) return;
 
-        // Ego Car starts Eastbound on North Avenue
+        // Ego Car: Eastbound on North Avenue (British LHD: y = Y_STREETS[0] - LANE_OFF)
         vehicles[0].x = X_STREETS[0] - 60;
-        vehicles[0].y = Y_STREETS[0] + LANE_OFF;
+        vehicles[0].y = Y_STREETS[0] - LANE_OFF;
         vehicles[0].dir = 0;
         vehicles[0].angle = 0;
 
-        // Car 1: Southbound on Central Street
-        vehicles[1].x = X_STREETS[1] - LANE_OFF;
+        // Car 1: Southbound on Central Street (British LHD: x = X_STREETS[1] + LANE_OFF)
+        vehicles[1].x = X_STREETS[1] + LANE_OFF;
         vehicles[1].y = Y_STREETS[0] - 50;
         vehicles[1].dir = 1;
         vehicles[1].angle = Math.PI / 2;
 
-        // Car 2: Westbound on South Avenue
+        // Car 2: Westbound on South Avenue (British LHD: y = Y_STREETS[2] + LANE_OFF)
         vehicles[2].x = X_STREETS[2] + 60;
-        vehicles[2].y = Y_STREETS[2] - LANE_OFF;
+        vehicles[2].y = Y_STREETS[2] + LANE_OFF;
         vehicles[2].dir = 2;
         vehicles[2].angle = Math.PI;
 
-        // Car 3: Northbound on East Street
-        vehicles[3].x = X_STREETS[2] + LANE_OFF;
+        // Car 3: Northbound on East Street (British LHD: x = X_STREETS[2] - LANE_OFF)
+        vehicles[3].x = X_STREETS[2] - LANE_OFF;
         vehicles[3].y = Y_STREETS[2] + 70;
         vehicles[3].dir = 3;
         vehicles[3].angle = -Math.PI / 2;
 
-        // Car 4: Eastbound on Central Avenue
+        // Car 4: Eastbound on Central Avenue (British LHD: y = Y_STREETS[1] - LANE_OFF)
         vehicles[4].x = X_STREETS[0] + 80;
-        vehicles[4].y = Y_STREETS[1] + LANE_OFF;
+        vehicles[4].y = Y_STREETS[1] - LANE_OFF;
         vehicles[4].dir = 0;
         vehicles[4].angle = 0;
 
-        // Car 5: Westbound on North Avenue
+        // Car 5: Westbound on North Avenue (British LHD: y = Y_STREETS[0] + LANE_OFF)
         vehicles[5].x = X_STREETS[1] + 120;
-        vehicles[5].y = Y_STREETS[0] - LANE_OFF;
+        vehicles[5].y = Y_STREETS[0] + LANE_OFF;
         vehicles[5].dir = 2;
         vehicles[5].angle = Math.PI;
       }
 
-      // 9 Lidar Rays (-40° to +40°)
-      const LIDAR_ANGLES = [-0.698, -0.524, -0.349, -0.175, 0, 0.175, 0.349, 0.524, 0.698];
-      const MAX_LIDAR_RANGE = 145;
+      // 9 Lidar Rays (-40° to +40°) matching dissertation sensor specs
+      const rayAngles = [-0.65, -0.45, -0.28, -0.14, 0, 0.14, 0.28, 0.45, 0.65];
+      const maxRange = 135;
 
       const resizeRadar = () => {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -457,29 +437,6 @@ export function initPipelineScroll() {
         pointerY = -9999;
       });
 
-      // Exact Ray-Segment Intersection
-      function intersectRaySegment(px, py, dx, dy, x1, y1, x2, y2) {
-        const sx = x2 - x1;
-        const sy = y2 - y1;
-        const denom = dx * sy - dy * sx;
-        if (Math.abs(denom) < 1e-6) return null;
-
-        const u = ((px - x1) * dy - (py - y1) * dx) / denom;
-        const t = ((x1 - px) * sy - (y1 - py) * sx) / (dy * sx - dx * sy);
-
-        if (t >= 0 && u >= 0 && u <= 1) {
-          const dist = Math.hypot(sx, sy) || 1;
-          return {
-            t,
-            x: px + t * dx,
-            y: py + t * dy,
-            nx: -sy / dist,
-            ny: sx / dist,
-          };
-        }
-        return null;
-      }
-
       let lastSimTime = performance.now();
 
       // Main City Simulation Render Loop
@@ -498,7 +455,7 @@ export function initPipelineScroll() {
 
         if (heroOpacity > 0.01 && X_STREETS.length === 3 && Y_STREETS.length === 3) {
           // -------------------------------------------------------------
-          // 1. RENDER CITY STREETS (Tarmac, Curbs, Centerlines, Crosswalks)
+          // 1. RENDER BRITISH CITY STREETS (Tarmac, Curbs, Centerlines)
           // -------------------------------------------------------------
           // Draw Horizontal Avenues
           Y_STREETS.forEach((y) => {
@@ -507,7 +464,7 @@ export function initPipelineScroll() {
             ctx.fillRect(0, y - HALF_ROAD, width, ROAD_W);
 
             // Sidewalk Curbs
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.24)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(0, y - HALF_ROAD);
@@ -534,7 +491,7 @@ export function initPipelineScroll() {
             ctx.fillRect(x - HALF_ROAD, 0, ROAD_W, height);
 
             // Sidewalk Curbs
-            ctx.strokeStyle = 'rgba(148, 163, 184, 0.22)';
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.24)';
             ctx.lineWidth = 1;
             ctx.beginPath();
             ctx.moveTo(x - HALF_ROAD, 0);
@@ -555,20 +512,19 @@ export function initPipelineScroll() {
           });
 
           // -------------------------------------------------------------
-          // 2. RENDER INTERSECTIONS (Stop Lines, Crosswalks, Traffic Lights)
+          // 2. RENDER INTERSECTIONS (British LHD Stop Lines, Crosswalks, Signals)
           // -------------------------------------------------------------
           intersections.forEach((intObj) => {
             const signal = getSignalState(intObj, simTimeSec);
 
-            // Clear intersection box
+            // Clear junction box
             ctx.fillStyle = 'rgba(14, 22, 38, 0.85)';
             ctx.fillRect(intObj.x - HALF_ROAD, intObj.y - HALF_ROAD, ROAD_W, ROAD_W);
 
-            // Zebra Crosswalks & Stop Bars
-            const drawZebra = (x1, y1, x2, y2, isHoriz) => {
+            const drawZebra = (x1, y1, x2, y2) => {
               ctx.save();
               ctx.setLineDash([2, 4]);
-              ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
               ctx.lineWidth = 1;
               ctx.beginPath();
               ctx.moveTo(x1, y1);
@@ -577,60 +533,73 @@ export function initPipelineScroll() {
               ctx.restore();
             };
 
-            // North entry (heading South)
-            drawZebra(intObj.x - HALF_ROAD, intObj.y - HALF_ROAD - 8, intObj.x, intObj.y - HALF_ROAD - 8, true);
-            // South entry (heading North)
-            drawZebra(intObj.x, intObj.y + HALF_ROAD + 8, intObj.x + HALF_ROAD, intObj.y + HALF_ROAD + 8, true);
-            // West entry (heading East)
-            drawZebra(intObj.x - HALF_ROAD - 8, intObj.y, intObj.x - HALF_ROAD - 8, intObj.y + HALF_ROAD, false);
-            // East entry (heading West)
-            drawZebra(intObj.x + HALF_ROAD + 8, intObj.y - HALF_ROAD, intObj.x + HALF_ROAD + 8, intObj.y, false);
+            // In UK Left-Hand Traffic:
+            // Eastbound drives on top lane: [y - HALF_ROAD, y]
+            // Westbound drives on bottom lane: [y, y + HALF_ROAD]
+            // Northbound drives on left lane: [x - HALF_ROAD, x]
+            // Southbound drives on right lane: [x, x + HALF_ROAD]
+
+            // Zebra crosswalks behind stop lines
+            drawZebra(intObj.x - HALF_ROAD - 8, intObj.y - HALF_ROAD, intObj.x - HALF_ROAD - 8, intObj.y);
+            drawZebra(intObj.x + HALF_ROAD + 8, intObj.y, intObj.x + HALF_ROAD + 8, intObj.y + HALF_ROAD);
+            drawZebra(intObj.x - HALF_ROAD, intObj.y + HALF_ROAD + 8, intObj.x, intObj.y + HALF_ROAD + 8);
+            drawZebra(intObj.x, intObj.y - HALF_ROAD - 8, intObj.x + HALF_ROAD, intObj.y - HALF_ROAD - 8);
 
             // Stop Lines (Solid White, 2px)
-            ctx.strokeStyle = 'rgba(255, 255, 255, 0.55)';
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
             ctx.lineWidth = 2;
-            // North stop line
+
+            // Eastbound Stop Line (West approach on top lane)
             ctx.beginPath();
-            ctx.moveTo(intObj.x - HALF_ROAD, intObj.y - HALF_ROAD - 2);
-            ctx.lineTo(intObj.x, intObj.y - HALF_ROAD - 2);
+            ctx.moveTo(intObj.x - HALF_ROAD - 2, intObj.y - HALF_ROAD);
+            ctx.lineTo(intObj.x - HALF_ROAD - 2, intObj.y);
             ctx.stroke();
-            // South stop line
+
+            // Westbound Stop Line (East approach on bottom lane)
             ctx.beginPath();
-            ctx.moveTo(intObj.x, intObj.y + HALF_ROAD + 2);
-            ctx.lineTo(intObj.x + HALF_ROAD, intObj.y + HALF_ROAD + 2);
+            ctx.moveTo(intObj.x + HALF_ROAD + 2, intObj.y);
+            ctx.lineTo(intObj.x + HALF_ROAD + 2, intObj.y + HALF_ROAD);
             ctx.stroke();
-            // West stop line
+
+            // Northbound Stop Line (South approach on left lane)
             ctx.beginPath();
-            ctx.moveTo(intObj.x - HALF_ROAD - 2, intObj.y);
-            ctx.lineTo(intObj.x - HALF_ROAD - 2, intObj.y + HALF_ROAD);
+            ctx.moveTo(intObj.x - HALF_ROAD, intObj.y + HALF_ROAD + 2);
+            ctx.lineTo(intObj.x, intObj.y + HALF_ROAD + 2);
             ctx.stroke();
-            // East stop line
+
+            // Southbound Stop Line (North approach on right lane)
             ctx.beginPath();
-            ctx.moveTo(intObj.x + HALF_ROAD + 2, intObj.y - HALF_ROAD);
-            ctx.lineTo(intObj.x + HALF_ROAD + 2, intObj.y);
+            ctx.moveTo(intObj.x, intObj.y - HALF_ROAD - 2);
+            ctx.lineTo(intObj.x + HALF_ROAD, intObj.y - HALF_ROAD - 2);
             ctx.stroke();
 
             // Traffic Light LED Indicators at the curbs
             const nsColor = signal === 'NS_GREEN' ? '#22c55e' : (signal === 'NS_YELLOW' ? '#f59e0b' : '#ef4444');
             const ewColor = signal === 'EW_GREEN' ? '#22c55e' : (signal === 'EW_YELLOW' ? '#f59e0b' : '#ef4444');
 
-            // North/South LED (top-left curb)
+            // Eastbound LED (top-left curb)
             ctx.beginPath();
             ctx.arc(intObj.x - HALF_ROAD - 5, intObj.y - HALF_ROAD - 5, 2.5, 0, Math.PI * 2);
-            ctx.fillStyle = nsColor;
-            ctx.shadowColor = nsColor;
-            ctx.shadowBlur = 6;
+            ctx.fillStyle = ewColor;
             ctx.fill();
-            ctx.shadowBlur = 0;
 
-            // East/West LED (bottom-right curb)
+            // Westbound LED (bottom-right curb)
             ctx.beginPath();
             ctx.arc(intObj.x + HALF_ROAD + 5, intObj.y + HALF_ROAD + 5, 2.5, 0, Math.PI * 2);
             ctx.fillStyle = ewColor;
-            ctx.shadowColor = ewColor;
-            ctx.shadowBlur = 6;
             ctx.fill();
-            ctx.shadowBlur = 0;
+
+            // Northbound LED (bottom-left curb)
+            ctx.beginPath();
+            ctx.arc(intObj.x - HALF_ROAD - 5, intObj.y + HALF_ROAD + 5, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = nsColor;
+            ctx.fill();
+
+            // Southbound LED (top-right curb)
+            ctx.beginPath();
+            ctx.arc(intObj.x + HALF_ROAD + 5, intObj.y - HALF_ROAD - 5, 2.5, 0, Math.PI * 2);
+            ctx.fillStyle = nsColor;
+            ctx.fill();
           });
 
           // -------------------------------------------------------------
@@ -653,26 +622,18 @@ export function initPipelineScroll() {
               ctx.strokeStyle = 'rgba(255, 255, 255, 0.035)';
               ctx.lineWidth = 1;
               ctx.strokeRect(b.x + 14, b.y + 14, b.w - 28, b.h - 28);
-
-              // Small rooftop structure / helipad / HVAC
-              const hw = Math.min(30, b.w * 0.28);
-              const hh = Math.min(24, b.h * 0.28);
-              ctx.fillStyle = 'rgba(15, 23, 42, 0.7)';
-              ctx.fillRect(b.x + b.w / 2 - hw / 2, b.y + b.h / 2 - hh / 2, hw, hh);
-              ctx.strokeStyle = 'rgba(148, 163, 184, 0.1)';
-              ctx.strokeRect(b.x + b.w / 2 - hw / 2, b.y + b.h / 2 - hh / 2, hw, hh);
             }
 
             // Minimalist Block Label
             if (b.name && b.w > 90) {
               ctx.font = '8px monospace';
-              ctx.fillStyle = 'rgba(148, 163, 184, 0.25)';
+              ctx.fillStyle = 'rgba(148, 163, 184, 0.22)';
               ctx.fillText(b.name, b.x + 8, b.y + 14);
             }
           });
 
           // -------------------------------------------------------------
-          // 4. UPDATE VEHICLE DYNAMICS (Physics, Intersections, Safe Headway)
+          // 4. UPDATE VEHICLE DYNAMICS (British LHD, Intersections, Headway)
           // -------------------------------------------------------------
           vehicles.forEach((car, i) => {
             const currentDir = DIRS[car.dir];
@@ -684,11 +645,9 @@ export function initPipelineScroll() {
               if (i === j) return;
               const ox = other.x - car.x;
               const oy = other.y - car.y;
-              // Projection along travel direction
               const forwardDist = ox * currentDir.dx + oy * currentDir.dy;
               const lateralDist = Math.abs(ox * currentDir.dy - oy * currentDir.dx);
 
-              // If other car is ahead in the same street corridor
               if (forwardDist > 0 && forwardDist < 52 && lateralDist < 16) {
                 if (forwardDist < 24) {
                   targetSpeed = 0;
@@ -700,20 +659,18 @@ export function initPipelineScroll() {
               }
             });
 
-            // B. Intersection Approach & Traffic Signal Yielding
+            // B. Intersection Approach & Traffic Signal Yielding (British LHD)
             intersections.forEach((intObj) => {
               const dxToInt = intObj.x - car.x;
               const dyToInt = intObj.y - car.y;
               const distAlongDir = dxToInt * currentDir.dx + dyToInt * currentDir.dy;
               const lateralDist = Math.abs(dxToInt * currentDir.dy - dyToInt * currentDir.dx);
 
-              // Approaching this intersection along the corridor
               if (distAlongDir > 0 && distAlongDir < 65 && lateralDist < 14) {
                 const signal = getSignalState(intObj, simTimeSec);
                 const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
 
                 if (!isGreen) {
-                  // Must stop at the stop line before the intersection!
                   const distToStop = distAlongDir - (HALF_ROAD + 4);
                   if (distToStop > 0) {
                     if (distToStop < 10) {
@@ -728,7 +685,7 @@ export function initPipelineScroll() {
               }
             });
 
-            // C. Pointer Avoidance (If user places cursor directly ahead of car)
+            // C. Pointer Avoidance
             if (pointerActive) {
               const px = pointerX - car.x;
               const py = pointerY - car.y;
@@ -754,13 +711,13 @@ export function initPipelineScroll() {
             car.y += currentDir.dy * car.speed * dt;
             car.angle = currentDir.angle;
 
-            // Handle Intersection Passage & Turning
+            // Handle Intersection Passage & Turning (British LHD)
             intersections.forEach((intObj) => {
               const d = Math.hypot(car.x - intObj.x, car.y - intObj.y);
               if (d < 5 && !car.hasTurnedInInt) {
                 car.hasTurnedInInt = true;
 
-                // Decision: Check if near boundary edges
+                // Decision at boundary vs interior
                 const atWest = intObj.xi === 0 && car.dir === 2;
                 const atEast = intObj.xi === 2 && car.dir === 0;
                 const atNorth = intObj.yi === 0 && car.dir === 3;
@@ -775,7 +732,6 @@ export function initPipelineScroll() {
                 } else if (atSouth) {
                   car.dir = intObj.xi === 0 ? 0 : 2;
                 } else {
-                  // Internal Intersection: 65% Straight, 17.5% Right, 17.5% Left
                   const rnd = Math.random();
                   if (rnd < 0.20) {
                     car.dir = (car.dir + 1) % 4; // Turn Right
@@ -784,17 +740,17 @@ export function initPipelineScroll() {
                   }
                 }
 
-                // Snap to correct lane offset for the new direction
-                if (car.dir === 0) car.y = intObj.y + LANE_OFF;
-                else if (car.dir === 2) car.y = intObj.y - LANE_OFF;
-                else if (car.dir === 1) car.x = intObj.x - LANE_OFF;
-                else if (car.dir === 3) car.x = intObj.x + LANE_OFF;
+                // Snap to British Left-Hand Lane for the new direction
+                if (car.dir === 0) car.y = intObj.y - LANE_OFF; // Eastbound: Top lane
+                else if (car.dir === 2) car.y = intObj.y + LANE_OFF; // Westbound: Bottom lane
+                else if (car.dir === 1) car.x = intObj.x + LANE_OFF; // Southbound: Right lane
+                else if (car.dir === 3) car.x = intObj.x - LANE_OFF; // Northbound: Left lane
               } else if (d > 20) {
                 car.hasTurnedInInt = false;
               }
             });
 
-            // Boundary Wrap to ensure cars never leave the screen
+            // Boundary Wrap
             if (car.x < -30) car.x = width + 20;
             if (car.x > width + 30) car.x = -20;
             if (car.y < -30) car.y = height + 20;
@@ -802,146 +758,170 @@ export function initPipelineScroll() {
           });
 
           // -------------------------------------------------------------
-          // 5. REAL 9-RAY LIDAR SENSOR SIMULATION (Ego Vehicle)
+          // 5. ACCURATE LIDAR SENSOR RAYCASTING (Matches Dissertation Specs)
           // -------------------------------------------------------------
           const ego = vehicles[0];
           const egoDir = DIRS[ego.dir];
           const egoBumperX = ego.x + egoDir.dx * (ego.length / 2);
           const egoBumperY = ego.y + egoDir.dy * (ego.length / 2);
 
-          const lidarHitPoints = [];
+          const lidarEndpoints = [];
           let closeObstacleWarning = false;
 
-          LIDAR_ANGLES.forEach((relAngle) => {
+          rayAngles.forEach((relAngle) => {
             const rayAngle = ego.angle + relAngle;
-            const rDx = Math.cos(rayAngle);
-            const rDy = Math.sin(rayAngle);
+            const rCos = Math.cos(rayAngle);
+            const rSin = Math.sin(rayAngle);
 
-            let closestDist = MAX_LIDAR_RANGE;
-            let hitX = egoBumperX + rDx * MAX_LIDAR_RANGE;
-            let hitY = egoBumperY + rDy * MAX_LIDAR_RANGE;
-            let didHit = false;
-            let hitNorm = { nx: 0, ny: 0 };
+            let bestDist = maxRange;
+            let hitType = 'none';
 
-            // A. Test against all Building Walls
-            wallSegments.forEach((seg) => {
-              const res = intersectRaySegment(egoBumperX, egoBumperY, rDx, rDy, seg.x1, seg.y1, seg.x2, seg.y2);
-              if (res && res.t < closestDist) {
-                closestDist = res.t;
-                hitX = res.x;
-                hitY = res.y;
-                didHit = true;
-                hitNorm = { nx: res.nx, ny: res.ny };
-              }
-            });
+            // Ray-stepping: checks obstacles at 2.5px resolution
+            for (let d = 4; d <= maxRange; d += 2.5) {
+              const rx = egoBumperX + rCos * d;
+              const ry = egoBumperY + rSin * d;
 
-            // B. Test against all Other Vehicles
-            for (let vIdx = 1; vIdx < vehicles.length; vIdx++) {
-              const other = vehicles[vIdx];
-              const oDir = DIRS[other.dir];
-              const hl = other.length / 2;
-              const hw = other.width / 2;
-              const cosA = Math.cos(other.angle);
-              const sinA = Math.sin(other.angle);
-
-              // 4 corners of the vehicle box
-              const c1 = { x: other.x + hl * cosA - hw * sinA, y: other.y + hl * sinA + hw * cosA };
-              const c2 = { x: other.x - hl * cosA - hw * sinA, y: other.y - hl * sinA + hw * cosA };
-              const c3 = { x: other.x - hl * cosA + hw * sinA, y: other.y - hl * sinA - hw * cosA };
-              const c4 = { x: other.x + hl * cosA + hw * sinA, y: other.y + hl * sinA - hw * cosA };
-
-              const boxSegs = [
-                { x1: c1.x, y1: c1.y, x2: c2.x, y2: c2.y },
-                { x1: c2.x, y1: c2.y, x2: c3.x, y2: c3.y },
-                { x1: c3.x, y1: c3.y, x2: c4.x, y2: c4.y },
-                { x1: c4.x, y1: c4.y, x2: c1.x, y2: c1.y },
-              ];
-
-              boxSegs.forEach((bSeg) => {
-                const res = intersectRaySegment(egoBumperX, egoBumperY, rDx, rDy, bSeg.x1, bSeg.y1, bSeg.x2, bSeg.y2);
-                if (res && res.t < closestDist) {
-                  closestDist = res.t;
-                  hitX = res.x;
-                  hitY = res.y;
-                  didHit = true;
-                  hitNorm = { nx: res.nx, ny: res.ny };
-                }
-              });
-            }
-
-            // C. Test against User Pointer
-            if (pointerActive) {
-              const pDist = Math.hypot(pointerX - egoBumperX, pointerY - egoBumperY);
-              if (pDist < MAX_LIDAR_RANGE) {
-                const toPointerAngle = Math.atan2(pointerY - egoBumperY, pointerX - egoBumperX);
-                let aDiff = Math.abs(rayAngle - toPointerAngle);
-                while (aDiff > Math.PI) aDiff = Math.abs(aDiff - Math.PI * 2);
-                if (aDiff < 0.15 && pDist < closestDist) {
-                  closestDist = pDist;
-                  hitX = pointerX;
-                  hitY = pointerY;
-                  didHit = true;
+              // Check 1: Hit any traffic vehicle
+              for (let vIdx = 1; vIdx < vehicles.length; vIdx++) {
+                const other = vehicles[vIdx];
+                const ox = rx - other.x;
+                const oy = ry - other.y;
+                const cosA = Math.cos(other.angle);
+                const sinA = Math.sin(other.angle);
+                const lx = ox * cosA + oy * sinA;
+                const ly = -ox * sinA + oy * cosA;
+                if (Math.abs(lx) <= other.length / 2 + 1 && Math.abs(ly) <= other.width / 2 + 1) {
+                  bestDist = d;
+                  hitType = 'car';
+                  break;
                 }
               }
+              if (hitType !== 'none') break;
+
+              // Check 2: Hit pointer obstacle
+              if (pointerActive) {
+                const pdx = rx - pointerX;
+                const pdy = ry - pointerY;
+                if (pdx * pdx + pdy * pdy < 14 * 14) {
+                  bestDist = d;
+                  hitType = 'obstacle';
+                  break;
+                }
+              }
+
+              // Check 3: Hit active RED/YELLOW stop lines
+              for (let iIdx = 0; iIdx < intersections.length; iIdx++) {
+                const intObj = intersections[iIdx];
+                const signal = getSignalState(intObj, simTimeSec);
+
+                // If signal is RED or YELLOW for current avenue
+                if (ego.dir === 0) { // Eastbound: top lane
+                  const isRed = signal === 'NS_GREEN' || signal === 'NS_YELLOW' || signal === 'ALL_RED';
+                  const stopLineX = intObj.x - HALF_ROAD - 2;
+                  if (isRed && Math.abs(rx - stopLineX) <= 3 && ry >= intObj.y - HALF_ROAD && ry <= intObj.y) {
+                    bestDist = d;
+                    hitType = 'signal';
+                    break;
+                  }
+                } else if (ego.dir === 2) { // Westbound: bottom lane
+                  const isRed = signal === 'NS_GREEN' || signal === 'NS_YELLOW' || signal === 'ALL_RED';
+                  const stopLineX = intObj.x + HALF_ROAD + 2;
+                  if (isRed && Math.abs(rx - stopLineX) <= 3 && ry >= intObj.y && ry <= intObj.y + HALF_ROAD) {
+                    bestDist = d;
+                    hitType = 'signal';
+                    break;
+                  }
+                } else if (ego.dir === 3) { // Northbound: left lane
+                  const isRed = signal === 'EW_GREEN' || signal === 'EW_YELLOW' || signal === 'ALL_RED';
+                  const stopLineY = intObj.y + HALF_ROAD + 2;
+                  if (isRed && Math.abs(ry - stopLineY) <= 3 && rx >= intObj.x - HALF_ROAD && rx <= intObj.x) {
+                    bestDist = d;
+                    hitType = 'signal';
+                    break;
+                  }
+                } else if (ego.dir === 1) { // Southbound: right lane
+                  const isRed = signal === 'EW_GREEN' || signal === 'EW_YELLOW' || signal === 'ALL_RED';
+                  const stopLineY = intObj.y - HALF_ROAD - 2;
+                  if (isRed && Math.abs(ry - stopLineY) <= 3 && rx >= intObj.x && rx <= intObj.x + HALF_ROAD) {
+                    bestDist = d;
+                    hitType = 'signal';
+                    break;
+                  }
+                }
+              }
+              if (hitType !== 'none') break;
+
+              // Check 4: Hit road kerb boundary (outside street corridors)
+              let onH = false;
+              for (let yi = 0; yi < Y_STREETS.length; yi++) {
+                if (Math.abs(ry - Y_STREETS[yi]) <= HALF_ROAD) { onH = true; break; }
+              }
+              let onV = false;
+              for (let xi = 0; xi < X_STREETS.length; xi++) {
+                if (Math.abs(rx - X_STREETS[xi]) <= HALF_ROAD) { onV = true; break; }
+              }
+
+              if (!onH && !onV) {
+                bestDist = d;
+                hitType = 'kerb';
+                break;
+              }
             }
 
-            if (closestDist < 48) {
+            const endX = egoBumperX + rCos * bestDist;
+            const endY = egoBumperY + rSin * bestDist;
+            const isHit = hitType !== 'none';
+
+            if (isHit && bestDist < 48) {
               closeObstacleWarning = true;
             }
 
-            lidarHitPoints.push({ x: hitX, y: hitY, didHit, dist: closestDist, norm: hitNorm });
+            lidarEndpoints.push({ x: endX, y: endY, isHit, hitType, dist: bestDist });
 
-            // Render Individual Lidar Laser Beam
+            // Draw Laser Ray Line
             ctx.beginPath();
             ctx.moveTo(egoBumperX, egoBumperY);
-            ctx.lineTo(hitX, hitY);
-            if (didHit) {
-              const isAlert = closestDist < 48;
-              ctx.strokeStyle = isAlert ? 'rgba(245, 158, 11, 0.85)' : 'rgba(45, 212, 191, 0.45)';
-              ctx.lineWidth = isAlert ? 1.4 : 0.9;
+            ctx.lineTo(endX, endY);
+            if (hitType === 'car' || hitType === 'obstacle') {
+              ctx.strokeStyle = 'rgba(245, 158, 11, 0.88)';
+              ctx.lineWidth = 1.6;
+            } else if (hitType === 'signal') {
+              ctx.strokeStyle = 'rgba(244, 63, 94, 0.85)';
+              ctx.lineWidth = 1.5;
+            } else if (hitType === 'kerb') {
+              ctx.strokeStyle = 'rgba(45, 212, 191, 0.6)';
+              ctx.lineWidth = 1.1;
             } else {
-              ctx.strokeStyle = 'rgba(45, 212, 191, 0.15)';
+              ctx.strokeStyle = 'rgba(45, 212, 191, 0.18)';
               ctx.lineWidth = 0.8;
             }
             ctx.stroke();
 
-            // Render Exact Collision Hit Blip
-            if (didHit) {
-              const isAlert = closestDist < 48;
+            // ONLY draw a hit dot if the ray actually collided!
+            if (isHit) {
               ctx.beginPath();
-              ctx.arc(hitX, hitY, isAlert ? 2.8 : 2.0, 0, Math.PI * 2);
-              ctx.fillStyle = isAlert ? '#f59e0b' : '#2dd4bf';
-              ctx.shadowColor = isAlert ? '#f59e0b' : '#2dd4bf';
-              ctx.shadowBlur = isAlert ? 8 : 4;
+              ctx.arc(endX, endY, hitType === 'signal' ? 2.8 : (hitType === 'car' ? 3.2 : 2.2), 0, Math.PI * 2);
+              ctx.fillStyle = hitType === 'car' || hitType === 'obstacle'
+                ? '#f59e0b'
+                : (hitType === 'signal' ? '#f43f5e' : '#2dd4bf');
               ctx.fill();
-              ctx.shadowBlur = 0;
-
-              // Tangent surface reflection tick mark
-              if (hitNorm.nx !== 0 || hitNorm.ny !== 0) {
-                ctx.beginPath();
-                ctx.moveTo(hitX - hitNorm.ny * 4, hitY + hitNorm.nx * 4);
-                ctx.lineTo(hitX + hitNorm.ny * 4, hitY - hitNorm.nx * 4);
-                ctx.strokeStyle = isAlert ? 'rgba(245, 158, 11, 0.6)' : 'rgba(45, 212, 191, 0.5)';
-                ctx.lineWidth = 1.2;
-                ctx.stroke();
-              }
             }
           });
 
-          // Fill Lidar Perception Field-of-View Cone
-          if (lidarHitPoints.length > 0) {
+          // Fill Lidar Field-of-View Cone
+          if (lidarEndpoints.length > 0) {
             ctx.beginPath();
             ctx.moveTo(egoBumperX, egoBumperY);
-            lidarHitPoints.forEach((hp) => ctx.lineTo(hp.x, hp.y));
+            lidarEndpoints.forEach((pt) => ctx.lineTo(pt.x, pt.y));
             ctx.closePath();
             ctx.fillStyle = closeObstacleWarning
               ? 'rgba(245, 158, 11, 0.05)'
-              : 'rgba(45, 212, 191, 0.04)';
+              : 'rgba(45, 212, 191, 0.035)';
             ctx.fill();
           }
 
           // -------------------------------------------------------------
-          // 6. RENDER ALL VEHICLES (Headlights, Chassis, Brake Lights)
+          // 6. RENDER ALL VEHICLES (Headlights, Body, Brake Lights — NO Orange Dot)
           // -------------------------------------------------------------
           vehicles.forEach((car) => {
             ctx.save();
@@ -951,22 +931,22 @@ export function initPipelineScroll() {
             const len = car.length;
             const w = car.width;
 
-            // Headlight beams casting onto tarmac
-            const headGrad = ctx.createLinearGradient(len / 2, 0, len / 2 + 30, 0);
-            headGrad.addColorStop(0, car.isEgo ? 'rgba(45, 212, 191, 0.32)' : 'rgba(255, 255, 255, 0.22)');
+            // Headlight beams
+            const headGrad = ctx.createLinearGradient(len / 2, 0, len / 2 + 28, 0);
+            headGrad.addColorStop(0, car.isEgo ? 'rgba(45, 212, 191, 0.3)' : 'rgba(255, 255, 255, 0.18)');
             headGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
             ctx.fillStyle = headGrad;
             ctx.beginPath();
             ctx.moveTo(len / 2, -w * 0.4);
-            ctx.lineTo(len / 2 + 30, -w * 0.9);
-            ctx.lineTo(len / 2 + 30, w * 0.9);
+            ctx.lineTo(len / 2 + 28, -w * 0.9);
+            ctx.lineTo(len / 2 + 28, w * 0.9);
             ctx.lineTo(len / 2, w * 0.4);
             ctx.closePath();
             ctx.fill();
 
             // Vehicle Body
             ctx.beginPath();
-            ctx.roundRect(-len / 2, -w / 2, len, w, 2.5);
+            ctx.roundRect(-len / 2, -w / 2, len, w, 3.5);
             ctx.fillStyle = car.color;
             ctx.fill();
             ctx.strokeStyle = car.isEgo ? '#5eead4' : 'rgba(255, 255, 255, 0.2)';
@@ -976,61 +956,36 @@ export function initPipelineScroll() {
             // Cockpit / Windshield
             ctx.fillStyle = car.isEgo ? '#042f2e' : '#0f172a';
             ctx.beginPath();
-            ctx.roundRect(-len * 0.15, -w * 0.35, len * 0.45, w * 0.7, 1.5);
+            ctx.roundRect(1, -w / 2 + 2.5, 6, w - 5, 1.5);
             ctx.fill();
 
-            // Ego Vehicle Mounted Lidar Scanner Dome
-            if (car.isEgo) {
-              ctx.beginPath();
-              ctx.arc(-len * 0.05, 0, 2.5, 0, Math.PI * 2);
-              ctx.fillStyle = closeObstacleWarning ? '#f59e0b' : '#2dd4bf';
-              ctx.shadowColor = closeObstacleWarning ? '#f59e0b' : '#2dd4bf';
-              ctx.shadowBlur = 5;
-              ctx.fill();
-              ctx.shadowBlur = 0;
-            }
-
-            // Headlights (Twin White / Cyan dots)
+            // Headlights
             ctx.fillStyle = car.isEgo ? '#99f6e4' : '#f8fafc';
             ctx.fillRect(len / 2 - 1.5, -w * 0.4, 2, 2);
             ctx.fillRect(len / 2 - 1.5, w * 0.4 - 2, 2, 2);
 
-            // Tail / Brake Lights (Twin Red LEDs)
+            // Tail / Brake Lights (Red LEDs)
             const brakeGlow = car.isBraking;
-            ctx.fillStyle = brakeGlow ? '#ef4444' : 'rgba(239, 68, 68, 0.5)';
-            if (brakeGlow) {
-              ctx.shadowColor = '#ef4444';
-              ctx.shadowBlur = 8;
-            }
+            ctx.fillStyle = brakeGlow ? '#f43f5e' : 'rgba(244, 63, 94, 0.4)';
             ctx.fillRect(-len / 2 - 0.5, -w * 0.42, 2, brakeGlow ? 3 : 2);
             ctx.fillRect(-len / 2 - 0.5, w * 0.42 - (brakeGlow ? 3 : 2), 2, brakeGlow ? 3 : 2);
-            ctx.shadowBlur = 0;
 
             ctx.restore();
           });
 
           // -------------------------------------------------------------
-          // 7. GTA MINIMAP HUD OVERLAYS & TELEMETRY
+          // 7. GTA MINIMAP HUD OVERLAYS
           // -------------------------------------------------------------
-          // Top-Left Coordinates & Status
           ctx.font = '9px monospace';
           ctx.fillStyle = 'rgba(148, 163, 184, 0.4)';
-          ctx.fillText('GPS MINIMAP // AUTONOMOUS SIMULATION', 20, 24);
+          ctx.fillText('GPS MINIMAP // AUTONOMOUS SIMULATION (UK LHD)', 20, 24);
 
-          // Top-Right Heading & Sensors
           const egoDeg = Math.round(((ego.angle * 180) / Math.PI + 360) % 360);
           const hdgText = `HDG ${egoDeg.toString().padStart(3, '0')}° · 9-RAY LIDAR ${closeObstacleWarning ? 'PROX ALERT' : 'ACTIVE'}`;
           ctx.textAlign = 'right';
           ctx.fillStyle = closeObstacleWarning ? '#f59e0b' : 'rgba(45, 212, 191, 0.55)';
           ctx.fillText(hdgText, width - 20, 24);
           ctx.textAlign = 'left';
-
-          // Road Labels along Curbs
-          ctx.font = '8px monospace';
-          ctx.fillStyle = 'rgba(148, 163, 184, 0.2)';
-          ctx.fillText('AVENUE NORTH', X_STREETS[0] + 28, Y_STREETS[0] - HALF_ROAD - 3);
-          ctx.fillText('PPO BOULEVARD', X_STREETS[0] + 28, Y_STREETS[1] - HALF_ROAD - 3);
-          ctx.fillText('AVENUE SOUTH', X_STREETS[0] + 28, Y_STREETS[2] - HALF_ROAD - 3);
         }
 
         requestAnimationFrame(renderCitySim);
