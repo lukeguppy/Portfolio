@@ -1,8 +1,8 @@
 import { initLukeAgent } from '../components/luke-agent.js';
 import { initHomePortalStage } from '../components/home-portal-stage.js';
-import { initVectorFlowfield } from '../components/vector-flowfield.js';
+import { initNetworkBackground } from '../components/network-background.js';
 
-initVectorFlowfield(document.getElementById('flowfield-canvas'));
+initNetworkBackground('home-bg-container', { nodeCount: 42 });
 initLukeAgent(document.querySelector('[data-luke-agent]'));
 initHomePortalStage(document.querySelector('[data-home-portal-stage]'));
 

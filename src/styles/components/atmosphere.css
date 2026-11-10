@@ -1,6 +1,6 @@
 /*
  * Architectural atmosphere: clean, quiet, unified dark canvas.
- * Crisp hairline structural grid, zero colored glow blobs or muddy spotlights.
+ * Zero generic CSS grids, zero colored glow blobs or muddy spotlights.
  */
 .atmosphere {
   position: fixed;
@@ -11,7 +11,7 @@
   overflow: hidden;
 }
 
-.flowfield-canvas {
+.home-bg-container {
   position: absolute;
   inset: 0;
   width: 100%;
@@ -20,31 +20,6 @@
   display: block;
 }
 
-.atmosphere::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background:
-    linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 6rem 6rem,
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 6rem 6rem;
-  /* Calm reading zone on the left, subtle structural presence toward the right and margins */
-  -webkit-mask-image: radial-gradient(ellipse 90% 80% at 70% 45%, #000 30%, transparent 85%);
-          mask-image: radial-gradient(ellipse 90% 80% at 70% 45%, #000 30%, transparent 85%);
-}
-
 .atmosphere--centered {
   background: var(--bg-base);
-}
-
-.atmosphere--centered::before {
-  -webkit-mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 90%);
-          mask-image: radial-gradient(ellipse 70% 60% at 50% 50%, #000 40%, transparent 90%);
-}
-
-@media (max-width: 48rem) {
-  .atmosphere::before {
-    -webkit-mask-image: none;
-            mask-image: none;
-    opacity: 0.4;
-  }
 }

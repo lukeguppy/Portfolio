@@ -42,13 +42,7 @@
   }
 
   .hero-glow {
-    position: absolute;
-    width: 46rem;
-    height: 46rem;
-    border-radius: 50%;
-    background: radial-gradient(circle, rgba(45, 212, 191, 0.08) 0%, transparent 68%);
-    pointer-events: none;
-    z-index: 0;
+    display: none;
   }
 
   .hero-content {
@@ -59,6 +53,9 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 2rem 1.5rem;
+    background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(7, 10, 20, 0.92) 20%, rgba(7, 10, 20, 0.55) 60%, transparent 100%);
+    border-radius: 1.5rem;
   }
 
   .hero-title {
