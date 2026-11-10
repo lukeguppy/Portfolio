@@ -1,7 +1,10 @@
 /*
  * Survey-sheet atmosphere, shared by Home and Contact.
- * Static: graphite-blue ground, plotter grid on an 8rem module, one lamp, light grain.
- * No canvas, no animation, no cost at runtime.
+ * Static light, no canvas, no animation. Four layers:
+ *   ground   deep ink-blue with a vignette so plates read as lifted
+ *   light    cool key behind the focal plate + warm kicker low-left
+ *   grid     plotter grid (major + minor) on an 8rem module, faded behind text
+ *   grain    kills banding and adds paper tooth
  */
 .atmosphere {
   position: fixed;
@@ -9,8 +12,13 @@
   z-index: 0;
   pointer-events: none;
   background:
-    radial-gradient(64rem 40rem at 80% 44%, var(--lamp), transparent 70%),
-    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-base) 55%, var(--bg-void) 100%);
+    /* vignette */
+    radial-gradient(130% 100% at 50% 38%, transparent 52%, rgb(3 5 11 / 0.6) 100%),
+    /* cool key light behind the terminal */
+    radial-gradient(58rem 38rem at 78% 42%, var(--lamp), transparent 70%),
+    /* warm kicker low-left */
+    radial-gradient(52rem 36rem at 2% 88%, var(--lamp-warm), transparent 72%),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-base) 50%, var(--bg-void) 100%);
 }
 
 .atmosphere::before {
@@ -19,26 +27,30 @@
   inset: 0;
   background:
     linear-gradient(var(--grid-line) 1px, transparent 1px) 0 0 / 8rem 8rem,
-    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 8rem 8rem;
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) 0 0 / 8rem 8rem,
+    linear-gradient(var(--grid-line-minor) 1px, transparent 1px) 0 0 / 2rem 2rem,
+    linear-gradient(90deg, var(--grid-line-minor) 1px, transparent 1px) 0 0 / 2rem 2rem;
   /* Calm zone: no texture behind the text column, grid rises toward the right. */
-  -webkit-mask-image: linear-gradient(90deg, transparent 0 36%, #000 66%);
-          mask-image: linear-gradient(90deg, transparent 0 36%, #000 66%);
+  -webkit-mask-image: linear-gradient(90deg, transparent 0 34%, #000 68%);
+          mask-image: linear-gradient(90deg, transparent 0 34%, #000 68%);
 }
 
 .atmosphere::after {
   content: "";
   position: absolute;
   inset: 0;
-  opacity: 0.05;
+  opacity: 0.06;
   mix-blend-mode: soft-light;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
 }
 
-/* Contact: lamp sits behind the address, grid frames it from the edges. */
+/* Contact: key light sits behind the address, grid frames it from the edges. */
 .atmosphere--centered {
   background:
+    radial-gradient(130% 100% at 40% 44%, transparent 52%, rgb(3 5 11 / 0.6) 100%),
     radial-gradient(56rem 34rem at 38% 46%, var(--lamp), transparent 70%),
-    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-base) 55%, var(--bg-void) 100%);
+    radial-gradient(44rem 30rem at 96% 100%, var(--lamp-warm), transparent 72%),
+    linear-gradient(180deg, var(--bg-deep) 0%, var(--bg-base) 50%, var(--bg-void) 100%);
 }
 
 .atmosphere--centered::before {

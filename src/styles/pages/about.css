@@ -675,7 +675,7 @@
 
   @media (hover: hover) {
     .wb-btn:hover {
-      background: #26334f;
+      background: var(--surface-floating);
     }
   }
 
@@ -725,7 +725,7 @@
 
   @media (hover: hover) {
     .project-link:hover {
-      background: #26334f;
+      background: var(--surface-floating);
     }
   }
 
@@ -744,10 +744,10 @@
   .workbench__viewport {
     display: flex;
     flex-direction: column;
-    background: var(--surface-plate);
+    background: linear-gradient(180deg, var(--surface-plate-top), var(--surface-plate) 70%);
     border-radius: 0.875rem;
     overflow: hidden;
-    box-shadow: 0 28px 60px -24px rgba(4, 7, 14, 0.7);
+    box-shadow: var(--elevation-2);
   }
 
   #projects-stage-canvas {

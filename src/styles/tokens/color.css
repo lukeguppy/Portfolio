@@ -7,14 +7,30 @@
  */
 :root {
   /* Ground and planes (darkest to lightest) */
-  --bg-void: #0a0e17;
-  --bg-base: #0f1522;
-  --bg-deep: #141c2d;
+  --bg-void: #070a12;
+  --bg-base: #0c111d;
+  --bg-deep: #121a2c;
   --bg-surface: rgba(24, 33, 52, 0.72);
   --bg-elevated: rgba(30, 41, 64, 0.84);
   --bg-glass: rgba(15, 21, 34, 0.84);
-  --surface-plate: #172033;
-  --surface-plate-raised: #1d2840;
+  /* Four clearly separated steps: ground < plate < raised < floating. */
+  --surface-plate-top: #223253;
+  --surface-plate: #1a2640;
+  --surface-plate-raised: #263659;
+  --surface-floating: #31446e;
+
+  /* Elevation: a hairline ring, a top-edge highlight, and layered drops. */
+  --elevation-1:
+    0 0 0 1px rgb(255 255 255 / 0.06),
+    inset 0 1px 0 rgb(255 255 255 / 0.07),
+    0 2px 4px rgb(2 5 12 / 0.35),
+    0 10px 24px -10px rgb(2 5 12 / 0.6);
+  --elevation-2:
+    0 0 0 1px rgb(255 255 255 / 0.07),
+    inset 0 1px 0 rgb(255 255 255 / 0.09),
+    0 2px 4px rgb(2 5 12 / 0.3),
+    0 18px 36px -12px rgb(2 5 12 / 0.6),
+    0 48px 90px -30px rgb(2 5 12 / 0.75);
 
   /* Text. Contrast on --bg-base: text 15:1, quiet 8:1, dim 5.6:1 */
   --text: #eef2f8;
@@ -43,8 +59,11 @@
   --border-active: rgba(45, 212, 191, 0.45);
 
   /* Atmosphere */
-  --grid-line: rgba(160, 185, 230, 0.055);
-  --lamp: rgba(110, 150, 255, 0.10);
+  --grid-line: rgba(160, 185, 230, 0.07);
+  --grid-line-minor: rgba(160, 185, 230, 0.028);
+  /* Two light temperatures: a cool key behind the focal plate, a warm kicker low-left. */
+  --lamp: rgba(86, 128, 255, 0.20);
+  --lamp-warm: rgba(255, 150, 82, 0.15);
 
   /* Compatibility aliases */
   --ground: var(--bg-base);

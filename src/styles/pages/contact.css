@@ -129,7 +129,7 @@
     border-radius: 9999px;
     background: var(--surface-plate-raised);
     color: var(--text);
-    box-shadow: 0 16px 40px -12px rgba(4, 7, 14, 0.8);
+    box-shadow: var(--elevation-2);
     font-family: var(--font-sans);
     font-size: 0.9rem;
     font-weight: 500;
