@@ -150,26 +150,99 @@ export function initPipelineScroll() {
 
   requestAnimationFrame(tick);
 
-  // 4. Hero Autonomous Lidar Perception Radar Canvas
+  // 4. Hero Autonomous Vector Road Map & 9-Ray Lidar Agent Simulation
   if (heroRadarCanvas) {
     const ctx = heroRadarCanvas.getContext('2d');
     if (ctx) {
       let width = 0;
       let height = 0;
       let dpr = 1;
-      let pointerX = 0.5;
-      let pointerY = 0.5;
-      let sweepAngle = 0;
+      let pointerX = -9999;
+      let pointerY = -9999;
+      let pointerActive = false;
 
-      const blips = [
-        { dist: 85, angle: -0.45, speed: 0.002, size: 3.5 },
-        { dist: 145, angle: 0.32, speed: -0.003, size: 4 },
-        { dist: 190, angle: -0.22, speed: 0.0015, size: 4.5 },
-        { dist: 225, angle: 0.55, speed: -0.002, size: 3.5 },
-        { dist: 110, angle: 1.15, speed: 0.001, size: 3 },
-        { dist: 175, angle: -1.25, speed: -0.0015, size: 3.5 },
-        { dist: 260, angle: -0.1, speed: 0.0025, size: 5 },
+      // Define 2 curved arterial highway loops across the canvas
+      let roads = [];
+
+      function catmullRom2D(p0, p1, p2, p3, t) {
+        const t2 = t * t;
+        const t3 = t2 * t;
+        const x = 0.5 * ((2 * p1.x) + (-p0.x + p2.x) * t + (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * t2 + (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * t3);
+        const y = 0.5 * ((2 * p1.y) + (-p0.y + p2.y) * t + (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * t2 + (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * t3);
+        return { x, y };
+      }
+
+      function buildSplinePoints(ctrlPts, numSamples = 400) {
+        const pts = [];
+        const n = ctrlPts.length;
+        for (let i = 0; i < n; i++) {
+          const p0 = ctrlPts[(i - 1 + n) % n];
+          const p1 = ctrlPts[i];
+          const p2 = ctrlPts[(i + 1) % n];
+          const p3 = ctrlPts[(i + 2) % n];
+          const steps = Math.floor(numSamples / n);
+          for (let s = 0; s < steps; s++) {
+            const t = s / steps;
+            const pt = catmullRom2D(p0, p1, p2, p3, t);
+            pts.push(pt);
+          }
+        }
+        for (let i = 0; i < pts.length; i++) {
+          const next = pts[(i + 1) % pts.length];
+          const prev = pts[(i - 1 + pts.length) % pts.length];
+          const dx = next.x - prev.x;
+          const dy = next.y - prev.y;
+          const len = Math.sqrt(dx * dx + dy * dy) || 1;
+          pts[i].nx = -dy / len;
+          pts[i].ny = dx / len;
+          pts[i].angle = Math.atan2(dy, dx);
+        }
+        return pts;
+      }
+
+      function buildRoadNetwork() {
+        // Road 0: sweeping arterial curve looping through hero space
+        const ctrl0 = [
+          { x: width * 0.08, y: height * 0.32 },
+          { x: width * 0.32, y: height * 0.18 },
+          { x: width * 0.68, y: height * 0.28 },
+          { x: width * 0.92, y: height * 0.52 },
+          { x: width * 0.82, y: height * 0.82 },
+          { x: width * 0.48, y: height * 0.85 },
+          { x: width * 0.18, y: height * 0.65 },
+        ];
+
+        // Road 1: intersecting bypass curve
+        const ctrl1 = [
+          { x: width * 0.15, y: height * 0.82 },
+          { x: width * 0.38, y: height * 0.58 },
+          { x: width * 0.64, y: height * 0.68 },
+          { x: width * 0.88, y: height * 0.32 },
+          { x: width * 0.68, y: height * 0.16 },
+          { x: width * 0.42, y: height * 0.36 },
+          { x: width * 0.20, y: height * 0.48 },
+        ];
+
+        roads = [buildSplinePoints(ctrl0, 480), buildSplinePoints(ctrl1, 480)];
+      }
+
+      // 8 Autonomous Agent Vehicles
+      const agents = [
+        // 0: Ego Vehicle (Luke's PPO Agent)
+        { roadIdx: 0, t: 0.18, speed: 0.0016, isEgo: true, lane: 0, length: 26, width: 13 },
+        // Surrounding traffic vehicles
+        { roadIdx: 0, t: 0.42, speed: 0.0014, isEgo: false, lane: -6, length: 22, width: 11 },
+        { roadIdx: 0, t: 0.68, speed: 0.0017, isEgo: false, lane: 6, length: 22, width: 11 },
+        { roadIdx: 0, t: 0.88, speed: 0.0013, isEgo: false, lane: 0, length: 24, width: 12 },
+        { roadIdx: 1, t: 0.06, speed: 0.0015, isEgo: false, lane: -6, length: 22, width: 11 },
+        { roadIdx: 1, t: 0.35, speed: 0.0018, isEgo: false, lane: 6, length: 22, width: 11, hasLidar: true },
+        { roadIdx: 1, t: 0.62, speed: 0.0014, isEgo: false, lane: 0, length: 22, width: 11 },
+        { roadIdx: 1, t: 0.84, speed: 0.0016, isEgo: false, lane: -6, length: 22, width: 11 },
       ];
+
+      // 9 Lidar Rays as per dissertation architecture (-45° to +45°)
+      const LIDAR_ANGLES = [-0.785, -0.589, -0.393, -0.196, 0, 0.196, 0.393, 0.589, 0.785];
+      const MAX_LIDAR_RANGE = 135;
 
       const resizeRadar = () => {
         dpr = Math.min(window.devicePixelRatio || 1, 2);
@@ -178,6 +251,7 @@ export function initPipelineScroll() {
         heroRadarCanvas.width = Math.floor(width * dpr);
         heroRadarCanvas.height = Math.floor(height * dpr);
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        buildRoadNetwork();
       };
 
       resizeRadar();
@@ -185,136 +259,249 @@ export function initPipelineScroll() {
       window.addEventListener(
         'pointermove',
         (e) => {
-          pointerX = e.clientX / Math.max(1, window.innerWidth);
-          pointerY = e.clientY / Math.max(1, window.innerHeight);
+          const rect = heroRadarCanvas.getBoundingClientRect();
+          pointerX = e.clientX - rect.left;
+          pointerY = e.clientY - rect.top;
+          pointerActive = true;
         },
         { passive: true },
       );
+      window.addEventListener('pointerleave', () => {
+        pointerActive = false;
+        pointerX = -9999;
+        pointerY = -9999;
+      });
 
-      const renderRadar = () => {
-        sweepAngle += 0.024;
+      const renderRoadSim = () => {
         ctx.clearRect(0, 0, width, height);
 
         const vh = Math.max(1, window.innerHeight);
-
-        // Smoothly fade out the radar as the user scrolls down towards Phase 01
+        // Smoothly fade out as user scrolls toward Phase 01
         const heroOpacity = Math.max(0, 1 - smoothScrollY / (vh * 0.72));
         heroRadarCanvas.style.opacity = heroOpacity.toFixed(3);
-        heroRadarCanvas.style.transform = `translate3d(0, ${(smoothScrollY * 0.3).toFixed(2)}px, 0)`;
+        heroRadarCanvas.style.transform = `translate3d(0, ${(smoothScrollY * 0.25).toFixed(2)}px, 0)`;
 
-        if (heroOpacity > 0.01) {
-          const cx = width * 0.5 + (pointerX - 0.5) * 36;
-          const cy = height * 0.54 + (pointerY - 0.5) * 24;
+        if (heroOpacity > 0.01 && roads.length >= 2) {
+          // 1. Draw Road Ribbons (Tarmac + Lanes + Boundaries)
+          roads.forEach((road) => {
+            const halfW = 14;
 
-          // Subtle ambient radial glow behind the vehicle
-          const radGrad = ctx.createRadialGradient(cx, cy, 10, cx, cy, Math.max(width, height) * 0.45);
-          radGrad.addColorStop(0, 'rgba(45, 212, 191, 0.07)');
-          radGrad.addColorStop(0.6, 'rgba(15, 23, 42, 0.02)');
-          radGrad.addColorStop(1, 'rgba(5, 7, 12, 0)');
-          ctx.fillStyle = radGrad;
-          ctx.fillRect(0, 0, width, height);
-
-          // Concentric Lidar Range Rings
-          const rings = [75, 150, 225, 300];
-          const labels = ['25m', '50m', '75m', '100m'];
-
-          rings.forEach((r, idx) => {
+            // Tarmac fill
             ctx.beginPath();
-            ctx.arc(cx, cy, r, 0, Math.PI * 2);
-            ctx.strokeStyle = idx === 1 ? 'rgba(45, 212, 191, 0.18)' : 'rgba(148, 163, 184, 0.08)';
-            ctx.lineWidth = 1;
-            ctx.stroke();
-
-            // Metric Range Label
-            ctx.font = '500 9.5px "JetBrains Mono Variable", monospace';
-            ctx.fillStyle = 'rgba(148, 163, 184, 0.45)';
-            ctx.textAlign = 'left';
-            ctx.fillText(labels[idx], cx + r + 4, cy - 2);
-          });
-
-          // Polar Crosshair Spokes
-          const numSpokes = 8;
-          ctx.strokeStyle = 'rgba(148, 163, 184, 0.06)';
-          ctx.lineWidth = 1;
-          for (let i = 0; i < numSpokes; i++) {
-            const ang = (i * Math.PI) / 4;
-            ctx.beginPath();
-            ctx.moveTo(cx - Math.cos(ang) * 310, cy - Math.sin(ang) * 310);
-            ctx.lineTo(cx + Math.cos(ang) * 310, cy + Math.sin(ang) * 310);
-            ctx.stroke();
-          }
-
-          // Forward Autonomous Trajectory Horizon Arc (+/- 45 deg)
-          ctx.save();
-          ctx.beginPath();
-          ctx.setLineDash([4, 6]);
-          ctx.arc(cx, cy, 270, -Math.PI * 0.75, -Math.PI * 0.25);
-          ctx.strokeStyle = 'rgba(45, 212, 191, 0.28)';
-          ctx.lineWidth = 1.4;
-          ctx.stroke();
-          ctx.restore();
-
-          // Rotating Lidar Sweep Line & Phosphor Wedge
-          const sweepLen = 310;
-          const sweepX = cx + Math.cos(sweepAngle) * sweepLen;
-          const sweepY = cy + Math.sin(sweepAngle) * sweepLen;
-
-          const sweepGrad = ctx.createRadialGradient(cx, cy, 5, cx, cy, sweepLen);
-          sweepGrad.addColorStop(0, 'rgba(45, 212, 191, 0.22)');
-          sweepGrad.addColorStop(1, 'rgba(45, 212, 191, 0)');
-
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.arc(cx, cy, sweepLen, sweepAngle - 0.35, sweepAngle);
-          ctx.closePath();
-          ctx.fillStyle = sweepGrad;
-          ctx.fill();
-
-          ctx.beginPath();
-          ctx.moveTo(cx, cy);
-          ctx.lineTo(sweepX, sweepY);
-          ctx.strokeStyle = 'rgba(45, 212, 191, 0.55)';
-          ctx.lineWidth = 1.5;
-          ctx.stroke();
-
-          // Obstacle detection blips
-          blips.forEach((b) => {
-            b.angle += b.speed;
-            const bx = cx + Math.cos(b.angle) * b.dist;
-            const by = cy + Math.sin(b.angle) * b.dist;
-
-            // Compute angular distance from sweep beam
-            let diff = (sweepAngle - b.angle) % (Math.PI * 2);
-            if (diff < 0) diff += Math.PI * 2;
-            const hit = diff < 0.45;
-            const intensity = hit ? 1 : Math.max(0.2, 1 - diff * 0.35);
-
-            ctx.beginPath();
-            ctx.arc(bx, by, b.size, 0, Math.PI * 2);
-            ctx.fillStyle = hit ? '#facc15' : `rgba(45, 212, 191, ${intensity.toFixed(2)})`;
-            ctx.shadowBlur = hit ? 10 : 0;
-            ctx.shadowColor = '#facc15';
+            for (let i = 0; i < road.length; i++) {
+              const pt = road[i];
+              const lx = pt.x + pt.nx * halfW;
+              const ly = pt.y + pt.ny * halfW;
+              if (i === 0) ctx.moveTo(lx, ly);
+              else ctx.lineTo(lx, ly);
+            }
+            for (let i = road.length - 1; i >= 0; i--) {
+              const pt = road[i];
+              const rx = pt.x - pt.nx * halfW;
+              const ry = pt.y - pt.ny * halfW;
+              ctx.lineTo(rx, ry);
+            }
+            ctx.closePath();
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.018)';
             ctx.fill();
-            ctx.shadowBlur = 0;
+
+            // Left & Right boundary lines
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.12)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i < road.length; i++) {
+              const pt = road[i];
+              const lx = pt.x + pt.nx * halfW;
+              const ly = pt.y + pt.ny * halfW;
+              if (i === 0) ctx.moveTo(lx, ly);
+              else ctx.lineTo(lx, ly);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            ctx.beginPath();
+            for (let i = 0; i < road.length; i++) {
+              const pt = road[i];
+              const rx = pt.x - pt.nx * halfW;
+              const ry = pt.y - pt.ny * halfW;
+              if (i === 0) ctx.moveTo(rx, ry);
+              else ctx.lineTo(rx, ry);
+            }
+            ctx.closePath();
+            ctx.stroke();
+
+            // Dashed centerline
+            ctx.save();
+            ctx.setLineDash([4, 8]);
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.07)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i < road.length; i++) {
+              const pt = road[i];
+              if (i === 0) ctx.moveTo(pt.x, pt.y);
+              else ctx.lineTo(pt.x, pt.y);
+            }
+            ctx.closePath();
+            ctx.stroke();
+            ctx.restore();
           });
 
-          // Ego Agent Vehicle Indicator at Origin
-          ctx.fillStyle = '#2dd4bf';
-          ctx.beginPath();
-          ctx.arc(cx, cy, 4, 0, Math.PI * 2);
-          ctx.fill();
+          // 2. Update and Draw Agent Vehicles
+          const vehiclePositions = [];
 
-          ctx.strokeStyle = '#fff';
-          ctx.lineWidth = 1.2;
-          ctx.beginPath();
-          ctx.arc(cx, cy, 7, 0, Math.PI * 2);
-          ctx.stroke();
+          agents.forEach((ag) => {
+            ag.t = (ag.t + ag.speed) % 1;
+            const road = roads[ag.roadIdx];
+            const idx = Math.floor(ag.t * road.length) % road.length;
+            const pt = road[idx];
+
+            const cx = pt.x + pt.nx * ag.lane;
+            const cy = pt.y + pt.ny * ag.lane;
+            const angle = pt.angle;
+
+            vehiclePositions.push({ x: cx, y: cy, angle, isEgo: ag.isEgo, agent: ag });
+          });
+
+          // 3. Render 9-Ray Lidar Sensing for Ego & Selected Vehicles
+          vehiclePositions.forEach((v) => {
+            if (!v.isEgo && !v.agent.hasLidar) return;
+
+            const fx = v.x + Math.cos(v.angle) * 14;
+            const fy = v.y + Math.sin(v.angle) * 14;
+
+            const rayHitPoints = [];
+
+            LIDAR_ANGLES.forEach((relAngle) => {
+              const rayAngle = v.angle + relAngle;
+              let rayDist = MAX_LIDAR_RANGE;
+              let isObstacleHit = false;
+
+              // Check collision against all other vehicles
+              vehiclePositions.forEach((other) => {
+                if (other === v) return;
+                const ox = other.x - fx;
+                const oy = other.y - fy;
+                const distToOther = Math.sqrt(ox * ox + oy * oy);
+                if (distToOther < MAX_LIDAR_RANGE + 15) {
+                  const toOtherAngle = Math.atan2(oy, ox);
+                  let angleDiff = Math.abs(rayAngle - toOtherAngle);
+                  while (angleDiff > Math.PI) angleDiff = Math.abs(angleDiff - Math.PI * 2);
+                  if (angleDiff < 0.12 && distToOther < rayDist) {
+                    rayDist = Math.max(12, distToOther - 10);
+                    isObstacleHit = true;
+                  }
+                }
+              });
+
+              // Check distance to interactive pointer
+              if (pointerActive) {
+                const px = pointerX - fx;
+                const py = pointerY - fy;
+                const distToPointer = Math.sqrt(px * px + py * py);
+                if (distToPointer < MAX_LIDAR_RANGE) {
+                  const toPointerAngle = Math.atan2(py, px);
+                  let angleDiff = Math.abs(rayAngle - toPointerAngle);
+                  while (angleDiff > Math.PI) angleDiff = Math.abs(angleDiff - Math.PI * 2);
+                  if (angleDiff < 0.16 && distToPointer < rayDist) {
+                    rayDist = Math.max(10, distToPointer);
+                    isObstacleHit = true;
+                  }
+                }
+              }
+
+              const hitX = fx + Math.cos(rayAngle) * rayDist;
+              const hitY = fy + Math.sin(rayAngle) * rayDist;
+
+              rayHitPoints.push({ x: hitX, y: hitY, hit: isObstacleHit, dist: rayDist });
+
+              // Draw individual laser ray line
+              ctx.beginPath();
+              ctx.moveTo(fx, fy);
+              ctx.lineTo(hitX, hitY);
+              ctx.strokeStyle = isObstacleHit
+                ? (rayDist < 55 ? 'rgba(245, 158, 11, 0.7)' : 'rgba(45, 212, 191, 0.65)')
+                : 'rgba(45, 212, 191, 0.22)';
+              ctx.lineWidth = isObstacleHit ? 1.4 : 0.85;
+              ctx.stroke();
+
+              // Draw hit point contact blip
+              if (isObstacleHit) {
+                ctx.beginPath();
+                ctx.arc(hitX, hitY, rayDist < 55 ? 2.5 : 2.0, 0, Math.PI * 2);
+                ctx.fillStyle = rayDist < 55 ? '#f59e0b' : '#2dd4bf';
+                ctx.fill();
+              }
+            });
+
+            // Lidar envelope fan fill
+            if (rayHitPoints.length > 0) {
+              ctx.beginPath();
+              ctx.moveTo(fx, fy);
+              rayHitPoints.forEach((hp) => ctx.lineTo(hp.x, hp.y));
+              ctx.closePath();
+              ctx.fillStyle = 'rgba(45, 212, 191, 0.03)';
+              ctx.fill();
+            }
+          });
+
+          // 4. Render All Vehicles
+          vehiclePositions.forEach((v) => {
+            ctx.save();
+            ctx.translate(v.x, v.y);
+            ctx.rotate(v.angle);
+
+            const len = v.agent.length;
+            const w = v.agent.width;
+
+            // Headlight beams
+            const headGrad = ctx.createLinearGradient(len / 2, 0, len / 2 + 28, 0);
+            headGrad.addColorStop(0, v.isEgo ? 'rgba(94, 234, 212, 0.28)' : 'rgba(255, 255, 255, 0.16)');
+            headGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+            ctx.fillStyle = headGrad;
+            ctx.beginPath();
+            ctx.moveTo(len / 2, -w * 0.4);
+            ctx.lineTo(len / 2 + 28, -w * 0.9);
+            ctx.lineTo(len / 2 + 28, w * 0.9);
+            ctx.lineTo(len / 2, w * 0.4);
+            ctx.closePath();
+            ctx.fill();
+
+            // Vehicle Body
+            ctx.beginPath();
+            ctx.roundRect(-len / 2, -w / 2, len, w, 3);
+            if (v.isEgo) {
+              ctx.fillStyle = '#f8fafc';
+              ctx.fill();
+              ctx.strokeStyle = '#2dd4bf';
+              ctx.lineWidth = 1.4;
+              ctx.stroke();
+
+              // Ego Sensor Dome on Roof
+              ctx.beginPath();
+              ctx.arc(0, 0, 3, 0, Math.PI * 2);
+              ctx.fillStyle = '#2dd4bf';
+              ctx.fill();
+            } else {
+              ctx.fillStyle = '#172033';
+              ctx.fill();
+              ctx.strokeStyle = 'rgba(255, 255, 255, 0.14)';
+              ctx.lineWidth = 1;
+              ctx.stroke();
+
+              // Rear Tail lights
+              ctx.fillStyle = 'rgba(244, 63, 94, 0.8)';
+              ctx.fillRect(-len / 2, -w * 0.38, 1.5, 2.5);
+              ctx.fillRect(-len / 2, w * 0.38 - 2.5, 1.5, 2.5);
+            }
+
+            ctx.restore();
+          });
         }
 
-        requestAnimationFrame(renderRadar);
+        requestAnimationFrame(renderRoadSim);
       };
 
-      requestAnimationFrame(renderRadar);
+      requestAnimationFrame(renderRoadSim);
     }
   }
 

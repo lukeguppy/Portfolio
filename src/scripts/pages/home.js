@@ -1,6 +1,8 @@
 import { initLukeAgent } from '../components/luke-agent.js';
 import { initHomePortalStage } from '../components/home-portal-stage.js';
+import { initVectorFlowfield } from '../components/vector-flowfield.js';
 
+initVectorFlowfield(document.getElementById('flowfield-canvas'));
 initLukeAgent(document.querySelector('[data-luke-agent]'));
 initHomePortalStage(document.querySelector('[data-home-portal-stage]'));
 

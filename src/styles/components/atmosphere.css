@@ -8,6 +8,16 @@
   z-index: 0;
   pointer-events: none;
   background: var(--bg-base);
+  overflow: hidden;
+}
+
+.flowfield-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  display: block;
 }
 
 .atmosphere::before {
