@@ -1,13 +1,4 @@
 @layer pages {
-  #autonomy-canvas {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: -1;
-  }
-
   .home-wrap {
     position: relative;
     z-index: 2;
@@ -38,7 +29,6 @@
     gap: 3.5rem;
     align-items: center;
     transform-origin: center top;
-    will-change: transform, opacity;
   }
 
   .home-hero__title {
@@ -144,9 +134,8 @@
     display: flex;
     flex-direction: column;
     border-radius: 0.875rem;
-    background: #090e1a;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    box-shadow: 0 16px 36px rgba(0, 0, 0, 0.45);
+    background: var(--surface-plate);
+    box-shadow: 0 28px 60px -24px rgba(4, 7, 14, 0.7);
     overflow: hidden;
   }
 
@@ -156,8 +145,7 @@
     align-items: center;
     gap: 0.625rem;
     padding: 0.95rem 1.25rem;
-    background: #070b14;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--surface-plate-raised);
   }
 
   .luke-agent__prompt-line {
@@ -248,7 +236,7 @@
   .luke-agent__summary {
     font-size: 0.94rem;
     line-height: 1.6;
-    color: #cbd5e1;
+    color: var(--text-quiet);
   }
 
   .luke-agent__summary strong {
@@ -298,7 +286,7 @@
   .dossier-bullet__detail {
     margin: 0;
     font-size: 0.84rem;
-    color: #94a3b8;
+    color: var(--text-quiet);
     line-height: 1.5;
   }
 
@@ -309,8 +297,7 @@
     flex-wrap: wrap;
     gap: 0.375rem;
     padding: 0.68rem 1.25rem;
-    background: #070b14;
-    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: var(--surface-plate-raised);
   }
 
   .luke-agent__presets-label {
@@ -321,23 +308,52 @@
   }
 
   .luke-agent__chip {
-    padding: 0.25rem 0.625rem;
+    position: relative;
+    min-height: 2.25rem;
+    padding: 0.25rem 0.7rem;
     border-radius: 0.375rem;
-    background: rgba(255, 255, 255, 0.04);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: transparent;
+    border: 0;
     color: var(--text-quiet);
     font-family: var(--font-sans);
-    font-size: 0.75rem;
+    font-size: 0.8rem;
     font-weight: 500;
     cursor: pointer;
-    transition: color 0.18s ease, border-color 0.18s ease, background-color 0.18s ease;
+    transition:
+      color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
   }
 
-  .luke-agent__chip:hover,
+  .luke-agent__chip::after {
+    content: "";
+    position: absolute;
+    left: 0.7rem;
+    right: 0.7rem;
+    bottom: 0.35rem;
+    height: 1.5px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 240ms var(--ease);
+  }
+
+  .luke-agent__chip:active {
+    transform: scale(0.97);
+  }
+
   .luke-agent__chip.is-active {
-    color: #fff;
-    border-color: var(--accent);
-    background: rgba(45, 212, 191, 0.14);
+    color: var(--text);
+  }
+
+  .luke-agent__chip.is-active::after {
+    transform: scaleX(1);
+    transform-origin: left center;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .luke-agent__chip:hover {
+      color: var(--text);
+    }
   }
 
   /* Scroll cue — hides automatically once scrolled */
@@ -406,7 +422,6 @@
     gap: 3.5rem;
     align-items: start;
     transform-origin: center top;
-    will-change: transform, opacity;
   }
 
   .portal-stage__head {
@@ -443,7 +458,7 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     text-decoration: none;
     color: var(--text-quiet);
-    transition: color 0.18s ease, padding-left 0.18s ease;
+    transition: color var(--dur-fast) var(--ease);
   }
 
   .portal-stage__item::before {
@@ -454,18 +469,25 @@
     bottom: 1.375rem;
     width: 2px;
     background: rgba(255, 255, 255, 0.12);
-    transition: background-color 0.18s ease;
+    transition: background-color var(--dur-fast) var(--ease);
   }
 
-  .portal-stage__item:hover,
   .portal-stage__item.is-active {
     color: var(--text);
-    padding-left: 1.5rem;
   }
 
-  .portal-stage__item:hover::before,
   .portal-stage__item.is-active::before {
     background: var(--accent);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .portal-stage__item:hover {
+      color: var(--text);
+    }
+
+    .portal-stage__item:hover::before {
+      background: var(--accent);
+    }
   }
 
   .portal-stage__item-top {
@@ -509,8 +531,8 @@
     position: relative;
     height: 27.5rem;
     border-radius: 0.875rem;
-    background: #090d19;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: var(--surface-plate);
+    box-shadow: 0 28px 60px -24px rgba(4, 7, 14, 0.7);
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -582,7 +604,7 @@
     width: 12px;
     height: 12px;
     border-radius: 50%;
-    background: #090d19;
+    background: var(--surface-plate);
     border: 2px solid #38bdf8;
     transform: translateX(-1px);
   }
@@ -689,7 +711,7 @@
     width: 100%;
     display: flex;
     flex-direction: column;
-    gap: 0.875rem;
+    border-top: 1px solid var(--border-subtle);
   }
 
   .stage-contact-item {
@@ -697,18 +719,17 @@
     align-items: center;
     justify-content: space-between;
     gap: 1rem;
-    padding: 1.15rem 1.35rem;
-    border-radius: 0.625rem;
-    background: #0d1424;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    padding: 1.15rem 0;
+    border-bottom: 1px solid var(--border-subtle);
     text-decoration: none;
     color: var(--text);
-    transition: border-color 0.18s ease, background-color 0.18s ease;
+    transition: color var(--dur-fast) var(--ease);
   }
 
-  .stage-contact-item:hover {
-    border-color: rgba(45, 212, 191, 0.5);
-    background: #10192d;
+  @media (hover: hover) and (pointer: fine) {
+    .stage-contact-item:hover {
+      color: var(--accent);
+    }
   }
 
   .stage-contact-link {
@@ -732,19 +753,26 @@
   .stage-copy-btn {
     padding: 0.35rem 0.75rem;
     border-radius: 0.375rem;
-    background: rgba(45, 212, 191, 0.12);
-    border: 1px solid rgba(45, 212, 191, 0.4);
-    color: #fff;
+    background: transparent;
+    border: 0;
+    color: var(--accent);
     font-family: var(--font-sans);
-    font-size: 0.78rem;
+    font-size: 0.82rem;
     font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.18s ease, border-color 0.18s ease;
+    transition:
+      color var(--dur-fast) var(--ease),
+      transform var(--dur-fast) var(--ease);
   }
 
-  .stage-copy-btn:hover {
-    background: rgba(45, 212, 191, 0.22);
-    border-color: var(--accent);
+  .stage-copy-btn:active {
+    transform: scale(0.97);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .stage-copy-btn:hover {
+      color: var(--accent-bright);
+    }
   }
 
   @media (max-width: 64rem) {

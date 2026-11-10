@@ -23,5 +23,6 @@
 @import "./components/site-header.css" layer(components);
 @import "./components/site-footer.css" layer(components);
 @import "./components/link-list.css" layer(components);
+@import "./components/atmosphere.css" layer(components);
 
 @import "./transitions.css" layer(transitions);

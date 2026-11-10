@@ -1,8 +1,6 @@
-import { initAutonomyField } from '../components/autonomy-field.js';
 import { initLukeAgent } from '../components/luke-agent.js';
 import { initHomePortalStage } from '../components/home-portal-stage.js';
 
-initAutonomyField(document.getElementById('autonomy-canvas'));
 initLukeAgent(document.querySelector('[data-luke-agent]'));
 initHomePortalStage(document.querySelector('[data-home-portal-stage]'));
 

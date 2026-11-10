@@ -2,6 +2,7 @@
 :root {
   --font-display: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-sans: var(--font-body);
   --font-serif: "Literata Variable", "Literata", Georgia, serif;
   --font-portal: "Bebas Neue", "Overpass Variable", sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;

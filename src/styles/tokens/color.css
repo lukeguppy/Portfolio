@@ -1,24 +1,37 @@
 /*
- * Dark-mode engineering & simulation palette.
- * Grounded in deep obsidian surfaces (#05070c -> #0c1220), crisp alabaster type,
- * electric teal/cyan signal lines (#2dd4bf / #00f0ff), and warm amber telemetry (#f59e0b).
+ * Dark-mode engineering palette with depth.
+ * Ground is a deep ink-blue (not black); each surface step is a visible lift,
+ * so layers read as planes of one sheet rather than boxes with borders.
+ * Teal is the live/actionable signal. Amber is the single warm "pop" colour,
+ * reserved for the primary action on a view. Text is a cool off-white, never pure white.
  */
 :root {
-  --bg-void: #05070c;
-  --bg-base: #070a12;
-  --bg-deep: #0b101d;
-  --bg-surface: rgba(13, 19, 33, 0.72);
-  --bg-elevated: rgba(19, 27, 46, 0.84);
-  --bg-glass: rgba(10, 14, 24, 0.76);
+  /* Ground and planes (darkest to lightest) */
+  --bg-void: #0a0e17;
+  --bg-base: #0f1522;
+  --bg-deep: #141c2d;
+  --bg-surface: rgba(24, 33, 52, 0.72);
+  --bg-elevated: rgba(30, 41, 64, 0.84);
+  --bg-glass: rgba(15, 21, 34, 0.84);
+  --surface-plate: #172033;
+  --surface-plate-raised: #1d2840;
 
-  --text: #f1f5f9;
-  --text-quiet: #94a3b8;
-  --text-dim: #64748b;
+  /* Text. Contrast on --bg-base: text 15:1, quiet 8:1, dim 5.6:1 */
+  --text: #eef2f8;
+  --text-quiet: #aab5c8;
+  --text-dim: #8895ab;
 
+  /* Signal */
   --accent: #2dd4bf;
-  --accent-bright: #00f0ff;
+  --accent-bright: #5eead4;
   --accent-glow: rgba(45, 212, 191, 0.34);
   --accent-soft: rgba(45, 212, 191, 0.12);
+  --on-accent: #04130f;
+
+  /* The pop colour. One per view, on the primary action only. */
+  --pop: #f6b45a;
+  --pop-soft: rgba(246, 180, 90, 0.14);
+  --on-pop: #1a1002;
 
   --paint: #f59e0b;
   --signal: #f43f5e;
@@ -28,6 +41,10 @@
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-mid: rgba(255, 255, 255, 0.14);
   --border-active: rgba(45, 212, 191, 0.45);
+
+  /* Atmosphere */
+  --grid-line: rgba(160, 185, 230, 0.055);
+  --lamp: rgba(110, 150, 255, 0.10);
 
   /* Compatibility aliases */
   --ground: var(--bg-base);

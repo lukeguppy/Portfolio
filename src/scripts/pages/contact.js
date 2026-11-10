@@ -1,7 +1,5 @@
 /**
- * Contact page:
- * 1. One-click clipboard copy for `lukewguppy@gmail.com`
- * 2. Subtle ambient background on `#contact-canvas`
+ * Contact page: one-click clipboard copy for `lukewguppy@gmail.com`.
  */
 const copyBtn = document.querySelector('[data-copy-email]');
 const toast = document.getElementById('contact-toast');
@@ -43,37 +41,4 @@ if (copyBtn) {
       }, 3000);
     }
   });
-}
-
-const canvas = document.getElementById('contact-canvas');
-if (canvas) {
-  const ctx = canvas.getContext('2d');
-  let width = 0;
-  let height = 0;
-
-  function resize() {
-    const dpr = Math.min(window.devicePixelRatio || 1, 2);
-    width = window.innerWidth;
-    height = window.innerHeight;
-    canvas.width = width * dpr;
-    canvas.height = height * dpr;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-
-    ctx.clearRect(0, 0, width, height);
-    const grad = ctx.createRadialGradient(
-      width * 0.5,
-      height * 0.45,
-      20,
-      width * 0.5,
-      height * 0.45,
-      Math.max(width, height) * 0.55,
-    );
-    grad.addColorStop(0, 'rgba(45, 212, 191, 0.06)');
-    grad.addColorStop(1, 'rgba(6, 9, 17, 0)');
-    ctx.fillStyle = grad;
-    ctx.fillRect(0, 0, width, height);
-  }
-
-  window.addEventListener('resize', resize, { passive: true });
-  resize();
 }
