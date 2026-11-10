@@ -1,52 +1,48 @@
 /*
- * Dark-mode engineering palette with depth.
- * Ground is a deep ink-blue (not black); each surface step is a visible lift,
- * so layers read as planes of one sheet rather than boxes with borders.
- * Teal is the live/actionable signal. Amber is the single warm "pop" colour,
- * reserved for the primary action on a view. Text is a cool off-white, never pure white.
+ * High-craft dark engineering palette.
+ * Grounded in deep obsidian slate, razor-sharp hairline borders,
+ * high-contrast alabaster typography, and precise signal accents.
+ * Zero ambient colored spotlights or fake neon glow blobs.
  */
 :root {
-  /* Ground and planes (darkest to lightest) */
-  --bg-void: #070a12;
-  --bg-base: #0c111d;
-  --bg-deep: #121a2c;
-  --bg-surface: rgba(24, 33, 52, 0.72);
-  --bg-elevated: rgba(30, 41, 64, 0.84);
-  --bg-glass: rgba(15, 21, 34, 0.84);
-  /* Four clearly separated steps: ground < plate < raised < floating. */
-  --surface-plate-top: #223253;
-  --surface-plate: #1a2640;
-  --surface-plate-raised: #263659;
-  --surface-floating: #31446e;
+  /* Ground */
+  --bg-void: #05080e;
+  --bg-base: #080c14;
+  --bg-deep: #05080e;
+  --bg-surface: rgba(13, 20, 36, 0.72);
+  --bg-elevated: rgba(18, 28, 48, 0.84);
+  --bg-glass: rgba(10, 15, 26, 0.84);
 
-  /* Elevation: a hairline ring, a top-edge highlight, and layered drops. */
+  /* Surface planes */
+  --surface-plate: #0d1424;
+  --surface-plate-top: #10192e;
+  --surface-plate-raised: #090e1c;
+  --surface-floating: #16213a;
+
+  /* Physical elevation: hairline border ring + inset top rim highlight + deep tight drop */
   --elevation-1:
-    0 0 0 1px rgb(255 255 255 / 0.06),
-    inset 0 1px 0 rgb(255 255 255 / 0.07),
-    0 2px 4px rgb(2 5 12 / 0.35),
-    0 10px 24px -10px rgb(2 5 12 / 0.6);
+    0 0 0 1px rgba(255, 255, 255, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.05),
+    0 8px 20px -6px rgba(0, 0, 0, 0.6);
   --elevation-2:
-    0 0 0 1px rgb(255 255 255 / 0.07),
-    inset 0 1px 0 rgb(255 255 255 / 0.09),
-    0 2px 4px rgb(2 5 12 / 0.3),
-    0 18px 36px -12px rgb(2 5 12 / 0.6),
-    0 48px 90px -30px rgb(2 5 12 / 0.75);
+    0 0 0 1px rgba(255, 255, 255, 0.09),
+    inset 0 1px 0 rgba(255, 255, 255, 0.07),
+    0 24px 50px -16px rgba(0, 0, 0, 0.8);
 
-  /* Text. Contrast on --bg-base: text 15:1, quiet 8:1, dim 5.6:1 */
-  --text: #eef2f8;
-  --text-quiet: #aab5c8;
-  --text-dim: #8895ab;
+  /* Typography */
+  --text: #f8fafc;
+  --text-quiet: #94a3b8;
+  --text-dim: #8493a8;
 
-  /* Signal */
+  /* Signal & Interactive */
   --accent: #2dd4bf;
   --accent-bright: #5eead4;
-  --accent-glow: rgba(45, 212, 191, 0.34);
+  --accent-glow: rgba(45, 212, 191, 0.25);
   --accent-soft: rgba(45, 212, 191, 0.12);
   --on-accent: #04130f;
 
-  /* The pop colour. One per view, on the primary action only. */
-  --pop: #f6b45a;
-  --pop-soft: rgba(246, 180, 90, 0.14);
+  --pop: #f59e0b;
+  --pop-soft: rgba(245, 158, 11, 0.12);
   --on-pop: #1a1002;
 
   --paint: #f59e0b;
@@ -54,16 +50,13 @@
   --signal-pos: #10b981;
   --signal-neg: #f43f5e;
 
+  /* Hairlines & structural dividers */
   --border-subtle: rgba(255, 255, 255, 0.08);
   --border-mid: rgba(255, 255, 255, 0.14);
   --border-active: rgba(45, 212, 191, 0.45);
 
-  /* Atmosphere */
-  --grid-line: rgba(160, 185, 230, 0.07);
-  --grid-line-minor: rgba(160, 185, 230, 0.028);
-  /* Two light temperatures: a cool key behind the focal plate, a warm kicker low-left. */
-  --lamp: rgba(86, 128, 255, 0.20);
-  --lamp-warm: rgba(255, 150, 82, 0.15);
+  /* Technical architectural grid: razor-crisp, ultra-subtle */
+  --grid-line: rgba(255, 255, 255, 0.035);
 
   /* Compatibility aliases */
   --ground: var(--bg-base);
