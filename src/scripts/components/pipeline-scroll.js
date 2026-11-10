@@ -324,6 +324,96 @@ export function initPipelineScroll() {
         { xi: 1, yi: 1, fromDir: 3, action: 'right', toDir: 0 },
       ];
 
+      // British Traffic Rules: Determine planned maneuver for a vehicle at an intersection
+      function getCarManeuver(car, intObj) {
+        if (car.isEgo) {
+          const wp = EGO_ROUTE[car.routeIndex];
+          if (wp && wp.xi === intObj.xi && wp.yi === intObj.yi) {
+            if (wp.toDir === car.dir) return { maneuver: 'straight', toDir: wp.toDir };
+            if ((car.dir + 3) % 4 === wp.toDir) return { maneuver: 'left', toDir: wp.toDir };
+            return { maneuver: 'right', toDir: wp.toDir };
+          }
+          return { maneuver: 'straight', toDir: car.dir };
+        }
+
+        // Environment vehicles: planned intention
+        if (car.plannedTurnDir === undefined || car.plannedTurnInt !== intObj) {
+          const atWest = intObj.xi === 0 && car.dir === 2;
+          const atEast = intObj.xi === 2 && car.dir === 0;
+          const atNorth = intObj.yi === 0 && car.dir === 3;
+          const atSouth = intObj.yi === 2 && car.dir === 1;
+
+          let targetDir = car.dir;
+          if (atWest) {
+            targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+          } else if (atEast) {
+            targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
+          } else if (atNorth) {
+            targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+          } else if (atSouth) {
+            targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
+          } else {
+            const rnd = Math.random();
+            if (rnd < 0.25) targetDir = (car.dir + 1) % 4; // Right turn
+            else if (rnd < 0.50) targetDir = (car.dir + 3) % 4; // Left turn
+            else targetDir = car.dir; // Straight
+          }
+          car.plannedTurnDir = targetDir;
+          car.plannedTurnInt = intObj;
+        }
+
+        const toDir = car.plannedTurnDir;
+        if (toDir === car.dir) return { maneuver: 'straight', toDir };
+        if ((car.dir + 3) % 4 === toDir) return { maneuver: 'left', toDir };
+        return { maneuver: 'right', toDir };
+      }
+
+      // British Right-of-Way Rules (Highway Code):
+      // 1. Straight-through traffic has Priority over vehicles turning across traffic.
+      // 2. Left turns (near-side) do not cross opposing traffic, so they do NOT yield to the other side.
+      // 3. Right turns (across oncoming lane) MUST yield to oncoming straight and left-turn traffic.
+      function shouldYieldAtIntersection(carA, intObj) {
+        const { maneuver: maneuverA } = getCarManeuver(carA, intObj);
+        const currentDir = DIRS[carA.dir];
+        const oppositeDir = (carA.dir + 2) % 4;
+
+        for (let i = 0; i < vehicles.length; i++) {
+          const carB = vehicles[i];
+          if (carB.id === carA.id) continue;
+
+          const distBToCenter = Math.hypot(carB.x - intObj.x, carB.y - intObj.y);
+
+          // A. Direct lane clearance: wait only if another car is physically inside the intersection
+          //    directly crossing Car A's corridor within the junction
+          if (distBToCenter < HALF_ROAD + 4) {
+            const dxFromA = (carB.x - carA.x) * currentDir.dx + (carB.y - carA.y) * currentDir.dy;
+            const latFromA = Math.abs((carB.x - carA.x) * currentDir.dy - (carB.y - carA.y) * currentDir.dx);
+            if (dxFromA > 0 && dxFromA < 44 && latFromA < 15) {
+              return true; // Lane obstructed
+            }
+          }
+
+          // B. Right-turn Yielding: if Car A is turning right across oncoming traffic,
+          //    Car A MUST yield to oncoming vehicles traveling straight or turning left
+          if (maneuverA === 'right') {
+            if (carB.dir === oppositeDir) {
+              const dOpp = DIRS[oppositeDir];
+              const distBAlong = (intObj.x - carB.x) * dOpp.dx + (intObj.y - carB.y) * dOpp.dy;
+
+              if (distBAlong > -8 && distBAlong < 90) {
+                const { maneuver: maneuverB } = getCarManeuver(carB, intObj);
+                if (maneuverB === 'straight' || maneuverB === 'left') {
+                  return true; // Yield to oncoming traffic
+                }
+              }
+            }
+          }
+        }
+
+        // Straight traffic and left turns have right-of-way!
+        return false;
+      }
+
       // 11 Vehicles: Vehicle 0 is Luke's PPO Agent (Ego), Vehicles 1-10 are Traffic
       const vehicles = [
         {
@@ -725,8 +815,9 @@ export function initPipelineScroll() {
                       brakeReason = true;
                     }
                   } else {
-                    // Green light: Yield if intersection is currently occupied by another car
-                    if (intObj.occupantCarId && intObj.occupantCarId !== car.id && simTimeSec < intObj.occupantUntil) {
+                    // Green light: check British Right-of-Way rules (straight has priority; right-turns yield)
+                    const mustYield = shouldYieldAtIntersection(car, intObj);
+                    if (mustYield) {
                       const yieldThreshold = HALF_ROAD + (car.length / 2) + 6; // ~37px
                       const distToYield = distAlongDir - yieldThreshold;
                       if (distToYield <= 4) {
@@ -744,46 +835,14 @@ export function initPipelineScroll() {
                   if (distAlongDir <= HALF_ROAD + 4 && distAlongDir > 0 && !car.hasTurnedInInt) {
                     const signal = getSignalState(intObj, simTimeSec);
                     const isGreen = currentDir.isNS ? signal === 'NS_GREEN' : signal === 'EW_GREEN';
-                    const isClear = !intObj.occupantCarId || intObj.occupantCarId === car.id || simTimeSec >= intObj.occupantUntil;
+                    const mustYield = shouldYieldAtIntersection(car, intObj);
 
-                    if (isGreen && isClear) {
-                      // Claim the intersection
-                      intObj.occupantCarId = car.id;
-                      intObj.occupantUntil = simTimeSec + 2.5;
+                    if (isGreen && !mustYield) {
                       car.hasTurnedInInt = true;
-
-                      let targetDir = car.dir;
+                      const { toDir: targetDir } = getCarManeuver(car, intObj);
 
                       if (car.isEgo) {
-                        // Follow closed circuit
-                        const wp = EGO_ROUTE[car.routeIndex];
-                        if (wp && wp.xi === intObj.xi && wp.yi === intObj.yi) {
-                          targetDir = wp.toDir;
-                          car.routeIndex = (car.routeIndex + 1) % EGO_ROUTE.length;
-                        }
-                      } else {
-                        // Environment cars: boundary vs interior
-                        const atWest = intObj.xi === 0 && car.dir === 2;
-                        const atEast = intObj.xi === 2 && car.dir === 0;
-                        const atNorth = intObj.yi === 0 && car.dir === 3;
-                        const atSouth = intObj.yi === 2 && car.dir === 1;
-
-                        if (atWest) {
-                          targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
-                        } else if (atEast) {
-                          targetDir = intObj.yi === 0 ? 1 : (intObj.yi === 2 ? 3 : (Math.random() < 0.5 ? 1 : 3));
-                        } else if (atNorth) {
-                          targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
-                        } else if (atSouth) {
-                          targetDir = intObj.xi === 0 ? 0 : (intObj.xi === 2 ? 2 : (Math.random() < 0.5 ? 0 : 2));
-                        } else {
-                          const rnd = Math.random();
-                          if (rnd < 0.25) {
-                            targetDir = (car.dir + 1) % 4; // Turn Right
-                          } else if (rnd < 0.50) {
-                            targetDir = (car.dir + 3) % 4; // Turn Left
-                          }
-                        }
+                        car.routeIndex = (car.routeIndex + 1) % EGO_ROUTE.length;
                       }
 
                       if (targetDir !== car.dir) {
@@ -798,15 +857,11 @@ export function initPipelineScroll() {
                   }
                 }
 
-                // Release intersection once comfortably exited
+                // Reset once comfortably exited
                 const distToCenter = Math.hypot(car.x - intObj.x, car.y - intObj.y);
-                if (distToCenter > HALF_ROAD + 12) {
-                  if (intObj.occupantCarId === car.id) {
-                    intObj.occupantCarId = null;
-                  }
-                  if (car.hasTurnedInInt && distToCenter > HALF_ROAD + 16) {
-                    car.hasTurnedInInt = false;
-                  }
+                if (car.hasTurnedInInt && distToCenter > HALF_ROAD + 16) {
+                  car.hasTurnedInInt = false;
+                  car.plannedTurnDir = undefined;
                 }
               });
             }

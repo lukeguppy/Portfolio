@@ -98,11 +98,31 @@
   }
 
   .hero-subtitle {
-    font-size: clamp(1.05rem, 1.6vw, 1.3rem);
-    color: var(--text-quiet);
-    max-width: 52ch;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.45rem;
+    max-width: 58ch;
     margin: 0 auto 2.5rem;
-    text-shadow: 0 2px 14px rgba(8, 12, 20, 0.95);
+    text-align: center;
+  }
+
+  .hero-subtitle__meta {
+    font-family: var(--font-mono);
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.04em;
+    text-shadow: 0 2px 14px rgba(8, 12, 20, 0.98), 0 0 20px rgba(8, 12, 20, 0.95);
+  }
+
+  .hero-subtitle__topic {
+    font-family: var(--font-sans);
+    font-size: clamp(1.15rem, 1.8vw, 1.38rem);
+    font-weight: 500;
+    color: #f1f5f9;
+    line-height: 1.35;
+    text-shadow: 0 2px 16px rgba(8, 12, 20, 0.98), 0 0 24px rgba(8, 12, 20, 0.95);
   }
 
   /* Architectural Spec Strip — replaces the clunky floating card */
