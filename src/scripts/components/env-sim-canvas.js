@@ -568,7 +568,7 @@ export function initEnvSimCanvas(canvas, options = {}) {
       ctx.font = '500 9.5px "JetBrains Mono Variable", monospace';
       ctx.fillStyle = '#64748b';
       ctx.textAlign = 'left';
-      ctx.fillText('SIMULATION: 4-WAY INTERSECTION · DYNAMIC TRAFFIC FLOW & HAZARDS', 14, 20);
+      ctx.fillText('SIMULATION EXAMPLE: INTERSECTIONS · REALISTIC TRAFFIC FLOW', 14, 20);
     }
   }
 
