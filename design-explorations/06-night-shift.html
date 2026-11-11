@@ -1,0 +1,814 @@
+<!--
+  Direction 06: "Night Shift"
+  Thesis: Flips the color temperature and the spatial composition entirely.
+  Rich espresso-coal and amber foundation where Amber is the primary interactive color,
+  and vibrant Teal is reserved strictly for AI intelligence signals.
+  The layout is mirrored: the interactive terminal docks securely to the left edge of the screen,
+  while the hero identity anchors the right. A continuous horizontal neural ribbon weaves across the stage.
+
+  Palette Tokens:
+  - --coal: #100c09 (Deep grounding base)
+  - --char: #17120e (Warm charcoal page canvas)
+  - --surface: #201914 (Docked terminal body)
+  - --raised: #2b221b (Terminal chrome, composer, and segmented controls)
+  - --raised-hi: #382c22 (Hover states and active items)
+  - --ink: #f3eadc (Warm cream white text)
+  - --ink-2: #bdae98 (Warm secondary text)
+  - --ink-3: #877867 (Metadata and hairline rules)
+  - --amber: #efa43a (Strictly INTERACTIVE: links, buttons, active segments)
+  - --teal: #63c7b6 (LIVE AI SIGNAL: agent status beacon, thinking state, pulse cores)
+
+  Typography:
+  - Epilogue: Heavy, distinctive humanistic sans (weight 800 for name, 600 for titles).
+  - Martian Mono: Compressed technical monospace for timestamps, telemetry, and terminal prompts.
+
+  Problem Solutions:
+  - Compositional Mirroring: Chat window docks flush to the left viewport edge with a warm volumetric drop shadow to the right; Luke Guppy headline is right-aligned.
+  - Signal Ribbon Canvas: Neural net is framed in a tight horizontal ribbon (40% hero height) that traverses behind the components.
+  - Semantic Color Flip: Amber drives the human touch (clickable, active); Teal illuminates the machine cognition.
+  - Explore: Big typographic rows running full width with baseline-aligned descriptions.
+  - Timeline: Clean chronological column list with teal status beacon on AlphaSights.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy — Night Shift (Direction 06)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Epilogue:wght@400;500;600;700;800;900&family=Martian+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --coal: #100c09;
+    --char: #17120e;
+    --surface: #201914;
+    --raised: #2b221b;
+    --raised-hi: #382c22;
+    --ink: #f3eadc;
+    --ink-2: #bdae98;
+    --ink-3: #877867;
+    --line: rgba(240, 210, 170, 0.12);
+    --line-subtle: rgba(240, 210, 170, 0.06);
+
+    --amber: #efa43a;
+    --teal: #63c7b6;
+
+    --font-display: "Epilogue", sans-serif;
+    --font-mono: "Martian Mono", monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--char);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------------- NAV ---------------- */
+  .site-header {
+    padding: 1.75rem 2.5rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 86rem;
+    margin: 0 auto;
+    position: relative;
+    z-index: 50;
+  }
+  .brand-mark {
+    font-size: 1.25rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+  .nav-segmented {
+    display: flex;
+    align-items: center;
+    background: var(--surface);
+    padding: 0.35rem 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--line);
+    gap: 0.25rem;
+  }
+  .nav-tab {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    padding: 0.35rem 0.85rem;
+    border-radius: 6px;
+    transition: all 160ms var(--ease);
+  }
+  .nav-tab:hover { color: var(--ink); }
+  .nav-tab.is-active {
+    background: var(--raised-hi);
+    color: var(--amber);
+  }
+  .nav-socials {
+    display: flex;
+    gap: 1rem;
+    color: var(--ink-2);
+    margin-left: 1rem;
+  }
+  .nav-socials a:hover { color: var(--amber); }
+  .nav-socials svg { width: 17px; height: 17px; fill: currentColor; }
+
+  /* ---------------- HERO STAGE (MIRRORED) ---------------- */
+  .hero-stage {
+    position: relative;
+    min-height: min(100vh, 880px);
+    display: grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 4rem;
+    align-items: center;
+    padding: 2rem 0 4rem;
+  }
+
+  /* Horizontal Neural Signal Ribbon */
+  .neural-ribbon-container {
+    position: absolute;
+    top: 25%;
+    left: 0;
+    right: 0;
+    height: 50%;
+    pointer-events: auto;
+    z-index: 1;
+    mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 15%, black 85%, transparent 100%);
+    opacity: 0.75;
+  }
+
+  /* Docked Left Window */
+  .docked-window {
+    position: relative;
+    z-index: 10;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: none;
+    border-radius: 0 18px 18px 0;
+    box-shadow: 20px 25px 60px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    max-width: 36rem;
+  }
+
+  .window-topbar {
+    padding: 0.85rem 1.5rem;
+    background: var(--raised);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--line-subtle);
+  }
+  .window-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--teal);
+  }
+  .window-beacon {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+    box-shadow: 0 0 8px rgba(99, 199, 182, 0.7);
+  }
+
+  .window-presets {
+    display: flex;
+    background: var(--raised);
+    padding: 0.35rem 0.75rem;
+    gap: 0.35rem;
+    border-bottom: 1px solid var(--line-subtle);
+  }
+  .window-chip {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--ink-2);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.45rem 0.3rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 160ms var(--ease);
+  }
+  .window-chip:hover { color: var(--ink); }
+  .window-chip.is-active {
+    background: var(--surface);
+    color: var(--amber);
+  }
+
+  .window-body {
+    padding: 1.5rem;
+    min-height: 19rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.15rem;
+  }
+  .window-bubble {
+    align-self: flex-end;
+    background: var(--raised);
+    color: var(--ink);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    padding: 0.55rem 0.95rem;
+    border-radius: 12px 12px 2px 12px;
+    border: 1px solid var(--line);
+    max-width: 85%;
+  }
+
+  .window-stream {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    line-height: 1.58;
+  }
+  .window-stream strong { color: var(--ink); font-weight: 700; }
+  .window-thinking {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--teal);
+  }
+  .window-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--line-subtle);
+  }
+  .ag-b { display: flex; flex-direction: column; gap: 0.15rem; }
+  .ag-bt { font-size: 0.86rem; color: var(--ink); font-weight: 700; }
+  .ag-bd { margin: 0; font-size: 0.84rem; color: var(--ink-2); }
+
+  .ag-cur {
+    display: inline-block;
+    width: 6px;
+    height: 0.95em;
+    vertical-align: -1px;
+    background: var(--teal);
+    margin-left: 2px;
+    animation: blk 0.8s infinite;
+  }
+  @keyframes blk { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+  .window-composer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.85rem 1.25rem;
+    background: var(--raised);
+    border-top: 1px solid var(--line);
+  }
+  .window-input-box {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    color: var(--ink);
+  }
+  .window-send-btn {
+    background: var(--amber);
+    color: #100c09;
+    border: none;
+    padding: 0.45rem 0.85rem;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    font-weight: 700;
+    cursor: pointer;
+  }
+
+  /* Right-Aligned Identity Hero */
+  .hero-identity-right {
+    position: relative;
+    z-index: 10;
+    text-align: right;
+    padding-right: 3.5rem;
+  }
+  .hero-name-big {
+    font-size: clamp(3.2rem, 5.8vw, 5.2rem);
+    font-weight: 900;
+    letter-spacing: -0.04em;
+    line-height: 0.98;
+    margin: 0 0 1rem;
+    color: var(--ink);
+  }
+  .hero-role-line {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--ink-2);
+    margin: 0 0 1.75rem;
+  }
+  .hero-role-line strong { color: var(--ink); font-weight: 700; }
+  .hero-lead-text {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    color: var(--ink-2);
+    max-width: 48ch;
+    margin: 0 0 2rem auto;
+  }
+  .hero-lead-text strong { color: var(--ink); }
+  .hero-nav-actions {
+    display: flex;
+    justify-content: flex-end;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid var(--line);
+  }
+  .hero-action-prime {
+    color: var(--amber);
+    font-weight: 700;
+    font-size: 0.95rem;
+  }
+  .hero-action-sec {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: var(--ink-3);
+  }
+  .hero-action-sec a:hover { color: var(--ink); }
+
+  /* ---------------- SECTION: EXPLORE (FULL-WIDTH ROWS) ---------------- */
+  .section-explore {
+    padding: 6rem 2.5rem;
+    max-width: 86rem;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+  }
+  .explore-head-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 3rem;
+  }
+  .explore-rows {
+    display: flex;
+    flex-direction: column;
+  }
+  .explore-row-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 2.25rem 0;
+    border-bottom: 1px solid var(--line);
+    transition: transform 180ms var(--ease);
+  }
+  .explore-row-item:hover { transform: translateX(8px); }
+  .explore-row-title {
+    font-size: 2rem;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .explore-row-item:hover .explore-row-title { color: var(--amber); }
+  .explore-row-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    max-width: 52ch;
+    text-align: right;
+  }
+
+  /* ---------------- SECTION: TIMELINE ---------------- */
+  .section-timeline {
+    padding: 6rem 2.5rem;
+    max-width: 86rem;
+    margin: 0 auto;
+    border-top: 1px solid var(--line);
+  }
+  .timeline-head-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin: 0 0 3.5rem;
+  }
+  .timeline-column-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.5rem;
+    border-left: 2px solid var(--line);
+    padding-left: 2rem;
+  }
+  .timeline-item {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .timeline-dot {
+    position: absolute;
+    left: -2rem;
+    top: 6px;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--ink-3);
+    transform: translateX(-5px);
+  }
+  .timeline-item.is-live .timeline-dot {
+    background: var(--teal);
+    box-shadow: 0 0 10px rgba(99, 199, 182, 0.8);
+  }
+  .timeline-period {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--ink-3);
+  }
+  .timeline-company {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .timeline-role {
+    font-size: 0.92rem;
+    font-weight: 600;
+    color: var(--amber);
+  }
+  .timeline-item:not(.is-live) .timeline-role { color: var(--ink-2); }
+  .timeline-summary {
+    margin: 0.3rem 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+    max-width: 65ch;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 3rem 2.5rem;
+    background: var(--coal);
+    border-top: 1px solid var(--line);
+    font-size: 0.86rem;
+    color: var(--ink-3);
+  }
+  .footer-inner {
+    max-width: 86rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 960px) {
+    .hero-stage { grid-template-columns: 1fr; gap: 3rem; }
+    .docked-window { border-left: 1px solid var(--line); border-radius: 18px; margin: 0 1.5rem; }
+    .hero-identity-right { text-align: left; padding: 0 1.5rem; }
+    .hero-lead-text { margin: 0 0 2rem 0; }
+    .hero-nav-actions { justify-content: flex-start; }
+    .explore-row-item { flex-direction: column; gap: 0.5rem; }
+    .explore-row-desc { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+    <div class="brand-mark">Luke Guppy</div>
+    <div style="display: flex; align-items: center;">
+      <nav aria-label="Main" class="nav-segmented">
+        <a href="#" class="nav-tab is-active">Home</a>
+        <a href="#" class="nav-tab">About Me</a>
+        <a href="#" class="nav-tab">Dissertation</a>
+        <a href="#" class="nav-tab">Playground</a>
+        <a href="#" class="nav-tab">Contact</a>
+      </nav>
+      <div class="nav-socials">
+        <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+        </a>
+        <a href="https://github.com/lukeguppy" target="_blank" rel="noopener" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Mirrored Hero Stage -->
+    <section class="hero-stage">
+      <!-- Horizontal Signal Ribbon Neural Net -->
+      <div class="neural-ribbon-container">
+        <canvas id="neural-canvas" style="width:100%; height:100%; display:block;"></canvas>
+      </div>
+
+      <!-- Docked Left Window (Chat) -->
+      <aside class="docked-window" data-agent-root aria-label="Interactive Terminal Window">
+        <div class="window-topbar">
+          <div class="window-badge">
+            <span class="window-beacon"></span>
+            <span>luke.agent // session active</span>
+          </div>
+          <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-3);">PORT 8080</span>
+        </div>
+
+        <div class="window-presets">
+          <button class="window-chip is-active" data-agent-chip="intro">Overview</button>
+          <button class="window-chip" data-agent-chip="alphasights">AlphaSights Role</button>
+          <button class="window-chip" data-agent-chip="experience">Past Experience</button>
+          <button class="window-chip" data-agent-chip="projects">Projects</button>
+        </div>
+
+        <div class="window-body">
+          <div class="window-bubble" data-agent-q hidden></div>
+
+          <div class="window-stream">
+            <div class="window-thinking" data-agent-thinking hidden>
+              <span>Computing reply...</span>
+            </div>
+            <div data-agent-summary></div>
+            <div class="window-bullets" data-agent-bullets></div>
+          </div>
+        </div>
+
+        <div class="window-composer">
+          <div class="window-input-box">
+            <span style="color: var(--amber);">&gt; </span>
+            <span data-agent-input></span>
+            <span class="ag-cur" data-agent-caret></span>
+          </div>
+          <button class="window-send-btn" data-agent-send type="button">SEND</button>
+        </div>
+      </aside>
+
+      <!-- Right Aligned Identity Hero -->
+      <div class="hero-identity-right">
+        <h1 class="hero-name-big">Luke Guppy</h1>
+        <div class="hero-role-line">AI Software Engineer @ <strong>AlphaSights</strong></div>
+        <p class="hero-lead-text">
+          Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.
+        </p>
+        <div class="hero-nav-actions">
+          <a href="#" class="hero-action-prime">Experience ➔</a>
+          <div class="hero-action-sec">
+            <a href="#">Dissertation</a>
+            <a href="#">Playground</a>
+            <a href="#">Contact Me</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Full-Width Typographic Rows (Explore) -->
+    <section class="section-explore">
+      <h2 class="explore-head-title">Explore Portals</h2>
+      <div class="explore-rows">
+        <a href="#" class="explore-row-item">
+          <h3 class="explore-row-title">Experience</h3>
+          <p class="explore-row-desc">Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
+        </a>
+
+        <a href="#" class="explore-row-item">
+          <h3 class="explore-row-title">Dissertation</h3>
+          <p class="explore-row-desc">Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
+        </a>
+
+        <a href="#" class="explore-row-item">
+          <h3 class="explore-row-title">Playground</h3>
+          <p class="explore-row-desc">Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
+        </a>
+
+        <a href="#" class="explore-row-item">
+          <h3 class="explore-row-title">Contact Me</h3>
+          <p class="explore-row-desc">Get in touch directly via email, LinkedIn, or GitHub.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Chronological Log (Timeline) -->
+    <section class="section-timeline">
+      <h2 class="timeline-head-title">Career Milestones</h2>
+      <div class="timeline-column-list">
+        <article class="timeline-item is-live">
+          <div class="timeline-dot"></div>
+          <span class="timeline-period">FEB 2026 – PRESENT</span>
+          <span class="timeline-company">AlphaSights</span>
+          <span class="timeline-role">Software Engineer I — AI Team</span>
+          <p class="timeline-summary">Building internal and external AI chat platforms, client-facing MCP servers, custom engineering tools, and automated AI data processing pipelines.</p>
+        </article>
+
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <span class="timeline-period">AUG 2024 – JAN 2026</span>
+          <span class="timeline-company">Leonardo Helicopters</span>
+          <span class="timeline-role">Graduate Software Engineer</span>
+          <p class="timeline-summary">Autonomy &amp; Tactical Processing: Reinforcement learning drone flight simulations in Python/Docker, combinatorial optimization solvers, and mission management microservices in C++ and gRPC.</p>
+        </article>
+
+        <article class="timeline-item">
+          <div class="timeline-dot"></div>
+          <span class="timeline-period">2021 – 2024</span>
+          <span class="timeline-company">University of Warwick</span>
+          <span class="timeline-role">BSc Computer Science (1st Class Hons)</span>
+          <p class="timeline-summary">Graduated with First-Class Honours. Engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous vehicle navigation in complex urban traffic environments.</p>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <span>Night Shift Theme · Warm Coal &amp; Amber · © 2026 Luke Guppy</span>
+      <a href="mailto:lukewguppy@gmail.com" style="color: var(--amber);">lukewguppy@gmail.com</a>
+    </div>
+  </footer>
+
+  <script>
+    const BRIEFINGS = {
+      intro: {
+        prompt: 'Tell me about Luke',
+        summary: 'Luke Guppy is an AI Software Engineer at AlphaSights with a First-Class Computer Science degree from the University of Warwick, specialising in backend AI systems, MCP servers, and workflow automation.',
+        highlights: ['AI Software Engineer at AlphaSights', 'First-Class Computer Science degree'],
+        bullets: [
+          { title: 'Current role at AlphaSights', detail: 'Building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing.' },
+          { title: 'Previous experience at Leonardo Helicopters', detail: 'Graduate Software Engineer building reinforcement learning simulations, optimisation solvers, and C++/Docker mission systems.' },
+          { title: 'Core languages & technologies', detail: 'Python, TypeScript, C++, C#, SQL, Docker, and modern LLM & MCP frameworks.' },
+        ],
+      },
+      alphasights: {
+        prompt: 'What does Luke build on the AI Team at AlphaSights?',
+        summary: 'On the AI team at AlphaSights, Luke engineers the backend platforms, tool integrations, and data workflows that power internal operations and client-facing AI products.',
+        highlights: ['backend platforms, tool integrations, and data workflows'],
+        bullets: [
+          { title: 'Internal & external AI chat platforms', detail: 'Developed the internal AI chat platform and now designs and implements the external-facing AI chat alongside its custom tool integrations.' },
+          { title: 'Client-facing MCP server & tooling', detail: 'Designing and implementing the client-facing Model Context Protocol (MCP) server to expose structured tools and data across external workflows.' },
+          { title: 'AI workflows & data processing jobs', detail: 'Building AI jobs for automated data processing and evaluating new AI capabilities to shape the company’s core AI foundations.' },
+        ],
+      },
+      experience: {
+        prompt: 'What is his background before AlphaSights?',
+        summary: 'Before joining AlphaSights, Luke spent 18 months as a Graduate Software Engineer at Leonardo Helicopters after graduating with First-Class Honours in Computer Science from the University of Warwick.',
+        highlights: ['Graduate Software Engineer at Leonardo Helicopters', 'First-Class Honours'],
+        bullets: [
+          { title: 'Leonardo Helicopters — Autonomy', detail: 'Implemented task-assignment optimisation solvers, built Python ROS2/Docker drone simulations for reinforcement learning, and designed behaviour tree architectures.' },
+          { title: 'Leonardo Helicopters — Tactical Processing', detail: 'Developed a C++/Docker mission management system with decision-tree infrastructure and built gRPC services for multi-system communication.' },
+          { title: 'University of Warwick — BSc Computer Science (1st)', detail: 'Graduated with First-Class Honours; engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous urban driving.' },
+        ],
+      },
+      projects: {
+        prompt: 'What projects has Luke built?',
+        summary: 'Luke has built technical projects spanning deep reinforcement learning, transformer architectures, combinatorial optimisation, network simulation, and interactive browser apps.',
+        highlights: ['deep reinforcement learning', 'transformer architectures'],
+        bullets: [
+          { title: 'Autonomous Navigation Dissertation (C#, Unity, PPO)', detail: 'Trained a Proximal Policy Optimisation reinforcement learning agent to control an autonomous vehicle through multi-lane traffic and intersections.' },
+          { title: 'AI & Systems Projects (Python, C++, C#)', detail: 'Built a scaled-down Transformer next-token predictor, an AI dynamic-pricing scheduler, a C++/NS-3 delay-tolerant network simulator, and a C#/WPF wave diffraction simulator.' },
+          { title: 'Interactive Browser Playground (JavaScript)', detail: 'Created interactive web versions of a Wordle Solver, Chess, Countries Quiz, Map Plotter, and Block Blast.' },
+        ],
+      },
+    };
+
+    function createNeuralNet(canvas) {
+      const o = {
+        layers: [3, 5, 7, 9, 9, 7, 5, 3],
+        lineRGB: '240,210,170', lineAlpha: 0.08,
+        strongRGB: '99,199,182', strongAlpha: 0.18,
+        nodeRGB: '240,210,170', nodeAlpha: 0.35, nodeR: 1.6,
+        pulseRGB: ['99,199,182', '239,164,58'], pulseWeights: [0.75, 0.25],
+        hop: 1050, gap: [800, 1600],
+      };
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, layers = [], conns = [], passes = [], wait = 200, last = performance.now();
+
+      function build() {
+        layers = []; conns = [];
+        const pattern = o.layers;
+        const px = W * 0.04, sp = (W - px * 2) / (pattern.length - 1);
+        pattern.forEach((count, l) => {
+          const span = H * 0.7;
+          const y0 = (H - span) / 2, vs = span / (count - 1);
+          const layer = [];
+          for (let i = 0; i < count; i++) {
+            layer.push({ x: px + sp * l, y: y0 + vs * i, l });
+          }
+          layers.push(layer);
+        });
+        for (let l = 0; l < layers.length - 1; l++) {
+          layers[l].forEach((a) => {
+            layers[l + 1].slice(0, 3).forEach((b) => {
+              conns.push({ a, b, w: 0.2 + Math.random() * 0.8 });
+            });
+          });
+        }
+      }
+
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        W = r.width; H = r.height;
+        canvas.width = W; canvas.height = H;
+        build();
+      }
+
+      function frame(now) {
+        requestAnimationFrame(frame);
+        ctx.clearRect(0, 0, W, H);
+        for (const c of conns) {
+          ctx.strokeStyle = c.w > 0.7 ? `rgba(${o.strongRGB},${o.strongAlpha})` : `rgba(${o.lineRGB},${o.lineAlpha})`;
+          ctx.lineWidth = c.w > 0.7 ? 0.8 : 0.5;
+          ctx.beginPath(); ctx.moveTo(c.a.x, c.a.y); ctx.lineTo(c.b.x, c.b.y); ctx.stroke();
+        }
+        for (let i = passes.length - 1; i >= 0; i--) {
+          const p = passes[i];
+          const t = Math.min(1, (now - p.t0) / o.hop);
+          for (const q of p.pulses) {
+            const x = q.a.x + (q.b.x - q.a.x) * t, y = q.a.y + (q.b.y - q.a.y) * t;
+            ctx.fillStyle = `rgba(${p.rgb},0.85)`;
+            ctx.beginPath(); ctx.arc(x, y, 2.0, 0, 6.28); ctx.fill();
+          }
+          if (t >= 1) {
+            passes.splice(i, 1);
+            if (p.l < layers.length - 2) {
+              const nextNodes = p.pulses.map((q) => q.b);
+              const nextPulses = [];
+              nextNodes.forEach((n) => {
+                const targets = layers[p.l + 2] || [];
+                targets.slice(0, 2).forEach((b) => nextPulses.push({ a: n, b }));
+              });
+              if (nextPulses.length) passes.push({ t0: now, pulses: nextPulses, l: p.l + 1, rgb: p.rgb });
+            }
+          }
+        }
+        for (const L of layers) for (const n of L) {
+          ctx.fillStyle = `rgba(${o.nodeRGB},${o.nodeAlpha})`;
+          ctx.beginPath(); ctx.arc(n.x, n.y, o.nodeR, 0, 6.28); ctx.fill();
+        }
+        if (now - last > 1100) {
+          last = now;
+          const a = layers[0][Math.floor(Math.random() * layers[0].length)];
+          const b = layers[1][0];
+          passes.push({ t0: now, pulses: [{ a, b }], l: 0, rgb: o.pulseRGB[0] });
+        }
+      }
+
+      new ResizeObserver(resize).observe(canvas);
+      resize();
+      requestAnimationFrame(frame);
+    }
+
+    function createAgent(root) {
+      const $ = (s) => root.querySelector(s);
+      const input = $('[data-agent-input]'), caret = $('[data-agent-caret]'), q = $('[data-agent-q]');
+      const thinking = $('[data-agent-thinking]'), summary = $('[data-agent-summary]'), bullets = $('[data-agent-bullets]');
+      const chips = root.querySelectorAll('[data-agent-chip]');
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const CUR = '<span class="ag-cur"></span>';
+      let run = 0;
+
+      async function play(key) {
+        const tok = ++run, d = BRIEFINGS[key] || BRIEFINGS.intro;
+        input.textContent = ''; caret.hidden = false;
+        thinking.hidden = true; summary.innerHTML = ''; bullets.innerHTML = '';
+        await sleep(300); if (tok !== run) return;
+        for (let i = 1; i <= d.prompt.length; i++) {
+          if (tok !== run) return;
+          input.textContent = d.prompt.slice(0, i);
+          await sleep(25);
+        }
+        await sleep(250); if (tok !== run) return;
+        q.textContent = d.prompt; q.hidden = false; input.textContent = '';
+        thinking.hidden = false;
+        await sleep(550); if (tok !== run) return;
+        thinking.hidden = true;
+        for (let i = 3; i <= d.summary.length; i += 3) {
+          if (tok !== run) return;
+          summary.innerHTML = d.summary.slice(0, i) + CUR;
+          await sleep(10);
+        }
+        summary.textContent = d.summary;
+        await sleep(120);
+        for (const b of d.bullets) {
+          if (tok !== run) return;
+          const row = document.createElement('div'); row.className = 'ag-b';
+          row.innerHTML = `<strong class="ag-bt">${b.title}</strong><p class="ag-bd">${b.detail}</p>`;
+          bullets.appendChild(row);
+          await sleep(60);
+        }
+      }
+
+      chips.forEach((c) => c.addEventListener('click', () => {
+        chips.forEach((x) => x.classList.toggle('is-active', x === c));
+        play(c.dataset.agentChip);
+      }));
+      play('intro');
+    }
+
+    createNeuralNet(document.getElementById('neural-canvas'));
+    createAgent(document.querySelector('[data-agent-root]'));
+  </script>
+</body>
+</html>

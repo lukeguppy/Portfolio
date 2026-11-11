@@ -1,213 +1,1719 @@
 ---
-layout: base.njk
-title: Home
-pageTitle: Luke Guppy
+title: Luke Guppy
 description: Luke Guppy — AI Software Engineer at AlphaSights.
-pageCss: home
-pageJs: home
 ---
+<!--
+  Direction 07: "Cinematic Single-Actor Genesis & Pure Spatial Choreography"
+  Designed for Luke Guppy — AI Software Engineer @ AlphaSights
 
-<!-- Fixed atmosphere: clean dark ground + serene neural constellation network matching About Me -->
-<div class="atmosphere" aria-hidden="true">
-    <div id="home-bg-container" class="home-bg-container"></div>
-</div>
+  CHOREOGRAPHY TIMELINE:
+  1. [0.0s - 0.7s] Pure obsidian void (#030712).
+     Two hairline laser beams slice from viewport margins and collide dead-center.
+  2. [0.7s - 1.0s] Genesis spark pops and condenses into THE ONE CURSOR.
+  3. [1.0s - 3.1s] Anticipation: The cursor blinks 3 full cycles in dead-center.
+  4. [3.1s - 4.0s] Types "Luke Guppy" — the name STAYS CENTERED.
+  5. [4.0s - 5.0s] Cursor moves down to subtitle line and types:
+     "AI Software Engineer @ AlphaSights" (centered).
+  6. [5.0s - 7.5s] Cursor moves down to description line and types EXACT portfolio copy:
+     "Software Engineer on the AI team at AlphaSights, building internal and external
+     AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data
+     processing that shape the company’s AI foundations." (centered).
+  7. [7.5s - 8.7s] THE SPATIAL HANDOFF:
+     - The intro block smoothly glides from center to the left column.
+     - The AI chatbot card smoothly transitions in on the right column.
+     - Top nav drops in and neural canvas blooms in the background.
+  8. [8.7s - 9.6s] THE AUTONOMOUS FLIGHT:
+     - The ONE cursor detaches from the description on the left and arcs smoothly
+       across the chasm into the chatbot prompt input bar on the right.
+  9. [9.6s - 10.6s] WAITS A FULL SECOND:
+     - Blinks inside the prompt bar.
+  10. [10.6s+] Types "Tell me about Luke", triggers Send, live briefing streams, and scroll unlocks.
+-->
+<!doctype html>
+<html lang="en" class="is-locked">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy — Cinematic Genesis & Fluid Orchestration</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --void: #030712;
+    --canvas-bg: #040915;
+    --surface: #080e1d;
+    --surface-elevated: #0d1527;
+    --card: #111b30;
+    --card-bar: #090f1d;
+    --card-raised: #182642;
+    --border: rgba(255, 255, 255, 0.08);
+    --border-subtle: rgba(255, 255, 255, 0.04);
 
-<!-- 1. HERO STAGE + SELF-PLAYING AI BRIEFING SHOWCASE -->
-<section class="home-hero">
-    <div class="home-hero__grid">
+    --teal: #2dd4bf;
+    --teal-glow: rgba(45, 212, 191, 0.35);
+    --amber: #f59e0b;
+    --amber-glow: rgba(245, 158, 11, 0.35);
 
-        <!-- Left column: Identity & primary navigation -->
-        <div class="home-hero__intro">
-            <h1 class="home-hero__title">
-                <span class="home-hero__name">Luke Guppy</span>
-                <span class="home-hero__statement">AI Software Engineer @ AlphaSights</span>
-            </h1>
+    --ink: #f8fafc;
+    --ink-2: #94a3b8;
+    --ink-3: #64748b;
 
-            <p class="home-hero__lead">
-                Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.
-            </p>
+    --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+    
+    --ease-glide: cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-smooth: cubic-bezier(0.23, 1, 0.32, 1);
+  }
 
-            <nav class="home-hero__actions" aria-label="Explore portfolio pages">
-                <a href="{{ '/about-me/' | url }}" class="home-nav-link">
-                    <span class="home-nav-link__label">Experience</span>
-                </a>
-                <a href="{{ '/dissertation/' | url }}" class="home-nav-link">
-                    <span class="home-nav-link__label">Dissertation</span>
-                </a>
-                <a href="{{ '/playground/' | url }}" class="home-nav-link">
-                    <span class="home-nav-link__label">Playground</span>
-                </a>
-                <a href="{{ '/contact/' | url }}" class="home-nav-link">
-                    <span class="home-nav-link__label">Contact Me</span>
-                </a>
-            </nav>
+  *, *::before, *::after { box-sizing: border-box; }
+  
+  html {
+    scroll-behavior: smooth;
+  }
+
+  html, body {
+    margin: 0;
+    padding: 0;
+    background-color: var(--void);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    scrollbar-width: none; /* Hide scrollbar Firefox */
+    -ms-overflow-style: none; /* Hide scrollbar IE/Edge */
+  }
+
+  body {
+    overflow-x: clip; /* Modern clean clip that preserves root scroll-snap */
+  }
+
+  /* Completely hide scrollbars for Chrome, Safari, Opera */
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
+
+  /* Strict scroll lock while the cinematic prologue unfolds */
+  html.is-locked, body.is-locked {
+    overflow: hidden !important;
+    height: 100vh !important;
+    max-height: 100vh !important;
+  }
+  html.is-locked #explore {
+    display: none !important;
+  }
+
+  /* Native desktop slide-snap physics between 100vh sections */
+  @media (min-width: 961px) {
+    html:not(.is-locked) {
+      scroll-snap-type: y mandatory;
+    }
+    .hero-viewport {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+    .section-explore {
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------------- BEAM COLLISION & GENESIS ---------------- */
+  #cinematic-stage {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+  }
+  .laser-beam {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(45, 212, 191, 0.4) 40%, #ffffff 95%, #ffffff);
+    box-shadow: 0 0 16px #ffffff, 0 0 32px var(--teal), 0 0 60px rgba(45, 212, 191, 0.5);
+    transform: translateY(-50%);
+    will-change: width, opacity;
+  }
+  .laser-left {
+    left: 0;
+    width: 0%;
+  }
+  .laser-right {
+    right: 0;
+    width: 0%;
+    background: linear-gradient(-90deg, transparent, rgba(45, 212, 191, 0.4) 40%, #ffffff 95%, #ffffff);
+  }
+
+  /* ---------------- THE SINGLE ACTOR CURSOR (CLEAN VERTICAL CARET) ---------------- */
+  .the-cursor {
+    display: inline-block;
+    width: 3px;
+    height: 1.05em;
+    vertical-align: -0.1em;
+    background: #ffffff;
+    box-shadow: 0 0 10px #ffffff, 0 0 20px var(--teal);
+    margin-left: 3px;
+    border-radius: 1px;
+    opacity: 0;
+    visibility: hidden;
+    transition: background 250ms ease, box-shadow 250ms ease;
+  }
+  /* The exact moment the beams collide: the vertical caret zips open from the collision seam */
+  .the-cursor.is-opening {
+    opacity: 1 !important;
+    visibility: visible !important;
+    clip-path: inset(50% 0);
+    animation: openVerticalCaret 240ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  @keyframes openVerticalCaret {
+    0% {
+      clip-path: inset(50% 0);
+      box-shadow: 0 0 24px 4px #ffffff, 0 0 45px var(--teal);
+    }
+    100% {
+      clip-path: inset(0% 0);
+      box-shadow: 0 0 10px #ffffff, 0 0 20px var(--teal);
+    }
+  }
+  .the-cursor.is-blinking {
+    opacity: 1;
+    visibility: visible;
+    clip-path: none;
+    animation: cursorBlink 800ms infinite;
+  }
+  .the-cursor.is-typing {
+    opacity: 1 !important;
+    visibility: visible !important;
+    clip-path: none !important;
+    animation: none !important;
+  }
+  .the-cursor.is-teal {
+    background: var(--teal) !important;
+    box-shadow: 0 0 6px rgba(45, 212, 191, 0.45) !important;
+  }
+  @keyframes cursorBlink {
+    0%, 49.9% {
+      opacity: 1;
+      visibility: visible;
+    }
+    50%, 100% {
+      opacity: 0;
+      visibility: hidden;
+    }
+  }
+
+  /* ---------------- SITE HEADER & FLOATING NAV ---------------- */
+  .site-header {
+    position: fixed;
+    top: 1.75rem;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    display: flex;
+    justify-content: center;
+    padding: 0 1.5rem;
+    opacity: 0;
+    transform: translateY(-30px);
+    transition: opacity 900ms var(--ease-glide), transform 900ms var(--ease-glide);
+    pointer-events: none;
+  }
+  .site-header.is-visible {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+  }
+
+  .nav-pill {
+    display: flex;
+    align-items: center;
+    gap: 2.25rem;
+    padding: 0.75rem 1.85rem;
+    min-height: 3.4rem;
+    box-sizing: border-box;
+    background: rgba(10, 17, 34, 0.88);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 9999px;
+    box-shadow: 0 20px 48px -8px rgba(0, 0, 0, 0.7), inset 0 1px 0 rgba(255, 255, 255, 0.12);
+  }
+  .nav-brand {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #ffffff;
+    letter-spacing: -0.015em;
+    white-space: nowrap;
+  }
+  .nav-list {
+    display: flex;
+    gap: 1.75rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .nav-link {
+    font-size: 0.93rem;
+    color: var(--ink-2);
+    font-weight: 500;
+    transition: color 150ms ease;
+    white-space: nowrap;
+  }
+  .nav-link:hover { color: #ffffff; }
+  .nav-link.is-active {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .nav-socials {
+    display: flex;
+    align-items: center;
+    gap: 1.1rem;
+    padding-left: 1.1rem;
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    color: var(--ink-2);
+  }
+  .nav-socials a {
+    display: flex;
+    align-items: center;
+    transition: color 150ms ease, transform 150ms ease;
+  }
+  .nav-socials a:hover {
+    color: var(--teal);
+    transform: translateY(-1px);
+  }
+  .nav-socials svg { width: 18px; height: 18px; fill: currentColor; }
+
+  /* ---------------- NEURAL BACKGROUND CANVAS ---------------- */
+  .neural-bg-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 1600ms var(--ease-glide);
+  }
+  .neural-bg-canvas.is-active {
+    opacity: 0.9;
+  }
+
+  /* ---------------- HERO STAGE (2-COLUMN GRID) ---------------- */
+  .hero-viewport {
+    position: relative;
+    min-height: 100vh;
+    max-width: 84rem;
+    margin: 0 auto;
+    padding: 7.5rem 2.5rem 4rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 10;
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.05fr;
+    gap: 4.5rem;
+    align-items: center;
+    width: 100%;
+  }
+
+  /* Left Column: Intro Text */
+  .hero-intro-col {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 38rem;
+    will-change: transform;
+    text-align: center;
+  }
+  .hero-intro-col.is-docked {
+    text-align: left;
+  }
+  .hero-intro-col.is-docked .hero-title,
+  .hero-intro-col.is-docked .hero-role {
+    justify-content: flex-start;
+  }
+
+  .hero-title {
+    font-size: clamp(3.2rem, 5.4vw, 4.8rem);
+    font-weight: 800;
+    letter-spacing: -0.04em;
+    line-height: 1.05;
+    margin: 0 0 0.85rem;
+    color: #ffffff;
+    min-height: 1.15em;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: justify-content 600ms ease;
+  }
+
+  .hero-role {
+    font-size: clamp(1.2rem, 2vw, 1.45rem);
+    font-weight: 600;
+    color: var(--teal);
+    margin: 0 0 1.35rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 1.6em;
+    transition: justify-content 600ms ease;
+  }
+
+  .hero-bio {
+    font-size: 1.05rem;
+    line-height: 1.72;
+    color: var(--ink-2);
+    margin: 0;
+    min-height: 4.5em;
+  }
+  .hero-bio strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Right Column: AI Chatbot Card */
+  .chat-terminal-col {
+    position: relative;
+    z-index: 20;
+    opacity: 0;
+    transform: translateX(50px);
+    pointer-events: none;
+    transition: opacity 350ms ease-out, transform 800ms var(--ease-glide);
+  }
+  .chat-terminal-col.is-visible {
+    opacity: 1;
+    transform: translateX(0);
+    pointer-events: auto;
+  }
+
+  .chat-card {
+    background: rgba(3, 7, 18, 0.28);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 18px;
+    box-shadow: 
+      0 20px 50px -10px rgba(0, 0, 0, 0.4), 
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 590px; /* Ample height so all 3 bullets fit with breathing room */
+  }
+
+  /* Clean, minimalist text tabs with underline indicator (No pills, no boxes) */
+  .chat-tabs {
+    display: flex;
+    align-items: center;
+    gap: 1.6rem;
+    padding: 0 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background: transparent;
+    height: 48px;
+    flex: 0 0 auto;
+  }
+  .chat-tab {
+    position: relative;
+    background: transparent;
+    border: none;
+    color: #718096;
+    font-family: var(--font-sans);
+    font-size: 0.82rem;
+    font-weight: 500;
+    padding: 0.85rem 0;
+    cursor: pointer;
+    transition: color 150ms ease;
+  }
+  .chat-tab:hover {
+    color: #cbd5e1;
+  }
+  .chat-tab.is-active {
+    color: #ffffff;
+    font-weight: 600;
+  }
+  .chat-tab.is-active::after {
+    content: "";
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--teal);
+    border-radius: 2px 2px 0 0;
+  }
+
+  .chat-transcript {
+    padding: 1.15rem 1.4rem;
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+  .chat-transcript::-webkit-scrollbar {
+    display: none;
+  }
+
+  .chat-user-bubble {
+    align-self: flex-end;
+    background: rgba(255, 255, 255, 0.045);
+    color: #e2e8f0;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    padding: 0.35rem 0.75rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.09);
+    max-width: 85%;
+  }
+
+  .chat-reply-container {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.88rem;
+    color: #cbd5e1;
+    line-height: 1.58;
+    text-align: left;
+  }
+  .chat-reply-container strong {
+    color: #ffffff;
+    font-weight: 600;
+  }
+
+  /* Unconditional display:none for hidden elements */
+  [hidden],
+  .chat-status-bar[hidden],
+  .chat-user-bubble[hidden],
+  .chat-bullets-list:empty {
+    display: none !important;
+  }
+
+  /* Precise telemetry row */
+  .chat-status-bar {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    color: #94a3b8;
+    padding: 0.1rem 0;
+  }
+  .chat-status-bar.is-pending {
+    color: #f59e0b;
+  }
+  .chat-status-bar.is-finished {
+    color: #94a3b8;
+  }
+  .status-spinner {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border: 1.5px solid #f59e0b;
+    border-top-color: transparent;
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+  }
+  .status-check-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    color: var(--teal);
+  }
+  .status-check-icon svg {
+    width: 12px;
+    height: 12px;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* Clean editorial telemetry list (Anti-slop: zero nested cards, pure typography & negative space) */
+  .chat-bullets-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+    padding-top: 0.85rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .chat-bullet-row {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 0;
+    transition: color 150ms ease;
+  }
+  .chat-bullet-title {
+    font-size: 0.84rem;
+    color: #f8fafc;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: color 150ms ease;
+  }
+  .chat-bullet-title::before {
+    content: "";
+    display: inline-block;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--teal);
+    opacity: 0.85;
+    flex-shrink: 0;
+    transition: opacity 150ms ease, transform 150ms ease;
+  }
+  .chat-bullet-row:hover .chat-bullet-title::before {
+    opacity: 1;
+    transform: scale(1.25);
+  }
+  .chat-bullet-detail {
+    margin: 0;
+    font-size: 0.80rem;
+    color: #94a3b8;
+    line-height: 1.52;
+    padding-left: 0.75rem;
+    transition: color 150ms ease;
+  }
+  .chat-bullet-row:hover .chat-bullet-detail {
+    color: #cbd5e1;
+  }
+
+  /* Full-width translucent prompt section (No inner box, no send button) */
+  .chat-composer {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0.95rem 1.4rem;
+    background: rgba(3, 7, 18, 0.2);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    color: #ffffff;
+    min-height: 3.2rem;
+    width: 100%;
+    box-sizing: border-box;
+    flex: 0 0 auto;
+  }
+  .composer-prompt-symbol {
+    color: var(--teal);
+    font-weight: 600;
+    margin-right: 0.55rem;
+    flex-shrink: 0;
+  }
+  .composer-prompt-input {
+    color: #ffffff;
+    white-space: pre-wrap;
+  }
+  .chat-composer .the-cursor {
+    margin-left: 1px !important;
+  }
+
+  /* Scroll cue base (hidden by default, smoothly fades in when .is-shown) */
+  .scroll-cue {
+    position: absolute;
+    bottom: 2.25rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(10px);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.65rem;
+    color: var(--ink-3);
+    text-decoration: none;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 320ms ease, transform 320ms ease, color 180ms ease;
+    z-index: 15;
+    cursor: pointer;
+  }
+  .scroll-cue:hover {
+    color: var(--teal);
+  }
+  .scroll-cue.is-shown {
+    opacity: 0.75;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .scroll-cue.is-shown:hover {
+    opacity: 1;
+    color: var(--teal);
+  }
+  .scroll-cue svg {
+    display: block;
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+    animation: bounceDown 2.2s ease-in-out infinite;
+  }
+  @keyframes bounceDown {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(7px); }
+  }
+
+  /* Upward return chevron in Section 2 (pinned beneath top nav) */
+  .scroll-cue-up {
+    top: 5.5rem;
+    bottom: auto;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  .scroll-cue-up.is-shown {
+    opacity: 0.75;
+    pointer-events: auto;
+    transform: translateX(-50%) translateY(0);
+  }
+  .scroll-cue-up.is-shown:hover {
+    opacity: 1;
+    color: var(--teal);
+  }
+  .scroll-cue-up svg {
+    animation: bounceUp 2.2s ease-in-out infinite;
+  }
+  @keyframes bounceUp {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-7px); }
+  }
+
+  /* ---------------- SECTION 2: EXPLORE WORK (100VH FULL SCREEN) ---------------- */
+  .section-explore {
+    background: var(--void);
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+    padding: 6.5rem 3rem 4.5rem;
+    min-height: 100vh;
+  }
+  @media (min-width: 961px) {
+    .section-explore {
+      height: 100vh;
+      max-height: 100vh;
+      overflow: hidden;
+    }
+  }
+
+  .section-container {
+    max-width: 86rem;
+    width: 100%;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.12fr 0.88fr;
+    gap: 5rem;
+    align-items: stretch;
+  }
+
+  .section-heading {
+    font-size: 0.85rem;
+    font-family: var(--font-mono);
+    color: #64748b;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 2rem;
+    line-height: 1;
+  }
+
+  /* ---------------- ARCHITECTURAL EXPLORE DIRECTORY (PRECISION LEDGER) ---------------- */
+  .explore-col {
+    display: flex;
+    flex-direction: column;
+  }
+  .explore-ledger {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    flex: 1;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .ledger-row {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    flex: 1;
+    padding: 1.65rem 1.25rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    text-decoration: none;
+    transition: background 180ms ease, padding-left 180ms ease, transform 120ms ease;
+    border-radius: 8px;
+    margin: 0 -0.5rem;
+  }
+  .ledger-row:hover {
+    background: rgba(255, 255, 255, 0.035);
+    padding-left: 1.55rem;
+  }
+  .ledger-row:active {
+    transform: scale(0.99);
+  }
+  .ledger-row::before {
+    content: "";
+    position: absolute;
+    left: 0.25rem;
+    top: 50%;
+    transform: translateY(-50%) scaleY(0);
+    width: 2.5px;
+    height: 55%;
+    background: var(--teal);
+    border-radius: 2px;
+    transition: transform 180ms ease;
+  }
+  .ledger-row:hover::before {
+    transform: translateY(-50%) scaleY(1);
+  }
+  .ledger-title {
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #ffffff;
+    letter-spacing: -0.015em;
+    margin: 0;
+    transition: color 180ms ease;
+    white-space: nowrap;
+  }
+  .ledger-row:hover .ledger-title {
+    color: var(--teal);
+  }
+  .ledger-meta-text {
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    letter-spacing: -0.01em;
+    text-align: right;
+    transition: color 180ms ease;
+  }
+  .ledger-row:hover .ledger-meta-text {
+    color: #cbd5e1;
+  }
+
+  /* ---------------- CAREER TIMELINE ---------------- */
+  .timeline-col {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  .timeline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2.85rem;
+    justify-content: space-between;
+    flex: 1;
+    position: relative;
+    padding-left: 1.75rem;
+  }
+  /* Continuous, clean hairline track (no random filled-in section, no neon) */
+  .timeline-list::before {
+    content: "";
+    position: absolute;
+    top: 0.55rem;
+    bottom: 0.55rem;
+    left: 3px;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .timeline-item {
+    position: relative;
+    transition: transform 180ms ease;
+  }
+  /* Clean, solid dot (no circle-in-circle, no neon) */
+  .timeline-item::before {
+    content: "";
+    position: absolute;
+    left: -1.75rem;
+    top: 0.42rem;
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--teal);
+  }
+  .timeline-date {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: #64748b;
+    font-weight: 500;
+    margin-bottom: 0.25rem;
+  }
+  .timeline-role {
+    font-size: 1.12rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 0 0 0.25rem;
+    letter-spacing: -0.01em;
+  }
+  .timeline-company {
+    font-size: 0.88rem;
+    color: var(--teal);
+    margin: 0 0 0.45rem;
+    font-weight: 500;
+  }
+  .timeline-desc {
+    font-size: 0.85rem;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ---------------- RESPONSIVENESS ---------------- */
+  @media (max-width: 960px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+    .section-container {
+      grid-template-columns: 1fr;
+      gap: 3.5rem;
+    }
+    .section-explore {
+      height: auto;
+      min-height: 100vh;
+      max-height: none;
+      padding: 6rem 1.5rem 4rem;
+    }
+    .hero-viewport {
+      padding-top: 6.5rem;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .explore-grid {
+      grid-template-columns: 1fr;
+    }
+    .nav-list { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Cinematic Prologue Layer: Two laser beams colliding in dead center -->
+  <div id="cinematic-stage">
+    <div id="beam-left" class="laser-beam laser-left"></div>
+    <div id="beam-right" class="laser-beam laser-right"></div>
+  </div>
+
+  <!-- Floating Navigation -->
+  <header id="site-header" class="site-header">
+    <nav class="nav-pill" aria-label="Primary navigation">
+      <div class="nav-brand">
+        Luke Guppy
+      </div>
+      <ul class="nav-list">
+        <li><a class="nav-link is-active" href="{{ '/' | url }}">Home</a></li>
+        <li><a class="nav-link" href="{{ '/about-me/' | url }}">About Me</a></li>
+        <li><a class="nav-link" href="{{ '/dissertation/' | url }}">Dissertation</a></li>
+        <li><a class="nav-link" href="{{ '/playground/' | url }}">Playground</a></li>
+        <li><a class="nav-link" href="{{ '/contact/' | url }}">Contact</a></li>
+      </ul>
+      <div class="nav-socials">
+        <a href="https://github.com/LukeGuppy" target="_blank" rel="noreferrer" aria-label="GitHub">
+          <svg viewBox="0 0 24 24"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z"/></svg>
+        </a>
+        <a href="https://linkedin.com/in/luke-guppy" target="_blank" rel="noreferrer" aria-label="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+        </a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Interactive Neural Background Canvas -->
+  <canvas id="neural-canvas" class="neural-bg-canvas"></canvas>
+
+  <!-- HERO SECTION -->
+  <main>
+    <section class="hero-viewport">
+      <div class="hero-grid">
+        
+        <!-- Left Column: Intro Text (Starts Centered in Viewport, Glides Left) -->
+        <div id="hero-intro-col" class="hero-intro-col">
+          <h1 id="hero-title" class="hero-title">
+            <span id="hero-title-text"></span><span id="the-cursor" class="the-cursor"></span>
+          </h1>
+          
+          <p id="hero-role" class="hero-role">
+            <span id="hero-role-text"></span>
+          </p>
+
+          <p id="hero-bio" class="hero-bio">
+            <span id="hero-bio-text"></span>
+          </p>
         </div>
 
-        <!-- Right column: Choreographed AI Briefing Terminal -->
-        <aside class="luke-agent" data-luke-agent aria-label="Interactive Overview Terminal">
-            <!-- Simulated User Prompt Bar -->
-            <div class="luke-agent__prompt-box">
-                <div class="luke-agent__prompt-line">
-                    <span class="luke-agent__prompt-chevron" aria-hidden="true">&gt;</span>
-                    <span class="luke-agent__prompt-text" data-agent-prompt-text></span>
-                    <span class="luke-agent__cursor" data-agent-prompt-cursor aria-hidden="true"></span>
+        <!-- Right Column: AI Interactive Briefing Card -->
+        <div id="chat-terminal-col" class="chat-terminal-col">
+          <div id="chat-card" class="chat-card" data-agent-root>
+            <div class="chat-tabs">
+              <button class="chat-tab is-active" data-agent-chip="intro">Overview</button>
+              <button class="chat-tab" data-agent-chip="alphasights">AlphaSights</button>
+              <button class="chat-tab" data-agent-chip="experience">Background</button>
+              <button class="chat-tab" data-agent-chip="projects">Projects</button>
+            </div>
+
+            <div class="chat-transcript">
+              <div class="chat-user-bubble" data-agent-q hidden></div>
+              <div class="chat-reply-container">
+                <div class="chat-status-bar" data-agent-status hidden>
+                  <span class="status-indicator" data-agent-status-icon></span>
+                  <span class="status-label" data-agent-status-text></span>
                 </div>
+                <div data-agent-summary></div>
+                <div class="chat-bullets-list" data-agent-bullets></div>
+              </div>
             </div>
 
-            <!-- Streamed AI Response Body -->
-            <div class="luke-agent__stage" data-agent-stage aria-live="polite">
-                <div class="luke-agent__thinking" data-agent-thinking hidden>
-                    <span class="thinking-dots" aria-hidden="true"><span></span><span></span><span></span></span>
-                    <span>Thinking...</span>
-                </div>
-
-                <div class="luke-agent__summary" data-agent-summary></div>
-
-                <div class="luke-agent__dossier" data-agent-dossier></div>
+            <div class="chat-composer">
+              <span class="composer-prompt-symbol">&gt;</span>
+              <span class="composer-prompt-input" data-agent-input></span>
             </div>
-
-            <!-- Preset Question Switcher -->
-            <div class="luke-agent__presets" aria-label="Ask a question">
-                <button type="button" class="luke-agent__chip is-active" data-agent-chip="intro">Overview</button>
-                <button type="button" class="luke-agent__chip" data-agent-chip="alphasights">AlphaSights Role</button>
-                <button type="button" class="luke-agent__chip" data-agent-chip="experience">Past Experience</button>
-                <button type="button" class="luke-agent__chip" data-agent-chip="projects">Projects</button>
-            </div>
-        </aside>
-
-    </div>
-
-    <a href="#interactive-index" class="home-scroll-cue" data-home-scroll-cue aria-label="Scroll to sections">
-        <span>Scroll</span>
-        <div class="home-scroll-cue__line"></div>
-    </a>
-</section>
-
-<!-- 2. INTERACTIVE DESTINATION STAGE -->
-<section class="home-portal-stage" id="interactive-index" data-home-portal-stage aria-labelledby="index-heading">
-    <div class="home-wrap">
-        <div class="portal-stage__layout">
-
-            <!-- Left: Section navigation -->
-            <div class="portal-stage__index">
-                <header class="portal-stage__head">
-                    <h2 class="portal-stage__title" id="index-heading">Explore</h2>
-                </header>
-
-                <nav class="portal-stage__list" aria-label="Primary portfolio sections">
-                    <a href="{{ '/about-me/' | url }}" class="portal-stage__item is-active" data-portal-scene="about">
-                        <div class="portal-stage__item-top">
-                            <h3>Experience</h3>
-                        </div>
-                        <p>Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
-                    </a>
-
-                    <a href="{{ '/dissertation/' | url }}" class="portal-stage__item" data-portal-scene="dissertation">
-                        <div class="portal-stage__item-top">
-                            <h3>Dissertation</h3>
-                        </div>
-                        <p>Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
-                    </a>
-
-                    <a href="{{ '/playground/' | url }}" class="portal-stage__item" data-portal-scene="playground">
-                        <div class="portal-stage__item-top">
-                            <h3>Playground</h3>
-                        </div>
-                        <p>Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
-                    </a>
-
-                    <a href="{{ '/contact/' | url }}" class="portal-stage__item" data-portal-scene="contact">
-                        <div class="portal-stage__item-top">
-                            <h3>Contact Me</h3>
-                        </div>
-                        <p>Get in touch directly via email, LinkedIn, or GitHub.</p>
-                    </a>
-                </nav>
-            </div>
-
-                <!-- Right: Live morphing simulation viewport -->
-                <div class="portal-stage__viewport">
-                    <div class="portal-stage__frame">
-                        <!-- Crisp DOM Experience Timeline (shown when Experience is selected) -->
-                        <div class="portal-stage__experience" data-stage-experience>
-                            <div class="stage-exp-timeline">
-                                <article class="stage-exp-entry is-primary">
-                                    <div class="stage-exp-head">
-                                        <div class="stage-exp-title">
-                                            <strong>AlphaSights</strong>
-                                            <span class="stage-exp-role">Software Engineer I — AI Team</span>
-                                        </div>
-                                        <span class="stage-exp-period">Feb 2026 – Present</span>
-                                    </div>
-                                    <p class="stage-exp-summary">
-                                        Building internal and external AI chat platforms, client-facing MCP servers, custom engineering tools, and automated AI data processing pipelines.
-                                    </p>
-                                </article>
-
-                                <article class="stage-exp-entry">
-                                    <div class="stage-exp-head">
-                                        <div class="stage-exp-title">
-                                            <strong>Leonardo Helicopters</strong>
-                                            <span class="stage-exp-role">Graduate Software Engineer</span>
-                                        </div>
-                                        <span class="stage-exp-period">Aug 2024 – Jan 2026</span>
-                                    </div>
-                                    <p class="stage-exp-summary">
-                                        Autonomy &amp; Tactical Processing: Reinforcement learning drone flight simulations in Python/Docker, combinatorial optimization solvers, and mission management microservices in C++ and gRPC.
-                                    </p>
-                                </article>
-
-                                <article class="stage-exp-entry">
-                                    <div class="stage-exp-head">
-                                        <div class="stage-exp-title">
-                                            <strong>University of Warwick</strong>
-                                            <span class="stage-exp-role">BSc Computer Science (1st Class Hons)</span>
-                                        </div>
-                                        <span class="stage-exp-period">2021 – 2024</span>
-                                    </div>
-                                    <p class="stage-exp-summary">
-                                        Graduated with First-Class Honours. Engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous vehicle navigation in complex urban traffic environments.
-                                    </p>
-                                </article>
-                            </div>
-                        </div>
-
-                        <canvas id="home-stage-canvas" aria-hidden="true" hidden></canvas>
-
-                        <!-- Interactive Contact Links (shown when Contact Me is selected) -->
-                    <div class="portal-stage__contact" data-stage-contact hidden>
-                        <div class="stage-contact-list">
-                            <div class="stage-contact-item">
-                                <a href="mailto:lukewguppy@gmail.com" class="stage-contact-link">
-                                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                        <rect x="2" y="4" width="20" height="16" rx="2.5"/>
-                                        <path d="M22 6.5L12 13L2 6.5"/>
-                                    </svg>
-                                    <span>lukewguppy@gmail.com</span>
-                                </a>
-                                <button type="button" class="stage-copy-btn" data-home-copy-email="lukewguppy@gmail.com">Copy</button>
-                            </div>
-
-                            <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener" class="stage-contact-item stage-contact-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                    <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/>
-                                    <rect x="2" y="9" width="4" height="12"/>
-                                    <circle cx="4" cy="4" r="2"/>
-                                </svg>
-                                <span>linkedin.com/in/lukeguppy</span>
-                            </a>
-
-                            <a href="https://github.com/lukeguppy" target="_blank" rel="noopener" class="stage-contact-item stage-contact-link">
-                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
-                                    <path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"/>
-                                </svg>
-                                <span>github.com/lukeguppy</span>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
-    </div>
-</section>
+
+      </div>
+
+      <!-- Scroll cue (Arrow only, positioned at bottom) -->
+      <a href="#explore" id="scroll-cue" class="scroll-cue" aria-label="Scroll down">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </a>
+    </section>
+
+    <!-- SECTION: EXPLORE WORK (100VH FULL SCREEN) -->
+    <section id="explore" class="section-explore">
+      <div class="section-container">
+        
+        <!-- Explore Navigation (Architectural Precision Ledger) -->
+        <div class="explore-col">
+          <h2 class="section-heading">Explore</h2>
+          <div class="explore-ledger">
+            <a href="{{ '/about-me/' | url }}" class="ledger-row">
+              <span class="ledger-title">About Me</span>
+              <span class="ledger-meta-text">Background and experience</span>
+            </a>
+
+            <a href="{{ '/dissertation/' | url }}" class="ledger-row">
+              <span class="ledger-title">Dissertation</span>
+              <span class="ledger-meta-text">University of Warwick final project</span>
+            </a>
+
+            <a href="{{ '/playground/' | url }}" class="ledger-row">
+              <span class="ledger-title">Playground</span>
+              <span class="ledger-meta-text">Interactive web games and tools</span>
+            </a>
+
+            <a href="{{ '/contact/' | url }}" class="ledger-row">
+              <span class="ledger-title">Contact</span>
+              <span class="ledger-meta-text">My details</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Career Timeline -->
+        <div class="timeline-col">
+          <h2 class="section-heading">Experience</h2>
+          <div class="timeline-list">
+            
+            <div class="timeline-item">
+              <div class="timeline-date">2024 — PRESENT</div>
+              <h3 class="timeline-role">AI Software Engineer</h3>
+              <div class="timeline-company">AlphaSights</div>
+              <p class="timeline-desc">Leading agentic AI workflows, LLM orchestration infrastructure, and production software platforms.</p>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-date">2022 — 2023</div>
+              <h3 class="timeline-role">Software Engineering Placement</h3>
+              <div class="timeline-company">Leonardo Helicopters</div>
+              <p class="timeline-desc">Engineered C++ tactical mission management infrastructure, microservices with gRPC communication, and avionics logic.</p>
+            </div>
+
+            <div class="timeline-item">
+              <div class="timeline-date">2020 — 2024</div>
+              <h3 class="timeline-role">BSc Computer Science (First Class)</h3>
+              <div class="timeline-company">University of Warwick</div>
+              <p class="timeline-desc">Graduated with First-Class Honours. Researched deep reinforcement learning, graph algorithms, and distributed computing.</p>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Scroll cue: Return to top -->
+      <a href="#hero" id="scroll-up-cue" class="scroll-cue scroll-cue-up" aria-label="Scroll back to top">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="18 15 12 9 6 15"></polyline>
+        </svg>
+      </a>
+    </section>
+  </main>
+
+  <script>
+    // Guarantee start at top (0, 0), purge hash, and disable browser auto-scroll restoration
+    if ('scrollRestoration' in history) {
+      history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+    if (window.location.hash) {
+      history.replaceState(null, '', window.location.pathname + window.location.search);
+    }
+
+    const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    /* ---------------- DATASET FOR INTERACTIVE BRIEFING ---------------- */
+    const BRIEFINGS = {
+      intro: {
+        prompt: 'Tell me about Luke',
+        thinking: 'Synthesising profile telemetry...',
+        status: 'Synthesised profile overview in 14ms',
+        summary: 'Luke Guppy is an <strong>AI Software Engineer at AlphaSights</strong>, specialising in production AI systems, agentic workflow orchestration, and scalable cloud platforms.',
+        bullets: [
+          { title: 'Current Focus', detail: 'Designing and deploying autonomous agent systems and LLM integrations that accelerate high-stakes knowledge search.' },
+          { title: 'Tactical Systems', detail: 'Previously engineered safety-critical avionics and mission management software in C++ at Leonardo Helicopters.' },
+          { title: 'Academic Research', detail: 'First-Class Honours from University of Warwick; trained deep reinforcement learning agents for autonomous driving.' },
+        ],
+      },
+      alphasights: {
+        prompt: 'What does Luke do at AlphaSights?',
+        thinking: 'Synthesising AlphaSights systems telemetry...',
+        status: 'Synthesised production AI architecture in 18ms',
+        summary: 'At AlphaSights, Luke engineers production-grade AI platforms that connect commercial clients with subject-matter experts worldwide.',
+        bullets: [
+          { title: 'Agentic Workflows', detail: 'Building multi-step reasoning pipelines that automate expert matching and research analysis.' },
+          { title: 'Production Reliability', detail: 'Hardening LLM latency, implementing guardrails, and managing resilient microservices at enterprise scale.' },
+        ],
+      },
+      experience: {
+        prompt: 'What is Luke\'s engineering background?',
+        thinking: 'Synthesising engineering trajectory...',
+        status: 'Synthesised systems & avionics trajectory in 22ms',
+        summary: 'Luke\'s background combines high-reliability systems engineering with modern artificial intelligence.',
+        bullets: [
+          { title: 'AlphaSights (2024—Present)', detail: 'AI Software Engineer leading agent workflows and LLM applications.' },
+          { title: 'Leonardo Helicopters (2022—2023)', detail: 'Developed high-throughput C++ services, gRPC pipelines, and Dockerised tactical planning infrastructure.' },
+          { title: 'University of Warwick (2020—2024)', detail: 'BSc Computer Science with First-Class Honours, specialising in Machine Learning and Systems.' },
+        ],
+      },
+      projects: {
+        prompt: 'What projects has Luke built?',
+        thinking: 'Synthesising research & project archives...',
+        status: 'Synthesised technical systems & research in 16ms',
+        summary: 'Luke has engineered technical systems across deep reinforcement learning, language models, network protocols, and interactive tools.',
+        bullets: [
+          { title: 'Autonomous Driving Dissertation (PPO)', detail: 'Trained a continuous-action Proximal Policy Optimisation agent in Unity and C# capable of navigating multi-lane road networks.' },
+          { title: 'Transformer & Systems Architecture', detail: 'Engineered a next-token predictor Transformer from scratch, dynamic-pricing engine, and C++/NS-3 network simulator.' },
+          { title: 'Interactive Web Playground', detail: 'Created algorithmic browser implementations of Wordle solvers, Chess engines, and spatial physics simulations.' },
+        ],
+      },
+    };
+
+    /* ---------------- THE SINGLE-ACTOR CINEMATIC CHOREOGRAPHY ---------------- */
+    async function runCinematicOrchestration() {
+      const beamL = document.getElementById('beam-left');
+      const beamR = document.getElementById('beam-right');
+      const theCursor = document.getElementById('the-cursor');
+      const introCol = document.getElementById('hero-intro-col');
+      const hTitle = document.getElementById('hero-title');
+      const hTitleText = document.getElementById('hero-title-text');
+      const hRole = document.getElementById('hero-role');
+      const hRoleText = document.getElementById('hero-role-text');
+      const hBio = document.getElementById('hero-bio');
+      const hBioText = document.getElementById('hero-bio-text');
+      const chatCol = document.getElementById('chat-terminal-col');
+      const siteHeader = document.getElementById('site-header');
+      const neuralCanvas = document.getElementById('neural-canvas');
+      const composerBox = document.querySelector('.chat-composer');
+      const scrollCue = document.getElementById('scroll-cue');
+
+      // Guarantee web fonts are loaded so caret dimensions and metrics are 100% exact
+      if (document.fonts && document.fonts.ready) {
+        await document.fonts.ready;
+      }
+      window.scrollTo(0, 0);
+
+      // 1. Initial Positioning:
+      // Translate introCol so that it sits dead-center in the viewport while typing
+      function updateIntroAndBeamAlignment() {
+        if (introCol.classList.contains('is-docked')) return;
+        const screenW = window.innerWidth;
+        const screenH = window.innerHeight;
+
+        introCol.style.transition = 'none';
+        introCol.style.transform = 'none';
+
+        const restingRect = introCol.getBoundingClientRect();
+        const deltaX = (screenW / 2) - (restingRect.width / 2) - restingRect.left;
+        const deltaY = (screenH / 2) - 80 - restingRect.top;
+
+        introCol.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+        syncBeams();
+      }
+
+      let isBeamsActive = true;
+      function syncBeams() {
+        if (!isBeamsActive) return;
+        const rect = theCursor.getBoundingClientRect();
+        if (rect.height > 0) {
+          const meetY = rect.top + (rect.height / 2);
+          beamL.style.top = `${meetY}px`;
+          beamR.style.top = `${meetY}px`;
+        }
+      }
+
+      function loopBeamSync() {
+        if (!isBeamsActive) return;
+        syncBeams();
+        requestAnimationFrame(loopBeamSync);
+      }
+
+      updateIntroAndBeamAlignment();
+      requestAnimationFrame(loopBeamSync);
+      window.addEventListener('resize', updateIntroAndBeamAlignment);
+
+      // 2. STAGE I: LASER BEAMS MEET IN THE MIDDLE (0.0s - 0.7s)
+      await sleep(150);
+      beamL.style.transition = 'width 650ms cubic-bezier(0.16, 1, 0.3, 1)';
+      beamR.style.transition = 'width 650ms cubic-bezier(0.16, 1, 0.3, 1)';
+      beamL.style.width = '50%';
+      beamR.style.width = '50%';
+
+      await sleep(650);
+
+      // 3. COLLISION: BEAMS MEET AND MORPH INTO THE VERTICAL CARET
+      beamL.style.transition = 'opacity 200ms ease';
+      beamR.style.transition = 'opacity 200ms ease';
+      beamL.style.opacity = '0';
+      beamR.style.opacity = '0';
+
+      // The vertical caret opens vertically from the exact collision seam
+      theCursor.classList.add('is-opening');
+      await sleep(240);
+      theCursor.classList.remove('is-opening');
+      theCursor.classList.add('is-blinking');
+      isBeamsActive = false;
+
+      // ANTICIPATION: Blinks 2 calm cycles in dead center (~2.1s)
+      await sleep(2100);
+
+      // 4. TYPE NAME — CONTINUOUS FLOW WITH CRISP 0.2s PAUSES
+      theCursor.classList.remove('is-blinking');
+      theCursor.classList.add('is-typing');
+
+      const nameStr = 'Luke Guppy';
+      for (let i = 1; i <= nameStr.length; i++) {
+        hTitleText.textContent = nameStr.slice(0, i);
+        await sleep(22 + (i % 2) * 10);
+      }
+
+      // Quick 0.2s breath, then move directly to subtitle
+      await sleep(200);
+
+      // 5. MOVE DOWN TO SUBTITLE
+      hRole.appendChild(theCursor);
+      theCursor.classList.add('is-typing');
+      await sleep(80);
+
+      const roleStr = 'AI Software Engineer @ AlphaSights';
+      for (let i = 1; i <= roleStr.length; i++) {
+        hRoleText.textContent = roleStr.slice(0, i);
+        await sleep(18 + (i % 2) * 8);
+      }
+
+      // Quick 0.2s breath, then move directly to description
+      await sleep(200);
+
+      // 6. MOVE DOWN TO DESCRIPTION
+      hBio.appendChild(theCursor);
+      theCursor.classList.add('is-typing');
+      await sleep(80);
+
+      // Exact portfolio copy from src/index.njk
+      const bioStr = 'Software Engineer on the AI team at AlphaSights, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.';
+      
+      for (let i = 2; i <= bioStr.length + 1; i += 2) {
+        hBioText.textContent = bioStr.slice(0, Math.min(i, bioStr.length));
+        await sleep(8 + (i % 3) * 3);
+      }
+      hBioText.textContent = bioStr;
+
+      // Quick 0.2s breath, then begin seamless spatial handoff
+      await sleep(200);
+
+      // 7. THE SPATIAL HANDOFF: INTRO MOVES TO LEFT SIDE, CHATBOT TRANSITIONS IN ON RIGHT
+      window.removeEventListener('resize', updateIntroAndBeamAlignment);
+      introCol.style.transition = 'transform 950ms cubic-bezier(0.16, 1, 0.3, 1)';
+      introCol.style.transform = 'translate(0px, 0px)';
+      introCol.classList.add('is-docked');
+
+      // Concurrently: Chatbot enters on right, nav drops, neural canvas blooms
+      chatCol.classList.add('is-visible');
+      siteHeader.classList.add('is-visible');
+      neuralCanvas.classList.add('is-active');
+
+      await sleep(850);
+
+      // 8. THE ONE CURSOR FLIES FROM BIO ACROSS TO CHATBOT PROMPT INPUT
+      const startRect = theCursor.getBoundingClientRect();
+      const targetRect = composerBox.getBoundingClientRect();
+
+      theCursor.classList.remove('is-blinking');
+      theCursor.style.position = 'fixed';
+      theCursor.style.left = `${startRect.left}px`;
+      theCursor.style.top = `${startRect.top}px`;
+      theCursor.style.width = '3px';
+      theCursor.style.height = `${startRect.height}px`;
+      theCursor.style.zIndex = '1000';
+      theCursor.classList.add('is-teal');
+      document.body.appendChild(theCursor);
+
+      await sleep(30);
+
+      // Smooth flight across the gap into composer bar
+      theCursor.style.transition = 'all 600ms cubic-bezier(0.16, 1, 0.3, 1)';
+      theCursor.style.left = `${targetRect.left + 39}px`;
+      theCursor.style.top = `${targetRect.top + (targetRect.height - 18) / 2}px`;
+      theCursor.style.height = '1.1rem';
+
+      await sleep(600);
+
+      // 9. DOCKS & BREATHES BRIEFLY IN CHATBOT INPUT BEFORE TYPING
+      theCursor.style.position = '';
+      theCursor.style.left = '';
+      theCursor.style.top = '';
+      theCursor.style.transition = '';
+      theCursor.style.zIndex = '';
+      theCursor.style.height = '1em';
+      theCursor.style.verticalAlign = '-2px';
+      composerBox.appendChild(theCursor);
+      theCursor.classList.add('is-blinking');
+
+      // Brief 300ms pause to register landing, then immediately begins typing
+      await sleep(300);
+
+      // 10. TYPES THE PROMPT (SOLID WHILE TYPING)
+      theCursor.classList.remove('is-blinking');
+      theCursor.classList.add('is-typing');
+
+      initLiveAgent(document.querySelector('[data-agent-root]'), theCursor, scrollCue);
+    }
+
+    /* ---------------- NEURAL NETWORK CANVAS ---------------- */
+    function createNeuralNet(canvas) {
+      const o = {
+        // Full-viewport deep neural network topology: input -> expanding layers -> dense core -> converging output
+        layers: [6, 9, 13, 16, 17, 16, 13, 9, 6],
+        nodeRGB: '148,163,184', nodeAlpha: 0.38, nodeR: 1.7,
+        pulseRGB: ['45,212,191', '245,158,11'],
+        hop: 1050,
+      };
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, layers = [], conns = [], passes = [], last = performance.now();
+
+      function build() {
+        layers = [];
+        conns = [];
+        const pattern = o.layers;
+        const px = W * 0.03, sp = (W - px * 2) / (pattern.length - 1);
+        const maxCount = Math.max(...pattern);
+        const maxSpan = H * 0.88; // Fills 88% of total viewport height
+
+        pattern.forEach((count, l) => {
+          // Proportionally scaled vertical span that fills the canvas from top to bottom
+          const span = maxSpan * (0.48 + 0.52 * (count / maxCount));
+          const y0 = (H - span) / 2;
+          const vs = span / (count - 1);
+          const layer = [];
+          for (let i = 0; i < count; i++) {
+            const jx = Math.sin(l * 3.7 + i * 2.1) * 7;
+            layer.push({ x: px + sp * l + jx, y: y0 + i * vs, l, idx: i });
+          }
+          layers.push(layer);
+        });
+
+        // Evenly distributed connections across the full canvas height
+        for (let l = 0; l < layers.length - 1; l++) {
+          const curr = layers[l];
+          const next = layers[l + 1];
+
+          curr.forEach((a) => {
+            const sorted = [...next].sort((n1, n2) => Math.abs(n1.y - a.y) - Math.abs(n2.y - a.y));
+            const countToConnect = Math.min(3, sorted.length);
+            for (let k = 0; k < countToConnect; k++) {
+              const b = sorted[k];
+              conns.push({ a, b, glow: 0 });
+            }
+          });
+
+          // Ensure every downstream node has at least one incoming connection
+          next.forEach((b) => {
+            const hasConn = conns.some((c) => c.b === b && c.a.l === l);
+            if (!hasConn) {
+              const closestInCurr = [...curr].sort((n1, n2) => Math.abs(n1.y - b.y) - Math.abs(n2.y - b.y))[0];
+              if (closestInCurr) {
+                conns.push({ a: closestInCurr, b, glow: 0 });
+              }
+            }
+          });
+        }
+      }
+
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        W = r.width; H = r.height;
+        canvas.width = W; canvas.height = H;
+        build();
+      }
+
+      function frame(now) {
+        requestAnimationFrame(frame);
+        ctx.clearRect(0, 0, W, H);
+        
+        // Render network edges: all resting lines are subtle & uniform (NO static opaque lines)
+        // Edges ONLY light up dynamically when a signal pulse traverses them!
+        for (const c of conns) {
+          if (c.glow > 0.02) {
+            ctx.strokeStyle = `rgba(45, 212, 191, ${0.05 + c.glow * 0.28})`;
+            ctx.lineWidth = 0.45 + c.glow * 0.7;
+            c.glow *= 0.94; // Smooth exponential decay
+          } else {
+            ctx.strokeStyle = 'rgba(148, 163, 184, 0.055)';
+            ctx.lineWidth = 0.45;
+            c.glow = 0;
+          }
+          ctx.beginPath();
+          ctx.moveTo(c.a.x, c.a.y);
+          ctx.lineTo(c.b.x, c.b.y);
+          ctx.stroke();
+        }
+
+        // Propagate signals along existing network paths
+        for (let i = passes.length - 1; i >= 0; i--) {
+          const p = passes[i];
+          const t = Math.min(1, (now - p.t0) / o.hop);
+          for (const q of p.pulses) {
+            const x = q.a.x + (q.b.x - q.a.x) * t;
+            const y = q.a.y + (q.b.y - q.a.y) * t;
+            if (q.conn) q.conn.glow = 1.0;
+            ctx.fillStyle = `rgba(${p.rgb},0.85)`;
+            ctx.beginPath();
+            ctx.arc(x, y, 2.2, 0, 6.28);
+            ctx.fill();
+          }
+          if (t >= 1) {
+            passes.splice(i, 1);
+            if (p.l < layers.length - 2) {
+              const nextNodes = p.pulses.map((q) => q.b);
+              const nextPulses = [];
+              nextNodes.forEach((n) => {
+                const outConns = conns.filter((c) => c.a === n);
+                if (outConns.length) {
+                  const pickConn = outConns[Math.floor(Math.random() * outConns.length)];
+                  nextPulses.push({ a: n, b: pickConn.b, conn: pickConn });
+                }
+              });
+              if (nextPulses.length) {
+                passes.push({ t0: now, pulses: nextPulses, l: p.l + 1, rgb: p.rgb });
+              }
+            }
+          }
+        }
+
+        // Render nodes
+        for (const L of layers) {
+          for (const n of L) {
+            ctx.fillStyle = `rgba(${o.nodeRGB},${o.nodeAlpha})`;
+            ctx.beginPath();
+            ctx.arc(n.x, n.y, o.nodeR, 0, 6.28);
+            ctx.fill();
+          }
+        }
+
+        // Pulse injection across diverse vertical input nodes
+        if (now - last > 800) {
+          last = now;
+          if (layers.length > 1 && layers[0].length) {
+            const countToFire = Math.random() < 0.4 ? 2 : 1;
+            for (let f = 0; f < countToFire; f++) {
+              const a = layers[0][Math.floor(Math.random() * layers[0].length)];
+              const outConns = conns.filter((c) => c.a === a);
+              if (outConns.length) {
+                const pickConn = outConns[Math.floor(Math.random() * outConns.length)];
+                passes.push({
+                  t0: now,
+                  pulses: [{ a, b: pickConn.b, conn: pickConn }],
+                  l: 0,
+                  rgb: Math.random() < 0.8 ? o.pulseRGB[0] : o.pulseRGB[1],
+                });
+              }
+            }
+          }
+        }
+      }
+
+      new ResizeObserver(resize).observe(canvas);
+      resize();
+      requestAnimationFrame(frame);
+    }
+
+    /* ---------------- LIVE BRIEFING AGENT INTERACTION ---------------- */
+    function initLiveAgent(root, liveCursor, scrollCue) {
+      const $ = (s) => root.querySelector(s);
+      const input = $('[data-agent-input]');
+      const q = $('[data-agent-q]');
+      const statusEl = $('[data-agent-status]'), statusIcon = $('[data-agent-status-icon]'), statusText = $('[data-agent-status-text]');
+      const summary = $('[data-agent-summary]'), bullets = $('[data-agent-bullets]');
+      const chips = root.querySelectorAll('[data-agent-chip]');
+      let run = 0;
+      let isIntroComplete = false;
+
+      async function play(key) {
+        const tok = ++run, d = BRIEFINGS[key] || BRIEFINGS.intro;
+        input.textContent = '';
+        if (liveCursor) {
+          liveCursor.style.display = 'inline-block';
+          liveCursor.classList.remove('is-blinking');
+          liveCursor.classList.add('is-typing');
+        }
+        
+        // Immediately reset and strictly hide user bubble and status bar on prompt change
+        if (q) {
+          q.hidden = true;
+          q.textContent = '';
+        }
+        if (statusEl) {
+          statusEl.hidden = true;
+          statusEl.classList.remove('is-pending', 'is-finished');
+          if (statusIcon) statusIcon.innerHTML = '';
+          if (statusText) statusText.textContent = '';
+        }
+        summary.innerHTML = '';
+        bullets.innerHTML = '';
+
+        await sleep(50); if (tok !== run) return;
+        
+        // Typing prompt into bar with THE ONE CURSOR leading (solid while typing)
+        for (let i = 1; i <= d.prompt.length; i++) {
+          if (tok !== run) return;
+          input.textContent = d.prompt.slice(0, i);
+          await sleep(24 + (i % 3) * 8);
+        }
+
+        // Brief pause after prompt finishes typing (like pressing Enter)
+        await sleep(280); if (tok !== run) return;
+
+        q.textContent = d.prompt; 
+        q.hidden = false; 
+        input.textContent = '';
+        if (liveCursor) liveCursor.style.display = 'none';
+
+        // 1. Processing state: only now does it appear with custom prompt thinking text
+        if (statusEl) {
+          statusEl.hidden = false;
+          statusEl.className = 'chat-status-bar is-pending';
+          statusIcon.innerHTML = '<span class="status-spinner"></span>';
+          statusText.textContent = d.thinking;
+        }
+        
+        await sleep(480); if (tok !== run) return;
+
+        // 2. Finished state: changes to custom past tense with finished checkmark
+        if (statusEl) {
+          statusEl.className = 'chat-status-bar is-finished';
+          statusIcon.innerHTML = `<span class="status-check-icon"><svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3.5 8.5 6.5 11.5 12.5 4.5"/></svg></span>`;
+          statusText.textContent = d.status;
+        }
+
+        // Stream answer
+        for (let i = 3; i <= d.summary.length; i += 3) {
+          if (tok !== run) return;
+          summary.innerHTML = d.summary.slice(0, i) + '<span class="the-cursor is-typing" style="display:inline-block"></span>';
+          await sleep(12);
+        }
+        summary.innerHTML = d.summary;
+        await sleep(90);
+
+        // Populate bullets with pleasant stagger
+        for (const b of d.bullets) {
+          if (tok !== run) return;
+          const row = document.createElement('div'); 
+          row.className = 'chat-bullet-row';
+          row.innerHTML = `<div class="chat-bullet-title">${b.title}</div><p class="chat-bullet-detail">${b.detail}</p>`;
+          bullets.appendChild(row);
+          await sleep(60);
+        }
+
+        // Only after the full intro animation and initial response finishes: unlock scrolling!
+        if (!isIntroComplete) {
+          isIntroComplete = true;
+          document.documentElement.classList.remove('is-locked');
+          document.body.classList.remove('is-locked');
+          if (scrollCue) scrollCue.classList.add('is-shown');
+        }
+      }
+
+      let isAnimatingScroll = false;
+      const scrollUpCue = document.getElementById('scroll-up-cue');
+
+      function updateCuesForCurrentSection() {
+        if (!isIntroComplete || isAnimatingScroll) return;
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const vh = window.innerHeight;
+        
+        // At top / hero section
+        if (scrollY < vh * 0.35) {
+          if (scrollCue) scrollCue.classList.add('is-shown');
+          if (scrollUpCue) scrollUpCue.classList.remove('is-shown');
+        } else if (scrollY > vh * 0.65) {
+          // In Section 2 (Explore)
+          if (scrollCue) scrollCue.classList.remove('is-shown');
+          if (scrollUpCue) scrollUpCue.classList.add('is-shown');
+        } else {
+          // Actively transitioning: hide both chevrons!
+          if (scrollCue) scrollCue.classList.remove('is-shown');
+          if (scrollUpCue) scrollUpCue.classList.remove('is-shown');
+        }
+      }
+
+      window.addEventListener('scroll', updateCuesForCurrentSection, { passive: true });
+
+      function smoothScrollToElement(target, duration = 850, onComplete) {
+        if (!target) return;
+        const startY = window.pageYOffset || document.documentElement.scrollTop;
+        let targetTop = 0;
+        if (target !== document.body && target !== document.documentElement) {
+          targetTop = target.getBoundingClientRect().top + startY;
+        }
+        const diff = targetTop - startY;
+        if (Math.abs(diff) < 2) return;
+        const startTime = performance.now();
+
+        // 1. Immediately hide BOTH chevrons upon click!
+        isAnimatingScroll = true;
+        if (scrollCue) scrollCue.classList.remove('is-shown');
+        if (scrollUpCue) scrollUpCue.classList.remove('is-shown');
+
+        // Temporarily suspend CSS snap during programmatic animated pan
+        document.documentElement.style.scrollSnapType = 'none';
+
+        function step(now) {
+          const elapsed = now - startTime;
+          const progress = Math.min(elapsed / duration, 1);
+          // EaseInOutCubic: gentle departure, smooth glide, cushioned arrival
+          const ease = progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+          window.scrollTo(0, startY + diff * ease);
+
+          if (progress < 1) {
+            requestAnimationFrame(step);
+          } else {
+            // Restore native snap once motion has completed and settled
+            setTimeout(() => {
+              document.documentElement.style.scrollSnapType = '';
+              isAnimatingScroll = false;
+              // 2. Only AFTER animation finishes: reveal the destination chevron!
+              if (typeof onComplete === 'function') {
+                onComplete();
+              } else {
+                updateCuesForCurrentSection();
+              }
+            }, 80);
+          }
+        }
+
+        requestAnimationFrame(step);
+      }
+
+      if (scrollCue) {
+        scrollCue.addEventListener('click', (e) => {
+          e.preventDefault();
+          const target = document.getElementById('explore');
+          smoothScrollToElement(target, 900, () => {
+            if (scrollUpCue) scrollUpCue.classList.add('is-shown');
+          });
+        });
+      }
+
+      if (scrollUpCue) {
+        scrollUpCue.addEventListener('click', (e) => {
+          e.preventDefault();
+          smoothScrollToElement(document.body, 900, () => {
+            if (scrollCue) scrollCue.classList.add('is-shown');
+          });
+        });
+      }
+
+      // Auto-complete full-page scroll animation on any wheel nudge
+      let isWheelLocked = false;
+      window.addEventListener('wheel', (e) => {
+        if (!isIntroComplete || isAnimatingScroll || isWheelLocked) return;
+
+        const scrollY = window.pageYOffset || document.documentElement.scrollTop;
+        const vh = window.innerHeight;
+
+        // In Hero section, scrolling down -> auto-complete down to Section 2
+        if (scrollY < vh * 0.25 && e.deltaY > 10) {
+          isWheelLocked = true;
+          const target = document.getElementById('explore');
+          smoothScrollToElement(target, 900, () => {
+            if (scrollUpCue) scrollUpCue.classList.add('is-shown');
+            setTimeout(() => { isWheelLocked = false; }, 200);
+          });
+        }
+        // In Section 2, scrolling up -> auto-complete up to Hero
+        else if (scrollY > vh * 0.75 && e.deltaY < -10) {
+          isWheelLocked = true;
+          smoothScrollToElement(document.body, 900, () => {
+            if (scrollCue) scrollCue.classList.add('is-shown');
+            setTimeout(() => { isWheelLocked = false; }, 200);
+          });
+        }
+      }, { passive: true });
+
+      // Smooth scroll for any in-page anchor links
+      document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+        if (anchor.id === 'scroll-cue' || anchor.id === 'scroll-up-cue') return;
+        anchor.addEventListener('click', (e) => {
+          const hash = anchor.getAttribute('href');
+          if (!hash || hash === '#') return;
+          const target = document.querySelector(hash);
+          if (target) {
+            e.preventDefault();
+            smoothScrollToElement(target, 850);
+          }
+        });
+      });
+
+      chips.forEach((c) => c.addEventListener('click', () => {
+        chips.forEach((x) => x.classList.toggle('is-active', x === c));
+        play(c.dataset.agentChip);
+      }));
+
+      play('intro');
+    }
+
+    createNeuralNet(document.getElementById('neural-canvas'));
+    if (document.readyState === 'loading') {
+      window.addEventListener('DOMContentLoaded', runCinematicOrchestration);
+    } else {
+      runCinematicOrchestration();
+    }
+  </script>
+</body>
+</html>

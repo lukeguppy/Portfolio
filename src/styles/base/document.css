@@ -1,12 +1,11 @@
 html {
-  background: var(--bg-base);
+  background: #030712 !important;
   color: var(--text);
   color-scheme: dark;
   scroll-padding-top: calc(var(--header-h) + var(--space-5));
   scrollbar-width: none;
   -ms-overflow-style: none;
   -webkit-tap-highlight-color: transparent;
-  overflow-x: hidden;
 }
 
 button,
@@ -36,7 +35,7 @@ body::-webkit-scrollbar {
 
 body {
   min-height: 100svh;
-  background: var(--bg-base);
+  background: #030712 !important;
   color: var(--text);
   font-family: var(--font-body);
   font-size: var(--step-0);
@@ -44,7 +43,7 @@ body {
   font-optical-sizing: auto;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
-  overflow-x: hidden;
+  overflow-x: clip;
 }
 
 ::selection {

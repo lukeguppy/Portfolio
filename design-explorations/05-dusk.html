@@ -1,0 +1,854 @@
+<!--
+  Direction 05: "Dusk"
+  Thesis: Moves out of deep near-black gloom into a refined blue-slate mid-tone dusk atmosphere.
+  The centerpiece chat card is rendered in a high-clarity LIGHT FOG plate that physically overlaps
+  the boundary between the upper atmospheric night band and the lower dusk section.
+
+  Palette Tokens:
+  - --night: #121826 (Upper hero band holding the neural network)
+  - --dusk: #1c2434 (Mid-tone slate page ground below the hero)
+  - --haze: #273146 (Raised surfaces and section bases)
+  - --fog: #e8ebef (Light fog chat card plate - high tactile separation)
+  - --fog-2: #d6dce3 (Card inset fields & composer)
+  - --fog-3: #c3cbd5 (Hairlines & active tabs on card)
+  - --ink-dark: #f2f4f8 (Primary text on dark bands)
+  - --ink-dark-2: #b1bacb (Secondary text on dark bands)
+  - --ink-fog: #151a23 (Primary text on light fog card)
+  - --ink-fog-2: #475163 (Secondary body on light fog card)
+  - --teal: #3cc4ae (INTERACTIVE on dark) / #0e7a6c (INTERACTIVE on fog)
+  - --amber: #f1b65c (LIVE AI SIGNAL: pulses, status beacon, thinking state)
+
+  Typography:
+  - Familjen Grotesk: Distinct Swedish grotesque for monumental headline and section heads.
+  - Hanken Grotesk: Balanced contemporary body and UI text.
+  - Fragment Mono: Precise technical timestamps, dates, and query telemetry.
+
+  Problem Solutions:
+  - Definitive Depth Separation: The light fog card against the dusk background eliminates all muddy value confusion.
+  - Physical Section Straddling: The card bleeds 110px over the boundary from --night into --dusk, grounding the layout in 3D space.
+  - Split Nav: Brand wordmark anchors top left on dark night; navigation links sit in a miniature fog pill at top right, echoing the card.
+  - Explore: Staggered asymmetric layout breaking uniform box grids.
+  - Timeline: Clean horizontal chronology track across the lower haze band.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy — Dusk (Direction 05)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Familjen+Grotesk:wght@600;700&family=Fragment+Mono&family=Hanken+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --night: #121826;
+    --dusk: #1c2434;
+    --haze: #273146;
+    --fog: #e8ebef;
+    --fog-2: #d6dce3;
+    --fog-3: #c3cbd5;
+
+    --ink-dark: #f2f4f8;
+    --ink-dark-2: #b1bacb;
+    --ink-dark-3: #7c889d;
+
+    --ink-fog: #151a23;
+    --ink-fog-2: #475163;
+    --ink-fog-3: #6a7486;
+
+    --teal: #3cc4ae;
+    --teal-fog: #0e7a6c;
+    --amber: #f1b65c;
+
+    --font-display: "Familjen Grotesk", sans-serif;
+    --font-body: "Hanken Grotesk", sans-serif;
+    --font-mono: "Fragment Mono", monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--dusk);
+    color: var(--ink-dark);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------------- SPLIT HEADER ---------------- */
+  .site-header {
+    position: absolute;
+    top: 2rem;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    padding: 0 2.5rem;
+  }
+  .header-inner {
+    max-width: 84rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .header-brand {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ink-dark);
+  }
+  .header-nav-group {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+  }
+  .fog-pill-nav {
+    background: var(--fog);
+    padding: 0.45rem 1.15rem;
+    border-radius: 999px;
+    display: flex;
+    gap: 1.25rem;
+    list-style: none;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  .fog-nav-link {
+    font-size: 0.84rem;
+    font-weight: 600;
+    color: var(--ink-fog-2);
+    transition: color 160ms var(--ease);
+  }
+  .fog-nav-link:hover, .fog-nav-link.is-active { color: var(--ink-fog); }
+  .fog-nav-link.is-active { text-decoration: underline; text-underline-offset: 3px; }
+
+  .header-socials {
+    display: flex;
+    gap: 0.75rem;
+    color: var(--ink-dark-2);
+  }
+  .header-socials a:hover { color: var(--teal); }
+  .header-socials svg { width: 17px; height: 17px; fill: currentColor; }
+
+  /* ---------------- NIGHT HERO BAND ---------------- */
+  .night-hero {
+    background: var(--night);
+    position: relative;
+    padding: 8.5rem 2.5rem 6.5rem;
+    overflow: hidden;
+  }
+
+  .night-canvas-bg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    z-index: 1;
+    opacity: 0.7;
+  }
+
+  .hero-container {
+    max-width: 84rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 4rem;
+    align-items: center;
+    position: relative;
+    z-index: 10;
+  }
+
+  .hero-copy {
+    display: flex;
+    flex-direction: column;
+  }
+  .hero-title-huge {
+    font-family: var(--font-display);
+    font-size: clamp(3.2rem, 5.8vw, 5rem);
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    line-height: 0.98;
+    margin: 0 0 1rem;
+    color: var(--ink-dark);
+  }
+  .hero-subtitle {
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: var(--ink-dark-2);
+    margin: 0 0 1.75rem;
+  }
+  .hero-subtitle strong { color: var(--ink-dark); font-weight: 600; }
+  .hero-lead-text {
+    font-size: 1.05rem;
+    line-height: 1.68;
+    color: var(--ink-dark-2);
+    max-width: 48ch;
+    margin: 0 0 2rem;
+  }
+  .hero-lead-text strong { color: var(--ink-dark); }
+  .hero-links-row {
+    display: flex;
+    align-items: baseline;
+    gap: 1.25rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .hero-link-prime {
+    color: var(--teal);
+    font-weight: 600;
+    font-size: 0.95rem;
+  }
+  .hero-link-sec {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.88rem;
+    color: var(--ink-dark-3);
+  }
+  .hero-link-sec a:hover { color: var(--ink-dark); }
+
+  /* ---------------- LIGHT FOG CHAT CARD (OVERLAPPING) ---------------- */
+  .fog-card-stage {
+    position: relative;
+    margin-bottom: -11rem; /* Physical Straddle into Dusk Section */
+    z-index: 30;
+  }
+
+  .fog-card {
+    background: var(--fog);
+    color: var(--ink-fog);
+    border-radius: 20px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.8) inset,
+      0 20px 45px -10px rgba(0, 0, 0, 0.45),
+      0 40px 80px -20px rgba(10, 15, 26, 0.6);
+    overflow: hidden;
+  }
+
+  .fog-card-head {
+    padding: 0.85rem 1.25rem;
+    background: var(--fog-2);
+    border-bottom: 1px solid var(--fog-3);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .fog-card-badge {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--ink-fog-2);
+  }
+  .fog-card-beacon {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--amber);
+    box-shadow: 0 0 6px rgba(241, 182, 92, 0.8);
+  }
+
+  .fog-card-tabs {
+    display: flex;
+    padding: 0.35rem 0.65rem;
+    background: var(--fog-2);
+    gap: 0.35rem;
+    border-bottom: 1px solid var(--fog-3);
+  }
+  .fog-tab-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    font-family: var(--font-body);
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--ink-fog-2);
+    padding: 0.45rem 0.3rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 160ms var(--ease);
+  }
+  .fog-tab-btn:hover { color: var(--ink-fog); }
+  .fog-tab-btn.is-active {
+    background: var(--fog);
+    color: var(--ink-fog);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.12);
+  }
+
+  .fog-card-transcript {
+    padding: 1.35rem;
+    min-height: 19rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--fog);
+  }
+  .fog-user-bubble {
+    align-self: flex-end;
+    background: var(--fog-2);
+    color: var(--ink-fog);
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    padding: 0.55rem 0.85rem;
+    border-radius: 10px 10px 2px 10px;
+    max-width: 85%;
+    border: 1px solid var(--fog-3);
+  }
+
+  .fog-agent-reply {
+    display: flex;
+    flex-direction: column;
+    gap: 0.8rem;
+    font-size: 0.92rem;
+    color: var(--ink-fog-2);
+    line-height: 1.58;
+  }
+  .fog-agent-reply strong { color: var(--ink-fog); font-weight: 700; }
+  .fog-thinking {
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    color: var(--amber);
+  }
+  .fog-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    padding-top: 0.65rem;
+    border-top: 1px solid var(--fog-3);
+  }
+  .ag-b { display: flex; flex-direction: column; gap: 0.15rem; }
+  .ag-bt { font-size: 0.86rem; color: var(--ink-fog); font-weight: 700; }
+  .ag-bd { margin: 0; font-size: 0.84rem; color: var(--ink-fog-2); }
+
+  .ag-cur {
+    display: inline-block;
+    width: 6px;
+    height: 0.95em;
+    vertical-align: -1px;
+    background: var(--amber);
+    margin-left: 2px;
+    animation: blk 0.8s infinite;
+  }
+  @keyframes blk { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+  .fog-composer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--fog-2);
+    border-top: 1px solid var(--fog-3);
+  }
+  .fog-input-line {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--ink-fog);
+  }
+  .fog-send-btn {
+    background: var(--teal-fog);
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.4rem 0.85rem;
+    cursor: pointer;
+    transition: transform 140ms var(--ease);
+  }
+  .fog-send-btn:active { transform: scale(0.96); }
+
+  /* ---------------- DUSK LOWER SECTION ---------------- */
+  .dusk-section {
+    padding: 14rem 2.5rem 6.5rem;
+    max-width: 84rem;
+    margin: 0 auto;
+  }
+
+  /* Asymmetric Explore Layout */
+  .explore-asym {
+    margin-bottom: 6rem;
+  }
+  .explore-asym-title {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin: 0 0 3rem;
+  }
+  .explore-asym-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+  .explore-asym-item {
+    display: grid;
+    grid-template-columns: 18rem 1fr;
+    gap: 2rem;
+    padding-bottom: 2rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    align-items: baseline;
+    transition: transform 180ms var(--ease);
+  }
+  .explore-asym-item:hover { transform: translateX(6px); }
+  .explore-asym-name {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: var(--ink-dark);
+  }
+  .explore-asym-item:hover .explore-asym-name { color: var(--teal); }
+  .explore-asym-desc {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink-dark-2);
+    line-height: 1.6;
+    max-width: 60ch;
+  }
+
+  /* ---------------- HORIZONTAL TIMELINE TRACK ---------------- */
+  .timeline-band {
+    background: var(--haze);
+    border-radius: 16px;
+    padding: 3rem 2.5rem;
+  }
+  .timeline-band-head {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 700;
+    margin: 0 0 2.5rem;
+  }
+  .timeline-track {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+    position: relative;
+  }
+  .timeline-track::before {
+    content: "";
+    position: absolute;
+    top: 6px;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: rgba(255, 255, 255, 0.12);
+  }
+  .timeline-stop {
+    position: relative;
+    padding-top: 1.75rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .timeline-stop-node {
+    position: absolute;
+    top: 2px;
+    left: 0;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--haze);
+    border: 2px solid var(--ink-dark-3);
+  }
+  .timeline-stop.is-active .timeline-stop-node {
+    background: var(--amber);
+    border-color: var(--amber);
+    box-shadow: 0 0 8px rgba(241, 182, 92, 0.8);
+  }
+  .timeline-stop-date {
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--ink-dark-3);
+  }
+  .timeline-stop-org {
+    font-family: var(--font-display);
+    font-size: 1.25rem;
+    font-weight: 700;
+    color: var(--ink-dark);
+  }
+  .timeline-stop-role {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--teal);
+  }
+  .timeline-stop:not(.is-active) .timeline-stop-role { color: var(--ink-dark-2); }
+  .timeline-stop-summary {
+    margin: 0.4rem 0 0;
+    font-size: 0.85rem;
+    color: var(--ink-dark-2);
+    line-height: 1.55;
+  }
+
+  /* Footer */
+  .site-footer {
+    padding: 3rem 2.5rem;
+    max-width: 84rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.84rem;
+    color: var(--ink-dark-3);
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+  }
+
+  @media (max-width: 960px) {
+    .hero-container { grid-template-columns: 1fr; gap: 3rem; }
+    .fog-card-stage { margin-bottom: 0; }
+    .dusk-section { padding-top: 4rem; }
+    .explore-asym-item { grid-template-columns: 1fr; gap: 0.5rem; }
+    .timeline-track { grid-template-columns: 1fr; gap: 2rem; }
+    .timeline-track::before { display: none; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Split Header -->
+  <header class="site-header">
+    <div class="header-inner">
+      <a href="#" class="header-brand">Luke Guppy</a>
+      <div class="header-nav-group">
+        <nav aria-label="Main">
+          <ul class="fog-pill-nav">
+            <li><a href="#" class="fog-nav-link is-active">Home</a></li>
+            <li><a href="#" class="fog-nav-link">About Me</a></li>
+            <li><a href="#" class="fog-nav-link">Dissertation</a></li>
+            <li><a href="#" class="fog-nav-link">Playground</a></li>
+            <li><a href="#" class="fog-nav-link">Contact</a></li>
+          </ul>
+        </nav>
+        <div class="header-socials">
+          <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24"><path d="M19 3a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h14m-.5 15.5v-5.3a3.26 3.26 0 0 0-3.26-3.26c-.85 0-1.84.52-2.28 1.3v-1.11h-2.79v8.37h2.79v-4.93c0-.77.62-1.4 1.39-1.4a1.4 1.4 0 0 1 1.4 1.4v4.93h2.75M6.88 8.56a1.68 1.68 0 0 0 1.68-1.68c0-.93-.75-1.69-1.68-1.69a1.69 1.69 0 0 0-1.69 1.69c0 .93.76 1.68 1.69 1.68m1.39 9.94v-8.37H5.5v8.37h2.77z"/></svg>
+          </a>
+          <a href="https://github.com/lukeguppy" target="_blank" rel="noopener" aria-label="GitHub">
+            <svg viewBox="0 0 24 24"><path d="M12 2A10 10 0 0 0 2 12c0 4.42 2.87 8.17 6.84 9.5.5.08.66-.23.66-.5v-1.69c-2.77.6-3.36-1.34-3.36-1.34-.46-1.16-1.11-1.47-1.11-1.47-.91-.62.07-.6.07-.6 1 .07 1.53 1.03 1.53 1.03.87 1.52 2.34 1.07 2.91.83.09-.65.35-1.09.63-1.34-2.22-.25-4.55-1.11-4.55-4.92 0-1.11.38-2 1.03-2.71-.1-.25-.45-1.29.1-2.64 0 0 .84-.27 2.75 1.02.79-.22 1.65-.33 2.5-.33.85 0 1.71.11 2.5.33 1.91-1.29 2.75-1.02 2.75-1.02.55 1.35.2 2.39.1 2.64.65.71 1.03 1.6 1.03 2.71 0 3.82-2.34 4.66-4.57 4.91.36.31.69.92.69 1.85V21c0 .27.16.59.67.5C19.14 20.16 22 16.42 22 12A10 10 0 0 0 12 2z"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Upper Night Band -->
+    <section class="night-hero">
+      <canvas id="neural-canvas" class="night-canvas-bg"></canvas>
+
+      <div class="hero-container">
+        <div class="hero-copy">
+          <h1 class="hero-title-huge">Luke Guppy</h1>
+          <div class="hero-subtitle">AI Software Engineer @ <strong>AlphaSights</strong></div>
+          <p class="hero-lead-text">
+            Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.
+          </p>
+          <div class="hero-links-row">
+            <a href="#" class="hero-link-prime">Experience ➔</a>
+            <div class="hero-link-sec">
+              <a href="#">Dissertation</a>
+              <a href="#">Playground</a>
+              <a href="#">Contact Me</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Overlapping Light Fog Chat Card -->
+        <div class="fog-card-stage">
+          <aside class="fog-card" data-agent-root aria-label="Interactive Overview Terminal">
+            <div class="fog-card-head">
+              <div class="fog-card-badge">
+                <span class="fog-card-beacon"></span>
+                <span>luke.agent // inquiry</span>
+              </div>
+              <span style="font-family: var(--font-mono); font-size: 0.72rem; color: var(--ink-fog-3);">ACTIVE DISPATCH</span>
+            </div>
+
+            <div class="fog-card-tabs">
+              <button class="fog-tab-btn is-active" data-agent-chip="intro">Overview</button>
+              <button class="fog-tab-btn" data-agent-chip="alphasights">AlphaSights Role</button>
+              <button class="fog-tab-btn" data-agent-chip="experience">Past Experience</button>
+              <button class="fog-tab-btn" data-agent-chip="projects">Projects</button>
+            </div>
+
+            <div class="fog-card-transcript">
+              <div class="fog-user-bubble" data-agent-q hidden></div>
+
+              <div class="fog-agent-reply">
+                <div class="fog-thinking" data-agent-thinking hidden>
+                  <span>Synthesizing briefing...</span>
+                </div>
+                <div data-agent-summary></div>
+                <div class="fog-bullets" data-agent-bullets></div>
+              </div>
+            </div>
+
+            <div class="fog-composer">
+              <div class="fog-input-line">
+                <span style="color: var(--teal-fog);">&gt; </span>
+                <span data-agent-input></span>
+                <span class="ag-cur" data-agent-caret></span>
+              </div>
+              <button class="fog-send-btn" data-agent-send type="button">SEND</button>
+            </div>
+          </aside>
+        </div>
+      </div>
+    </section>
+
+    <!-- Lower Dusk Section -->
+    <section class="dusk-section">
+      <!-- Asymmetric Explore -->
+      <div class="explore-asym">
+        <h2 class="explore-asym-title">Explore Work</h2>
+        <div class="explore-asym-list">
+          <a href="#" class="explore-asym-item">
+            <span class="explore-asym-name">Experience</span>
+            <p class="explore-asym-desc">Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
+          </a>
+
+          <a href="#" class="explore-asym-item">
+            <span class="explore-asym-name">Dissertation</span>
+            <p class="explore-asym-desc">Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
+          </a>
+
+          <a href="#" class="explore-asym-item">
+            <span class="explore-asym-name">Playground</span>
+            <p class="explore-asym-desc">Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
+          </a>
+
+          <a href="#" class="explore-asym-item">
+            <span class="explore-asym-name">Contact Me</span>
+            <p class="explore-asym-desc">Get in touch directly via email, LinkedIn, or GitHub.</p>
+          </a>
+        </div>
+      </div>
+
+      <!-- Horizontal Career Timeline Track -->
+      <div class="timeline-band">
+        <h2 class="timeline-band-head">Engineering Trajectory</h2>
+        <div class="timeline-track">
+          <article class="timeline-stop is-active">
+            <div class="timeline-stop-node"></div>
+            <div class="timeline-stop-date">FEB 2026 – PRESENT</div>
+            <div class="timeline-stop-org">AlphaSights</div>
+            <div class="timeline-stop-role">Software Engineer I — AI Team</div>
+            <p class="timeline-stop-summary">Building internal and external AI chat platforms, client-facing MCP servers, custom engineering tools, and automated AI data processing pipelines.</p>
+          </article>
+
+          <article class="timeline-stop">
+            <div class="timeline-stop-node"></div>
+            <div class="timeline-stop-date">AUG 2024 – JAN 2026</div>
+            <div class="timeline-stop-org">Leonardo Helicopters</div>
+            <div class="timeline-stop-role">Graduate Software Engineer</div>
+            <p class="timeline-stop-summary">Autonomy &amp; Tactical Processing: Reinforcement learning drone flight simulations in Python/Docker, combinatorial optimization solvers, and mission management microservices in C++ and gRPC.</p>
+          </article>
+
+          <article class="timeline-stop">
+            <div class="timeline-stop-node"></div>
+            <div class="timeline-stop-date">2021 – 2024</div>
+            <div class="timeline-stop-org">University of Warwick</div>
+            <div class="timeline-stop-role">BSc Computer Science (1st Class Hons)</div>
+            <p class="timeline-stop-summary">Graduated with First-Class Honours. Engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous vehicle navigation in complex urban traffic environments.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <span>© 2026 Luke Guppy · Dusk Exploratory Mockup</span>
+    <a href="mailto:lukewguppy@gmail.com" style="color: var(--teal);">lukewguppy@gmail.com</a>
+  </footer>
+
+  <script>
+    const BRIEFINGS = {
+      intro: {
+        prompt: 'Tell me about Luke',
+        summary: 'Luke Guppy is an AI Software Engineer at AlphaSights with a First-Class Computer Science degree from the University of Warwick, specialising in backend AI systems, MCP servers, and workflow automation.',
+        highlights: ['AI Software Engineer at AlphaSights', 'First-Class Computer Science degree'],
+        bullets: [
+          { title: 'Current role at AlphaSights', detail: 'Building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing.' },
+          { title: 'Previous experience at Leonardo Helicopters', detail: 'Graduate Software Engineer building reinforcement learning simulations, optimisation solvers, and C++/Docker mission systems.' },
+          { title: 'Core languages & technologies', detail: 'Python, TypeScript, C++, C#, SQL, Docker, and modern LLM & MCP frameworks.' },
+        ],
+      },
+      alphasights: {
+        prompt: 'What does Luke build on the AI Team at AlphaSights?',
+        summary: 'On the AI team at AlphaSights, Luke engineers the backend platforms, tool integrations, and data workflows that power internal operations and client-facing AI products.',
+        highlights: ['backend platforms, tool integrations, and data workflows'],
+        bullets: [
+          { title: 'Internal & external AI chat platforms', detail: 'Developed the internal AI chat platform and now designs and implements the external-facing AI chat alongside its custom tool integrations.' },
+          { title: 'Client-facing MCP server & tooling', detail: 'Designing and implementing the client-facing Model Context Protocol (MCP) server to expose structured tools and data across external workflows.' },
+          { title: 'AI workflows & data processing jobs', detail: 'Building AI jobs for automated data processing and evaluating new AI capabilities to shape the company’s core AI foundations.' },
+        ],
+      },
+      experience: {
+        prompt: 'What is his background before AlphaSights?',
+        summary: 'Before joining AlphaSights, Luke spent 18 months as a Graduate Software Engineer at Leonardo Helicopters after graduating with First-Class Honours in Computer Science from the University of Warwick.',
+        highlights: ['Graduate Software Engineer at Leonardo Helicopters', 'First-Class Honours'],
+        bullets: [
+          { title: 'Leonardo Helicopters — Autonomy', detail: 'Implemented task-assignment optimisation solvers, built Python ROS2/Docker drone simulations for reinforcement learning, and designed behaviour tree architectures.' },
+          { title: 'Leonardo Helicopters — Tactical Processing', detail: 'Developed a C++/Docker mission management system with decision-tree infrastructure and built gRPC services for multi-system communication.' },
+          { title: 'University of Warwick — BSc Computer Science (1st)', detail: 'Graduated with First-Class Honours; engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous urban driving.' },
+        ],
+      },
+      projects: {
+        prompt: 'What projects has Luke built?',
+        summary: 'Luke has built technical projects spanning deep reinforcement learning, transformer architectures, combinatorial optimisation, network simulation, and interactive browser apps.',
+        highlights: ['deep reinforcement learning', 'transformer architectures'],
+        bullets: [
+          { title: 'Autonomous Navigation Dissertation (C#, Unity, PPO)', detail: 'Trained a Proximal Policy Optimisation reinforcement learning agent to control an autonomous vehicle through multi-lane traffic and intersections.' },
+          { title: 'AI & Systems Projects (Python, C++, C#)', detail: 'Built a scaled-down Transformer next-token predictor, an AI dynamic-pricing scheduler, a C++/NS-3 delay-tolerant network simulator, and a C#/WPF wave diffraction simulator.' },
+          { title: 'Interactive Browser Playground (JavaScript)', detail: 'Created interactive web versions of a Wordle Solver, Chess, Countries Quiz, Map Plotter, and Block Blast.' },
+        ],
+      },
+    };
+
+    function createNeuralNet(canvas) {
+      const o = {
+        layers: [4, 6, 8, 8, 6, 4],
+        lineRGB: '177,186,203', lineAlpha: 0.08,
+        strongRGB: '241,182,92', strongAlpha: 0.16,
+        nodeRGB: '177,186,203', nodeAlpha: 0.35, nodeR: 1.6,
+        pulseRGB: ['241,182,92', '200,214,235'], pulseWeights: [0.65, 0.35],
+        hop: 1200, gap: [800, 1800],
+      };
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, layers = [], conns = [], passes = [], wait = 200, last = performance.now();
+
+      function build() {
+        layers = []; conns = [];
+        const pattern = o.layers;
+        const px = W * 0.06, sp = (W - px * 2) / (pattern.length - 1);
+        pattern.forEach((count, l) => {
+          const span = H * 0.7;
+          const y0 = (H - span) / 2, vs = span / (count - 1);
+          const layer = [];
+          for (let i = 0; i < count; i++) {
+            layer.push({ x: px + sp * l, y: y0 + vs * i, l });
+          }
+          layers.push(layer);
+        });
+        for (let l = 0; l < layers.length - 1; l++) {
+          layers[l].forEach((a) => {
+            layers[l + 1].slice(0, 3).forEach((b) => {
+              conns.push({ a, b, w: 0.2 + Math.random() * 0.8 });
+            });
+          });
+        }
+      }
+
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        W = r.width; H = r.height;
+        canvas.width = W; canvas.height = H;
+        build();
+      }
+
+      function frame(now) {
+        requestAnimationFrame(frame);
+        ctx.clearRect(0, 0, W, H);
+        for (const c of conns) {
+          ctx.strokeStyle = c.w > 0.7 ? `rgba(${o.strongRGB},${o.strongAlpha})` : `rgba(${o.lineRGB},${o.lineAlpha})`;
+          ctx.lineWidth = c.w > 0.7 ? 0.8 : 0.5;
+          ctx.beginPath(); ctx.moveTo(c.a.x, c.a.y); ctx.lineTo(c.b.x, c.b.y); ctx.stroke();
+        }
+        for (let i = passes.length - 1; i >= 0; i--) {
+          const p = passes[i];
+          const t = Math.min(1, (now - p.t0) / o.hop);
+          for (const q of p.pulses) {
+            const x = q.a.x + (q.b.x - q.a.x) * t, y = q.a.y + (q.b.y - q.a.y) * t;
+            ctx.fillStyle = `rgba(${p.rgb},0.85)`;
+            ctx.beginPath(); ctx.arc(x, y, 2.0, 0, 6.28); ctx.fill();
+          }
+          if (t >= 1) {
+            passes.splice(i, 1);
+            if (p.l < layers.length - 2) {
+              const nextNodes = p.pulses.map((q) => q.b);
+              const nextPulses = [];
+              nextNodes.forEach((n) => {
+                const targets = layers[p.l + 2] || [];
+                targets.slice(0, 2).forEach((b) => nextPulses.push({ a: n, b }));
+              });
+              if (nextPulses.length) passes.push({ t0: now, pulses: nextPulses, l: p.l + 1, rgb: p.rgb });
+            }
+          }
+        }
+        for (const L of layers) for (const n of L) {
+          ctx.fillStyle = `rgba(${o.nodeRGB},${o.nodeAlpha})`;
+          ctx.beginPath(); ctx.arc(n.x, n.y, o.nodeR, 0, 6.28); ctx.fill();
+        }
+        if (now - last > 1300) {
+          last = now;
+          const a = layers[0][Math.floor(Math.random() * layers[0].length)];
+          const b = layers[1][0];
+          passes.push({ t0: now, pulses: [{ a, b }], l: 0, rgb: o.pulseRGB[0] });
+        }
+      }
+
+      new ResizeObserver(resize).observe(canvas);
+      resize();
+      requestAnimationFrame(frame);
+    }
+
+    function createAgent(root) {
+      const $ = (s) => root.querySelector(s);
+      const input = $('[data-agent-input]'), caret = $('[data-agent-caret]'), q = $('[data-agent-q]');
+      const thinking = $('[data-agent-thinking]'), summary = $('[data-agent-summary]'), bullets = $('[data-agent-bullets]');
+      const chips = root.querySelectorAll('[data-agent-chip]');
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const CUR = '<span class="ag-cur"></span>';
+      let run = 0;
+
+      async function play(key) {
+        const tok = ++run, d = BRIEFINGS[key] || BRIEFINGS.intro;
+        input.textContent = ''; caret.hidden = false;
+        thinking.hidden = true; summary.innerHTML = ''; bullets.innerHTML = '';
+        await sleep(300); if (tok !== run) return;
+        for (let i = 1; i <= d.prompt.length; i++) {
+          if (tok !== run) return;
+          input.textContent = d.prompt.slice(0, i);
+          await sleep(25);
+        }
+        await sleep(250); if (tok !== run) return;
+        q.textContent = d.prompt; q.hidden = false; input.textContent = '';
+        thinking.hidden = false;
+        await sleep(550); if (tok !== run) return;
+        thinking.hidden = true;
+        for (let i = 3; i <= d.summary.length; i += 3) {
+          if (tok !== run) return;
+          summary.innerHTML = d.summary.slice(0, i) + CUR;
+          await sleep(10);
+        }
+        summary.textContent = d.summary;
+        await sleep(120);
+        for (const b of d.bullets) {
+          if (tok !== run) return;
+          const row = document.createElement('div'); row.className = 'ag-b';
+          row.innerHTML = `<strong class="ag-bt">${b.title}</strong><p class="ag-bd">${b.detail}</p>`;
+          bullets.appendChild(row);
+          await sleep(60);
+        }
+      }
+
+      chips.forEach((c) => c.addEventListener('click', () => {
+        chips.forEach((x) => x.classList.toggle('is-active', x === c));
+        play(c.dataset.agentChip);
+      }));
+      play('intro');
+    }
+
+    createNeuralNet(document.getElementById('neural-canvas'));
+    createAgent(document.querySelector('[data-agent-root]'));
+  </script>
+</body>
+</html>

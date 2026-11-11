@@ -3,13 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0f1d">
+    <meta name="theme-color" content="#030712">
     <title>{% if title and title != "Home" %}{{ title }} · {% endif %}{{ site.author }}</title>
     <meta name="description" content="{{ description or site.description }}">
-    <link rel="preload" href="{{ '/assets/fonts/overpass-latin-wght-normal.woff2' | url }}" as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="{{ '/assets/fonts/literata-latin-wght-normal.woff2' | url }}" as="font" type="font/woff2" crossorigin>
-    <link rel="stylesheet" href="{{ '/assets/styles/main.css' | url }}">
-    {% if pageCss %}<link rel="stylesheet" href="{{ ('/assets/styles/pages/' + pageCss + '.css') | url }}">{% endif %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ '/assets/styles/main.css' | url }}?v=genesis3">
+    {% if pageCss %}<link rel="stylesheet" href="{{ ('/assets/styles/pages/' + pageCss + '.css') | url }}?v=genesis3">{% endif %}
     {% if legacyStyle %}<link rel="stylesheet" href="{{ legacyStyle | url }}">{% endif %}
 </head>
 <body data-chrome="{{ chrome or 'default' }}"{% if pageCss %} data-page="{{ pageCss }}"{% endif %}>

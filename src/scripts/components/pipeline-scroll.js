@@ -1351,36 +1351,36 @@ export function initPipelineScroll() {
           });
 
           // -------------------------------------------------------------
-          // 7. SOFT EDGE VIGNETTE FADE (Fades all 4 outer edges into #080c14)
+          // 7. SOFT EDGE VIGNETTE FADE (Fades all 4 outer edges into #030712)
           // -------------------------------------------------------------
           const fadeW = Math.round(width * 0.12);
           const fadeH = Math.round(height * 0.14);
 
           // Top edge fade
           const gradTop = ctx.createLinearGradient(0, 0, 0, fadeH);
-          gradTop.addColorStop(0, '#080c14');
-          gradTop.addColorStop(1, 'rgba(8, 12, 20, 0)');
+          gradTop.addColorStop(0, '#030712');
+          gradTop.addColorStop(1, 'rgba(3, 7, 18, 0)');
           ctx.fillStyle = gradTop;
           ctx.fillRect(0, 0, width, fadeH);
 
           // Bottom edge fade
           const gradBottom = ctx.createLinearGradient(0, height - fadeH, 0, height);
-          gradBottom.addColorStop(0, 'rgba(8, 12, 20, 0)');
-          gradBottom.addColorStop(1, '#080c14');
+          gradBottom.addColorStop(0, 'rgba(3, 7, 18, 0)');
+          gradBottom.addColorStop(1, '#030712');
           ctx.fillStyle = gradBottom;
           ctx.fillRect(0, height - fadeH, width, fadeH);
 
           // Left edge fade
           const gradLeft = ctx.createLinearGradient(0, 0, fadeW, 0);
-          gradLeft.addColorStop(0, '#080c14');
-          gradLeft.addColorStop(1, 'rgba(8, 12, 20, 0)');
+          gradLeft.addColorStop(0, '#030712');
+          gradLeft.addColorStop(1, 'rgba(3, 7, 18, 0)');
           ctx.fillStyle = gradLeft;
           ctx.fillRect(0, 0, fadeW, height);
 
           // Right edge fade
           const gradRight = ctx.createLinearGradient(width - fadeW, 0, width, 0);
-          gradRight.addColorStop(0, 'rgba(8, 12, 20, 0)');
-          gradRight.addColorStop(1, '#080c14');
+          gradRight.addColorStop(0, 'rgba(3, 7, 18, 0)');
+          gradRight.addColorStop(1, '#030712');
           ctx.fillStyle = gradRight;
           ctx.fillRect(width - fadeW, 0, fadeW, height);
         }
@@ -1525,8 +1525,8 @@ export function initPipelineScroll() {
         // Atmospheric Horizon Fog (softly dissolves the grid into dark space above the horizon — ZERO cutoff line)
         const fogH = Math.max(140, height * 0.42);
         const fogGrad = ctx.createLinearGradient(0, horizonY - 60, 0, horizonY + fogH);
-        fogGrad.addColorStop(0, '#080c14');
-        fogGrad.addColorStop(0.28, '#080c14');
+        fogGrad.addColorStop(0, '#030712');
+        fogGrad.addColorStop(0.28, '#030712');
         fogGrad.addColorStop(0.65, 'rgba(8, 12, 20, 0.75)');
         fogGrad.addColorStop(1, 'rgba(8, 12, 20, 0)');
         ctx.fillStyle = fogGrad;

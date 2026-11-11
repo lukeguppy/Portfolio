@@ -1,8 +1,8 @@
 /* Type system: Overpass Variable for UI & headings, Bebas Neue for monumental portal titles, JetBrains Mono for telemetry */
 :root {
   --font-display: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-body: "Overpass Variable", "Overpass", -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-sans: var(--font-body);
+  --font-body: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-sans: "Plus Jakarta Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-serif: "Literata Variable", "Literata", Georgia, serif;
   --font-portal: "Bebas Neue", "Overpass Variable", sans-serif;
   --font-mono: "JetBrains Mono Variable", "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;

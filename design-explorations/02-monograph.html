@@ -1,0 +1,878 @@
+<!--
+  Direction 02: "Monograph"
+  Thesis: An understated, high-literacy editorial direction on warm graphite.
+  Treats the portfolio like the opening spread of an academic monograph or architectural journal.
+  Colour is stripped away from generic decorations, reserving a warm Ochre purely for live signals
+  and an oxidized Verdigris for interaction.
+
+  Palette Tokens:
+  - --paper: #131210 (Deep warm charcoal/espresso paper)
+  - --paper-2: #1a1815 (Secondary quiet band)
+  - --sheet: #211f1b (Transcript and panel sheet ground)
+  - --rule: #3a362f (Crisp hairline rules)
+  - --rule-quiet: #28251f (Subtle structural dividers)
+  - --ink: #eee7da (Warm parchment white text)
+  - --ink-2: #b6ad9e (Muted editorial body)
+  - --ink-3: #81796c (Metadata, timestamps, footnotes)
+  - --verdigris: #7dbfaf (INTERACTIVE: hover states, active links, focused inputs)
+  - --ochre: #d7a548 (LIVE SIGNAL ONLY: status indicator, pulse cores, current timeline node)
+
+  Typography:
+  - Newsreader (Optical Variable Serif): Academic weight, italic nuances for subtitles and titles.
+  - IBM Plex Sans: Clean humanist engineering sans for dense copy and navigation.
+  - IBM Plex Mono: Strict monospace reserved for transcript prompt questions and CV dates.
+
+  Problem Solutions:
+  - Nav: Elegant masthead with no floating pill box. Anchored by a clean structural hairline.
+  - Chat Treatment: NOT a fake rounded card. Treated as an interview transcript / colloquy with "Q." and "A." structure on a warm sheet.
+  - Typography: Name in Newsreader light/regular display; title in delicate Newsreader italic; hero links resolved as an editorial prose sentence.
+  - Canvas: Warm ochre/ink network masked to the masthead/header region, preventing pulse distraction behind reading text.
+  - Explore: Set as a clean editorial index/table of contents with typographic leader rules.
+  - Timeline: Clean tabular curriculum vitae table with ochre "now" marker.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy — Monograph (Direction 02)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..600;1,6..72,400;1,6..72,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #131210;
+    --paper-2: #1a1815;
+    --sheet: #211f1b;
+    --rule: #3a362f;
+    --rule-quiet: #28251f;
+    --ink: #eee7da;
+    --ink-2: #b6ad9e;
+    --ink-3: #81796c;
+    --verdigris: #7dbfaf;
+    --ochre: #d7a548;
+
+    --font-serif: "Newsreader", Garamond, Georgia, serif;
+    --font-sans: "IBM Plex Sans", -apple-system, sans-serif;
+    --font-mono: "IBM Plex Mono", monospace;
+
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-sans);
+    font-size: 1rem;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------------- MASTHEAD ---------------- */
+  .masthead {
+    border-bottom: 1px solid var(--rule);
+    padding: 1.75rem 2.5rem;
+    position: relative;
+    z-index: 50;
+    background: var(--paper);
+  }
+  .masthead-inner {
+    max-width: 84rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+  }
+  .masthead-brand {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  .masthead-nav {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .masthead-link {
+    font-size: 0.86rem;
+    color: var(--ink-2);
+    letter-spacing: 0.02em;
+    transition: color 180ms var(--ease);
+  }
+  .masthead-link:hover, .masthead-link.is-active { color: var(--ink); }
+  .masthead-link.is-active {
+    border-bottom: 1px solid var(--ink);
+    padding-bottom: 2px;
+  }
+  .masthead-socials {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--rule-quiet);
+  }
+  .masthead-socials a {
+    color: var(--ink-2);
+    font-size: 0.84rem;
+    transition: color 180ms var(--ease);
+  }
+  .masthead-socials a:hover { color: var(--verdigris); }
+
+  /* ---------------- HERO SPREAD ---------------- */
+  .hero-spread {
+    position: relative;
+    max-width: 84rem;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1.15fr 0.85fr;
+    border-bottom: 1px solid var(--rule);
+    min-height: min(100vh, 860px);
+  }
+
+  /* Upper canvas behind title */
+  .hero-canvas-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 60%;
+    height: 70%;
+    pointer-events: auto;
+    z-index: 1;
+    mask-image: radial-gradient(ellipse at 30% 30%, black 20%, transparent 75%);
+    -webkit-mask-image: radial-gradient(ellipse at 30% 30%, black 20%, transparent 75%);
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 10;
+    padding: 5.5rem 3.5rem 5rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .hero-name {
+    font-family: var(--font-serif);
+    font-size: clamp(3.4rem, 5.8vw, 5.4rem);
+    font-weight: 400;
+    line-height: 0.98;
+    letter-spacing: -0.035em;
+    margin: 0 0 1rem;
+    color: var(--ink);
+  }
+
+  .hero-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.45rem;
+    color: var(--ink-2);
+    margin: 0 0 2rem;
+  }
+  .hero-title strong {
+    font-style: normal;
+    color: var(--ink);
+    font-weight: 500;
+  }
+
+  .hero-lead {
+    font-size: 1.05rem;
+    line-height: 1.72;
+    color: var(--ink-2);
+    max-width: 52ch;
+    margin: 0 0 2.5rem;
+  }
+  .hero-lead strong { color: var(--ink); font-weight: 600; }
+
+  .hero-editorial-links {
+    font-family: var(--font-serif);
+    font-size: 1.15rem;
+    color: var(--ink-2);
+    line-height: 1.8;
+  }
+  .hero-editorial-links a {
+    color: var(--ink);
+    border-bottom: 1px solid var(--verdigris);
+    transition: color 180ms var(--ease), border-color 180ms var(--ease);
+  }
+  .hero-editorial-links a:hover {
+    color: var(--verdigris);
+  }
+
+  /* ---------------- INTERVIEW TRANSCRIPT COLUMN ---------------- */
+  .transcript-column {
+    background: var(--sheet);
+    border-left: 1px solid var(--rule);
+    padding: 3rem 2.5rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    z-index: 10;
+  }
+
+  .transcript-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .transcript-title {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 1.05rem;
+    color: var(--ink);
+    margin: 0;
+  }
+  .transcript-signal {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    font-family: var(--font-mono);
+    font-size: 0.76rem;
+    color: var(--ochre);
+  }
+  .transcript-signal-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ochre);
+  }
+
+  .transcript-tabs {
+    display: flex;
+    gap: 0.75rem;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--rule-quiet);
+    flex-wrap: wrap;
+  }
+  .transcript-tab {
+    background: none;
+    border: none;
+    padding: 0;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    color: var(--ink-3);
+    cursor: pointer;
+    transition: color 180ms var(--ease);
+  }
+  .transcript-tab:hover { color: var(--ink); }
+  .transcript-tab.is-active {
+    color: var(--verdigris);
+    border-bottom: 1px solid var(--verdigris);
+  }
+
+  .transcript-body {
+    flex: 1;
+    padding: 1.75rem 0;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .transcript-q-row {
+    display: flex;
+    gap: 0.6rem;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    color: var(--ink);
+  }
+  .transcript-q-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--ochre);
+    font-weight: 600;
+  }
+
+  .transcript-a-row {
+    display: flex;
+    gap: 0.6rem;
+    font-size: 0.92rem;
+    line-height: 1.62;
+    color: var(--ink-2);
+  }
+  .transcript-a-label {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--verdigris);
+    font-weight: 600;
+  }
+  .transcript-a-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .transcript-a-content strong { color: var(--ink); font-weight: 600; }
+
+  .transcript-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid var(--rule-quiet);
+  }
+  .ag-b {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+  .ag-bt {
+    font-size: 0.84rem;
+    color: var(--ink);
+    font-weight: 500;
+  }
+  .ag-bd {
+    margin: 0;
+    font-size: 0.82rem;
+    color: var(--ink-2);
+  }
+
+  .transcript-composer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+  }
+  .transcript-input-line {
+    color: var(--ink);
+    flex: 1;
+  }
+  .transcript-ask-btn {
+    background: none;
+    border: none;
+    font-family: var(--font-sans);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--verdigris);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .ag-cur {
+    display: inline-block;
+    width: 6px;
+    height: 0.9em;
+    vertical-align: -1px;
+    background: var(--ochre);
+    margin-left: 3px;
+    animation: blk 0.8s infinite;
+  }
+  @keyframes blk { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+  /* ---------------- CONTENTS SPREAD (EXPLORE) ---------------- */
+  .contents-spread {
+    max-width: 84rem;
+    margin: 0 auto;
+    padding: 5rem 2.5rem;
+    border-bottom: 1px solid var(--rule);
+  }
+  .contents-header {
+    margin-bottom: 3rem;
+  }
+  .contents-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 400;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+
+  .contents-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem 4rem;
+  }
+  .contents-item {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  .contents-item-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--rule-quiet);
+    padding-bottom: 0.4rem;
+  }
+  .contents-item-title {
+    font-family: var(--font-serif);
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: var(--ink);
+    transition: color 180ms var(--ease);
+  }
+  .contents-item:hover .contents-item-title { color: var(--verdigris); }
+  .contents-item-desc {
+    margin: 0;
+    font-size: 0.92rem;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+
+  /* ---------------- CURRICULUM VITAE TABLE (TIMELINE) ---------------- */
+  .cv-spread {
+    max-width: 84rem;
+    margin: 0 auto;
+    padding: 5rem 2.5rem 6rem;
+  }
+  .cv-title {
+    font-family: var(--font-serif);
+    font-size: 2.2rem;
+    font-weight: 400;
+    margin: 0 0 3rem;
+  }
+  .cv-table {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--rule);
+  }
+  .cv-row {
+    display: grid;
+    grid-template-columns: 16rem 1fr;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--rule-quiet);
+    gap: 2rem;
+  }
+  .cv-dates {
+    font-family: var(--font-mono);
+    font-size: 0.84rem;
+    color: var(--ink-3);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .cv-dates.is-current::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--ochre);
+  }
+  .cv-details {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .cv-org {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 500;
+    color: var(--ink);
+  }
+  .cv-role {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+  }
+  .cv-summary {
+    margin: 0.4rem 0 0;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    line-height: 1.62;
+    max-width: 64ch;
+  }
+
+  /* Colophon Footer */
+  .colophon {
+    border-top: 1px solid var(--rule);
+    padding: 2.5rem;
+    font-size: 0.82rem;
+    color: var(--ink-3);
+    max-width: 84rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 900px) {
+    .masthead-inner { flex-direction: column; gap: 1rem; }
+    .hero-spread { grid-template-columns: 1fr; }
+    .transcript-column { border-left: none; border-top: 1px solid var(--rule); }
+    .contents-grid { grid-template-columns: 1fr; }
+    .cv-row { grid-template-columns: 1fr; gap: 0.5rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Editorial Masthead -->
+  <header class="masthead">
+    <div class="masthead-inner">
+      <div class="masthead-brand">Luke Guppy</div>
+      <nav aria-label="Main">
+        <ul class="masthead-nav">
+          <li><a href="#" class="masthead-link is-active">Home</a></li>
+          <li><a href="#" class="masthead-link">About Me</a></li>
+          <li><a href="#" class="masthead-link">Dissertation</a></li>
+          <li><a href="#" class="masthead-link">Playground</a></li>
+          <li><a href="#" class="masthead-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="masthead-socials">
+        <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/lukeguppy" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Hero Editorial Spread -->
+    <section class="hero-spread">
+      <!-- Engraved Plate Neural Canvas -->
+      <div class="hero-canvas-container">
+        <canvas id="neural-canvas" style="width:100%; height:100%; display:block;"></canvas>
+      </div>
+
+      <div class="hero-content">
+        <h1 class="hero-name">Luke Guppy</h1>
+        <p class="hero-title">AI Software Engineer @ <strong>AlphaSights</strong></p>
+        <p class="hero-lead">
+          Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.
+        </p>
+        <p class="hero-editorial-links">
+          Read the <a href="#">Experience</a>, examine the <a href="#">Dissertation</a>, test the <a href="#">Playground</a>, or <a href="#">Contact Me</a> directly.
+        </p>
+      </div>
+
+      <!-- Transcript Colloquy Column -->
+      <aside class="transcript-column" data-agent-root aria-label="Interview Transcript">
+        <div>
+          <div class="transcript-head">
+            <h2 class="transcript-title">Colloquy with Luke</h2>
+            <span class="transcript-signal">
+              <span class="transcript-signal-dot"></span>
+              Live Dispatch
+            </span>
+          </div>
+
+          <div class="transcript-tabs">
+            <button class="transcript-tab is-active" data-agent-chip="intro">Overview</button>
+            <button class="transcript-tab" data-agent-chip="alphasights">AlphaSights Role</button>
+            <button class="transcript-tab" data-agent-chip="experience">Past Experience</button>
+            <button class="transcript-tab" data-agent-chip="projects">Projects</button>
+          </div>
+
+          <div class="transcript-body">
+            <div class="transcript-q-row">
+              <span class="transcript-q-label">Q.</span>
+              <span data-agent-q>Tell me about Luke</span>
+            </div>
+
+            <div class="transcript-a-row">
+              <span class="transcript-a-label">A.</span>
+              <div class="transcript-a-content">
+                <div data-agent-thinking hidden style="color: var(--ochre); font-style: italic;">Consulting dossier...</div>
+                <div data-agent-summary></div>
+                <div class="transcript-bullets" data-agent-bullets></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="transcript-composer">
+          <div class="transcript-input-line">
+            <span style="color: var(--ochre);">&gt; </span>
+            <span data-agent-input></span>
+            <span class="ag-cur" data-agent-caret></span>
+          </div>
+          <button class="transcript-ask-btn" data-agent-send type="button">Ask</button>
+        </div>
+      </aside>
+    </section>
+
+    <!-- Contents Section (Explore) -->
+    <section class="contents-spread">
+      <div class="contents-header">
+        <h2 class="contents-title">Table of Contents</h2>
+      </div>
+      <div class="contents-grid">
+        <a href="#" class="contents-item">
+          <div class="contents-item-head">
+            <h3 class="contents-item-title">Experience</h3>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-3);">01</span>
+          </div>
+          <p class="contents-item-desc">Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
+        </a>
+
+        <a href="#" class="contents-item">
+          <div class="contents-item-head">
+            <h3 class="contents-item-title">Dissertation</h3>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-3);">02</span>
+          </div>
+          <p class="contents-item-desc">Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
+        </a>
+
+        <a href="#" class="contents-item">
+          <div class="contents-item-head">
+            <h3 class="contents-item-title">Playground</h3>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-3);">03</span>
+          </div>
+          <p class="contents-item-desc">Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
+        </a>
+
+        <a href="#" class="contents-item">
+          <div class="contents-item-head">
+            <h3 class="contents-item-title">Contact Me</h3>
+            <span style="font-family: var(--font-mono); font-size: 0.8rem; color: var(--ink-3);">04</span>
+          </div>
+          <p class="contents-item-desc">Get in touch directly via email, LinkedIn, or GitHub.</p>
+        </a>
+      </div>
+    </section>
+
+    <!-- Curriculum Vitae (Timeline) -->
+    <section class="cv-spread">
+      <h2 class="cv-title">Curriculum Vitæ</h2>
+      <div class="cv-table">
+        <article class="cv-row">
+          <div class="cv-dates is-current">Feb 2026 – Present</div>
+          <div class="cv-details">
+            <span class="cv-org">AlphaSights</span>
+            <span class="cv-role">Software Engineer I — AI Team</span>
+            <p class="cv-summary">Building internal and external AI chat platforms, client-facing MCP servers, custom engineering tools, and automated AI data processing pipelines.</p>
+          </div>
+        </article>
+
+        <article class="cv-row">
+          <div class="cv-dates">Aug 2024 – Jan 2026</div>
+          <div class="cv-details">
+            <span class="cv-org">Leonardo Helicopters</span>
+            <span class="cv-role">Graduate Software Engineer</span>
+            <p class="cv-summary">Autonomy &amp; Tactical Processing: Reinforcement learning drone flight simulations in Python/Docker, combinatorial optimization solvers, and mission management microservices in C++ and gRPC.</p>
+          </div>
+        </article>
+
+        <article class="cv-row">
+          <div class="cv-dates">2021 – 2024</div>
+          <div class="cv-details">
+            <span class="cv-org">University of Warwick</span>
+            <span class="cv-role">BSc Computer Science (1st Class Hons)</span>
+            <p class="cv-summary">Graduated with First-Class Honours. Engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous vehicle navigation in complex urban traffic environments.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="colophon">
+    <span>Set in Newsreader &amp; IBM Plex. © 2026 Luke Guppy.</span>
+    <a href="mailto:lukewguppy@gmail.com" style="color: var(--verdigris);">lukewguppy@gmail.com</a>
+  </footer>
+
+  <script>
+    const BRIEFINGS = {
+      intro: {
+        prompt: 'Tell me about Luke',
+        summary: 'Luke Guppy is an AI Software Engineer at AlphaSights with a First-Class Computer Science degree from the University of Warwick, specialising in backend AI systems, MCP servers, and workflow automation.',
+        highlights: ['AI Software Engineer at AlphaSights', 'First-Class Computer Science degree'],
+        bullets: [
+          { title: 'Current role at AlphaSights', detail: 'Building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing.' },
+          { title: 'Previous experience at Leonardo Helicopters', detail: 'Graduate Software Engineer building reinforcement learning simulations, optimisation solvers, and C++/Docker mission systems.' },
+          { title: 'Core languages & technologies', detail: 'Python, TypeScript, C++, C#, SQL, Docker, and modern LLM & MCP frameworks.' },
+        ],
+      },
+      alphasights: {
+        prompt: 'What does Luke build on the AI Team at AlphaSights?',
+        summary: 'On the AI team at AlphaSights, Luke engineers the backend platforms, tool integrations, and data workflows that power internal operations and client-facing AI products.',
+        highlights: ['backend platforms, tool integrations, and data workflows'],
+        bullets: [
+          { title: 'Internal & external AI chat platforms', detail: 'Developed the internal AI chat platform and now designs and implements the external-facing AI chat alongside its custom tool integrations.' },
+          { title: 'Client-facing MCP server & tooling', detail: 'Designing and implementing the client-facing Model Context Protocol (MCP) server to expose structured tools and data across external workflows.' },
+          { title: 'AI workflows & data processing jobs', detail: 'Building AI jobs for automated data processing and evaluating new AI capabilities to shape the company’s core AI foundations.' },
+        ],
+      },
+      experience: {
+        prompt: 'What is his background before AlphaSights?',
+        summary: 'Before joining AlphaSights, Luke spent 18 months as a Graduate Software Engineer at Leonardo Helicopters after graduating with First-Class Honours in Computer Science from the University of Warwick.',
+        highlights: ['Graduate Software Engineer at Leonardo Helicopters', 'First-Class Honours'],
+        bullets: [
+          { title: 'Leonardo Helicopters — Autonomy', detail: 'Implemented task-assignment optimisation solvers, built Python ROS2/Docker drone simulations for reinforcement learning, and designed behaviour tree architectures.' },
+          { title: 'Leonardo Helicopters — Tactical Processing', detail: 'Developed a C++/Docker mission management system with decision-tree infrastructure and built gRPC services for multi-system communication.' },
+          { title: 'University of Warwick — BSc Computer Science (1st)', detail: 'Graduated with First-Class Honours; engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous urban driving.' },
+        ],
+      },
+      projects: {
+        prompt: 'What projects has Luke built?',
+        summary: 'Luke has built technical projects spanning deep reinforcement learning, transformer architectures, combinatorial optimisation, network simulation, and interactive browser apps.',
+        highlights: ['deep reinforcement learning', 'transformer architectures'],
+        bullets: [
+          { title: 'Autonomous Navigation Dissertation (C#, Unity, PPO)', detail: 'Trained a Proximal Policy Optimisation reinforcement learning agent to control an autonomous vehicle through multi-lane traffic and intersections.' },
+          { title: 'AI & Systems Projects (Python, C++, C#)', detail: 'Built a scaled-down Transformer next-token predictor, an AI dynamic-pricing scheduler, a C++/NS-3 delay-tolerant network simulator, and a C#/WPF wave diffraction simulator.' },
+          { title: 'Interactive Browser Playground (JavaScript)', detail: 'Created interactive web versions of a Wordle Solver, Chess, Countries Quiz, Map Plotter, and Block Blast.' },
+        ],
+      },
+    };
+
+    function createNeuralNet(canvas) {
+      const o = {
+        layers: [4, 6, 8, 8, 6, 4],
+        mobileLayers: [3, 4, 5, 4, 3],
+        padX: 0.08, spanMin: 0.35, spanMax: 0.8,
+        lineRGB: '182,173,158', lineAlpha: 0.1,
+        strongRGB: '215,165,72', strongAlpha: 0.18,
+        nodeRGB: '182,173,158', nodeAlpha: 0.35, nodeR: 1.5,
+        pulseRGB: ['215,165,72'], pulseWeights: [1.0],
+        hop: 1200, gap: [900, 2000], trail: 0.35,
+        interactive: true,
+      };
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, layers = [], conns = [], passes = [], wait = 200, last = performance.now();
+      let mx = -1e4, my = -1e4;
+
+      function build() {
+        layers = []; conns = []; passes = [];
+        const pattern = W < 720 ? o.mobileLayers : o.layers;
+        const px = W * o.padX, sp = (W - px * 2) / (pattern.length - 1);
+        const max = Math.max(...pattern), min = Math.min(...pattern);
+        pattern.forEach((count, l) => {
+          const t = (count - min) / (max - min || 1);
+          const span = H * (o.spanMin + t * (o.spanMax - o.spanMin));
+          const y0 = (H - span) / 2, vs = count > 1 ? span / (count - 1) : 0;
+          const layer = [];
+          for (let i = 0; i < count; i++) {
+            layer.push({ x: px + sp * l, y: count > 1 ? y0 + vs * i : H / 2,
+              n: count > 1 ? i / (count - 1) : 0.5, l, a: 0, out: [], inc: 0 });
+          }
+          layers.push(layer);
+        });
+        for (let l = 0; l < layers.length - 1; l++) {
+          const nxt = layers[l + 1];
+          layers[l].forEach((a) => {
+            const sorted = [...nxt].sort((p, q) => Math.abs(p.n - a.n) - Math.abs(q.n - a.n));
+            sorted.slice(0, 3).forEach((b) => {
+              const c = { a, b, w: 0.2 + Math.random() * 0.8 }; a.out.push(c); b.inc++; conns.push(c);
+            });
+          });
+        }
+      }
+
+      function hopFrom(nodes, now) {
+        const pulses = [];
+        nodes.forEach((n) => {
+          n.out.slice(0, 2).forEach((c) => pulses.push({ c, op: 0.8 }));
+        });
+        if (pulses.length) passes.push({ t0: now, pulses, l: nodes[0].l });
+      }
+
+      function spawn(now) {
+        if (!layers.length) return;
+        const nodes = [...layers[0]].sort(() => Math.random() - 0.5).slice(0, 2);
+        nodes.forEach((n) => n.a = 1);
+        hopFrom(nodes, now);
+      }
+
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        W = r.width; H = r.height;
+        canvas.width = Math.max(1, Math.floor(W * dpr)); canvas.height = Math.max(1, Math.floor(H * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        build();
+      }
+
+      function frame(now) {
+        requestAnimationFrame(frame);
+        const dt = Math.min(48, now - last); last = now;
+        ctx.clearRect(0, 0, W, H);
+        for (const c of conns) {
+          ctx.strokeStyle = c.w > 0.7 ? `rgba(${o.strongRGB},${o.strongAlpha})` : `rgba(${o.lineRGB},${o.lineAlpha})`;
+          ctx.lineWidth = c.w > 0.7 ? 0.8 : 0.5;
+          ctx.beginPath(); ctx.moveTo(c.a.x, c.a.y); ctx.lineTo(c.b.x, c.b.y); ctx.stroke();
+        }
+        for (let i = passes.length - 1; i >= 0; i--) {
+          const p = passes[i];
+          const t = Math.min(1, (now - p.t0) / o.hop);
+          for (const q of p.pulses) {
+            const { a, b } = q.c;
+            const x = a.x + (b.x - a.x) * t, y = a.y + (b.y - a.y) * t;
+            ctx.fillStyle = `rgba(${o.strongRGB},0.85)`;
+            ctx.beginPath(); ctx.arc(x, y, 1.8, 0, 6.28); ctx.fill();
+          }
+          if (t >= 1) {
+            passes.splice(i, 1);
+            if (p.l < layers.length - 2) {
+              const nextNodes = p.pulses.map((q) => q.c.b);
+              hopFrom(nextNodes, now);
+            }
+          }
+        }
+        for (const L of layers) for (const n of L) {
+          ctx.fillStyle = `rgba(${o.nodeRGB},${o.nodeAlpha})`;
+          ctx.beginPath(); ctx.arc(n.x, n.y, o.nodeR, 0, 6.28); ctx.fill();
+        }
+        wait -= dt;
+        if (wait <= 0) { spawn(now); wait = 1400; }
+      }
+
+      new ResizeObserver(resize).observe(canvas);
+      resize();
+      requestAnimationFrame(frame);
+    }
+
+    function createAgent(root) {
+      const $ = (s) => root.querySelector(s);
+      const input = $('[data-agent-input]'), caret = $('[data-agent-caret]'), q = $('[data-agent-q]');
+      const thinking = $('[data-agent-thinking]'), summary = $('[data-agent-summary]'), bullets = $('[data-agent-bullets]');
+      const chips = root.querySelectorAll('[data-agent-chip]');
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const CUR = '<span class="ag-cur"></span>';
+      let run = 0;
+
+      async function play(key) {
+        const tok = ++run, d = BRIEFINGS[key] || BRIEFINGS.intro;
+        input.textContent = ''; caret.hidden = false;
+        thinking.hidden = true; summary.innerHTML = ''; bullets.innerHTML = '';
+        await sleep(300); if (tok !== run) return;
+        for (let i = 1; i <= d.prompt.length; i++) {
+          if (tok !== run) return;
+          input.textContent = d.prompt.slice(0, i);
+          await sleep(25);
+        }
+        await sleep(250); if (tok !== run) return;
+        q.textContent = d.prompt; input.textContent = '';
+        thinking.hidden = false;
+        await sleep(550); if (tok !== run) return;
+        thinking.hidden = true;
+        for (let i = 3; i <= d.summary.length; i += 3) {
+          if (tok !== run) return;
+          summary.innerHTML = d.summary.slice(0, i) + CUR;
+          await sleep(10);
+        }
+        summary.textContent = d.summary;
+        await sleep(120);
+        for (const b of d.bullets) {
+          if (tok !== run) return;
+          const row = document.createElement('div'); row.className = 'ag-b';
+          row.innerHTML = `<strong class="ag-bt">${b.title}</strong><p class="ag-bd">${b.detail}</p>`;
+          bullets.appendChild(row);
+          await sleep(60);
+        }
+      }
+
+      chips.forEach((c) => c.addEventListener('click', () => {
+        chips.forEach((x) => x.classList.toggle('is-active', x === c));
+        play(c.dataset.agentChip);
+      }));
+      play('intro');
+    }
+
+    createNeuralNet(document.getElementById('neural-canvas'));
+    createAgent(document.querySelector('[data-agent-root]'));
+  </script>
+</body>
+</html>

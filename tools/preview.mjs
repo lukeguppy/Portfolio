@@ -58,7 +58,12 @@ const server = http.createServer((req, res) => {
   }
 
   const ext = path.extname(filePath).toLowerCase();
-  res.writeHead(200, { 'content-type': mimeTypes[ext] || 'application/octet-stream' });
+  res.writeHead(200, {
+    'content-type': mimeTypes[ext] || 'application/octet-stream',
+    'cache-control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+    'pragma': 'no-cache',
+    'expires': '0'
+  });
   fs.createReadStream(filePath).pipe(res);
 });
 

@@ -1,0 +1,134 @@
+<!--
+  Design explorations: index
+  A plain comparison sheet. It uses live, scaled-down previews so each direction
+  can be judged in motion (canvas + chat) without opening six tabs. The sheet
+  stays neutral on purpose so it doesn't bias the comparison.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy · Home page design directions</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f4f3f0; --bg-2: #ebe9e4; --ink: #18181a; --ink-2: #55555a; --ink-3: #85858a;
+    --rule: rgba(24,24,26,.12); --focus: #0d6b63;
+    --sans: "IBM Plex Sans", system-ui, sans-serif; --mono: "IBM Plex Mono", ui-monospace, monospace;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 1rem/1.55 var(--sans); -webkit-font-smoothing: antialiased; }
+  main { max-width: 76rem; margin: 0 auto; padding: 4.5rem clamp(1.25rem, 4vw, 3rem) 6rem; }
+  header { display: grid; grid-template-columns: 1fr minmax(0, 26rem); gap: 2rem 4rem; align-items: end; padding-bottom: 2.5rem; border-bottom: 1px solid var(--rule); }
+  h1 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 500; letter-spacing: -0.025em; line-height: 1.05; margin: 0; }
+  header p { margin: 0; color: var(--ink-2); font-size: .95rem; }
+  header a { color: var(--ink); text-underline-offset: 3px; }
+  ol { list-style: none; margin: 0; padding: 0; }
+  li { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.35fr); gap: 2rem 3.5rem; padding: 3rem 0; border-bottom: 1px solid var(--rule); align-items: center; }
+  li:nth-child(even) .preview { order: -1; }
+  .meta h2 { font-size: 1.6rem; font-weight: 500; letter-spacing: -0.02em; margin: 0 0 .5rem; }
+  .meta h2 a { color: inherit; text-decoration: none; }
+  .meta h2 a:hover { text-decoration: underline; text-underline-offset: 4px; text-decoration-thickness: 1px; }
+  .meta p { margin: 0 0 1rem; color: var(--ink-2); max-width: 42ch; }
+  .meta .file { font: 400 .8rem var(--mono); color: var(--ink-3); }
+  .swatches { display: flex; gap: 0; margin: 0 0 1rem; height: 10px; width: 9rem; border-radius: 2px; overflow: hidden; }
+  .swatches span { flex: 1; }
+  .preview { position: relative; display: block; aspect-ratio: 16 / 10; border-radius: 10px; overflow: hidden; background: var(--bg-2);
+    box-shadow: 0 1px 0 rgba(0,0,0,.04), 0 14px 34px -14px rgba(20,20,30,.35); transition: transform 200ms cubic-bezier(.23,1,.32,1); }
+  .preview:hover { transform: translateY(-2px); }
+  .preview:active { transform: scale(.985); }
+  .preview:focus-visible, a:focus-visible { outline: 2px solid var(--focus); outline-offset: 4px; }
+  .preview iframe { position: absolute; top: 0; left: 0; width: 1440px; height: 900px; border: 0; transform-origin: 0 0; pointer-events: none; }
+  .review { margin-top: 3rem; color: var(--ink-2); font-size: .95rem; }
+  @media (max-width: 52rem) {
+    header, li { grid-template-columns: 1fr; }
+    li:nth-child(even) .preview { order: 0; }
+  }
+  @media (prefers-reduced-motion: reduce) { .preview { transition: none; } }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Home page: seven directions</h1>
+    <p>Each direction keeps the neural-network canvas and the chat send/reply animation, and changes the palette, type, layout, nav, chat and background treatment. Read the <a href="REVIEW.md">review of the current page</a> first. Previews are live; click to open full size.</p>
+  </header>
+
+  <ol>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#04070E"></span><span style="background:#0F1729"></span><span style="background:#172238"></span><span style="background:#3DD6C0"></span><span style="background:#F2A93B"></span></div>
+        <h2><a href="01-navy-relayered.html">01 · Navy, Re-layered</a></h2>
+        <p>The current identity with a real five-step surface ladder: the network sits in a recessed well and the chat is raised over it, with Literata as the second voice. The closest to shippable.</p>
+        <span class="file">01-navy-relayered.html</span>
+      </div>
+      <a class="preview" href="01-navy-relayered.html" aria-label="Open direction 01"><iframe src="01-navy-relayered.html" loading="lazy" tabindex="-1" title="Direction 01 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#131210"></span><span style="background:#211F1B"></span><span style="background:#EEE7DA"></span><span style="background:#7DBFAF"></span><span style="background:#D7A548"></span></div>
+        <h2><a href="02-monograph.html">02 · Monograph</a></h2>
+        <p>Restrained and editorial on warm graphite. Newsreader and Plex, the chat set as an interview transcript, and colour reserved for what's alive.</p>
+        <span class="file">02-monograph.html</span>
+      </div>
+      <a class="preview" href="02-monograph.html" aria-label="Open direction 02"><iframe src="02-monograph.html" loading="lazy" tabindex="-1" title="Direction 02 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#F3EFE7"></span><span style="background:#DED6C6"></span><span style="background:#15191E"></span><span style="background:#0D6B63"></span><span style="background:#D9542A"></span></div>
+        <h2><a href="03-paper-and-signal.html">03 · Paper &amp; Signal</a></h2>
+        <p>The bold departure: warm paper, an expanded Archivo name, the network drawn like a technical plate, and the chat as a dark physical device on the page.</p>
+        <span class="file">03-paper-and-signal.html</span>
+      </div>
+      <a class="preview" href="03-paper-and-signal.html" aria-label="Open direction 03"><iframe src="03-paper-and-signal.html" loading="lazy" tabindex="-1" title="Direction 03 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#061215"></span><span style="background:#0F252A"></span><span style="background:#15323A"></span><span style="background:#E28B5B"></span><span style="background:#86D5C4"></span></div>
+        <h2><a href="04-conversation-first.html">04 · Conversation First</a></h2>
+        <p>Petrol and copper with a left rail nav. The chat is the hero, sitting in a clearing of the network, and Explore becomes suggested follow-ups.</p>
+        <span class="file">04-conversation-first.html</span>
+      </div>
+      <a class="preview" href="04-conversation-first.html" aria-label="Open direction 04"><iframe src="04-conversation-first.html" loading="lazy" tabindex="-1" title="Direction 04 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#121826"></span><span style="background:#1C2434"></span><span style="background:#273146"></span><span style="background:#E8EBEF"></span><span style="background:#F1B65C"></span></div>
+        <h2><a href="05-dusk.html">05 · Dusk</a></h2>
+        <p>A mid-tone slate page with a light fog chat card that overlaps the night band where the network lives. The page brightens as you scroll.</p>
+        <span class="file">05-dusk.html</span>
+      </div>
+      <a class="preview" href="05-dusk.html" aria-label="Open direction 05"><iframe src="05-dusk.html" loading="lazy" tabindex="-1" title="Direction 05 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#100C09"></span><span style="background:#201914"></span><span style="background:#382C22"></span><span style="background:#EFA43A"></span><span style="background:#63C7B6"></span></div>
+        <h2><a href="06-night-shift.html">06 · Night Shift</a></h2>
+        <p>Warm coal, amber as the interactive colour and teal for the AI. A mirrored layout with a docked chat window, and the network as a horizontal signal ribbon.</p>
+        <span class="file">06-night-shift.html</span>
+      </div>
+      <a class="preview" href="06-night-shift.html" aria-label="Open direction 06"><iframe src="06-night-shift.html" loading="lazy" tabindex="-1" title="Direction 06 preview"></iframe></a>
+    </li>
+    <li>
+      <div class="meta">
+        <div class="swatches"><span style="background:#050811"></span><span style="background:#131F36"></span><span style="background:#2DD4BF"></span><span style="background:#F59E0B"></span><span style="background:#FFFFFF"></span></div>
+        <h2><a href="07-cinematic-genesis.html">07 · Cinematic Genesis &amp; Spatial Orchestration</a></h2>
+        <p>Two hairline laser beams collide dead-center into the ONE cursor. It types Luke Guppy (staying centered), moves down to type the subtitle, moves down to type the description, then glides into the chat bot input, pauses a full second, and types the briefing prompt. Clean, centered editorial layout with zero slop pills or redundant buttons.</p>
+        <span class="file">07-cinematic-genesis.html</span>
+      </div>
+      <a class="preview" href="07-cinematic-genesis.html" aria-label="Open direction 07"><iframe src="07-cinematic-genesis.html" loading="lazy" tabindex="-1" title="Direction 07 preview"></iframe></a>
+    </li>
+  </ol>
+</main>
+<script>
+  // Scale each 1440×900 live preview to fit its frame.
+  const fit = () => document.querySelectorAll('.preview').forEach((p) => {
+    const f = p.querySelector('iframe'); f.style.transform = `scale(${p.clientWidth / 1440})`;
+  });
+  new ResizeObserver(fit).observe(document.body); fit();
+</script>
+</body>
+</html>

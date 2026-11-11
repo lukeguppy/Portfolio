@@ -1,0 +1,842 @@
+<!--
+  Direction 03: "Paper & Signal"
+  Thesis: A high-contrast departure from standard developer dark-mode defaults.
+  Warm architectural vellum paper ground creates an organic physical reality.
+  The chat terminal is styled as a physical dark slate device engineered on top of paper,
+  creating an immediate tactile hierarchy and answering the flatness problem.
+
+  Palette Tokens:
+  - --paper: #f3efe7 (Warm textured drafting vellum)
+  - --paper-2: #eae4d8 (Structured alternate section band)
+  - --paper-3: #ded6c6 (Recessed fields and subtle rules)
+  - --ink: #17191c (Primary crisp jet black text)
+  - --ink-2: #4a4d52 (Secondary editorial body text)
+  - --ink-3: #74767a (Technical notes and captions)
+  - --dev-body: #15191e (Physical chat chassis)
+  - --dev-surface: #1d232a (Device display screen)
+  - --dev-raised: #262e37 (Device buttons and user bubbles)
+  - --teal-dark: #0d6b63 (INTERACTIVE on paper: links, badges)
+  - --teal-light: #4fd1be (INTERACTIVE on device: buttons, active segments)
+  - --vermilion: #d9542a (LIVE AI SIGNAL: pulse sparks, status LED, current milestone)
+
+  Typography:
+  - Archivo (Variable Width & Weight): Wide uppercase monumental headline (font-stretch: 115%), tight geometric structure.
+  - Archivo normal: Humanist geometric body copy.
+  - JetBrains Mono: Precise engineering telemetry on the device.
+
+  Problem Solutions:
+  - Extreme Tactile Depth: Light paper ground meets a physical dark device with layered realistic drop shadows (0 20px 45px rgba(30,25,15,0.3)).
+  - Canvas Integration: Drawn as a technical blueprint schematic in sepia ink on paper with vermilion spark transmissions.
+  - Chat Device: Features physical top bezel with glowing vermilion LED indicator, segmented hardware-style tab switcher, and monospace terminal screen.
+  - Explore: Four clean columns separated by architectural vertical rules (no repetitive bordered boxes).
+  - Timeline: Large tabular year markers in expanded Archivo anchoring career milestones.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Luke Guppy — Paper & Signal (Direction 03)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,400..900&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --paper: #f3efe7;
+    --paper-2: #eae4d8;
+    --paper-3: #ded6c6;
+    --ink: #17191c;
+    --ink-2: #4a4d52;
+    --ink-3: #74767a;
+    --rule: rgba(23, 25, 28, 0.12);
+
+    --dev-body: #15191e;
+    --dev-surface: #1d232a;
+    --dev-raised: #262e37;
+    --dev-text: #eceff1;
+    --dev-muted: #a7b0ba;
+
+    --teal-dark: #0d6b63;
+    --teal-light: #4fd1be;
+    --vermilion: #d9542a;
+
+    --font-display: "Archivo", sans-serif;
+    --font-mono: "JetBrains Mono", monospace;
+    --ease: cubic-bezier(0.23, 1, 0.32, 1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background-color: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-display);
+    font-size: 1rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  a { color: inherit; text-decoration: none; }
+
+  /* ---------------- TOP BAR ---------------- */
+  .topbar {
+    border-bottom: 1px solid var(--rule);
+    padding: 1.25rem 2.5rem;
+    background: var(--paper);
+    position: relative;
+    z-index: 50;
+  }
+  .topbar-inner {
+    max-width: 86rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .topbar-brand {
+    font-size: 1.25rem;
+    font-weight: 800;
+    font-stretch: 110%;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+  }
+  .topbar-nav {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .topbar-link {
+    font-size: 0.88rem;
+    font-weight: 500;
+    color: var(--ink-2);
+    transition: color 180ms var(--ease);
+  }
+  .topbar-link:hover, .topbar-link.is-active { color: var(--ink); }
+  .topbar-link.is-active { font-weight: 700; text-decoration: underline; text-underline-offset: 4px; }
+  .topbar-socials {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+  }
+
+  /* ---------------- HERO WITH HARDWARE DEVICE ---------------- */
+  .hero-block {
+    position: relative;
+    max-width: 86rem;
+    margin: 0 auto;
+    padding: 4.5rem 2.5rem 6.5rem;
+  }
+
+  .hero-headline-wide {
+    font-size: clamp(3.5rem, 8vw, 7.2rem);
+    font-weight: 900;
+    font-stretch: 120%;
+    letter-spacing: -0.04em;
+    line-height: 0.92;
+    text-transform: uppercase;
+    margin: 0 0 3.5rem;
+    color: var(--ink);
+  }
+
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1.15fr;
+    gap: 4rem;
+    align-items: start;
+    position: relative;
+  }
+
+  .hero-canvas-substrate {
+    position: absolute;
+    top: -4rem;
+    right: 0;
+    width: 65%;
+    height: 120%;
+    pointer-events: auto;
+    z-index: 1;
+    mask-image: radial-gradient(ellipse at 70% 30%, black 30%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse at 70% 30%, black 30%, transparent 80%);
+  }
+
+  .hero-info {
+    position: relative;
+    z-index: 10;
+  }
+  .hero-role-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: 0.86rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+    margin-bottom: 1.25rem;
+    background: var(--paper-2);
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    border: 1px solid var(--rule);
+  }
+  .hero-lead-text {
+    font-size: 1.12rem;
+    line-height: 1.68;
+    color: var(--ink-2);
+    margin: 0 0 2rem;
+  }
+  .hero-lead-text strong { color: var(--ink); font-weight: 700; }
+  .hero-link-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--rule);
+  }
+  .hero-primary-link {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: var(--ink);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  .hero-primary-link:hover { color: var(--teal-dark); }
+  .hero-sec-links {
+    display: flex;
+    gap: 1.25rem;
+    font-size: 0.88rem;
+    color: var(--ink-2);
+  }
+  .hero-sec-links a:hover { color: var(--ink); text-decoration: underline; }
+
+  /* Physical Chat Device Chassis */
+  .device-chassis {
+    position: relative;
+    z-index: 10;
+    background: var(--dev-body);
+    border-radius: 18px;
+    box-shadow:
+      0 1px 0 rgba(255, 255, 255, 0.1) inset,
+      0 18px 40px -12px rgba(30, 25, 15, 0.4),
+      0 45px 85px -25px rgba(30, 25, 15, 0.35);
+    overflow: hidden;
+    color: var(--dev-text);
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    margin-bottom: -4rem; /* Deliberate physical overlap into next section */
+  }
+
+  .device-bezel {
+    padding: 0.85rem 1.25rem;
+    background: rgba(0, 0, 0, 0.35);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  }
+  .device-label {
+    font-family: var(--font-mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    color: var(--dev-muted);
+    display: flex;
+    align-items: center;
+    gap: 0.55rem;
+  }
+  .device-led {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: var(--vermilion);
+    box-shadow: 0 0 10px rgba(217, 84, 42, 0.8);
+  }
+
+  .device-segmented {
+    display: flex;
+    background: var(--dev-surface);
+    padding: 0.35rem 0.6rem;
+    gap: 0.35rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .device-seg-btn {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: var(--dev-muted);
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 600;
+    padding: 0.45rem 0.3rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 160ms var(--ease);
+  }
+  .device-seg-btn:hover { color: var(--dev-text); }
+  .device-seg-btn.is-active {
+    background: var(--dev-raised);
+    color: var(--teal-light);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+  }
+
+  .device-screen {
+    padding: 1.25rem;
+    min-height: 19rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    background: var(--dev-surface);
+  }
+  .device-bubble {
+    align-self: flex-end;
+    background: var(--dev-raised);
+    color: var(--dev-text);
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    padding: 0.5rem 0.85rem;
+    border-radius: 10px 10px 2px 10px;
+    max-width: 85%;
+  }
+  .device-reply {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    font-size: 0.9rem;
+    color: var(--dev-muted);
+    line-height: 1.58;
+  }
+  .device-reply strong { color: var(--dev-text); }
+  .device-bullets {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    padding-top: 0.65rem;
+  }
+  .ag-b { display: flex; flex-direction: column; gap: 0.15rem; }
+  .ag-bt { font-size: 0.84rem; color: var(--dev-text); font-weight: 700; }
+  .ag-bd { margin: 0; font-size: 0.82rem; color: var(--dev-muted); }
+
+  .ag-cur {
+    display: inline-block;
+    width: 6px;
+    height: 0.9em;
+    vertical-align: -1px;
+    background: var(--vermilion);
+    margin-left: 2px;
+    animation: blk 0.8s infinite;
+  }
+  @keyframes blk { 0%, 49% { opacity: 1; } 50%, 100% { opacity: 0; } }
+
+  .device-composer {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1rem;
+    background: var(--dev-raised);
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+  .device-input-box {
+    flex: 1;
+    font-family: var(--font-mono);
+    font-size: 0.82rem;
+    color: var(--dev-muted);
+  }
+  .device-send-btn {
+    background: var(--teal-light);
+    color: #07191e;
+    border: none;
+    font-family: var(--font-display);
+    font-size: 0.78rem;
+    font-weight: 700;
+    padding: 0.35rem 0.75rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  /* ---------------- SECTION: EXPLORE (4-COL ARCHITECTURAL) ---------------- */
+  .section-explore {
+    background: var(--paper-2);
+    border-top: 1px solid var(--rule);
+    border-bottom: 1px solid var(--rule);
+    padding: 7rem 2.5rem 5.5rem;
+    position: relative;
+    z-index: 5;
+  }
+  .explore-wrap {
+    max-width: 86rem;
+    margin: 0 auto;
+  }
+  .explore-header-row {
+    margin-bottom: 3rem;
+  }
+  .explore-section-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-stretch: 110%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0;
+  }
+  .explore-columns {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    border-left: 1px solid var(--rule);
+  }
+  .explore-col {
+    padding: 0 1.75rem;
+    border-right: 1px solid var(--rule);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    transition: transform 180ms var(--ease);
+  }
+  .explore-col:hover { transform: translateY(-3px); }
+  .explore-col-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    margin: 0;
+    color: var(--ink);
+  }
+  .explore-col:hover .explore-col-title { color: var(--teal-dark); }
+  .explore-col-desc {
+    font-size: 0.9rem;
+    color: var(--ink-2);
+    line-height: 1.55;
+    margin: 0;
+  }
+
+  /* ---------------- SECTION: TIMELINE ---------------- */
+  .section-timeline {
+    padding: 6rem 2.5rem;
+    max-width: 86rem;
+    margin: 0 auto;
+  }
+  .timeline-head-title {
+    font-size: 1.75rem;
+    font-weight: 800;
+    font-stretch: 110%;
+    text-transform: uppercase;
+    letter-spacing: -0.02em;
+    margin: 0 0 3.5rem;
+  }
+  .timeline-stack {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--rule);
+  }
+  .timeline-row {
+    display: grid;
+    grid-template-columns: 14rem 1fr;
+    padding: 2.5rem 0;
+    border-bottom: 1px solid var(--rule);
+    gap: 3rem;
+  }
+  .timeline-year {
+    font-size: 2.8rem;
+    font-weight: 900;
+    font-stretch: 115%;
+    line-height: 0.9;
+    color: var(--ink-3);
+    display: flex;
+    align-items: baseline;
+    gap: 0.4rem;
+  }
+  .timeline-year.is-live { color: var(--ink); }
+  .timeline-live-tag {
+    font-size: 0.75rem;
+    color: var(--vermilion);
+    font-family: var(--font-mono);
+    font-weight: 700;
+  }
+  .timeline-content {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .timeline-company {
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--ink);
+  }
+  .timeline-role {
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--teal-dark);
+  }
+  .timeline-text {
+    margin: 0.4rem 0 0;
+    font-size: 0.95rem;
+    color: var(--ink-2);
+    line-height: 1.62;
+    max-width: 65ch;
+  }
+
+  /* Footer */
+  .footer-paper {
+    border-top: 1px solid var(--rule);
+    padding: 2.5rem;
+    background: var(--paper-2);
+    font-size: 0.86rem;
+    color: var(--ink-3);
+  }
+  .footer-paper-inner {
+    max-width: 86rem;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+  }
+
+  @media (max-width: 960px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 3rem; }
+    .device-chassis { margin-bottom: 0; }
+    .explore-columns { grid-template-columns: 1fr 1fr; gap: 2rem 0; }
+    .timeline-row { grid-template-columns: 1fr; gap: 1rem; }
+  }
+</style>
+</head>
+<body>
+
+  <!-- Top bar on paper -->
+  <header class="topbar">
+    <div class="topbar-inner">
+      <div class="topbar-brand">Luke Guppy</div>
+      <nav aria-label="Main">
+        <ul class="topbar-nav">
+          <li><a href="#" class="topbar-link is-active">Home</a></li>
+          <li><a href="#" class="topbar-link">About Me</a></li>
+          <li><a href="#" class="topbar-link">Dissertation</a></li>
+          <li><a href="#" class="topbar-link">Playground</a></li>
+          <li><a href="#" class="topbar-link">Contact</a></li>
+        </ul>
+      </nav>
+      <div class="topbar-socials">
+        <a href="https://www.linkedin.com/in/lukeguppy" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/lukeguppy" target="_blank" rel="noopener">GitHub</a>
+      </div>
+    </div>
+  </header>
+
+  <main>
+    <!-- Monumental Hero -->
+    <section class="hero-block">
+      <h1 class="hero-headline-wide">Luke Guppy</h1>
+
+      <div class="hero-grid">
+        <!-- Technical Schematic Background Canvas -->
+        <div class="hero-canvas-substrate">
+          <canvas id="neural-canvas" style="width:100%; height:100%; display:block;"></canvas>
+        </div>
+
+        <div class="hero-info">
+          <div class="hero-role-tag">AI Software Engineer @ AlphaSights</div>
+          <p class="hero-lead-text">
+            Software Engineer on the AI team at <strong>AlphaSights</strong>, building internal and external AI chat systems, agent tools, client-facing MCP servers, and AI jobs for data processing that shape the company’s AI foundations.
+          </p>
+          <div class="hero-link-stack">
+            <a href="#" class="hero-primary-link">Explore Experience ➔</a>
+            <div class="hero-sec-links">
+              <a href="#">Dissertation</a>
+              <a href="#">Playground</a>
+              <a href="#">Contact Me</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- Physical Hardware Device (Chat) -->
+        <aside class="device-chassis" data-agent-root aria-label="Interactive Terminal Device">
+          <div class="device-bezel">
+            <div class="device-label">
+              <span class="device-led"></span>
+              <span>luke.agent // live telemetry</span>
+            </div>
+            <span style="font-family: var(--font-mono); font-size: 0.7rem; color: var(--dev-muted);">STANDBY</span>
+          </div>
+
+          <div class="device-segmented">
+            <button class="device-seg-btn is-active" data-agent-chip="intro">Overview</button>
+            <button class="device-seg-btn" data-agent-chip="alphasights">AlphaSights Role</button>
+            <button class="device-seg-btn" data-agent-chip="experience">Past Experience</button>
+            <button class="device-seg-btn" data-agent-chip="projects">Projects</button>
+          </div>
+
+          <div class="device-screen">
+            <div class="device-bubble" data-agent-q hidden></div>
+
+            <div class="device-reply">
+              <div data-agent-thinking hidden style="color: var(--vermilion); font-family: var(--font-mono); font-size: 0.8rem;">
+                [AGENT DISPATCHING HEURISTIC]
+              </div>
+              <div data-agent-summary></div>
+              <div class="device-bullets" data-agent-bullets></div>
+            </div>
+          </div>
+
+          <div class="device-composer">
+            <div class="device-input-box">
+              <span style="color: var(--teal-light);">&gt; </span>
+              <span data-agent-input></span>
+              <span class="ag-cur" data-agent-caret></span>
+            </div>
+            <button class="device-send-btn" data-agent-send type="button">SEND</button>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- 4-Column Architectural Section (Explore) -->
+    <section class="section-explore">
+      <div class="explore-wrap">
+        <div class="explore-header-row">
+          <h2 class="explore-section-title">Directory</h2>
+        </div>
+        <div class="explore-columns">
+          <a href="#" class="explore-col">
+            <h3 class="explore-col-title">Experience</h3>
+            <p class="explore-col-desc">Career timeline across AlphaSights and Leonardo Helicopters, University of Warwick education, and other projects.</p>
+          </a>
+
+          <a href="#" class="explore-col">
+            <h3 class="explore-col-title">Dissertation</h3>
+            <p class="explore-col-desc">Deep reinforcement learning agent trained with PPO in Unity and C# to navigate complex urban traffic.</p>
+          </a>
+
+          <a href="#" class="explore-col">
+            <h3 class="explore-col-title">Playground</h3>
+            <p class="explore-col-desc">Interactive browser games and tools: Countries Quiz, Chess, Wordle Solver, Map Plotter, and Block Blast.</p>
+          </a>
+
+          <a href="#" class="explore-col">
+            <h3 class="explore-col-title">Contact Me</h3>
+            <p class="explore-col-desc">Get in touch directly via email, LinkedIn, or GitHub.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Career Timeline with Monumental Year Typography -->
+    <section class="section-timeline">
+      <h2 class="timeline-head-title">Chronology</h2>
+      <div class="timeline-stack">
+        <article class="timeline-row">
+          <div class="timeline-year is-live">
+            2026
+            <span class="timeline-live-tag">[ACTIVE]</span>
+          </div>
+          <div class="timeline-content">
+            <span class="timeline-company">AlphaSights</span>
+            <span class="timeline-role">Software Engineer I — AI Team (Feb 2026 – Present)</span>
+            <p class="timeline-text">Building internal and external AI chat platforms, client-facing MCP servers, custom engineering tools, and automated AI data processing pipelines.</p>
+          </div>
+        </article>
+
+        <article class="timeline-row">
+          <div class="timeline-year">2024</div>
+          <div class="timeline-content">
+            <span class="timeline-company">Leonardo Helicopters</span>
+            <span class="timeline-role">Graduate Software Engineer (Aug 2024 – Jan 2026)</span>
+            <p class="timeline-text">Autonomy &amp; Tactical Processing: Reinforcement learning drone flight simulations in Python/Docker, combinatorial optimization solvers, and mission management microservices in C++ and gRPC.</p>
+          </div>
+        </article>
+
+        <article class="timeline-row">
+          <div class="timeline-year">2021</div>
+          <div class="timeline-content">
+            <span class="timeline-company">University of Warwick</span>
+            <span class="timeline-role">BSc Computer Science (1st Class Hons, 2021 – 2024)</span>
+            <p class="timeline-text">Graduated with First-Class Honours. Engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous vehicle navigation in complex urban traffic environments.</p>
+          </div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer-paper">
+    <div class="footer-paper-inner">
+      <span>Architectural Drafting Theme · © 2026 Luke Guppy</span>
+      <a href="mailto:lukewguppy@gmail.com" style="color: var(--teal-dark); font-weight: 600;">lukewguppy@gmail.com</a>
+    </div>
+  </footer>
+
+  <script>
+    const BRIEFINGS = {
+      intro: {
+        prompt: 'Tell me about Luke',
+        summary: 'Luke Guppy is an AI Software Engineer at AlphaSights with a First-Class Computer Science degree from the University of Warwick, specialising in backend AI systems, MCP servers, and workflow automation.',
+        highlights: ['AI Software Engineer at AlphaSights', 'First-Class Computer Science degree'],
+        bullets: [
+          { title: 'Current role at AlphaSights', detail: 'Building internal and external AI chat systems, client-facing MCP servers, custom tools, and AI jobs for data processing.' },
+          { title: 'Previous experience at Leonardo Helicopters', detail: 'Graduate Software Engineer building reinforcement learning simulations, optimisation solvers, and C++/Docker mission systems.' },
+          { title: 'Core languages & technologies', detail: 'Python, TypeScript, C++, C#, SQL, Docker, and modern LLM & MCP frameworks.' },
+        ],
+      },
+      alphasights: {
+        prompt: 'What does Luke build on the AI Team at AlphaSights?',
+        summary: 'On the AI team at AlphaSights, Luke engineers the backend platforms, tool integrations, and data workflows that power internal operations and client-facing AI products.',
+        highlights: ['backend platforms, tool integrations, and data workflows'],
+        bullets: [
+          { title: 'Internal & external AI chat platforms', detail: 'Developed the internal AI chat platform and now designs and implements the external-facing AI chat alongside its custom tool integrations.' },
+          { title: 'Client-facing MCP server & tooling', detail: 'Designing and implementing the client-facing Model Context Protocol (MCP) server to expose structured tools and data across external workflows.' },
+          { title: 'AI workflows & data processing jobs', detail: 'Building AI jobs for automated data processing and evaluating new AI capabilities to shape the company’s core AI foundations.' },
+        ],
+      },
+      experience: {
+        prompt: 'What is his background before AlphaSights?',
+        summary: 'Before joining AlphaSights, Luke spent 18 months as a Graduate Software Engineer at Leonardo Helicopters after graduating with First-Class Honours in Computer Science from the University of Warwick.',
+        highlights: ['Graduate Software Engineer at Leonardo Helicopters', 'First-Class Honours'],
+        bullets: [
+          { title: 'Leonardo Helicopters — Autonomy', detail: 'Implemented task-assignment optimisation solvers, built Python ROS2/Docker drone simulations for reinforcement learning, and designed behaviour tree architectures.' },
+          { title: 'Leonardo Helicopters — Tactical Processing', detail: 'Developed a C++/Docker mission management system with decision-tree infrastructure and built gRPC services for multi-system communication.' },
+          { title: 'University of Warwick — BSc Computer Science (1st)', detail: 'Graduated with First-Class Honours; engineered a PPO deep reinforcement learning agent in C# and Unity for autonomous urban driving.' },
+        ],
+      },
+      projects: {
+        prompt: 'What projects has Luke built?',
+        summary: 'Luke has built technical projects spanning deep reinforcement learning, transformer architectures, combinatorial optimisation, network simulation, and interactive browser apps.',
+        highlights: ['deep reinforcement learning', 'transformer architectures'],
+        bullets: [
+          { title: 'Autonomous Navigation Dissertation (C#, Unity, PPO)', detail: 'Trained a Proximal Policy Optimisation reinforcement learning agent to control an autonomous vehicle through multi-lane traffic and intersections.' },
+          { title: 'AI & Systems Projects (Python, C++, C#)', detail: 'Built a scaled-down Transformer next-token predictor, an AI dynamic-pricing scheduler, a C++/NS-3 delay-tolerant network simulator, and a C#/WPF wave diffraction simulator.' },
+          { title: 'Interactive Browser Playground (JavaScript)', detail: 'Created interactive web versions of a Wordle Solver, Chess, Countries Quiz, Map Plotter, and Block Blast.' },
+        ],
+      },
+    };
+
+    function createNeuralNet(canvas) {
+      const o = {
+        layers: [4, 6, 8, 8, 6, 4],
+        lineRGB: '23,25,28', lineAlpha: 0.1,
+        strongRGB: '217,84,42', strongAlpha: 0.22,
+        nodeRGB: '23,25,28', nodeAlpha: 0.35, nodeR: 1.6,
+        pulseRGB: ['217,84,42', '13,107,99'], pulseWeights: [0.7, 0.3],
+        hop: 1100, gap: [800, 1800],
+      };
+      const ctx = canvas.getContext('2d');
+      let W = 0, H = 0, layers = [], conns = [], passes = [], wait = 200, last = performance.now();
+
+      function build() {
+        layers = []; conns = [];
+        const pattern = o.layers;
+        const px = W * 0.08, sp = (W - px * 2) / (pattern.length - 1);
+        pattern.forEach((count, l) => {
+          const span = H * 0.65;
+          const y0 = (H - span) / 2, vs = span / (count - 1);
+          const layer = [];
+          for (let i = 0; i < count; i++) {
+            layer.push({ x: px + sp * l, y: y0 + vs * i, l });
+          }
+          layers.push(layer);
+        });
+        for (let l = 0; l < layers.length - 1; l++) {
+          layers[l].forEach((a) => {
+            layers[l + 1].slice(0, 3).forEach((b) => {
+              conns.push({ a, b, w: 0.2 + Math.random() * 0.8 });
+            });
+          });
+        }
+      }
+
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        W = r.width; H = r.height;
+        canvas.width = W; canvas.height = H;
+        build();
+      }
+
+      function frame(now) {
+        requestAnimationFrame(frame);
+        ctx.clearRect(0, 0, W, H);
+        for (const c of conns) {
+          ctx.strokeStyle = c.w > 0.7 ? `rgba(${o.strongRGB},${o.strongAlpha})` : `rgba(${o.lineRGB},${o.lineAlpha})`;
+          ctx.lineWidth = c.w > 0.7 ? 0.9 : 0.5;
+          ctx.beginPath(); ctx.moveTo(c.a.x, c.a.y); ctx.lineTo(c.b.x, c.b.y); ctx.stroke();
+        }
+        for (let i = passes.length - 1; i >= 0; i--) {
+          const p = passes[i];
+          const t = Math.min(1, (now - p.t0) / o.hop);
+          for (const q of p.pulses) {
+            const x = q.a.x + (q.b.x - q.a.x) * t, y = q.a.y + (q.b.y - q.a.y) * t;
+            ctx.fillStyle = `rgba(${p.rgb},0.85)`;
+            ctx.beginPath(); ctx.arc(x, y, 2.2, 0, 6.28); ctx.fill();
+          }
+          if (t >= 1) {
+            passes.splice(i, 1);
+            if (p.l < layers.length - 2) {
+              const nextNodes = p.pulses.map((q) => q.b);
+              const nextPulses = [];
+              nextNodes.forEach((n) => {
+                const targets = layers[p.l + 2] || [];
+                targets.slice(0, 2).forEach((b) => nextPulses.push({ a: n, b }));
+              });
+              if (nextPulses.length) passes.push({ t0: now, pulses: nextPulses, l: p.l + 1, rgb: p.rgb });
+            }
+          }
+        }
+        for (const L of layers) for (const n of L) {
+          ctx.fillStyle = `rgba(${o.nodeRGB},${o.nodeAlpha})`;
+          ctx.beginPath(); ctx.arc(n.x, n.y, o.nodeR, 0, 6.28); ctx.fill();
+        }
+        if (now - last > 1200) {
+          last = now;
+          const a = layers[0][Math.floor(Math.random() * layers[0].length)];
+          const b = layers[1][0];
+          passes.push({ t0: now, pulses: [{ a, b }], l: 0, rgb: o.pulseRGB[0] });
+        }
+      }
+
+      new ResizeObserver(resize).observe(canvas);
+      resize();
+      requestAnimationFrame(frame);
+    }
+
+    function createAgent(root) {
+      const $ = (s) => root.querySelector(s);
+      const input = $('[data-agent-input]'), caret = $('[data-agent-caret]'), q = $('[data-agent-q]');
+      const thinking = $('[data-agent-thinking]'), summary = $('[data-agent-summary]'), bullets = $('[data-agent-bullets]');
+      const chips = root.querySelectorAll('[data-agent-chip]');
+      const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+      const CUR = '<span class="ag-cur"></span>';
+      let run = 0;
+
+      async function play(key) {
+        const tok = ++run, d = BRIEFINGS[key] || BRIEFINGS.intro;
+        input.textContent = ''; caret.hidden = false;
+        thinking.hidden = true; summary.innerHTML = ''; bullets.innerHTML = '';
+        await sleep(300); if (tok !== run) return;
+        for (let i = 1; i <= d.prompt.length; i++) {
+          if (tok !== run) return;
+          input.textContent = d.prompt.slice(0, i);
+          await sleep(25);
+        }
+        await sleep(250); if (tok !== run) return;
+        q.textContent = d.prompt; q.hidden = false; input.textContent = '';
+        thinking.hidden = false;
+        await sleep(550); if (tok !== run) return;
+        thinking.hidden = true;
+        for (let i = 3; i <= d.summary.length; i += 3) {
+          if (tok !== run) return;
+          summary.innerHTML = d.summary.slice(0, i) + CUR;
+          await sleep(10);
+        }
+        summary.textContent = d.summary;
+        await sleep(120);
+        for (const b of d.bullets) {
+          if (tok !== run) return;
+          const row = document.createElement('div'); row.className = 'ag-b';
+          row.innerHTML = `<strong class="ag-bt">${b.title}</strong><p class="ag-bd">${b.detail}</p>`;
+          bullets.appendChild(row);
+          await sleep(60);
+        }
+      }
+
+      chips.forEach((c) => c.addEventListener('click', () => {
+        chips.forEach((x) => x.classList.toggle('is-active', x === c));
+        play(c.dataset.agentChip);
+      }));
+      play('intro');
+    }
+
+    createNeuralNet(document.getElementById('neural-canvas'));
+    createAgent(document.querySelector('[data-agent-root]'));
+  </script>
+</body>
+</html>

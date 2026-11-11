@@ -6,9 +6,9 @@
  */
 :root {
   /* Ground */
-  --bg-void: #05080e;
-  --bg-base: #080c14;
-  --bg-deep: #05080e;
+  --bg-void: #030712;
+  --bg-base: #030712;
+  --bg-deep: #030712;
   --bg-surface: rgba(13, 20, 36, 0.72);
   --bg-elevated: rgba(18, 28, 48, 0.84);
   --bg-glass: rgba(10, 15, 26, 0.84);
